@@ -1,0 +1,84 @@
+body {
+    background-color: white;
+    overflow-x:hidden;
+}
+#header {
+    /* Slightly hacky CSS to get the top navbar to align flush. */
+    background: black;
+    margin-top:-10px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-top:20px;
+    padding-bottom:20px;
+    text-align: center;
+    border-bottom:3px solid gray;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size:28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: white;
+}
+#frame {
+    width:800px;
+    margin:auto;
+    background:transparent;
+}
+#navbar {
+    width:800px;
+    margin:auto;
+    z-index: -1;
+    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+#content {
+    font-size:14px;
+    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
+    line-height:1.6em;
+    color: #252525;
+    margin-top:45px;
+}
+#footer {
+    width:inherit;
+    margin:auto;
+    font-size:12px;
+    font-family:Garamond;
+    color:#888888;
+}
+#blog_navbar {
+    width:inherit;
+    margin:auto;
+}
+h2 {
+    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size:26px;
+    color: #252525;
+    margin-bottom:0px;
+}
+h3 {
+    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size:18px;
+    color: #3E4349;
+}
+p {
+    margin-bottom:1.5em;
+}
+/* unvisited link */
+a:link {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+/* visited link */
+a:visited {
+    color: #333;
+    text-decoration: none;
+}
+/* mouse over link */
+a:hover {
+    color: #666;
+    text-decoration: none;
+}
+/* selected link */
+a:active {
+    color: #BBB;
+    text-decoration: none;
+}

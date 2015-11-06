@@ -1,0 +1,201 @@
+{% extends "blog_frame.html" %}
+{% block posttitle %} An Exercise in Probability {% endblock %}
+{% block postdate %}09/31/2015{% endblock %}
+{% block content %}
+
+			<!-- Need to implement some sort of scrolling mechanism for going through blog posts. -->
+
+			<p>Here's a simple question: let's say that you are playing a game that consists of rolling a pair of dice until you get a total of either five or seven. The game ends as soon as you get one of those two totals, and you keep playing until you do. What is the probability that you will end the game by rolling a five, not a seven?
+
+			The answer to this question is not obvious&mdash;it's one we have to arrive at ourselves, using a bit of probability.
+
+			This is a nifty problem because it uses one of probability's favorite demonstration tools&mdash;dice, a pair of them in this case&mdash;to demonstrate a result of geometric convergence in probability.
+
+			<p>Note: This is an adaptation of a part of a presentation I gave before the <a href="http://www.baruchmathematicssociety.com">Mathematics Society at CUNY Baruch</a>. It is meant to be a minimum-preliminaries example of a problem in probability.
+
+			<h3>Preliminaries</h3>
+
+			<p>To start let's consider a simpler problem: what is the probability of rolling a pair of dice and having them total a certain number? Let's create a variable called \(T\) for "total" to store this number that we'd like to create.
+
+				\[T\:\:\:&mdash;\:\:\:\text{A random variable describing the total of two dice rolls.}\]
+				\[t\:\:\:&mdash;\:\:\:\text{The experimental outcome of those throws.}\]
+				\[P(T=t)\:\:\:&mdash;\:\:\:\text{The probability of T taking on the value t.}\]
+
+			<p>We call this variable \(T\) a <i>random variable</i> because when we conduct our experiment it will take on some value&mdash;t&mdash;that we can't predict beforehand. In our experiment \(T\) can take on any integer between 2 and 12:
+
+				<ul>
+					<li>2 if we roll a 1 and a 1 again.</li>
+					<li>3 if we roll a 1 and then a 2 or a 2 and then a 1</li>
+					<li>4 if roll a 1 and then a 3, or a 2 and then a 2, or a 3 and then a 1</li>
+					<li>...and so on, all the way up to 12.</li>
+				</ul>
+
+			<p>So for instance asking "What is the probability of rolling a total of 2?" would be the same as asking:
+
+				\[P(T=2) = ?\]
+
+			<p>Asking "What is the probability of rolling a total of 7?" would be the same as asking:
+
+				\[P(T=7) = ?\]
+
+			<p>And so on.
+
+			<h3>Equally Likely Outcomes</h3>
+
+			<p>Dice have this nice property that every outcome is equally likely. I don't know about, reader, but my change of scoring a three-pointer in basketball is far, far smaller than that of Lebron James. If James and I were to roll some dice, on the other hand, our chances would be exactly the same. Unlike in basketball, there's no skill in rolling a pair of dice—it's all just a matter of luck. For that reason, assuming that there's nothing wrong with our pair of dice—that they are "fair"—any one roll of the dice is just as likely to happen as any other.
+
+			<p>This is important because it means that we can just count our results, because the probability of any event occuring simplifies to the number of ways it can happen over the number of all possible events. You can think of this visually as an exercise in highlighting. If we list out all possible dice throws, arranged by their total, we get:
+
+				\[
+				\begin{equation*}
+\begin{aligned}[c]
+T=2:\\
+T=3:\\
+T=4:\\
+T=5:\\
+T=6:\\
+T=7:\\
+T=8:\\
+T=9:\\
+T=10:\\
+T=11:\\
+T=12:\\
+\end{aligned}
+\qquad
+\begin{aligned}[c]
+(1,1)\\
+(1,2), (2,1)\\
+(1,3), (2,2), (3,1)\\
+(1,4), (2,3), (3,2), (4,1)\\
+(1,5), (2,4), (3,3), (4,2), (5,1)\\
+(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)\\
+(2,6), (3,5), (4,4), (5,3), (6,2)\\
+(3,6), (4,5), (5,4), (6,3)\\
+(4,6), (5,5), (6,4)\\
+(5,6), (6,5)\\
+(6,6)\\
+\end{aligned}
+\end{equation*}
+				\]
+
+			<p>Through something called the "Fudamental Counting Principle" the number of different possible dice throws when throwing two dice is the number of possibile results from the first dice times the number of possible results from the second. Since both our dice have six faces, the number of possible combinations of faces is \(6\times6=36\).
+
+			<p>So what's \(P(T=2)\)? It's the number of ways we can get a total of two over the number of ways we can roll a pair of dice! In other words:
+
+				\[P(T=2) = \frac{\text{number of rolls totalling 2}}{\text{number of possible dice rolls}} = \frac{N(T=2)}{N(T)} = \frac{1}{6 \times 6} = \frac{1}{36}\]
+
+			<p>What's the probability of rolling a 5? There are four rolls totaling 5:
+
+				\[(1,4), (2,3), (3, 2), (4, 1)\]
+
+			<p>Therefore the answer is:
+
+				\[P(T=5) = \frac{4}{36}\]
+
+			<p>And what's the probability of rolling a seven?
+
+				\[P(T=7) = \frac{N(\{(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\})}{36} = \frac{6}{36}\]
+
+			<p>As you can see these probabilities are <i>not</i> equal: there more ways of creating a 7 then there are of creating a 5 when rolling dice. What does this impy about our game? Since our game necessitates rolling a 5 before a 7 we actually already know that we have a less-than-half chance of winning. But answering the question that immediately follows&mdash;precisely <i>how much</i> less?&mdash;takes quite a bit more work.
+
+			<h3>Fun with compliments</h3>
+
+			<p>In the context of our game, the \(P(X=5)\) and \(P(X=7)\) results above are, respectively, the probability that we won the game on our first try, and then the probability that we lost the game on our first try. In other words:
+
+				\[P(\text{Won immediately.}) = P(X=5) = \frac{4}{36} \approx 11.1\%\]
+				\[P(\text{Lost immediately.}) = P(X=7) = \frac{6}{36} \approx 16.7\%\]
+
+			<p>The fun is in the fact that if we don't win or lose on our first try, we have to keep playing until we do (is it possible that we never stop playing? Technically, yes!). So let's think about what happens if we get anything but a 5 or a 7 that first try, and then roll something else. This next step requires that we think about something called the <i>compliment</i>.
+
+			<p>The <i>compliment</i> of an <i>event</i> is whatever happens when that event doesn't happen. For example, let's define an event called \(T \neq 5\):
+
+				\[T \neq 5\:\:\:&mdash;\:\:\:\text{The event that we don't roll a five.}\]
+				\[P(T \neq 5)\:\:\:&mdash;\:\:\:\text{The probability of the event that we don't roll a five.}\]
+
+			<p>The cool thing about compliments is that when we add the probability of something happening and the probability of something not happening, we get 1, corresponding with 100% probability. 1 is called the <i>total probability</i>. We assume that something <i>will</i> happen&mdash;we won't fluke and not throw the dice at all&mdash;and that expectation is codified as a 1.
+
+			<p>We can therefore say that:
+
+				\[P(T \neq 5) + P(T = 5) = 1\]
+
+			<p>And from there that:
+
+				\[P(T \neq 5) = 1 - P(T = 5) = 1 - \frac{4}{36} = \frac{32}{36}\]
+
+			<p>The result we want is a little bit trickier. We've found the probability that we do not win the game, but what we want to know is what is the probability that we <i>neither</i> lose <i>nor</i> win the game. If we join our expressions together with the logical \(\cap\) symbol for "and", we can extend the compliments rule like so to get our desired result:
+
+				\[P(T\neq 5\cap T\neq 7)\:\:\:&mdash;\:\:\:\text{The event that we roll neither a five nor a seven.}\]
+				\[P(T\neq 5\text{ and }T\neq 7) = P(T\neq 5 \cap T\neq 7) = 1 - (P(T = 5) + P(T = 7))\]
+				\[= 1 - (\frac{4}{36} + \frac{6}{36}) = 1 - \frac{10}{36} = \frac{26}{36}\]
+				\[\therefore P(T\neq 5 \cap T\neq 7) = \frac{26}{36}\]
+
+			<h3>Generalization</h3>
+
+			<p>So let's just suppose for argument's sake that you rolled neither a five nor a seven total on that first roll, and then rolled a five total on your very next try! If you flip a coin twice and ask what're the chances you got heads twice, you're multiplying \(\frac{1}{2}\) twice, right? So to get this probability we do the same thing&mdash;multiplication, via the earlier-mentioned "General Counting Principle"&mdash;with the probabilities we just found:
+
+				\[P(\text{Win on the second try.}) = P(\text{You don't lose...}) \times P(\text{You win!}) = \frac{26}{36} * \frac{4}{36}  \approx 0.08025 \approx 8\%\]
+
+			<p>But then what if we win on the third try?
+
+				\[P(\text{Win on the third try.}) = P(\text{You don't lose...}) P(\text{You don't lose...}) P(\text{You win!})\]
+				\[= \frac{26}{36} * \frac{26}{36} * \frac{4}{36} \approx 0.0580 \approx 5.8\%\]
+
+			<p>We can extend this result as far as we need. The probability of winning in four rounds? Multiply by \(\frac{26}{36}\) again. The fifth? Go yet another round.
+
+			<p>Let's create another random variable, N. This random variable will store how many rolls it took us to win the game:
+
+				\[N\:\:\:&mdash;\:\:\:\text{A random variable describing the number of tries it took us to win the game.}\]
+				\[n\:\:\:&mdash;\:\:\:\text{The experimental outcome of how many tries it took us to win.}\]
+				\[P(N=n)\:\:\:&mdash;\:\:\:\text{The probability of X taking on the value x.}\]
+
+			<p>Using this new random variable we can now easily describe our chance of winning-ness:
+
+				\[P(N=1) = \frac{4}{36} \approx 0.11111 \approx 11.1\%\]
+				\[P(N=2) = \frac{26}{36} \times \frac{4}{36} \approx 0.08025 \approx 8.0\%\]
+				\[P(N=3) = \frac{26}{36} \times \frac{26}{36} \times \frac{4}{36} \approx 0.05796 \approx 5.8\%\]
+				\[P(N=4) = \left[\frac{26}{36}\right]^3 \times \frac{4}{36} \approx 0.04186 \approx 4.1\%\]
+				\[P(N=5) = \left[\frac{26}{36}\right]^4\frac{4}{36} \approx 0.03023 \approx 3.0\%\]
+				\[...\]
+
+			<p>So our chance of winning immediately is ~11%; our chance of winning on the second throw is ~8.0%; and so on. If you look at the equations we're creating here you can see that there's an obvious relationship between our parameter \(X\) and the number of times we have to multiply \(\frac{26}{36}\). After all, in order to win on the fifth throw, don't we first have to not lose on the first four? Can't we just rewrite that, even more generally:
+
+				\[P(N=n) = \frac{4}{36}\left[\frac{26}{36}\right]^{n-1}\]
+
+			<h3>Geometric convergence</h3>
+
+			<p>Ah! A result! This equation allows us to easily answer the question: how likely are we of winning this game on the <i>x</i>th try? So what we have to do now is tally up our victories, using summation or sigma notation. So for instance our chances of winning the game in the first five rounds is:
+
+				\[P(N \leq 5) = \sum_{n=1}^{5}\frac{4}{36}\left[\frac{26}{36}\right]^{n-1} = \frac{4}{36}\sum_{n=1}^{5}\left[\frac{26}{36}\right]^{n-1} \approx 0.32141 \approx 32\%\]
+
+			<p>If this notation is unfamilar, don't worry about it. It's just a compact way of writing the following:
+
+				\[P(N \leq 5) = \frac{4}{36}\left[\frac{26}{36}\right] + \frac{4}{36}\left[\frac{26}{36}\right]^{2} + \frac{4}{36}\left[\frac{26}{36}\right]^{3} + \frac{4}{36}\left[\frac{26}{36}\right]^{4} + \frac{4}{36}\left[\frac{26}{36}\right]^{5}\]
+
+			<p>So that's our chances of winning in the first five rounds. About a third&mdash;not bad! But we want our chances of winning, period; and to do that, yes, we need to use infinity (because who doesn't like tossing dice an infinite number of times?).
+
+				\[P(\text{We win!}) = \frac{4}{36}\sum_{n=1}^{\infty}\left[\frac{26}{36}\right]^{n-1}\]
+
+			<p>Oh, and isn't winning just another event?
+
+				\[W\:\:\:&mdash;\:\:\:\text{Event that we've won!}\]
+				\[\therefore P(W) = \frac{4}{36}\sum_{n=1}^{\infty}\left[\frac{26}{36}\right]^{n-1}\]
+
+			<p>This is where an awe-inspiring mathematical formula usually taught in precalculus comes in: the geometric sum formula. The geometric sum formula basically states that, given that \(r &#60; 1\) (otherwise we'll be going to infinity!):
+
+				\[a\sum_{n=1}^{\infty}\left[r\right]^{n} = \frac{ar}{1-r}\]
+
+			<p> The trouble is that our equation is not quite in the right form&mdash;we <i>have</i> an \(n-1\) term, but <i>want</i> plain old \(n\). We can do that with a little bit of algebra:
+
+				\[\frac{4}{36}\sum_{n=1}^{\infty}\left[\frac{26}{36}\right]^{n-1} = \frac{4}{36}\frac{36}{26}\sum_{n=1}^{\infty}\left[\frac{26}{36}\right]^{n} = \frac{4}{26}\sum_{n=1}^{\infty}\left[\frac{26}{36}\right]^{n}\]
+
+			<p>Now that our summation is in the right form we are almost there: all that have left to do is applying our formula.
+
+				\[P(W) = \frac{\left(\frac{4}{26}\frac{26}{36}\right)}{\left(1-\frac{26}{36}\right)} = \frac{4}{26}\frac{26}{36-26} = \frac{4}{26}\frac{26}{10} = \frac{4}{10} = 0.4 = 40\%\]
+
+			<p>That's it! That solves our problem! We have a 0.4 or 40% chance of winning our game&mdash;which, by the way, also means that we have a 60% chance of losing it. Our hunch at the beginning was right: in the long run we will lose everything we bet.
+
+			<p>This game is not unlike one that might be played at a casino, where you are placing bets against the casino's money&mdash;the "house". Though it's simpler than any roulotte wheel, this 10% "house advantage" is not one unknown in the world of gambling, as house advantages waver anywhere from ~0.5% to ~20%, depending on the game.
+
+{% endblock %}
+<!-- No previous post; this is the first one. -->
+<!-- No next post either, yet; this is the only blog post at the moment. -->

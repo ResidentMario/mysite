@@ -1,0 +1,23 @@
+{% extends "frame.html" %}
+{% block pagetitle %} Blog {% endblock %}
+{% block contenttitle %}
+<h2>
+{% block posttitle %}
+{% endblock %}
+</h2>
+<span style="color:#aaa; font-style:italic">{% block postdate %}{% endblock %}</span>
+
+{% endblock %}
+
+{% block extension_page_bottom %}
+<div class="blog_navbar">
+<div style="float:left">
+{% block previouspost %}
+{% endblock %}
+<div style="float:right">
+{% block nextpost %}
+{% endblock %}
+</div>
+</div>
+<br/><br/>
+{% endblock %}

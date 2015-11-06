@@ -1,0 +1,26 @@
+{% extends "frame.html" %}
+{% block title %}An Exercise in Linear Algebra{% endblock %}
+{% block content %}
+
+
+			<h2>An Exercise in Linear Algebra</h2>
+
+			<b>Last updated: 9/24/2015</b>
+
+			<p>Linear algebra is one of the most widely applicable but, at times, tedious fields in mathematics. An early example of the field's application came from the field of economics. Economists have theorized on the systematic nature of the field since the times of François Quesnay, an 18th century mathematician whose "tableau économique", an attempt to systematically classify the movement of capital, was one of the first works in analytical economics.
+
+			<p>Note: This is an adaptation of a part of a presentation I maybe gave before the Mathematics Society at CUNY Baruch.
+
+			<p><b>Preliminaries</b>
+
+			<p>Linear algebra concerns itself principally with finding the solution to "linear equations". Linear equations are equations in which takes the form of a line in space: every variable in the equation is of the same "order". Example are a line in two dimensions, eg. \(y = 5x + 2\), and are line in three dimensions, eg. \(z = 3x + 5y + 9\). Exhibiting the casual power of mathematics you can even easily represent a linear equation in four dimensions (something not easy to actually visualize): \(w = 3x + 6y + 3z\), for instance.
+
+			<p>When you present several linear equations you define a "system of linear equations":
+
+				\[\begin{cases} 0.3p_1 + 0.3p_2 + 0.3p_3 = p_1 \\ 0.4p_1 + 0.1p_2 + 0.5p_3 = p_2 \\ 0.3p_1 + 0.6p_2 + 0.2p_3 = p_3 \end{cases}\]
+
+			<p>Quesnay's insights was that he could represent whole industries using simple systems like this one. Industry is interconnected: the rubber industry uses inputs from the electrical industry (amongst others) in its inputs, and the electrical industry in turn uses inputs from the rubber company (amongst others). Accounting for the great variety of commerical industries in the world such a "complete" matrix would represent thousands of variables; but even such a large and unwieldly system could, theoretically, be solved. The tableau économique was primitive in many ways, but its seeming completeness was nevertheless a source of optimism for the economists of the time.
+
+			<p>Suppose that the industries in the previous matrix are, in the greatest possible scale, service, manufacturing, and utilities...
+
+{% endblock %}
