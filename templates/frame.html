@@ -1,3 +1,4 @@
+{% set most_recent_blog_post_url = request.base_url + "2015/11/06/an-exercise-in-probability.html" %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +21,7 @@
 	</div>
 	</div>
 	<div id="navbar">
-	<div style="float:left"><a href="/">About</a>&nbsp;&nbsp;<img src="/static/vertbar.svg" style="height:30px"/>&nbsp;&nbsp;<a href="/2015/09/31/an-exercise-in-probability.html">Blog</a></div>
+	<div style="float:left"><a href="/">About</a>&nbsp;&nbsp;<img src="/static/vertbar.svg" style="height:30px"/>&nbsp;&nbsp;<a href={{ most_recent_blog_post_url }}>Blog</a></div>
 		<div style="float:right; padding-top:11px">
 				<a href="https://github.com/ResidentMario"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" style="max-height:25px"/></a>
 				<a href="https://en.wikipedia.org/wiki/User:Resident_Mario"><img src="https://upload.wikimedia.org/wikipedia/en/2/28/WikipediaMobileAppLogo.png" style="max-height:25px"/></a>
@@ -40,6 +41,7 @@
 		</div>
 		{% block extension_page_bottom %}
 		{% endblock %}
+		<div id="disqus">
 		<div id="footer">
 			<div style="float:right">{% block footer %} © Aleksey Bilogur 2015&mdash;<a href="https://github.com/ResidentMario/mysite">View Source</a>&mdash;<a href="mailto:aleksey.bilogur@baruchmail.cuny.edu">Contact</a>{% endblock %}</div>
 		</div>

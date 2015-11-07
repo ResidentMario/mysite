@@ -1,0 +1,15 @@
+{% extends "blog_frame.html" %}
+{% block posttitle %} About this website{% endblock %}
+{% block postdate %}10/31/2015{% endblock %}
+{% block content %}
+
+	<p>I've been kicking around the idea of creating my own website for some time now. I started learning how to use Python's <a href="http://flask.pocoo.org/">Flask</a> web framework early this summer, while working on a few publication scripts for the <a href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost">Wikipedia Signpost</a>. The application I was hoping to build and deploy on <a href="http://tools.wmflabs.org/">Wikimedia Labs</a> still isn't quite finished: converting a bunch of scripts meant to be run by hand into a series of scheduled jobs on a server somewhere is far harder to dive into than I thought it would be. Still, that project progresses, albeit slowly (watch <a href="http://tools.wmflabs.org/signpostlab/">this space</a>).</p>
+
+	<p>In the meantime I put the skills to use building a home on the web for a CUNY Baruch on-campus organization that I'm active in, the <a href="http://www.baruchmathematicssociety.com/">Mathematics Society</a>. What I love about the Flask microframework is the lightness: packages exist for handling most or all of the issues you run into in web programming, but they're hovering in the background of what you're doing, and never intrude. I love Squarespace (and their office seems like a dream to work in) but for a first effort I preferred, for my own elucidation, to create something handbuild.</p>
+
+	<p>After I finished <i>that</i> project, it seemed only a matter of time until I turned to creating a personal one as well: and now it has arrived! This website, like the one for the Mathematics Society that preceded, is a static (so far) no-fluff handbuilt project developed in Flask-Python. You can see the <a href="https://github.com/ResidentMario/mysite">source code</a> on GitHub. I use <a href="https://www.pythonanywhere.com/">PythonAnywhere</a> as my webhost. Math formulae are rendered with <a href="https://www.mathjax.org/">MathJax</a>. iPython notebooks I host on <a href="https://github.com/ResidentMario">GitHub</a> and render via <a href="http://nbviewer.ipython.org/">Jupyter</a>. Blog commentary is powered by <a href="http://disqus.com/">Disqus</a>.</p>
+
+	<p>So there you go: from zero to semi-reasonable hero in a few months' hacking. Here's to years more of the same to come.</p>
+
+{% endblock %}
+{% block nextpost %}<a href="{{request.url_root}}2015/11/06/an-exercise-in-probability.html"> An Exercise in Probability</a>{% endblock %}
