@@ -1,34 +1,12 @@
-# .gitignore template originally imported from https://github.com/github/gitignore/blob/master/Python.gitignore
-
-# Junk file on Mac.
 .DS_Store
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
-*$py.class
-
-# C extensions
-*.so
-
-# Distribution / packaging
 .Python
+__pycache__
+pip-selfcheck.json
 env/
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
+include/
 lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
+bin/
 *.egg
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt

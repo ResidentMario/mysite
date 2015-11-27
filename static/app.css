@@ -47,7 +47,13 @@ body {
     width:inherit;
     margin:auto;
 }
-#blog_previously_next_links {
+#blog_previously_links {
+    font-size:20px;
+    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
+    margin-bottom:50px;
+    font-style: italic;
+}
+#blog_next_links {
     font-size:20px;
     font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
     margin-bottom:50px;
