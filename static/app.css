@@ -59,6 +59,11 @@ body {
     margin-bottom:50px;
     font-style: italic;
 }
+#blog_inline_block {
+    width:inherit;
+    padding: 10px 20px 10px 20px;
+    background:#f0f5f5;
+}
 h2 {
     font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size:26px;

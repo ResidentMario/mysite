@@ -23,5 +23,10 @@ def first_post():
 def second_post():
 	return render_template('this_website.html', id=2)
 
+@app.route('/2015/12/12/openness-versus-quality.html')
+def third_post():
+	return render_template('openness_versus_quality.html', id=3)
+
 if __name__ == '__main__':
     app.run()
+    # app.run(debug=True)
