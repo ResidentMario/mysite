@@ -1,4 +1,1 @@
 flask
-git-lint==0.0.8
-pylint
-pep8

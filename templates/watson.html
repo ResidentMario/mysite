@@ -1,0 +1,89 @@
+{% extends "blog_frame.html" %}
+{% block posttitle %}IBM Watson, Cultural Insight, and WatsonGraph{% endblock %}
+{% block postdate %}12/26/2015{% endblock %}
+{% block content %}
+
+	<p><a href="https://en.wikipedia.org/wiki/Watson_%28computer%29">IBM Watson</a> had a commanding entrance back in
+        2011 when, in the supercomputer's first public
+          exhibition, it was
+        pitched against long-time Jeopardy! Champions Brad Rutter and Ken Jennings – and won. It was an intensely
+        novel system, the product of years of intense efforts on the part of IBM's theoretical DeepQA team, and
+        seemed to define a new frontier in the capacity of computers to think: the biggest new hit since Deep Blue
+        in 1999. Seeing such an intensely fantastical system compete in such a public arena seemed almost magical to
+        me, and in the bedlam of a frontier-defining match there was one of my personal all-time favorite television
+        moments. Nevertheless as exciting as IBM Watson was at the time of its match it seemed far too
+        incomprehensible a system – the product of a lab full of researchers, and not something that I would ever
+        work with myself.</p>
+
+        <img src="http://images.pcworld.com/news/graphics/219900-overlords3_original.jpg"
+             style="width:50%; display:flex; margin:auto"/>
+
+	<p>Fast forward to the fall of 2014 and, I was astounded to learn, IBM was coming to CUNY for the <a
+            href="http://blogs.baruch.cuny.edu/fieldcenter/current-opportunities/ibm-watson/">CUNY-IBM
+                                                                                                         Watson
+          Case Competition</a>. After years of heavy institutional thinking and polish IBM was opening up the Watson
+        "black box" to colleges across the United States (and the rest of the world), forming relationships and
+        running competitions aiming to help work out viable commercial applications for the technology. Aware of the
+        challenges of student advisement at large public schools like those in the CUNY system, my team proposed a
+        Watson instance for student advisement. The advisers at our school work reflexively, we found, concerning
+        themselves primarily with students that come to them and not working proactively to seek out and assist the
+        students that actually most needed their help. With a student-to-adviser ratio in the hundreds academic
+        advisors were far too floored with the work that they already have to do otherwise. We thought of a
+        two-pronged solution, a Watson instance which would simultaneously answer questions directed at it on the
+        student side and assess the progress of students at the school and "rank" their risk level on the adviser
+        side. Though we didn't win my team placed into finals, and experience is its own reward.</p>
+
+	<p>Despite the buzz and excitement of the case competition we weren't provided, I felt, with a clear way forward –
+             until I was again taken by surprise and learned, in the fall 2015 term, that there would be an
+        experimental class dedicated to IBM Watson development. The case competition had been a business case
+        competition: we were not provided with access to a Watson instance because, as I later surmised, the
+        technology had not yet been in a cohesive enough state for it to be useful. A year of further development
+        had completely changed the state of play: there are now dozens of plug-in RESTBase APIs available in various
+        states of advancing polish on the cloud via the IBM Watson Bluemix service, a large raft of which have now
+        gone gold in "General Available" release. We were still on the bleeding edge of the tech, to be sure, but
+        suddenly IBM Watson was something that I could not just admire, but actually work with.</p>
+
+	<p>The first thing I put together is the Cultural Insight tool, a user event recommendation engine which models
+         user interests in various cultural events and exhibitions in New York City and uses to serve them with
+        those which are most relevant to those interests. If you're a software developer who expresses an interest
+        in data science you'd probably be more interested in a NYC Data Wranglers meetup than you would be in a new
+        James Pollack exhibit, and this is what this application tries to puzzle out. Not that, as a code-obsessed
+        mathematics and English student, there's anything wrong with being of two minds (and I enjoyed both).</p>
+
+	<p>The Cultural Insight tool was one of firsts for me: my first time working with access credentials, my first time
+         building a web app, my first time crunching models, really just my first large-scale development project
+        period. I was frustrated throughout the work by a feeling that the underlying model I was using – a
+        relevance-correlated list – was simply expressive enough to be sufficiently useful. One of the other classes
+        I was enrolled in that semester was Bridge to Higher Mathematics, an introduction to various domains in
+        discrete mathematics from a proof-oriented perspective. At the very end of this class we jumped into graph
+        theory, and the solution dawned on me.</p>
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/6n-graf.svg"
+             style="width:50%; display:flex; margin:auto"/>
+
+	<p>The past few post-finals days have seen me through a sprint to enact this realization, the result of which is
+         the watsongraph package, a Pythonic concept graphing and recommendation library. The watsongraph core
+        ConceptModel objects is constructed out of the individual concept nodes which are associated with labels
+        from the IBM Watson wikipedia/en-20120601 cognitive graph, queried using the Concept Insights API and
+        reconstructed locally as a <a href="https://networkx.github.io/">networkx</a>-based weighted conceptual graph.
+            Nodes are defined by Concept
+                                      objects,
+        each mapped to a unique Wikipedia page, which are in turn connected to one another by edges demarcating
+        relevance (on a 0-to-1 probabilistic scale) within a ConceptMap object. This ConceptMap can then be
+        associated with any number of applications – including with my original Cultural Insight concept, which I am
+        now working on refactoring using this powerful new tool.</p>
+
+	<p>Now that the <a href="https://pypi.python.org/pypi/watsongraph/0.1.5">first version of the project is complete
+        and PyPied</a> I've been writing documentation and
+        thinking
+         about the practical applications. We will see where it goes – but I haven't been this excited about
+        something in quite a while! And I'm now taking a whole class on graph theory next semester.</p>
+
+	<p>You can pip install watsongraph yourself; <a href="https://github.com/ResidentMario/watsongraph">the source
+        code is up on GitHub, including two notebooks</a> with technical walkthroughs on using the package: one on
+        using ConceptModel objects directly and one on using User and Item objects and constructing recommendations.</p>
+
+{% endblock %}
+{% block previouspost %}<a href="{{request.url_root}}2015/12/12/openness-versus-quality.html">Openness Versus
+        Quality</a>{% endblock %}
+{% block nextpost %}{% endblock %}
