@@ -62,14 +62,14 @@
              style="width:50%; display:flex; margin:auto"/>
 
 	<p>The past few post-finals days have seen me through a sprint to enact this realization, the result of which is
-         the watsongraph package, a Pythonic concept graphing and recommendation library. The watsongraph core
-        ConceptModel objects is constructed out of the individual concept nodes which are associated with labels
+         the <code>watsongraph</code> package, a Pythonic concept graphing and recommendation library. The watsongraph core
+        <code>ConceptModel</code> objects is constructed out of the individual concept nodes which are associated with labels
         from the IBM Watson wikipedia/en-20120601 cognitive graph, queried using the Concept Insights API and
         reconstructed locally as a <a href="https://networkx.github.io/">networkx</a>-based weighted conceptual graph.
-            Nodes are defined by Concept
+            Nodes are defined by <code>Concept</code>
                                       objects,
         each mapped to a unique Wikipedia page, which are in turn connected to one another by edges demarcating
-        relevance (on a 0-to-1 probabilistic scale) within a ConceptMap object. This ConceptMap can then be
+        relevance (on a 0-to-1 probabilistic scale) within a <code>ConceptMap</code> object. This ConceptMap can then be
         associated with any number of applications – including with my original Cultural Insight concept, which I am
         now working on refactoring using this powerful new tool.</p>
 
@@ -79,9 +79,14 @@
          about the practical applications. We will see where it goes – but I haven't been this excited about
         something in quite a while! And I'm now taking a whole class on graph theory next semester.</p>
 
-	<p>You can pip install watsongraph yourself; <a href="https://github.com/ResidentMario/watsongraph">the source
-        code is up on GitHub, including two notebooks</a> with technical walkthroughs on using the package: one on
-        using ConceptModel objects directly and one on using User and Item objects and constructing recommendations.</p>
+	<p>
+            You can pip install <code>watsongraph</code> yourself; <a
+            href="https://github.com/ResidentMario/watsongraph">the
+            source code is up on GitHub</a>, including three notebooks with technical walkthroughs on using the
+            package: one on using <code>ConceptModel</code> objects directly, one on using <code>User</code> and
+            <code>Item</code> objects to construct recommendations, and one with further recommendations on modeling
+            using <code>ConceptModel</code>.
+    </p>
 
 {% endblock %}
 {% block previouspost %}<a href="{{request.url_root}}2015/12/12/openness-versus-quality.html">Openness Versus
