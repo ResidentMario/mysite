@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from flask import redirect
 
 app = Flask(__name__)
 
@@ -39,10 +40,14 @@ def fourth_post():
     return render_template('watson.html', id=4)
 
 
-@app.route('/2016/01/17/signpost_views.html')
+@app.route('/2016/01/17/signpost-views.html')
 def fifth_post():
     return render_template('signpost_views.html', id=5)
 
+
+@app.route('/2016/01/17/signpost_views.html')
+def redir():
+    return redirect('/2016/01/17/signpost-views.html')
 
 if __name__ == '__main__':
     app.run()
