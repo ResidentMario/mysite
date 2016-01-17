@@ -1,0 +1,96 @@
+{% extends "blog_frame.html" %}
+{% block posttitle %}Measuring Wikipedia Signpost popularity{% endblock %}
+{% block postdate %}01/17/2016{% endblock %}
+{% block content %}
+
+    <p>I briefly spoke of my involvement with the <i><a
+            href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost">Wikipedia Signpost</a></i> earlier in
+        my blog post essay on the negotiation between <a
+                href="{{request.url_root}}2015/11/06/openness-versus-quality.html">Openness and Quality</a> in the
+        Wikimedian movement. My involvement with the <i>Signpost</i> has dampened somewhat lately: I've been busy
+        with other projects and haven't had as much time as I did in the past to write articles. I still participate
+        in the editorial board and still read every issue, of course, but more of my work is in the secondary
+        technical elements of the newspaper. You can see the list of every article I've contributed <a
+                href="https://en.wikipedia.org/wiki/User:Resident_Mario/Signpost">here</a>.
+    </p>
+
+    <p>
+       The <i>Signpost</i>, like the English Wikipedia that hosts it, is an organic entity that has come about as a
+        result of over a decade of steady innovation. By the time I became active again there in early 2015 its
+        internal organization had descended into an unfortunate maelstrom of half-active pages, unused template code,
+        and decade-old discussions still nested into hidden talk pages that hadn't been visited by actual human in
+        years. I took it upon myself to refresh the project's technical organization, a lengthy singular effort that
+        took months of slow progress to complete. I <a
+            href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost/Newsroom/Content_guidance">created
+        content guidelines</a>, <a
+            href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost/2015-07-08/Editorial">fixed the layout</a>
+        (with <a href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost/Newsroom/Style">guidelines!</a>),
+        reworked the default templates we use for creating articles, constructed a new <a
+            href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost/Newsroom#Current_discussion">submission
+        queue</a>, wrote <a
+            href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost/Newsroom/Coordination">coordination
+        guidelines</a>, wrote a <a href="https://github.com/ResidentMario/tnimporter">technology report republication
+        script</a>, wrote a <a href="https://github.com/ResidentMario/fcimporter">featured content publication
+        script</a> (saving us at least an hour of work every week), wrote a <a
+            href="https://tools.wmflabs.org/signpostlab/blog-importer.html">Blog Importer webtool</a> on <a
+            href="https://www.mediawiki.org/wiki/Wikimedia_Labs">Wikimedia Labs</a> (saving us at least 20 minutes
+        every time we republish something), and introduced interactive <a
+            href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost/Templates/Voter">polls</a> and <a
+            href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost/Index">indexing</a> into our
+        stories. All a labor of love, usually during school hours no less...
+    </p>
+
+    <p>
+        Continuing along with that theme, this week I put together a <a
+            href="https://github.com/ResidentMario/signpostviews/blob/master/signpostviews.ipynb">Jupyter
+        notebook</a> analyzing page view information for <i>Signpost</i> stories using the new (incredibly long overdue)
+        <a href="http://blog.wikimedia.org/2015/12/14/pageview-data-easily-accessible/">pageview API</a>. We on the
+        <i>Signpost</i> board have for ages now wanted to run some analysis on our stories to see what it is that
+        readers like the most and the least so that we can better target our publication efforts, and now I've
+        finally gone and done it. The key takeaways are:
+    </p>
+
+    <ul>
+    <li>
+        The average <i>Signpost</i> story gets 1550 pageviews, but with a crazy amount of variance, from low 900s to
+        5000 or more. My own comparison: though my school newspaper probably has higher average circulation, it sure as
+        heck has fewer readers. Sorry <a href="http://ticker.baruchconnect.com/"><i>Ticker</i></a>.</li>
+    <li>
+        The most popular stories are, as expected, in-depth special reports and community-written op-eds, which often
+        advance interesting or controversial or just in-depth points of view or stories and which reliably get over
+        2000 hits per publication.
+    </li>
+    <li>
+        The regular "News and notes" and "In the media" sections are most popular when they focus on one big story,
+        instead of an amalgamation of small ones as we used to have in the past.
+    </li>
+    <li>
+        Surprisingly, 20% of hits happen outside of the current news cycle.
+    </li>
+    <li>
+        The Blog section (republications of reports from the <a href="https://blog.wikimedia.org/">Wikimedia Blog</a>)
+        is surprisingly poorly read. Galleries (photo compositions) are also not popular. Nor is the Technology
+        report, but this makes sense: it is just a script-based copy-paste job.
+    </li>
+    <li>
+        Readers want controversy!
+    </li>
+    <li>
+        Jupyter notebooks are amazing and I now want to do everything in them.
+    </li>
+    </ul>
+
+    <p>
+        I presented a lightning talk on this topic at yesterday's <a
+         href="https://en.wikipedia.org/w/index.php?title=Wikipedia:Meetup/NYC/Wikipedia_Day_2016&redirect=no">
+        NYC Wikipedia Day 2016</a> celebratory conference. You can <a
+            href="https://github.com/ResidentMario/signpostviews/blob/master/signpostviews.ipynb">see the
+        data for yourself</a> on GitHub.
+    </p>
+
+{% endblock %}
+{% block previouspost %} <a href="{{request.url_root}}2015/12/26/watson.html">IBM Watson, Cultural Insight, and
+    WatsonGraph</a>{% endblock %}
+{% block nextpost
+%}
+{% endblock %}
