@@ -1,6 +1,7 @@
 body {
     background-color: white;
     overflow-x:hidden;
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
 }
 #header {
     /* Slightly hacky CSS to get the top navbar to align flush. */
@@ -12,7 +13,6 @@ body {
     padding-bottom:20px;
     text-align: center;
     border-bottom:3px solid gray;
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size:28px;
     font-weight: bold;
     letter-spacing: 2px;
@@ -27,12 +27,10 @@ body {
     width:800px;
     margin:auto;
     z-index: -1;
-    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 #content {
-    font-size:14px;
-    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
-    line-height:1.6em;
+    font-size:17px;
+    line-height:1.5em;
     color: #252525;
     margin-top:45px;
 }
@@ -40,7 +38,7 @@ body {
     width:inherit;
     margin:auto;
     font-size:12px;
-    font-family:Garamond;
+    font-family: 'Garamond', 'sans-serif';
     color:#888888;
 }
 #blog_navbar {
@@ -49,13 +47,11 @@ body {
 }
 #blog_previously_links {
     font-size:20px;
-    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
     margin-bottom:50px;
     font-style: italic;
 }
 #blog_next_links {
     font-size:20px;
-    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
     margin-bottom:50px;
     font-style: italic;
 }
@@ -65,13 +61,11 @@ body {
     background:#f0f5f5;
 }
 h2 {
-    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size:26px;
     color: #252525;
-    margin-bottom:0px;
+    margin-bottom:0;
 }
 h3 {
-    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size:18px;
     color: #3E4349;
 }
