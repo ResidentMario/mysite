@@ -1,0 +1,87 @@
+{% extends "blog_frame.html" %}
+{% block posttitle %}The decision to launch the Space Shuttle Challenger{% endblock %}
+{% block postdate %}02/07/2016{% endblock %}
+{% block content %}
+
+<p>
+    In the second chapter of the classic "<a href="http://www.edwardtufte.com/tufte/books_textb">Visual &
+    Statistical Thinking</a>" Edward Tufte wrote extensively about his critique of the failure of analysis that
+    was present in the moments leading up to the 1986 <a
+        href="https://en.wikipedia.org/wiki/Space_Shuttle_Challenger_disaster">Challenger disaster</a>, in which
+    seven astronauts tragically died aboard a space shuttle which broke apart 73 seconds into flight. The
+    explosion was traced to the failure of a rubberized "O-ring" on one of the shuttle's booster rockets for the
+    flight, a failure which was in turn traced to the exceptionally low temperature (29 °F, just below
+    freezing—a rare cold snap in Florida) at the time of the launch.
+</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Icicles_on_the_Launch_Tower_-_GPN-2000-001348.jpg"
+     style="width:50%; display:flex; margin:auto" alt="The shuttle before launch."/>
+<p>
+    Engineers at Thiokol, the manufacturer of the rockets, had reason to be concerned, before the flight took place,
+    that the temperatures were too low for a safe flight. Their initial recommendation was to hold off the launch,
+    and in the ensuing conferences between the engineers and managers at Thiokol on the one hand and at NASA on the
+    other, they provided thirteen hand-written charts arguing against the launch.
+</p>
+
+<p>
+    Ultimately, however, go fever won out: after much wrangling those in the room that were favor of the flight were
+    able to convince the dissenting engineers that there was no association between the previous history of O-ring
+    damage and temperature, and that the data they had collected was not convincing enough to stay the launch. In this
+    manner, Tufte believes, the ensuing disaster hinges on the inability of those suspicious engineers to adequately
+    present and argue the data that they had collected before their assembled colleagues. Had the data been presented
+    better, he argues, then the true narrative ought to have been convincing enough to move the launch to another day.
+</p>
+
+<p>
+    Tufte's criticism has its own criticism, including <a
+        href="http://www.onlineethics.org/Topics/ProfPractice/Exemplars/BehavingWell/RB-intro/RepMisrep.aspx">this
+    article by Roger Boisjoly</a>. Nevertheless, borrowing one of the visual ideas that Tufte hypothesizes for
+    constructing a more complete and convincing argument, here is a chart of the past history of temperature at launch
+    set against the amount of damage the O-rings suffered, gradated in red. The leftmost launch in particular, <a
+        href="https://en.wikipedia.org/wiki/STS-51-C#Connection_to_the_Challenger_disaster">STS-51-C</a>, suffered
+    nearly fatal damage, with a complete burn-through of the primary O-ring and bad charring on the backup secondary
+    O-ring.
+</p>
+
+<iframe src="http://127.0.0.1:5000/raw/challenger-compact.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    Visualizations of this sort have a way of establishing the conversation about what they depict. A good
+    visualization (like, I hope, this one) provides its user with a fast, visual way of summarizing the data that it
+    presents, making the questions that it is attempting to address and the connections that it draws from them
+    obvious and palatable. Compare this to the kind of charts that Thiokol brought to the meeting:
+</p>
+
+<img src="http://i.imgur.com/7Mn1eF9.png"
+     style="width:50%; display:flex; margin:auto" alt="The shuttle before launch."/>
+
+<p>
+    Damage data is not actually presented here: it was provided in more handwritten notes on the side of the page.
+</p>
+
+<p>
+    And compare further with the chart that was brought before the subsequent federal commission:
+</p>
+
+<img src="http://i.imgur.com/L4KpktN.png" style="width:50%; display:flex; margin:auto" alt="Federal charting."/>
+
+<p>
+    One further data point is missing from our chart, as it has nothing to say about the exceptionality of the low
+    temperature at the time of the Challenger's launch, fully 24° F colder than any previous launch temperature.
+    If we throw that data in, and shrink the rest of the visualization to accompany it, this is the result:
+</p>
+
+<iframe src="http://127.0.0.1:5000/raw/challenger-extended.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    I rest my case.
+</p>
+
+{% endblock %}
+{% block previouspost %}<a href="{{request.url_root}}2016/01/17/signpost-views.html">Measuring Wikipedia Signpost
+    popularity</a>
+{% endblock %}
+{% block nextpost %}
+{% endblock %}

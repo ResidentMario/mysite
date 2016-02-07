@@ -72,6 +72,9 @@ h3 {
 p {
     margin-bottom:1.5em;
 }
+code {
+    font-family:Courier,monospace;
+}
 /* unvisited link */
 a:link {
     color: #333;

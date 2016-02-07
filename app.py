@@ -45,10 +45,25 @@ def fifth_post():
     return render_template('signpost_views.html', id=5)
 
 
+@app.route('/2016/02/07/space-shuttle-challenger.html')
+def sixth_post():
+    return render_template('challenger.html', id=6)
+
+
+@app.route('/raw/challenger-compact.html')
+def challenger_compact():
+    return render_template('raw_challenger_compact.html')
+
+
+@app.route('/raw/challenger-extended.html')
+def challenger_extended():
+    return render_template('raw_challenger_extended.html')
+
+# Fix a link rot issue in some links I handed out earlier; can safely delete this some time in the future.
 @app.route('/2016/01/17/signpost_views.html')
 def redir():
     return redirect('/2016/01/17/signpost-views.html')
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
