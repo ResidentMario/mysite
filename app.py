@@ -65,5 +65,5 @@ def redir():
     return redirect('/2016/01/17/signpost-views.html')
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
