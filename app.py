@@ -50,6 +50,11 @@ def sixth_post():
     return render_template('challenger.html', id=6)
 
 
+@app.route('/2016/02/07/average-chain-distance.html')
+def average_chain_distance():
+    return render_template('average_chain_distance.html')
+
+
 @app.route('/raw/challenger-compact.html')
 def challenger_compact():
     return render_template('raw_challenger_compact.html')
@@ -59,11 +64,27 @@ def challenger_compact():
 def challenger_extended():
     return render_template('raw_challenger_extended.html')
 
-# Fix a link rot issue in some links I handed out earlier; can safely delete this some time in the future.
-@app.route('/2016/01/17/signpost_views.html')
-def redir():
-    return redirect('/2016/01/17/signpost-views.html')
+
+@app.route('/raw/gregorys-map.html')
+def gregorys_map():
+    return render_template('raw_gregorys_map.html')
+
+
+@app.route('/raw/dunkin-donuts-map.html')
+def dunkin_map():
+    return render_template('raw_dunkin_donuts_map.html')
+
+
+@app.route('/raw/starbucks-map.html')
+def starbucks_map():
+    return render_template('raw_starbucks_map.html')
+
+
+@app.route('/raw/manhattan-point-cloud.html')
+def manhattan_point_cloud():
+    return render_template('manhattan_point_cloud.html')
+
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)

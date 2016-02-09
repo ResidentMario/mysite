@@ -1,0 +1,180 @@
+{% extends "blog_frame.html" %}
+{% block posttitle %}How far away is the nearest chain store?{% endblock %}
+{% block postdate %}02/08/2016{% endblock %}
+{% block content %}
+
+<h3>Context</h3>
+<p>
+    This one started on Reddit.
+</p>
+
+<p>
+    Someone on r/NYC <a
+        href="https://www.reddit.com/r/nyc/comments/44hjol/this_is_a_9_cheeseburger_from_brgr_on_61st_and/czr22cf">complained
+    about the poor quality</a> of an overpriced "cheeseburger" they received at the  61st and 3rd location of the
+    small-chain "brgr" restaurant, commenting that this is the reason why everyone ought to read Yelp! reviews. A
+    little further down the line <a href="https://www.reddit.com/user/seancurry1">u/seancurry1</a> shared a story
+    from time ago related to the subject matter:
+</p>
+
+<div class="blog_inline_block">
+<p>True story.</p>
+
+<p>I've been in NYC about seven years. First four years of that I just worked any odd job I could, and one of those was dog walking for a while.</p>
+
+<p>I'm walking a dog near Columbus Circle (SW corner of Central Park) one day when an obviously touristy couple approaches me. In a thick southern accent, they ask me if I know anywhere to get a cup of coffee.</p>
+
+<p>"You kidding me? You're on the Upper West Side! There's amazing coffee everywhere. My favorite is the Sensuous Bean, 70th and Columbus. About five blocks up."</p>
+
+<p>They looked unsatisfied. "Well, we're really looking more for tea."</p>
+
+<p>"Oh, they've got tea! Plus there's Alice's Tea Cup three blocks up, cute little tea house."</p>
+
+<p>They look at each other, then back to me.</p>
+
+<p>"Well actually, uh... We were just looking for a Starbucks..."</p>
+
+<p>I just stared at them, then walked away. I pointed in a direction - any direction it didn't matter - and said, "Walk two blocks."</p>
+
+<p>Infuriating.</p>
+
+</div>
+
+<p>
+    Leaving aside the usual heckling-of-the-tourists&mdash;although I admit, having lived here all of my life, I do
+    enjoy a good heckling&mdash;one wonders whether or not this statement really is true. Starbucks baristas always
+    (or almost always) ask for your name when serving your oder, but I have long since given up on my real name,
+    going by the pseudonym Al whenever I'm on location. Well, the last two times I've been in a Starbucks I've
+    gotten back "Ale". Not the good kind. Come on guys. Two letters.
+</p>
+
+<p>
+    It's pretty well established that no one actually really likes Starbucks (except maybe <a
+        href="https://en.wikipedia.org/wiki/Howard_Schultz">this guy</a>), but we all tolerate it well enough, and
+    you do have to respect their business acumen, because they really do seem to be literally everywhere. But is it
+    really true that every two blocks, no matter which direction, another Starbucks calls? This is a hypothesis worth
+    putting under the microscope.
+</p>
+
+<!--<img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Icicles_on_the_Launch_Tower_-_GPN-2000-001348.jpg"-->
+ <!--style="width:50%; display:flex; margin:auto" alt="The shuttle before launch."/>-->
+
+<h3>Methodology</h3>
+
+<p>
+    First and foremost I needed some sort of way of actually getting every instance of a chain in Manhattan. There
+    are two major APIs available for this sort of job that I am aware of, <a
+        href="https://www.yelp.com/developers/api_console">Yelp!</a> and <a
+        href="https://developers.google.com/maps/">Google Maps</a> (and maybe
+    Foursquare), and Yelp! turned out to be the better of the two. Yelp! lists its businesses in ascending order: so
+    "dunkin-donuts-3" accedes to "dunkin-donuts-4", then "dunkin-donuts-5", and so on down the line of infamy. Using
+    their <a href="https://github.com/Yelp/yelp-python">Python driver</a> and taking the time to check for stores
+    which have closed, it's a simple enough matter to gather a list of every instance of their "biz" (Yelp! URLs are
+    in the form <code>http://www.yelp.com/biz/[...]</code>).
+</p>
+
+<p>
+    If you're the sort that likes reading code (I know I am), here's the core of it:
+</p>
+
+<!-- TODO: code highlighting -->
+<pre class="codesnippet">
+    def fetch_businesses(name, area='New York', manual_override=0):
+    area = area.lower().replace(' ', '-')
+    name = name.lower().replace(' ', '-')
+    i = 2
+    # Run the first one through by hand.
+    try:
+        responses = [client.get_business("{0}-{1}".format(name, area))]
+    # This can happen, and did, in the Dunkin' Donuts case.
+    except BusinessUnavailable:
+        responses = []
+        pass
+    # The rest are handled by a loop.
+    while True:
+        bus_id = "{0}-{1}-{2}".format(name, area, i)
+        try:
+            response = client.get_business(bus_id)
+        except BusinessUnavailable:
+            # We manually check trouble spots.
+            # But see the TODO.
+            if requests.get('http://www.yelp.com/biz/' + bus_id).status_code != requests.codes.ok:
+                break
+            else:
+                # Increment the counter but don't include the troubled ID.
+                i += 1
+                continue
+        responses += [response]
+        i += 1
+    print("Ended `fetch_businesses()` on:", "http://www.yelp.com/biz/" + bus_id)
+    return responses
+</pre>
+
+<p>
+    I used <a href="http://folium.readthedocs.org/en/latest/">folium</a> (the Python driver for <a
+        href="http://leafletjs.com/">leaflet.js</a>) to get a sense of the data. Here's the coordinate map for
+    <a href="http://www.gregoryscoffee.com/">Gregory's Coffee</a>, a locally-grown coffee chain that some of my
+    friends know that I love to hate (their logo is literally their founder's well-coiffed head&mdash;tacky) but go
+    to anyway:
+</p>
+
+<iframe src="http://127.0.0.1:5000/raw/gregorys-map.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    No word yet on the Williamsburg location. Playing around with these maps you can even find some weird discrepancies
+    in Yelp's data. The following coordinate map for Dunkin Donuts, for instance, reveals a franchise
+    nominally in "New York" but is actually nowhere near it:
+</p>
+
+<iframe src="http://127.0.0.1:5000/raw/dunkin-donuts-map.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    And here's the Starbucks map. Living near those two random Starbucks locations in lower Brooklyn I am actually a
+    little bit surprised, I confess, by the paucity of Starbucks locations in Brooklyn. It's kind of amazing how hard
+    these chains work to get locations in Manhattan, and how little they care for the outer boroughs.
+</p>
+
+<iframe src="http://127.0.0.1:5000/raw/starbucks-map.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    If you scroll in and look around for a bit, it becomes immediately obvious that, ok, there are a <b>lot</b> of
+    areas in Manhattan which are absolutely not always in a two-block radius of a pumkin spice latte. But amazingly,
+    the thesis does hold up for some of the densest neighborhoods in particular. Try navigating through the Financial
+    District or through Midtown without hitting one location or other; you won't get far.
+</p>
+
+<p>
+    This still doesn't answer the question on my mind, though: on average, how far away are you from a Starbucks? To
+    figure that out we have to go a little deeper.
+</p>
+
+<p>
+    Here is a point cloud of 2000 random locations in Manhattan:
+</p>
+
+<iframe src="http://127.0.0.1:5000/raw/manhattan-point-cloud.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="550px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    This point cloud uses an underlying <a href="http://geojson.org/">GeoJSON</a> layer data (hand-drawn using the
+    wonderful <a href="http://geojson.io/">geojson.io web-app</a>). I then constructed uniformly random variables
+    within the "Manhattanite" <a href="https://en.wikipedia.org/wiki/Minimum_bounding_box">bounding box</a>, and us
+    ed a <a href="https://en.wikipedia.org/wiki/Point_in_polygon">point-in-polygon algorithm</a> to verify interior
+    points until I got 2000 of them.
+</p>
+
+<p>
+    The idea is that a random sample this large will be approximately evenly distributed across the island. It's
+    possible to use an even larger sample, but 2000 points turned out to be more than enough: you don't really gain
+    much in the way of accuracy using more, and you lose a lot of speed.
+</p>
+
+{% endblock %}
+{% block previouspost %}<a href="{{request.url_root}}2016/01/17/signpost-views.html">Measuring Wikipedia Signpost
+    popularity</a>
+{% endblock %}
+{% block nextpost %}
+{% endblock %}
