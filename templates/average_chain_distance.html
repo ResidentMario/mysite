@@ -129,9 +129,17 @@
         width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
 
 <p>
-    And here's the Starbucks map. Living near those two random Starbucks locations in lower Brooklyn I am actually a
-    little bit surprised, I confess, by the paucity of Starbucks locations in Brooklyn. It's kind of amazing how hard
-    these chains work to get locations in Manhattan, and how little they care for the outer boroughs.
+    And here's the Starbucks map. Your analysis is only as good as your data, of course, and a large number of <a
+        href="https://www.reddit.com/r/nyc/comments/44x90z/is_starbucks_really_always_two_blocks_away_oc/">comments
+</a> on the corresponding Reddit post for this thread point out that the paucity of outer borough locations on this
+    map is incorrect, as <a
+        href="https://www.yelp.com/search?find_desc=starbucks&find_loc=Crown+Heights%2C+Brooklyn%2C+NY">many
+        locations</a> are actually instead ID'd either by borough or, amazingly, by neighborhood! The Yelp! API
+    documentation, annoyingly, is actually mum on this fact. It's not practical to try to scrape data by borough and
+    by neighborhood, however, but after digging around for a bit in their data it appears that this never happens in
+    Manhattan&mdash;only in the outer boroughs. Since we're focusing on Manhattan in this post, net-net this doesn't
+    impact our analysis later on&mdash;but the data on locations outside of Manhattan displayed here should be taken
+    with a grain of salt, as it is extremely partial.
 </p>
 
 <iframe src="{{request.url_root}}raw/starbucks-map.html" marginwidth="0" marginheight="0" scrolling="no"
@@ -141,8 +149,8 @@
     If you scroll in and look around for a bit, it becomes immediately obvious that, ok, there are a <b>lot</b> of
     areas in Manhattan which are absolutely not always in a two-block radius of a pumkin spice latte. But amazingly,
     there are also a decent number of areas that always are. Try navigating through the Financial District or through
-    Midtown without hitting one location or other, for instance&mdash;you won't get far. And Columbus Circle? Awash in
-    them.
+    Midtown without hitting one location or other, for instance&mdash;you won't get far. And Columbus Circle, the
+    precise point of interest in our story? Awash in them.
 </p>
 
 <h3>Calculating average distance</h3>
