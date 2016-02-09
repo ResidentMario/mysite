@@ -1,20 +1,18 @@
 {% extends "blog_frame.html" %}
-{% block posttitle %}How far away is the nearest chain store?{% endblock %}
-{% block postdate %}02/08/2016{% endblock %}
+{% block posttitle %}Is Starbucks really always two blocks away?{% endblock %}
+{% block postdate %}02/09/2016{% endblock %}
 {% block content %}
 
-<h3>Context</h3>
 <p>
     This one started on Reddit.
 </p>
 
 <p>
-    Someone on r/NYC <a
+    Someone on one of my favorite subreddits, r/NYC, <a
         href="https://www.reddit.com/r/nyc/comments/44hjol/this_is_a_9_cheeseburger_from_brgr_on_61st_and/czr22cf">complained
-    about the poor quality</a> of an overpriced "cheeseburger" they received at the  61st and 3rd location of the
-    small-chain "brgr" restaurant, commenting that this is the reason why everyone ought to read Yelp! reviews. A
-    little further down the line <a href="https://www.reddit.com/user/seancurry1">u/seancurry1</a> shared a story
-    from time ago related to the subject matter:
+    </a> (naturally) about the poor quality of an overpriced burger they bought at a restaurant chain, and <a
+        href="https://www.reddit.com/user/seancurry1">u/seancurry1</a> took the time to share a life story relevant to
+    the topic:
 </p>
 
 <div class="blog_inline_block">
@@ -59,7 +57,7 @@
 <!--<img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Icicles_on_the_Launch_Tower_-_GPN-2000-001348.jpg"-->
  <!--style="width:50%; display:flex; margin:auto" alt="The shuttle before launch."/>-->
 
-<h3>Methodology</h3>
+<h3>Mapping coordinates</h3>
 
 <p>
     First and foremost I needed some sort of way of actually getting every instance of a chain in Manhattan. There
@@ -118,7 +116,7 @@
     to anyway:
 </p>
 
-<iframe src="http://127.0.0.1:5000/raw/gregorys-map.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}raw/gregorys-map.html" marginwidth="0" marginheight="0" scrolling="no"
         width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
 
 <p>
@@ -127,7 +125,7 @@
     nominally in "New York" but is actually nowhere near it:
 </p>
 
-<iframe src="http://127.0.0.1:5000/raw/dunkin-donuts-map.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}raw/dunkin-donuts-map.html" marginwidth="0" marginheight="0" scrolling="no"
         width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
 
 <p>
@@ -136,26 +134,26 @@
     these chains work to get locations in Manhattan, and how little they care for the outer boroughs.
 </p>
 
-<iframe src="http://127.0.0.1:5000/raw/starbucks-map.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}raw/starbucks-map.html" marginwidth="0" marginheight="0" scrolling="no"
         width="960px" height="450px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
 
 <p>
     If you scroll in and look around for a bit, it becomes immediately obvious that, ok, there are a <b>lot</b> of
     areas in Manhattan which are absolutely not always in a two-block radius of a pumkin spice latte. But amazingly,
-    the thesis does hold up for some of the densest neighborhoods in particular. Try navigating through the Financial
-    District or through Midtown without hitting one location or other; you won't get far.
+    there are also a decent number of areas that always are. Try navigating through the Financial District or through
+    Midtown without hitting one location or other, for instance&mdash;you won't get far. And Columbus Circle? Awash in
+    them.
 </p>
+
+<h3>Calculating average distance</h3>
 
 <p>
     This still doesn't answer the question on my mind, though: on average, how far away are you from a Starbucks? To
-    figure that out we have to go a little deeper.
+    figure that out we have to go a little deeper. We start with the following point cloud of 2000 random
+    locations in Manhattan:
 </p>
 
-<p>
-    Here is a point cloud of 2000 random locations in Manhattan:
-</p>
-
-<iframe src="http://127.0.0.1:5000/raw/manhattan-point-cloud.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}raw/manhattan-point-cloud.html" marginwidth="0" marginheight="0" scrolling="no"
         width="960px" height="550px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
 
 <p>
@@ -167,14 +165,77 @@
 </p>
 
 <p>
-    The idea is that a random sample this large will be approximately evenly distributed across the island. It's
-    possible to use an even larger sample, but 2000 points turned out to be more than enough: you don't really gain
-    much in the way of accuracy using more, and you lose a lot of speed.
+    By taking a measure of the smallest distance between a uniformally distributed random sample of points in
+    Manhattan and a list of chain locations, and then taking the average of the resulting distances, we get an
+    accurate measure of nearness. It's possible to use an even larger sample, but 2000 points turned out to be more
+    than enough once I threw them at my distance measurement algorithms: you don't really gain much in the way of
+    accuracy using more, and you lose a lot of speed.
+</p>
+
+<p>
+    And with that done, one data crunch later, we get our answer. If you were randomly dropped anywhere in Manhattan,
+    anywhere at all, the nearest Starbucks would be, on average, a mere <b>1335 feet</b> away.
+</p>
+
+<p>
+    Let's put this figure in
+    context. Most blocks in Manhattan consist of a short street and a long avenue. The ballpark figure for the  <a
+        href="http://www.nytimes.com/2006/09/17/nyregion/thecity/17fyi.html">average length of a Manhattan avenue</a>
+    is 750 feet, so the nearest Starbucks is a little over two avenues away; or, using the old ballpark figure of 20
+    city streets to a mile (which is 264 feet per block), five streets.
+</p>
+
+<p>
+    Furthermore, analysis done by another Redditor a little while ago (titled <a
+        href="http://iquantny.tumblr.com/post/82964955696/half-of-manhattan-is-within-4-blocks-of-a">"Half of Manhattan is Within
+    4 Blocks of a Starbucks"</a>) bore out the fact the 20% of Manhattan is within 0.1 miles (520 feet) of a Starbucks,
+    while a whopping 50% of it is within 0.2 miles (1040 feet) of it. So not quite two blocks&mdash;at least, not
+    always&mdash;but it's still hella close.
+</p>
+
+<h3>Visualizing the data</h3>
+
+<p>
+    But why stop there? Starbucks isn't the only game in town; in fact, as the Center for an Urban Future reports in
+    its <a href="https://nycfuture.org/research/publications/state-of-the-chains-2015">"State of the Chain 2015"</a>
+    report, Starbucks is only the <i>fourth</i> largest chain in Manhattan, trailing the likes of Dunkin Donuts,
+    Subways, and, um, Metro PCS (wait, seriously?).
+</p>
+
+<p>
+    I ran the numbers on what I felt was a somewhat representative sample of my favorite chains in the State of the
+    Chain 2015's dataset and compiled the results into the <a href="https://d3js.org/">d3.js</a> visualization below.
+    Data is provided in both feet and in the number of streets (which is, unscientifically, <code>feet / 240</code>).
+    The small blue bars demarkate the standard deviation of the data: if you don't know what those are, ignore them,
+    as I will have more to say on that topic in a future post.
+</p>
+
+<p>
+
+</p>
+
+<iframe src="{{request.url_root}}raw/average-chain-distance-viz.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="1375px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    How do competing chains compare against one another? What chains are particularly good at distributing themselves
+    throughout Manhattan? What chains are bad at it (e.g. why are Apple Stores only where the rich people live)? If
+    Whole Foods is still so hard to find, why do people feel endangered by it? What are the confidence intervals at
+    play here? This is a broad dataset, we've only scratched the surface on what we can do with it, and I definitely
+    plan to revisit this topic in a future continuation. In the meantime you can sleep soundly at night, if you're
+    lucky enough (or foolish enough, or both) to live in Manhattan, knowing that the nearest Starbucks is probably just
+    a few minutes' walk away.
+</p>
+
+<p>
+    Addendum: this post was the product of a day's furious hacking. You can play with the code that generated the
+    visualizations and datasets here yourself at the corresponding <a
+        href="https://github.com/ResidentMario/chain-incidence">repository</a> on GitHub.
 </p>
 
 {% endblock %}
-{% block previouspost %}<a href="{{request.url_root}}2016/01/17/signpost-views.html">Measuring Wikipedia Signpost
-    popularity</a>
+{% block previouspost %}<a href="{{request.url_root}}2016/02/07/space-shuttle-challenger.html">The decision to
+    launch the Space Shuttle Challenger</a>
 {% endblock %}
 {% block nextpost %}
 {% endblock %}

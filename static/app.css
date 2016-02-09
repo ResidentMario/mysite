@@ -49,11 +49,13 @@ body {
     font-size:20px;
     margin-bottom:50px;
     font-style: italic;
+    max-width:400px;
 }
 #blog_next_links {
     font-size:20px;
     margin-bottom:50px;
     font-style: italic;
+    max-width:400px;
 }
 .blog_inline_block {
     width:inherit;

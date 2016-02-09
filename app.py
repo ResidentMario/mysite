@@ -50,9 +50,9 @@ def sixth_post():
     return render_template('challenger.html', id=6)
 
 
-@app.route('/2016/02/07/average-chain-distance.html')
+@app.route('/2016/02/09/average-chain-distance.html')
 def average_chain_distance():
-    return render_template('average_chain_distance.html')
+    return render_template('average_chain_distance.html', id=7)
 
 
 @app.route('/raw/challenger-compact.html')
@@ -85,6 +85,10 @@ def manhattan_point_cloud():
     return render_template('manhattan_point_cloud.html')
 
 
+@app.route('/raw/average-chain-distance-viz.html')
+def average_chain_distance_viz():
+    return render_template('average_chain_distance_viz.html')
+
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
