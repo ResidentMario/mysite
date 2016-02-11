@@ -1,0 +1,105 @@
+{% extends "blog_frame.html" %}
+{% block posttitle %}Exploring the IBM Watson Concept Insights service using <code>watsongraph</code>{% endblock %}
+{% block postdate %}02/11/2016{% endblock %}
+{% block content %}
+
+<p>
+    I wrote a <a href="http://www.residentmar.io/2015/12/26/watson.html">blog post</a> a couple of weeks ago speaking of
+    my experience developing the <a href="https://pypi.python.org/pypi/watsongraph/">watsongraph</a> library, a
+    Pythonic concept mapping and exploration library based on the IBM Watson <a
+            href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/concept-insights.html">Concept
+        Insights</a> API.
+</p>
+
+<p>
+    Netfix and Amazon are two examples of companies with famously precise and well-developed recommendation engines:
+    their entire business model relies on being able to present their users with attractive products related to the
+    ones that they have already viewed.
+<p>
+
+    But though the implementations differ, the core idea of both of these focused systems&mdash;providing a way to map
+    objects to and from one another&mdash;is the same, as, indeed, it is for any company wishing to build such a
+    system. The watsongraph library is made to make it as easy as possible to map text to concepts and concepts to other
+    concepts, freeing up those working with concept mining or relationship analysis to focus on their actual datasets,
+    not the analytical tools that they are using. It does this by leveraging the massive size, flexibility, and power
+    of IBM's <code>wikipedia/en-20120601</code> cognitive graph, a Watsonian machine-learned model of the conceptual
+    interconnectedness of all of Wikipedia, allowing you to reconstruct flexible <code>ConceptMap</code> objects
+    relating the things you are studying to their associated concepts. These maps can in turn be measured for
+    their relative overlap, giving us a flexible yet durable way to model the relationships within almost any dataset.
+</p>
+
+<p>
+    For more details on how to use the library see the <a
+        href="https://github.com/ResidentMario/watsongraph#documentation-and-examples">extensive documentation</a>.
+    In this post I will focus on a related but sort of meta-analytical issue: parametrizing Concept Insights output.
+    In order to do that I have using visualized relative conceptual interdependence, as Watson sees it, of several
+    different datasets.
+</p>
+
+<p>
+    First up, here is the conceptual output for the seven planets. Lines width and weight is by the scale of the
+    conceptual relationship on a scale of 0.5-to-1. Hover over the individual nodes to get names, and over the
+    individual edges to get relationship strengths.
+</p>
+
+<iframe src="{{request.url_root}}raw/planets-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="500px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    The data here is kind of hard to interpret, but it does give us a sense of the scale of the relations that Watson
+    tends to generate. Earth seems to be relatively unique, for a planet, having only relatively weak (<0.70)
+    conceptual relatedness to the rest of the solar system. The same is true of Mars. It's unsurprising that Watson
+    highly correlates the gas giants. Somewhat more surprisingly Venus, thanks to its atmosphere, is also considered
+    relatively highly correlated to them. The relationships amongst the rocky planets, meanwhile, are much weaker
+    than those amongst the gas giants.
+</p>
+
+<p>
+    Next let's take a look at what Watson has to say about my top 30 contributions on Wikipedia in terms of edit
+    volume. This time nodes are scaled in size and intensity against the number of edits (which is also visible in
+    the tooltip):
+</p>
+
+<iframe src="{{request.url_root}}raw/contributions-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="500px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    It doesn't take very long to see that the vast majority of my most highly edited articles are very strongly
+    correlated! The density of the cloud surprised me. But you can also see that Watson is silent on the connections
+    of a number of points here, all of which were "one-off" diversions for me in terms of editing activity. As for
+    Asinara: this is a small island at the tip of Italian Sicily, while Ferdinandea is a seamount and former volcanic
+    island claimed by Italy which succeeds in conceptually "linking" the island back into the rest of the data.
+</p>
+
+<p>
+    Here is probably the most interesting of the force graphs that I made. Here we measure the conceptual
+    interdependence of the fifty largest US companies (taken from the Fortune 500 list). Nodes are colored according
+    to industry.
+</p>
+
+<iframe src="{{request.url_root}}raw/fortune-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
+        width="960px" height="500px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
+
+<p>
+    The relationships here are very interesting, and I recommend playing around with it for a while to see what you
+    can learn. The Verizon-AT&T-Compact substructure is unique. Oil companies are considered to be very strongly related
+    to one another, while technology companies and car companies are considered to be distinguishably unique (IBM
+    itself is amongst the points floating around on the outside). General Electric and Beoing are also surprisingly
+    unique&mdash;what is this United Technology Company? Freddie Mae and Fannie Mac are, unsurprisingly, placed very
+    close to one another. And so on.
+</p>
+
+<p>
+    <code>watsongraph</code> is still a beta library, as it is not quite yet ready for prime time: there are a number
+    of <a
+        href="https://github.com/ResidentMario/watsongraph/issues?utf8=%E2%9C%93&q=is%3Aissue+milestone%3A0.3.0+">important structural improvements</a>
+    that remain to be carried out to take it to its first full release, <code>0.3.0</code>. But there are already
+    quite a few lessons to be learned from visualizing. And, ok, it's also just plain old good fun!
+</p>
+
+{% endblock %}
+{% block previouspost %}<a href="{{request.url_root}}2016/02/09/average-chain-distance.html">Is Starbucks really
+    always two blocks away?</a>
+{% endblock %}
+{% block nextpost %}
+{% endblock %}

@@ -1,0 +1,198 @@
+{
+    "graph": {
+        "name": "compose( ,  )"
+    },
+    "links": [
+        {
+            "source": 3,
+            "weight": 0.5506542,
+            "target": 0
+        },
+        {
+            "source": 3,
+            "weight": 0.67572737,
+            "target": 2
+        },
+        {
+            "source": 3,
+            "weight": 0.64393395,
+            "target": 6
+        },
+        {
+            "source": 3,
+            "weight": 0.69244766,
+            "target": 1
+        },
+        {
+            "source": 3,
+            "weight": 0.5761174,
+            "target": 7
+        },
+        {
+            "source": 3,
+            "weight": 0.6508541,
+            "target": 8
+        },
+        {
+            "source": 3,
+            "weight": 0.6687697,
+            "target": 5
+        },
+        {
+            "source": 2,
+            "weight": 0.8650364,
+            "target": 6
+        },
+        {
+            "source": 2,
+            "weight": 0.90263027,
+            "target": 1
+        },
+        {
+            "source": 2,
+            "weight": 0.701095,
+            "target": 7
+        },
+        {
+            "source": 2,
+            "weight": 0.66321003,
+            "target": 0
+        },
+        {
+            "source": 2,
+            "weight": 0.85339475,
+            "target": 8
+        },
+        {
+            "source": 2,
+            "weight": 0.8768007,
+            "target": 5
+        },
+        {
+            "source": 6,
+            "weight": 0.6063263,
+            "target": 4
+        },
+        {
+            "source": 6,
+            "weight": 0.9516121,
+            "target": 1
+        },
+        {
+            "source": 6,
+            "weight": 0.8758611,
+            "target": 0
+        },
+        {
+            "source": 6,
+            "weight": 0.9471918,
+            "target": 8
+        },
+        {
+            "source": 6,
+            "weight": 0.8723537,
+            "target": 7
+        },
+        {
+            "source": 6,
+            "weight": 0.9668754,
+            "target": 5
+        },
+        {
+            "source": 1,
+            "weight": 0.7658437,
+            "target": 7
+        },
+        {
+            "source": 1,
+            "weight": 0.8677793,
+            "target": 0
+        },
+        {
+            "source": 1,
+            "weight": 0.9717554,
+            "target": 8
+        },
+        {
+            "source": 1,
+            "weight": 0.67443794,
+            "target": 4
+        },
+        {
+            "source": 1,
+            "weight": 0.9689604,
+            "target": 5
+        },
+        {
+            "source": 7,
+            "weight": 0.858609,
+            "target": 0
+        },
+        {
+            "source": 7,
+            "weight": 0.80708086,
+            "target": 8
+        },
+        {
+            "source": 7,
+            "weight": 0.833997,
+            "target": 5
+        },
+        {
+            "source": 0,
+            "weight": 0.8787444,
+            "target": 8
+        },
+        {
+            "source": 0,
+            "weight": 0.86294395,
+            "target": 5
+        },
+        {
+            "source": 8,
+            "weight": 0.60784465,
+            "target": 4
+        },
+        {
+            "source": 8,
+            "weight": 0.9625241,
+            "target": 5
+        },
+        {
+            "source": 4,
+            "weight": 0.6899861,
+            "target": 5
+        }
+    ],
+    "multigraph": false,
+    "nodes": [
+        {
+            "id": "Mars"
+        },
+        {
+            "id": "Neptune"
+        },
+        {
+            "id": "Jupiter"
+        },
+        {
+            "id": "Earth"
+        },
+        {
+            "id": "Mercury"
+        },
+        {
+            "id": "Uranus"
+        },
+        {
+            "id": "Saturn"
+        },
+        {
+            "id": "Venus"
+        },
+        {
+            "id": "Pluto"
+        }
+    ],
+    "directed": false
+}

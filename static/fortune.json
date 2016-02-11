@@ -1,0 +1,1234 @@
+{
+    "links": [
+        {
+            "weight": 0.83818614,
+            "source": 0,
+            "target": 15
+        },
+        {
+            "weight": 0.8383687,
+            "source": 0,
+            "target": 1
+        },
+        {
+            "weight": 0.57141024,
+            "source": 0,
+            "target": 42
+        },
+        {
+            "weight": 0.94706297,
+            "source": 0,
+            "target": 28
+        },
+        {
+            "weight": 0.75099915,
+            "source": 0,
+            "target": 29
+        },
+        {
+            "weight": 0.643691,
+            "source": 0,
+            "target": 30
+        },
+        {
+            "weight": 0.5871605,
+            "source": 0,
+            "target": 5
+        },
+        {
+            "weight": 0.9746715,
+            "source": 0,
+            "target": 31
+        },
+        {
+            "weight": 0.87822616,
+            "source": 0,
+            "target": 20
+        },
+        {
+            "weight": 0.94444966,
+            "source": 0,
+            "target": 33
+        },
+        {
+            "weight": 0.79003906,
+            "source": 0,
+            "target": 22
+        },
+        {
+            "weight": 0.99605465,
+            "source": 0,
+            "target": 35
+        },
+        {
+            "weight": 0.6183772,
+            "source": 1,
+            "target": 28
+        },
+        {
+            "weight": 0.55965847,
+            "source": 1,
+            "target": 45
+        },
+        {
+            "weight": 0.5597641,
+            "source": 1,
+            "target": 48
+        },
+        {
+            "weight": 0.780927,
+            "source": 1,
+            "target": 5
+        },
+        {
+            "weight": 0.7807296,
+            "source": 1,
+            "target": 32
+        },
+        {
+            "weight": 0.60045695,
+            "source": 1,
+            "target": 30
+        },
+        {
+            "weight": 0.57859343,
+            "source": 1,
+            "target": 6
+        },
+        {
+            "weight": 0.99450123,
+            "source": 1,
+            "target": 36
+        },
+        {
+            "weight": 0.54257524,
+            "source": 1,
+            "target": 7
+        },
+        {
+            "weight": 0.95329493,
+            "source": 1,
+            "target": 8
+        },
+        {
+            "weight": 0.9172099,
+            "source": 1,
+            "target": 44
+        },
+        {
+            "weight": 0.64408255,
+            "source": 1,
+            "target": 11
+        },
+        {
+            "weight": 0.6983307,
+            "source": 1,
+            "target": 12
+        },
+        {
+            "weight": 0.9987622,
+            "source": 1,
+            "target": 42
+        },
+        {
+            "weight": 0.6845393,
+            "source": 1,
+            "target": 13
+        },
+        {
+            "weight": 0.6788844,
+            "source": 1,
+            "target": 14
+        },
+        {
+            "weight": 0.59268206,
+            "source": 1,
+            "target": 15
+        },
+        {
+            "weight": 0.72906566,
+            "source": 1,
+            "target": 2
+        },
+        {
+            "weight": 0.9468988,
+            "source": 1,
+            "target": 17
+        },
+        {
+            "weight": 0.5958935,
+            "source": 1,
+            "target": 35
+        },
+        {
+            "weight": 0.8368418,
+            "source": 1,
+            "target": 20
+        },
+        {
+            "weight": 0.5022296,
+            "source": 1,
+            "target": 37
+        },
+        {
+            "weight": 0.6322128,
+            "source": 1,
+            "target": 24
+        },
+        {
+            "weight": 0.6257782,
+            "source": 2,
+            "target": 17
+        },
+        {
+            "weight": 0.8582582,
+            "source": 2,
+            "target": 5
+        },
+        {
+            "weight": 0.8789698,
+            "source": 2,
+            "target": 31
+        },
+        {
+            "weight": 0.82978,
+            "source": 2,
+            "target": 37
+        },
+        {
+            "weight": 0.7700876,
+            "source": 2,
+            "target": 30
+        },
+        {
+            "weight": 0.65579426,
+            "source": 2,
+            "target": 15
+        },
+        {
+            "weight": 0.7888053,
+            "source": 4,
+            "target": 32
+        },
+        {
+            "weight": 0.59276575,
+            "source": 4,
+            "target": 8
+        },
+        {
+            "weight": 0.5431569,
+            "source": 4,
+            "target": 15
+        },
+        {
+            "weight": 0.5075428,
+            "source": 4,
+            "target": 41
+        },
+        {
+            "weight": 0.7669374,
+            "source": 4,
+            "target": 25
+        },
+        {
+            "weight": 0.8341904,
+            "source": 5,
+            "target": 15
+        },
+        {
+            "weight": 0.60391647,
+            "source": 5,
+            "target": 22
+        },
+        {
+            "weight": 0.8615354,
+            "source": 5,
+            "target": 42
+        },
+        {
+            "weight": 0.9896028,
+            "source": 5,
+            "target": 30
+        },
+        {
+            "weight": 0.9877191,
+            "source": 5,
+            "target": 17
+        },
+        {
+            "weight": 0.7003736,
+            "source": 5,
+            "target": 31
+        },
+        {
+            "weight": 0.50840217,
+            "source": 5,
+            "target": 20
+        },
+        {
+            "weight": 0.9734931,
+            "source": 5,
+            "target": 37
+        },
+        {
+            "weight": 0.76032996,
+            "source": 5,
+            "target": 8
+        },
+        {
+            "weight": 0.6430649,
+            "source": 5,
+            "target": 35
+        },
+        {
+            "weight": 0.92268026,
+            "source": 5,
+            "target": 36
+        },
+        {
+            "weight": 0.6355336,
+            "source": 5,
+            "target": 24
+        },
+        {
+            "weight": 0.598567,
+            "source": 6,
+            "target": 17
+        },
+        {
+            "weight": 0.77611846,
+            "source": 6,
+            "target": 34
+        },
+        {
+            "weight": 0.88514996,
+            "source": 6,
+            "target": 44
+        },
+        {
+            "weight": 0.65898937,
+            "source": 6,
+            "target": 43
+        },
+        {
+            "weight": 0.7798795,
+            "source": 6,
+            "target": 8
+        },
+        {
+            "weight": 0.7045516,
+            "source": 6,
+            "target": 15
+        },
+        {
+            "weight": 0.8764419,
+            "source": 6,
+            "target": 12
+        },
+        {
+            "weight": 0.78695875,
+            "source": 6,
+            "target": 7
+        },
+        {
+            "weight": 0.5566736,
+            "source": 7,
+            "target": 42
+        },
+        {
+            "weight": 0.71124566,
+            "source": 7,
+            "target": 17
+        },
+        {
+            "weight": 0.7735114,
+            "source": 7,
+            "target": 44
+        },
+        {
+            "weight": 0.8894585,
+            "source": 7,
+            "target": 12
+        },
+        {
+            "weight": 0.9184699,
+            "source": 7,
+            "target": 43
+        },
+        {
+            "weight": 0.7870886,
+            "source": 7,
+            "target": 8
+        },
+        {
+            "weight": 0.56674737,
+            "source": 7,
+            "target": 45
+        },
+        {
+            "weight": 0.79809433,
+            "source": 7,
+            "target": 34
+        },
+        {
+            "weight": 0.5700587,
+            "source": 7,
+            "target": 15
+        },
+        {
+            "weight": 0.9643642,
+            "source": 8,
+            "target": 42
+        },
+        {
+            "weight": 0.60339934,
+            "source": 8,
+            "target": 43
+        },
+        {
+            "weight": 0.9312497,
+            "source": 8,
+            "target": 44
+        },
+        {
+            "weight": 0.8277131,
+            "source": 8,
+            "target": 12
+        },
+        {
+            "weight": 0.77799636,
+            "source": 8,
+            "target": 34
+        },
+        {
+            "weight": 0.9980302,
+            "source": 8,
+            "target": 17
+        },
+        {
+            "weight": 0.5891525,
+            "source": 8,
+            "target": 15
+        },
+        {
+            "weight": 0.9099342,
+            "source": 8,
+            "target": 36
+        },
+        {
+            "weight": 0.63828975,
+            "source": 9,
+            "target": 41
+        },
+        {
+            "weight": 0.5258101,
+            "source": 9,
+            "target": 29
+        },
+        {
+            "weight": 0.69878286,
+            "source": 9,
+            "target": 15
+        },
+        {
+            "weight": 0.6415444,
+            "source": 10,
+            "target": 18
+        },
+        {
+            "weight": 0.9437372,
+            "source": 11,
+            "target": 38
+        },
+        {
+            "weight": 0.6946351,
+            "source": 11,
+            "target": 44
+        },
+        {
+            "weight": 0.9346681,
+            "source": 11,
+            "target": 16
+        },
+        {
+            "weight": 0.5385439,
+            "source": 11,
+            "target": 36
+        },
+        {
+            "weight": 0.8200489,
+            "source": 11,
+            "target": 42
+        },
+        {
+            "weight": 0.97709686,
+            "source": 11,
+            "target": 13
+        },
+        {
+            "weight": 0.95317703,
+            "source": 11,
+            "target": 29
+        },
+        {
+            "weight": 0.92280966,
+            "source": 11,
+            "target": 46
+        },
+        {
+            "weight": 0.76110196,
+            "source": 12,
+            "target": 15
+        },
+        {
+            "weight": 0.66161263,
+            "source": 12,
+            "target": 17
+        },
+        {
+            "weight": 0.7666437,
+            "source": 12,
+            "target": 42
+        },
+        {
+            "weight": 0.7991738,
+            "source": 12,
+            "target": 43
+        },
+        {
+            "weight": 0.9297511,
+            "source": 12,
+            "target": 44
+        },
+        {
+            "weight": 0.9514781,
+            "source": 13,
+            "target": 38
+        },
+        {
+            "weight": 0.54074603,
+            "source": 13,
+            "target": 41
+        },
+        {
+            "weight": 0.76345336,
+            "source": 13,
+            "target": 42
+        },
+        {
+            "weight": 0.71355665,
+            "source": 13,
+            "target": 44
+        },
+        {
+            "weight": 0.9735544,
+            "source": 13,
+            "target": 16
+        },
+        {
+            "weight": 0.91501015,
+            "source": 13,
+            "target": 29
+        },
+        {
+            "weight": 0.96391255,
+            "source": 13,
+            "target": 46
+        },
+        {
+            "weight": 0.6951398,
+            "source": 14,
+            "target": 21
+        },
+        {
+            "weight": 0.9655505,
+            "source": 14,
+            "target": 48
+        },
+        {
+            "weight": 0.7862823,
+            "source": 15,
+            "target": 28
+        },
+        {
+            "weight": 0.7384695,
+            "source": 15,
+            "target": 30
+        },
+        {
+            "weight": 0.85784817,
+            "source": 15,
+            "target": 31
+        },
+        {
+            "weight": 0.84638804,
+            "source": 15,
+            "target": 33
+        },
+        {
+            "weight": 0.8210026,
+            "source": 15,
+            "target": 35
+        },
+        {
+            "weight": 0.5813228,
+            "source": 15,
+            "target": 41
+        },
+        {
+            "weight": 0.67314434,
+            "source": 15,
+            "target": 42
+        },
+        {
+            "weight": 0.6069767,
+            "source": 15,
+            "target": 17
+        },
+        {
+            "weight": 0.50469047,
+            "source": 15,
+            "target": 43
+        },
+        {
+            "weight": 0.7918653,
+            "source": 15,
+            "target": 20
+        },
+        {
+            "weight": 0.54843545,
+            "source": 15,
+            "target": 37
+        },
+        {
+            "weight": 0.8463936,
+            "source": 15,
+            "target": 22
+        },
+        {
+            "weight": 0.953271,
+            "source": 16,
+            "target": 38
+        },
+        {
+            "weight": 0.88810146,
+            "source": 16,
+            "target": 41
+        },
+        {
+            "weight": 0.9355632,
+            "source": 16,
+            "target": 29
+        },
+        {
+            "weight": 0.9080072,
+            "source": 16,
+            "target": 46
+        },
+        {
+            "weight": 0.6888982,
+            "source": 17,
+            "target": 22
+        },
+        {
+            "weight": 0.97327805,
+            "source": 17,
+            "target": 42
+        },
+        {
+            "weight": 0.9056909,
+            "source": 17,
+            "target": 44
+        },
+        {
+            "weight": 0.51769984,
+            "source": 17,
+            "target": 45
+        },
+        {
+            "weight": 0.91993195,
+            "source": 17,
+            "target": 30
+        },
+        {
+            "weight": 0.57788575,
+            "source": 17,
+            "target": 33
+        },
+        {
+            "weight": 0.57052565,
+            "source": 17,
+            "target": 46
+        },
+        {
+            "weight": 0.528937,
+            "source": 17,
+            "target": 43
+        },
+        {
+            "weight": 0.578788,
+            "source": 17,
+            "target": 20
+        },
+        {
+            "weight": 0.6491692,
+            "source": 17,
+            "target": 37
+        },
+        {
+            "weight": 0.97151077,
+            "source": 17,
+            "target": 36
+        },
+        {
+            "weight": 0.9476381,
+            "source": 20,
+            "target": 22
+        },
+        {
+            "weight": 0.52675325,
+            "source": 20,
+            "target": 42
+        },
+        {
+            "weight": 0.9547792,
+            "source": 20,
+            "target": 28
+        },
+        {
+            "weight": 0.6594556,
+            "source": 20,
+            "target": 29
+        },
+        {
+            "weight": 0.6196841,
+            "source": 20,
+            "target": 30
+        },
+        {
+            "weight": 0.92034984,
+            "source": 20,
+            "target": 31
+        },
+        {
+            "weight": 0.6209023,
+            "source": 20,
+            "target": 37
+        },
+        {
+            "weight": 0.8674007,
+            "source": 20,
+            "target": 35
+        },
+        {
+            "weight": 0.96296376,
+            "source": 20,
+            "target": 33
+        },
+        {
+            "weight": 0.54069173,
+            "source": 20,
+            "target": 25
+        },
+        {
+            "weight": 0.84391534,
+            "source": 21,
+            "target": 48
+        },
+        {
+            "weight": 0.7724339,
+            "source": 22,
+            "target": 35
+        },
+        {
+            "weight": 0.77256554,
+            "source": 22,
+            "target": 31
+        },
+        {
+            "weight": 0.91072834,
+            "source": 22,
+            "target": 28
+        },
+        {
+            "weight": 0.5956881,
+            "source": 22,
+            "target": 37
+        },
+        {
+            "weight": 0.6129463,
+            "source": 22,
+            "target": 30
+        },
+        {
+            "weight": 0.9652546,
+            "source": 22,
+            "target": 33
+        },
+        {
+            "weight": 0.5452996,
+            "source": 23,
+            "target": 26
+        },
+        {
+            "weight": 0.7384334,
+            "source": 24,
+            "target": 39
+        },
+        {
+            "weight": 0.78840953,
+            "source": 24,
+            "target": 42
+        },
+        {
+            "weight": 0.7881429,
+            "source": 24,
+            "target": 40
+        },
+        {
+            "weight": 0.5519646,
+            "source": 24,
+            "target": 36
+        },
+        {
+            "weight": 0.5358974,
+            "source": 25,
+            "target": 32
+        },
+        {
+            "weight": 0.5030325,
+            "source": 25,
+            "target": 44
+        },
+        {
+            "weight": 0.548499,
+            "source": 25,
+            "target": 29
+        },
+        {
+            "weight": 0.6606676,
+            "source": 25,
+            "target": 41
+        },
+        {
+            "weight": 0.9269042,
+            "source": 28,
+            "target": 31
+        },
+        {
+            "weight": 0.7658277,
+            "source": 28,
+            "target": 37
+        },
+        {
+            "weight": 0.94674784,
+            "source": 28,
+            "target": 35
+        },
+        {
+            "weight": 0.9351533,
+            "source": 28,
+            "target": 33
+        },
+        {
+            "weight": 0.6817032,
+            "source": 28,
+            "target": 30
+        },
+        {
+            "weight": 0.95383835,
+            "source": 29,
+            "target": 38
+        },
+        {
+            "weight": 0.5997924,
+            "source": 29,
+            "target": 41
+        },
+        {
+            "weight": 0.9025846,
+            "source": 29,
+            "target": 46
+        },
+        {
+            "weight": 0.6272671,
+            "source": 29,
+            "target": 32
+        },
+        {
+            "weight": 0.5446864,
+            "source": 29,
+            "target": 31
+        },
+        {
+            "weight": 0.7779316,
+            "source": 29,
+            "target": 35
+        },
+        {
+            "weight": 0.62211037,
+            "source": 30,
+            "target": 36
+        },
+        {
+            "weight": 0.7023195,
+            "source": 30,
+            "target": 42
+        },
+        {
+            "weight": 0.8087978,
+            "source": 30,
+            "target": 31
+        },
+        {
+            "weight": 0.8463409,
+            "source": 30,
+            "target": 37
+        },
+        {
+            "weight": 0.64435136,
+            "source": 30,
+            "target": 35
+        },
+        {
+            "weight": 0.5794576,
+            "source": 30,
+            "target": 33
+        },
+        {
+            "weight": 0.93869174,
+            "source": 31,
+            "target": 37
+        },
+        {
+            "weight": 0.97249377,
+            "source": 31,
+            "target": 35
+        },
+        {
+            "weight": 0.88599706,
+            "source": 31,
+            "target": 33
+        },
+        {
+            "weight": 0.80371064,
+            "source": 32,
+            "target": 42
+        },
+        {
+            "weight": 0.51362854,
+            "source": 33,
+            "target": 42
+        },
+        {
+            "weight": 0.9374255,
+            "source": 33,
+            "target": 35
+        },
+        {
+            "weight": 0.6168657,
+            "source": 33,
+            "target": 37
+        },
+        {
+            "weight": 0.8442466,
+            "source": 36,
+            "target": 41
+        },
+        {
+            "weight": 0.9970161,
+            "source": 36,
+            "target": 42
+        },
+        {
+            "weight": 0.62704587,
+            "source": 36,
+            "target": 44
+        },
+        {
+            "weight": 0.56939167,
+            "source": 37,
+            "target": 42
+        },
+        {
+            "weight": 0.51515347,
+            "source": 38,
+            "target": 42
+        },
+        {
+            "weight": 0.99084085,
+            "source": 38,
+            "target": 46
+        },
+        {
+            "weight": 0.9191336,
+            "source": 42,
+            "target": 44
+        },
+        {
+            "weight": 0.76710606,
+            "source": 43,
+            "target": 44
+        },
+        {
+            "weight": 0.7132287,
+            "source": 44,
+            "target": 46
+        }
+    ],
+    "nodes": [
+        {
+            "rank": 42,
+            "id": "Freddie Mac",
+            "industry": "Diversified Financials"
+        },
+        {
+            "rank": 26,
+            "id": "Cardinal Health",
+            "industry": "Wholesalers: Health Care"
+        },
+        {
+            "rank": 41,
+            "id": "State Farm Insurance",
+            "industry": "Insurance: Property and Casualty (Mutual)"
+        },
+        {
+            "rank": 5,
+            "id": "Apple Inc.",
+            "industry": "Computers, Office Equipment"
+        },
+        {
+            "rank": 32,
+            "id": "Procter & Gamble",
+            "industry": "Household and Personal Products"
+        },
+        {
+            "rank": 14,
+            "id": "UnitedHealth Group",
+            "industry": "Health Care: Insurance and Managed Care"
+        },
+        {
+            "rank": 1,
+            "id": "Walmart",
+            "industry": "General Merchandisers"
+        },
+        {
+            "rank": 33,
+            "id": "The Home Depot",
+            "industry": "Specialty Retailers: Other"
+        },
+        {
+            "rank": 35,
+            "id": "Walgreens",
+            "industry": "Food and Drug Stores"
+        },
+        {
+            "rank": 48,
+            "id": "Dow Chemical Company",
+            "industry": "Chemicals"
+        },
+        {
+            "rank": 19,
+            "id": "Hewlett-Packard",
+            "industry": "Computers, Office Equipment"
+        },
+        {
+            "rank": 13,
+            "id": "Valero Energy",
+            "industry": "Petroleum Refining"
+        },
+        {
+            "rank": 18,
+            "id": "Costco",
+            "industry": "Specialty Retailers: Other"
+        },
+        {
+            "rank": 25,
+            "id": "Marathon Petroleum",
+            "industry": "Petroleum Refining"
+        },
+        {
+            "rank": 12,
+            "id": "AT&T",
+            "industry": "Telecommunications"
+        },
+        {
+            "rank": 4,
+            "id": "Berkshire Hathaway",
+            "industry": "Insurance: Property and Casualty (Stock)"
+        },
+        {
+            "rank": 3,
+            "id": "Chevron Corporation",
+            "industry": "Petroleum Refining"
+        },
+        {
+            "rank": 22,
+            "id": "Express Scripts",
+            "industry": "Health Care: Pharmacy and Other Services"
+        },
+        {
+            "rank": 24,
+            "id": "IBM",
+            "industry": "Information Technology Services"
+        },
+        {
+            "rank": 6,
+            "id": "General Motors",
+            "industry": "Motor Vehicles and Parts"
+        },
+        {
+            "rank": 21,
+            "id": "JPMorgan Chase",
+            "industry": "Commercial Banks"
+        },
+        {
+            "rank": 43,
+            "id": "Comcast",
+            "industry": "Telecommunications"
+        },
+        {
+            "rank": 30,
+            "id": "Wells Fargo",
+            "industry": "Commercial Banks"
+        },
+        {
+            "rank": 29,
+            "id": "Amazon.com",
+            "industry": "Internet Services and Retailing"
+        },
+        {
+            "rank": 45,
+            "id": "United Technologies Corporation",
+            "industry": "Aerospace and Defense"
+        },
+        {
+            "rank": 44,
+            "id": "PepsiCo",
+            "industry": "Food Consumer Products"
+        },
+        {
+            "rank": 40,
+            "id": "Google",
+            "industry": "Internet Services and Retailing"
+        },
+        {
+            "rank": 9,
+            "id": "Ford Motor Company",
+            "industry": "Motor Vehicles and Parts"
+        },
+        {
+            "rank": 28,
+            "id": "Citigroup",
+            "industry": "Commercial Banks"
+        },
+        {
+            "rank": 2,
+            "id": "ExxonMobil",
+            "industry": "Petroleum Refining"
+        },
+        {
+            "rank": 49,
+            "id": "Aetna",
+            "industry": "Health Care: Insurance and Managed Care"
+        },
+        {
+            "rank": 46,
+            "id": "American International Group",
+            "industry": "Insurance: Property and Casualty (Stock)"
+        },
+        {
+            "rank": 37,
+            "id": "Johnson & Johnson",
+            "industry": "Pharmaceuticals"
+        },
+        {
+            "rank": 23,
+            "id": "Bank of America",
+            "industry": "Commercial Banks"
+        },
+        {
+            "rank": 36,
+            "id": "Target Corporation",
+            "industry": "General Merchandisers"
+        },
+        {
+            "rank": 17,
+            "id": "Fannie Mae",
+            "industry": "Diversified Financials"
+        },
+        {
+            "rank": 11,
+            "id": "McKesson Corporation",
+            "industry": "Wholesalers: Health Care"
+        },
+        {
+            "rank": 39,
+            "id": "MetLife",
+            "industry": "Insurance: Life, Health (stock)"
+        },
+        {
+            "rank": 51,
+            "id": "ConocoPhillips",
+            "industry": "Mining, Crude-Oil Production"
+        },
+        {
+            "rank": 8,
+            "id": "General Electric",
+            "industry": "Diversified Financials"
+        },
+        {
+            "rank": 27,
+            "id": "Boeing",
+            "industry": "Aerospace and Defense"
+        },
+        {
+            "rank": 34,
+            "id": "Archer Daniels Midland",
+            "industry": "Food Production"
+        },
+        {
+            "rank": 16,
+            "id": "AmerisourceBergen",
+            "industry": "Wholesalers: Health Care"
+        },
+        {
+            "rank": 50,
+            "id": "Lowe's",
+            "industry": "Specialty Retailers: Other"
+        },
+        {
+            "rank": 20,
+            "id": "Kroger",
+            "industry": "Food and Drug Stores"
+        },
+        {
+            "rank": 47,
+            "id": "United Parcel Service",
+            "industry": "Mail, Package, and Freight Delivery"
+        },
+        {
+            "rank": 7,
+            "id": "Phillips 66",
+            "industry": "Petroleum Refining"
+        },
+        {
+            "rank": 31,
+            "id": "Microsoft",
+            "industry": "Computer Software"
+        },
+        {
+            "rank": 15,
+            "id": "Verizon Communications",
+            "industry": "Telecommunications"
+        }
+    ],
+    "graph": [
+        [
+            "name",
+            "compose( ,  )"
+        ]
+    ],
+    "directed": false,
+    "multigraph": false
+}

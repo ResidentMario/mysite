@@ -55,6 +55,11 @@ def average_chain_distance():
     return render_template('average_chain_distance.html', id=7)
 
 
+@app.route('/2016/02/11/watsongraph-visualization.html')
+def watsongraph_visualization():
+    return render_template('watsongraph_visualization.html', id=8)
+
+
 @app.route('/raw/challenger-compact.html')
 def challenger_compact():
     return render_template('raw_challenger_compact.html')
@@ -89,6 +94,22 @@ def manhattan_point_cloud():
 def average_chain_distance_viz():
     return render_template('average_chain_distance_viz.html')
 
+
+@app.route('/raw/contributions-visualization.html')
+def raw_contributions():
+    return render_template('raw_contributions_visualization.html')
+
+
+@app.route('/raw/fortune-visualization.html')
+def raw_fortune():
+    return render_template('raw_fortune_visualization.html')
+
+
+@app.route('/raw/planets-visualization.html')
+def raw_planets():
+    return render_template('raw_planets_visualization.html')
+
+
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
