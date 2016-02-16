@@ -59,7 +59,11 @@ def average_chain_distance():
 def watsongraph_visualization():
     return render_template('watsongraph_visualization.html', id=8)
 
+@app.route('/2016/02/15/wikiprojects.html')
+def wikiprojects():
+    return render_template('wikiprojects.html', id=9)
 
+# RAW HOSTING
 @app.route('/raw/challenger-compact.html')
 def challenger_compact():
     return render_template('raw_challenger_compact.html')
@@ -111,5 +115,5 @@ def raw_planets():
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)

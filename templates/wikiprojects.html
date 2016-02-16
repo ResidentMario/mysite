@@ -1,0 +1,196 @@
+{% extends "blog_frame.html" %}
+{% block posttitle %}Analyzing WikiProjects{% endblock %}
+{% block postdate %}02/15/2016{% endblock %}
+{% block content %}
+
+<h3>Context</h3>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/WikimediaMosaicCapture.png"
+     style="width:500px; display:flex; margin:auto" alt="The Wikimedia Commons logo, mosaic-style."/>
+
+<p>
+    Active editors on Wikipedia nominally organize themselves using WikiProjects, gathering-places for users
+    with similar editing interests and experiences which serve to help bind together the specific
+    sub-populations in the Wikipedian editing community. The effectiveness of these WikiProjects, however, is highly
+    variable. Some, like <a href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Military_history">WikiProject
+    Military history</a> or <a href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Video games">WikiProject
+    Video games</a> are highly active and well-organized discussion-board-cum-communities. Some, like my home
+    projects <a href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Volcanoes">WikiProject Volcanoes</a> and <a
+        href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Hawaii">WikiProject Hawaii</a>, are moderately
+    active, but can seem lifeless at times. And some, like <a
+        href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Nudity">WikiProject Nudity</a> (!), are graveyards.
+</p>
+
+<p>
+    At their best, WikiProjects help keep Wikipedians addicted: they provide friendly, even sometimes joshingly
+    competitive spaces in which any of a number of users interested in a topic can discuss and coordinate their
+    effects, creating, in that communal atmosphere, a reason to stick with the project. However, speaking for
+    experience, numerically speaking by and large few WikiProjects are truly all that effective. Which really is a
+    shame, given the prevailing nervousness about the community's health: a healthy WikiProject infastructure would
+    help keep the community more cohesive. <a
+        href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_X">WikiProject X</a> is an ongoing program led by a
+    few experienced Wikipedians that is attempting to proactively refresh WikiProjects.
+</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/WikiProject_X_logo.svg/400px-WikiProject_X_logo.svg.png"
+     style="width:50%; display:flex; margin:auto" alt="WikiProject X"/>
+
+<h3>Sizing it up</h3>
+
+<p>
+    Dealing with the haphazard way in which WikiProjects organize their data turned out to be vaguely Herculean, and
+    over the course of working through this data I had to write in logic for more cases than I ever imagined―an
+    object lesson on how difficult it can be to clean an unpurposed dataset. My "in" was the <a
+        href="https://en.wikipedia.org/wiki/Wikipedia:Version_1.0_Editorial_Team">1.0 assessment scale ratings</a>,
+    which <a href="https://en.wikipedia.org/wiki/User:WP_1.0_bot/Tables/Project/Africa">charts</a> data for all
+    WikiProjects. A lot of grease and a ridiculous amount of API and page requests later, I rolled up a list
+    of (almost?) every WikiProject and their sizes.
+</p>
+
+<p>
+    I now ranked the WikiProjects and plotted them according to size:
+</p>
+
+<img src="/static/wikiproject_articles_tagged_linear.png"
+     style="width:800px; display:flex; margin:auto" alt="WikiProject X"/>
+
+<p>
+    Here when I mean size I mean the number of
+    articles which the WikiProject covers. Large WikiProjects like the Biography or Military history one have a very,
+    very, very broad basis of coverage; more narrow ones, like WikiProject Hawaii or WikiProject Seamounts, have a
+    much narrower scope.
+</p>
+
+<p>
+    The exponential distribution of WikiProject sizes is abundantly obvious: there are a few very, very large
+    WikiProjects which dominate everyone else. Exponential curves like this one are far and away the norm amongst
+    measures of online communities: academic analysis has demonstrated that almost all social networks follow
+    something <a href="https://en.wikipedia.org/wiki/Zipf's_law">Zipf-like</a> at scale. This graph on its own is not
+    very informative, however. We can get a better sense of what's going on by looking at the log-log plot:
+</p>
+
+<img src="/static/wikiproject_articles_tagged_exponential.png"
+     style="width:800px; display:flex; margin:auto" alt="Logarithmic graph of article distribution."/>
+
+
+<p>
+    Here you can see that WikiProject sizes are not at all log-normal: indeed, ignoring failed WikiProjects at the
+    tip of the distribution the majority of WikiProjects fit into a prominent "bow" of larger-than-expected projects.
+</p>
+
+<p>
+    Here are the 25 largest WikiProjects and their sizes:
+</p>
+
+<pre class="codesnippet">
+    [('WikiProject Biography', 1353948),
+     ('WikiProject United States', 423152),
+     ('WikiProject Football', 273194),
+     ('WikiProject Military history', 196951),
+     ('WikiProject Film', 177418),
+     ('WikiProject Australia', 158077),
+     ('WikiProject India', 156128),
+     ('WikiProject Cities', 132825),
+     ('WikiProject Canada', 129344),
+     ('WikiProject Years', 109213),
+     ('WikiProject Olympics', 109007),
+     ('WikiProject Africa', 106722),
+     ('WikiProject France', 104831),
+     ('WikiProject Lepidoptera', 98042),
+     ('WikiProject Television', 96543),
+     ('WikiProject Germany', 95924),
+     ('WikiProject Poland', 89034),
+     ('WikiProject Iran', 84132),
+     ('WikiProject Geography', 80741),
+     ('WikiProject National Register of Historic Places', 68779),
+     ('WikiProject Ships', 65494),
+     ('WikiProject Japan', 63350),
+     ('WikiProject Baseball', 63252),
+     ('WikiProject Russia', 62244),
+     ('WikiProject Aviation', 61506)]
+</pre>
+
+<p>
+    Just from a cursory examination of this list you can already get a sense of the biases at play on Wikipedia. Put
+    yourself in the midset of your typical Wikipedian: according to a
+    <a href="https://meta.wikimedia.org/wiki/Editor_Survey_2011">2011 Editor Survey</a> you are overwhelmingly white,
+    English-speaking (duh), male, and kind of a nerd (don't knock it 'til you try it!). What types of articles do you
+    edit: ones on your local highway in Alberta or ones on a village in Africa? The beauty of Wikipedia is that it is
+    such a comprehensive resource, covering a wider breadth of information than any other resource in existance. Its
+    curse, though, is that, yes, an entire continent (Africa) gets less than a fourth of coverage that the United
+    States does, and only two thirds that of Australia, a country with on the order of a fifthieth of the population.
+</p>
+
+<!--
+<p>
+    That's powerful. One of the things that I learned over the course of this project, however, is to take care with
+    drawing conclusions based on WikiProject sizes. For instance, the Military history project is one of the largest
+    on Wikipedia, with close to 200,000 articles. The History project, meanwhile, has 36,266. Why? Because there are
+    far more editors interested in the specific subfield of military history than there are in history more broadly
+    construed, and those editors have done a better job of curating their content
+</p>
+-->
+
+<h3>Correlative strength</h3>
+
+<p>
+    Categorization was one of the most important meta-tasks in the early history of Wikipedia: Wikipedians then as
+    now were very much interested in the how much and of what of their editing areas. Today the vast majority of
+    Wikipedia articles are categorized according to WikiProject, most according to multiple ones: <a
+        href="https://en.wikipedia.org/wiki/Talk:Shield_volcano">Shield volcano</a>, for instance, is associated
+    with WikiProjects in Volcanoes and Geology, while <a
+        href="https://en.wikipedia.org/wiki/Talk:Barack_Obama">Barrack Obama</a> has something like a dozen of them.
+    I was interested in gauging the relative levels of overlap in content coverage for various WikiProjects. How
+    often WikiProject Geology editors interact with WikiProject Mountains ones? How about WikiProject Alaska and
+    WikiProject Glaciers?
+</p>
+
+<p>
+    Here is the data I collected for one particular example, WikiProject Volcanoes:
+</p>
+
+<img src="/static/wikiproject_volcanoes_correlated_articles.png"
+     style="width:800px; display:flex; margin:auto" alt="WikiProject Volcanoes correlations"/>
+
+<p>
+    Most of this shouldn't be too surprising: associated features and countries with many active volcanoes dominate
+    the rankings (many other smaller correlations were omitted).
+</p>
+
+<p>
+    However, this turned out to be a hard question to answer: not because the necessary queries were difficult to write,
+    but because the raw volume of API requests necessary for thorough classification are out of immediate reach. I
+    measured correlation by sampling a WikiProject's pages and then parsing the templates on their talk pages for
+    connections to alternative WikiProjects. After playing around with the data for some time I realized that to
+    construct a meaingful dataset this way I would need to analyze the top 500 or so projects: a task which would
+    require, the way the code is currently written, over a hundred thousand API queries. This is simply too much scale
+    for me to manage for the moment.
+</p>
+
+<p>
+    Nevertheless, here's a gallery of some of my favorites:
+</p>
+
+<img src="/static/wikiproject_tennis_correlated_articles.png"
+     style="width:800px; display:flex; margin:auto" alt="WikiProject Tennis correlations"/>
+
+<img src="/static/wikiproject_medicine_correlated_articles.png"
+     style="width:800px; display:flex; margin:auto" alt="WikiProject Medicine correlations"/>
+
+<img src="/static/wikiproject_nyc_correlated_articles.png"
+     style="width:800px; display:flex; margin:auto" alt="WikiProject New York City correlations"/>
+
+<img src="/static/wikiproject_mathematics_correlated_articles.png"
+     style="width:800px; display:flex; margin:auto" alt="WikiProject Mathematics correlations"/>
+
+<p>
+    That's all for now, folks!
+</p>
+
+{% endblock %}
+{% block previouspost %}
+<a href="{{request.url_root}}2016/02/11/watsongraph-visualization.html">Exploring the IBM Watson Concept Insights
+    service using watsongraph</a>
+{% endblock %}
+{% block nextpost %}
+{% endblock %}
