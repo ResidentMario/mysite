@@ -63,6 +63,10 @@ def watsongraph_visualization():
 def wikiprojects():
     return render_template('wikiprojects.html', id=9)
 
+@app.route('/2016/02/20/wikmedia-foundation-turnover.html')
+def turnover():
+    return render_template('turnover.html', id=10)
+
 # RAW HOSTING
 @app.route('/raw/challenger-compact.html')
 def challenger_compact():
