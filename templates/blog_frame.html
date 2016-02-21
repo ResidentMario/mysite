@@ -5,16 +5,15 @@
 {% block posttitle %}
 {% endblock %}
 </h2>
-<span style="color:#aaa; font-style:italic">{% block postdate %}{% endblock %}</span>
+<span id="postdate">{% block postdate %}{% endblock %}</span>
 
 {% endblock %}
 
 {% block extension_page_bottom %}
-<div id="blog_next_links" style="float:left">
-&lArr;{% block nextpost %}
-{% endblock %}
+<div id="blog_next_links">
+&lArr; {% block nextpost %}{% endblock %}
 </div>
-<div id="blog_previously_links" style="float:right">
+<div id="blog_previously_links">
 {% block previouspost %}
 {% endblock %}&rArr;
 </div>

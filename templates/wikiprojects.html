@@ -3,10 +3,8 @@
 {% block postdate %}02/15/2016{% endblock %}
 {% block content %}
 
-<h3>Context</h3>
-
 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/WikimediaMosaicCapture.png"
-     style="width:500px; display:flex; margin:auto" alt="The Wikimedia Commons logo, mosaic-style."/>
+     class="inline_image" style="width:500px;" alt="The Wikimedia Commons logo, mosaic-style."/>
 
 <p>
     Active editors on Wikipedia nominally organize themselves using WikiProjects, gathering-places for users
@@ -22,18 +20,18 @@
 </p>
 
 <p>
-    At their best, WikiProjects help keep Wikipedians addicted: they provide friendly, even sometimes joshingly
-    competitive spaces in which any of a number of users interested in a topic can discuss and coordinate their
-    effects, creating, in that communal atmosphere, a reason to stick with the project. However, speaking for
-    experience, numerically speaking by and large few WikiProjects are truly all that effective. Which really is a
-    shame, given the prevailing nervousness about the community's health: a healthy WikiProject infastructure would
-    help keep the community more cohesive. <a
-        href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_X">WikiProject X</a> is an ongoing program led by a
-    few experienced Wikipedians that is attempting to proactively refresh WikiProjects.
+    At their best, WikiProjects help keep Wikipedians addicted: they provide friendly gathering spaces in which
+    any of a number of users interested in a topic can discuss and coordinate their effects, creating a healthy
+    communal atmosphere and a reason to stick with the project.
 </p>
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/WikiProject_X_logo.svg/400px-WikiProject_X_logo.svg.png"
-     style="width:50%; display:flex; margin:auto" alt="WikiProject X"/>
+<p>
+    For this project I set out to try to understand the way that WikiProjects interact with one another. Some of my
+    questions were: how many WikiProjects are there? How big are they? And how do they link to one another?
+</p>
+
+<!--<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/WikiProject_X_logo.svg/400px-WikiProject_X_logo.svg.png"-->
+     <!--style="width:50%; display:flex; margin:auto" alt="WikiProject X"/>-->
 
 <h3>Sizing it up</h3>
 
@@ -48,38 +46,39 @@
 </p>
 
 <p>
-    I now ranked the WikiProjects and plotted them according to size:
+    WikiProjects keep track of the articles that they are responsible for with "tag templates", placed on article talk
+    pages, which provide some quality and importance metrics about the article in question. I first ranked the
+    WikiProjects and plotted them according to their size&mdash;that is, the number of articles that they have tagged
+    in this manner:
 </p>
 
 <img src="/static/wikiproject_articles_tagged_linear.png"
-     style="width:800px; display:flex; margin:auto" alt="WikiProject X"/>
+     class="inline_image_full" alt="WikiProject X"/>
 
 <p>
-    Here when I mean size I mean the number of
-    articles which the WikiProject covers. Large WikiProjects like the Biography or Military history one have a very,
-    very, very broad basis of coverage; more narrow ones, like WikiProject Hawaii or WikiProject Seamounts, have a
-    much narrower scope.
+    WikiProject sizes are exponential distributed: there are a few very, very large WikiProjects which dominate
+    everyone else. Exponential curves like this one are far and away the norm amongst measures of online
+    communities: so much so that there is a colloquial term for it, called <a
+        href="https://en.wikipedia.org/wiki/Zipf's_law">Zipf's law</a>, in the field of network analysis.
 </p>
-
 <p>
-    The exponential distribution of WikiProject sizes is abundantly obvious: there are a few very, very large
-    WikiProjects which dominate everyone else. Exponential curves like this one are far and away the norm amongst
-    measures of online communities: academic analysis has demonstrated that almost all social networks follow
-    something <a href="https://en.wikipedia.org/wiki/Zipf's_law">Zipf-like</a> at scale. This graph on its own is not
-    very informative, however. We can get a better sense of what's going on by looking at the log-log plot:
+    This graph on its own is not very informative, however. We can get a better sense of what's going on by looking
+    at a compressed view known as the log-log plot:
 </p>
 
 <img src="/static/wikiproject_articles_tagged_exponential.png"
-     style="width:800px; display:flex; margin:auto" alt="Logarithmic graph of article distribution."/>
+     class="inline_image_full" alt="Logarithmic graph of article distribution."/>
 
 
 <p>
-    Here you can see that WikiProject sizes are not at all log-normal: indeed, ignoring failed WikiProjects at the
-    tip of the distribution the majority of WikiProjects fit into a prominent "bow" of larger-than-expected projects.
+    In red is the trend line that we would expect the WikiProjects to follow if they have a so-called Zipf-like
+    distribution. Instead many large WikiProjects are larger-than-expected and many small ones are
+    smaller-than-expected.
 </p>
 
 <p>
-    Here are the 25 largest WikiProjects and their sizes:
+    I think that this data hints at the unbalanced way in which Wikipedians organize their article tagging
+    campaigns. To see what I mean, here are the 25 largest WikiProjects and their sizes:
 </p>
 
 <pre class="codesnippet">
@@ -114,11 +113,27 @@
     Just from a cursory examination of this list you can already get a sense of the biases at play on Wikipedia. Put
     yourself in the midset of your typical Wikipedian: according to a
     <a href="https://meta.wikimedia.org/wiki/Editor_Survey_2011">2011 Editor Survey</a> you are overwhelmingly white,
-    English-speaking (duh), male, and kind of a nerd (don't knock it 'til you try it!). What types of articles do you
-    edit: ones on your local highway in Alberta or ones on a village in Africa? The beauty of Wikipedia is that it is
-    such a comprehensive resource, covering a wider breadth of information than any other resource in existance. Its
-    curse, though, is that, yes, an entire continent (Africa) gets less than a fourth of coverage that the United
-    States does, and only two thirds that of Australia, a country with on the order of a fifthieth of the population.
+    English-speaking (at least on the English Wikipedia), male, and kind of a nerd (don't knock it 'til you try it!).
+    What types of article are you more likely to be interested in: one on your local highway in Alberta or one on a
+    village in Africa?
+</p>
+
+<p>
+    And so it is that an entire continent (Africa) gets less than a fourth of coverage that the United States does,
+    and only two thirds that of Australia, a country with on the order of a fiftieth of the population.
+</p>
+
+<p>
+    This list also demonstrates some of the aforementioned quirks of the article tagging system. As of writing,
+    <a href="https://en.wikipedia.org/wiki/Lepidoptera">WikiProject Lepidoptera</a>, an order of insects, has 98,042
+    tagged
+    articles, seemingly the work of a bot tagging campaign early in the project's history. This is enough to make it
+    the thirteenth largest WikiProject on the English Wikipedia&mdash;yet its parent project, WikiProject Insects,
+    has just 55,644 articles.
+</p>
+<p>
+    Or look at WikiProject Military history, with 196,951 tagged articles: aren't these all a strict subset of
+    WikiProject History, which has merely 36,324 of them?
 </p>
 
 <!--
@@ -146,42 +161,36 @@
 </p>
 
 <p>
-    Here is the data I collected for one particular example, WikiProject Volcanoes:
+    The following charts, generated by sampling tagged articles and checking
+    their talk pages for interactions with other projects, provide a snapshot of what WikiProjects interact with one
+    another the most. WikiProjects are measured by "correlation": that is, how often, on a scale of 0 to 1, that an
+    article tagged by the project in question also happens to be tagged by this other one.
+</p>
+
+<p>
+    A gallery of some of my favorites follows.
 </p>
 
 <img src="/static/wikiproject_volcanoes_correlated_articles.png"
-     style="width:800px; display:flex; margin:auto" alt="WikiProject Volcanoes correlations"/>
-
-<p>
-    Most of this shouldn't be too surprising: associated features and countries with many active volcanoes dominate
-    the rankings (many other smaller correlations were omitted).
-</p>
-
-<p>
-    However, this turned out to be a hard question to answer: not because the necessary queries were difficult to write,
-    but because the raw volume of API requests necessary for thorough classification are out of immediate reach. I
-    measured correlation by sampling a WikiProject's pages and then parsing the templates on their talk pages for
-    connections to alternative WikiProjects. After playing around with the data for some time I realized that to
-    construct a meaingful dataset this way I would need to analyze the top 500 or so projects: a task which would
-    require, the way the code is currently written, over a hundred thousand API queries. This is simply too much scale
-    for me to manage for the moment.
-</p>
-
-<p>
-    Nevertheless, here's a gallery of some of my favorites:
-</p>
+     class="inline_image_full" alt="WikiProject Volcanoes correlations"/>
 
 <img src="/static/wikiproject_tennis_correlated_articles.png"
-     style="width:800px; display:flex; margin:auto" alt="WikiProject Tennis correlations"/>
+     class="inline_image_full" alt="WikiProject Tennis correlations"/>
 
 <img src="/static/wikiproject_medicine_correlated_articles.png"
-     style="width:800px; display:flex; margin:auto" alt="WikiProject Medicine correlations"/>
+     class="inline_image_full" alt="WikiProject Medicine correlations"/>
 
 <img src="/static/wikiproject_nyc_correlated_articles.png"
-     style="width:800px; display:flex; margin:auto" alt="WikiProject New York City correlations"/>
+     class="inline_image_full" alt="WikiProject New York City correlations"/>
 
 <img src="/static/wikiproject_mathematics_correlated_articles.png"
-     style="width:800px; display:flex; margin:auto" alt="WikiProject Mathematics correlations"/>
+     class="inline_image_full" alt="WikiProject Mathematics correlations"/>
+
+<p>
+    Getting an unbiased sample of articles tagged a certain way proved to be challenging, so an important caveat
+    needs to be made: the article samples used to calculate correlation for this project are biased towards
+    high-importance, high-quality articles.
+</p>
 
 <p>
     That's all for now, folks!
