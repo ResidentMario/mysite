@@ -4,10 +4,9 @@
 <head>
 	<link rel= "stylesheet" type= "text/css" href= "{{request.url_root}}static/app.css">
 	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-	<script type="text/javascript"
-	  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-	</script>
 	 <link rel="icon" type="image/x-icon" href="/static/code-writer-black.svg"/>
+    {% block scripts %}
+    {% endblock %}
     <title>
     Aleksey Bilogur—
     {% block pagetitle %}

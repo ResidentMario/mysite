@@ -1,6 +1,10 @@
 {% extends "blog_frame.html" %}
 {% block posttitle %}Analyzing WikiProjects{% endblock %}
 {% block postdate %}02/15/2016{% endblock %}
+{% block scripts %}
+<link href="/static/prism.css" rel="stylesheet" />
+<script src="/static/prism.js"></script>
+{% endblock %}
 {% block content %}
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/WikimediaMosaicCapture.png"
@@ -81,7 +85,8 @@
     campaigns. To see what I mean, here are the 25 largest WikiProjects and their sizes:
 </p>
 
-<pre class="codesnippet">
+<pre>
+    <code class="language-python">
     [('WikiProject Biography', 1353948),
      ('WikiProject United States', 423152),
      ('WikiProject Football', 273194),
@@ -107,6 +112,7 @@
      ('WikiProject Baseball', 63252),
      ('WikiProject Russia', 62244),
      ('WikiProject Aviation', 61506)]
+    </code>
 </pre>
 
 <p>

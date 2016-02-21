@@ -79,14 +79,17 @@ body {
     /*background:#f0f5f5;*/
     color:#252525;
 }
-.codesnippet {
-    font-family:Courier,monospace;
-    white-space: pre-wrap;
+.language-python {
     font-size: 12px;
-    width:inherit;
-    padding: 20px 20px 20px 20px;
-    background:#f0f5f5;
-    line-height: 1.4em;
+}
+.inline_code {
+    font-family:Courier,monospace;
+    font-size:14px;
+    border:1px solid gray;
+    padding-left:2px;
+    padding-right:2px;
+    background:#eee;
+    font-weight:bold;
 }
 .inline_image {
     width:50%;
@@ -99,7 +102,6 @@ body {
     display:flex;
     margin: 40px auto;
 }
-
 .inline_iframe {
     transform:translate(-95px, 0);
     width:960px;
@@ -119,15 +121,6 @@ h3 {
 }
 p {
     margin-bottom:1.5em;
-}
-code {
-    font-family:Courier,monospace;
-    font-size:14px;
-    border:1px solid gray;
-    padding-left:2px;
-    padding-right:2px;
-    background:#eee;
-    font-weight:bold;
 }
 /* unvisited link */
 a:link {

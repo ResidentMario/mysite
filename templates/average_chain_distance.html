@@ -1,6 +1,10 @@
 {% extends "blog_frame.html" %}
 {% block posttitle %}Is Starbucks really always two blocks away?{% endblock %}
 {% block postdate %}02/09/2016{% endblock %}
+{% block scripts %}
+<link href="/static/prism.css" rel="stylesheet" />
+<script src="/static/prism.js"></script>
+{% endblock %}
 {% block content %}
 
 <p>
@@ -44,7 +48,7 @@
     "dunkin-donuts-3" accedes to "dunkin-donuts-4", then "dunkin-donuts-5", and so on down the line of infamy. Using
     their <a href="https://github.com/Yelp/yelp-python">Python driver</a> and taking the time to check for stores
     which have closed, it's a simple enough matter to gather a list of every instance of their "biz" (Yelp! URLs are
-    in the form <code>http://www.yelp.com/biz/[...]</code>).
+    in the form <code class="inline_code">http://www.yelp.com/biz/[...]</code>).
 </p>
 
 <p>
@@ -52,8 +56,8 @@
 </p>
 
 <!-- TODO: code highlighting -->
-<pre class="codesnippet">
-    def fetch_businesses(name, area='New York', manual_override=0):
+<pre><code class="language-python">
+def fetch_businesses(name, area='New York', manual_override=0):
     area = area.lower().replace(' ', '-')
     name = name.lower().replace(' ', '-')
     i = 2
@@ -82,7 +86,7 @@
         i += 1
     print("Ended `fetch_businesses()` on:", "http://www.yelp.com/biz/" + bus_id)
     return responses
-</pre>
+    </code></pre>
 
 <p>
     I used <a href="http://folium.readthedocs.org/en/latest/">folium</a> (the Python driver for <a
