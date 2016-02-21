@@ -1,5 +1,5 @@
-{% set most_recent_blog_post_url = request.url_root + "2016/02/20/wikmedia-foundation-turnover.html" %}
 <!DOCTYPE html>
+{% set most_recent_blog_post_url = request.url_root + "2016/02/20/wikmedia-foundation-turnover.html" %}
 <html lang="en">
 <head>
 	<link rel= "stylesheet" type= "text/css" href= "{{request.url_root}}static/app.css">
@@ -43,7 +43,9 @@
 		{% endblock %}
 		<div id="disqus">
 		<div id="footer">
-			<div style="float:right">{% block footer %} © Aleksey Bilogur 2015&mdash;<a href="https://validator.w3.org/nu/?doc={{ request.url }}">Valid HTML</a>&mdash;<a href="https://github.com/ResidentMario/mysite">View Source</a>&mdash;<a href="mailto:aleksey@residentmar.io">Contact</a>{% endblock %}</div>
+			<div style="float:right">{% block footer %} © Aleksey Bilogur 2015&mdash;<!--<a
+					href="https://validator.w3.org/nu/?doc={{ request.url }}">Valid HTML</a>-->&mdash;<a href="https
+					://github.com/ResidentMario/mysite">View Source</a>&mdash;<a href="mailto:aleksey@residentmar.io">Contact</a>{% endblock %}</div>
 		</div>
 		</div>
 	</div>
