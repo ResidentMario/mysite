@@ -65,10 +65,12 @@ body {
     color:#aaa;
     font-style:italic;
 }
-.blog_inline_block {
+.inline_quote {
     width:inherit;
-    padding: 10px 25px 10px 25px;
-    background:#f0f5f5;
+    padding: 0px 0px 0px 25px;
+    border-left:5px solid #aaa;
+    /*background:#f0f5f5;*/
+    color:#595959;
 }
 .codesnippet {
     font-family:Courier,monospace;
