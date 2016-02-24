@@ -1,6 +1,4 @@
 {% extends "blog_frame.html" %}
-{% block posttitle %}The decision to launch the Space Shuttle Challenger{% endblock %}
-{% block postdate %}02/07/2016{% endblock %}
 {% block content %}
 
 <p>
@@ -43,7 +41,7 @@
     O-ring.
 </p>
 
-<iframe src="{{request.url_root}}raw/challenger-compact.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}challenger-compact-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         class="inline_iframe"></iframe>
 
 <p>
@@ -72,7 +70,8 @@
     If we throw that data in, and shrink the rest of the visualization to accompany it, this is the result:
 </p>
 
-<iframe marginwidth="0" marginheight="0" scrolling="no" src="{{request.url_root}}raw/challenger-extended.html"
+<iframe marginwidth="0" marginheight="0" scrolling="no"
+        src="{{request.url_root}}challenger-extended-visualization.html"
         class="inline_iframe"></iframe>
 
 <p>

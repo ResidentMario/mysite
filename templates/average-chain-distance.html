@@ -1,6 +1,4 @@
 {% extends "blog_frame.html" %}
-{% block posttitle %}Is Starbucks really always two blocks away?{% endblock %}
-{% block postdate %}02/09/2016{% endblock %}
 {% block scripts %}
 <link href="/static/prism.css" rel="stylesheet" />
 <script src="/static/prism.js"></script>
@@ -96,7 +94,7 @@ def fetch_businesses(name, area='New York', manual_override=0):
     to anyway:
 </p>
 
-<iframe src="{{request.url_root}}raw/gregorys-map.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}gregorys-map-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         class="inline_iframe"></iframe>
 
 <p>
@@ -105,7 +103,7 @@ def fetch_businesses(name, area='New York', manual_override=0):
     nominally in "New York" but actually way out north in Rockaway County:
 </p>
 
-<iframe src="{{request.url_root}}raw/dunkin-donuts-map.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}dunkin-donuts-map-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         class="inline_iframe"></iframe>
 
 <p>
@@ -122,7 +120,7 @@ def fetch_businesses(name, area='New York', manual_override=0):
     with a grain of salt, as it is extremely partial.
 </p>
 
-<iframe src="{{request.url_root}}raw/starbucks-map.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}starbucks-map-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         class="inline_iframe"></iframe>
 
 <p>
@@ -141,7 +139,7 @@ def fetch_businesses(name, area='New York', manual_override=0):
     locations in Manhattan:
 </p>
 
-<iframe src="{{request.url_root}}raw/manhattan-point-cloud.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}manhattan-point-cloud-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         style="height:540px" class="inline_iframe"
 ></iframe>
 
@@ -203,7 +201,7 @@ def fetch_businesses(name, area='New York', manual_override=0):
 
 </p>
 
-<iframe src="{{request.url_root}}raw/average-chain-distance-viz.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}average-chain-distance-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         style="transform:translate(-95px, 0); height:1375px" class="inline_iframe"></iframe>
 
 <p>

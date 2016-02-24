@@ -1,7 +1,6 @@
 {% extends "blog_frame.html" %}
 {% block posttitle %}Exploring the IBM Watson Concept Insights service using <code class="inline_code">watsongraph</code>{%
 endblock %}
-{% block postdate %}02/11/2016{% endblock %}
 {% block content %}
 
 <p>
@@ -43,7 +42,7 @@ endblock %}
     individual edges to get relationship strengths.
 </p>
 
-<iframe src="{{request.url_root}}raw/planets-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}planets-force-graph-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         width="960px" height="500px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
 
 <p>
@@ -61,7 +60,7 @@ endblock %}
     the tooltip):
 </p>
 
-<iframe src="{{request.url_root}}raw/contributions-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}contributions-force-graph-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         width="960px" height="500px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
 
 <p>
@@ -78,7 +77,7 @@ endblock %}
     to industry.
 </p>
 
-<iframe src="{{request.url_root}}raw/fortune-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
+<iframe src="{{request.url_root}}fortune-force-graph-visualization.html" marginwidth="0" marginheight="0" scrolling="no"
         width="960px" height="500px" frameBorder="0" style="transform:translate(-95px, 0);"></iframe>
 
 <p>

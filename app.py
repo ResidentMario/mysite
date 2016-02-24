@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import render_template
-from flask import redirect
+from flask import abort
+from flask import request
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -12,110 +14,107 @@ app = Flask(__name__)
 # 3. Update the previously most recent Blog post to point to the new post as the new most recent one.
 # These URLs are generated within Jinja2 using eg. href='{{request.url_root}}2015/10/31/this-website.html'.
 
-# TODO: Automagically host blog posts using a list of posts and an iterative generator (url_for).
-# TODO: Automagically host summaries of recent blog posts on the About page (using the same technique).
+# Note: Titles are assigned globally but may also be overwritten in the Jinja2 template using a {% posttitle %}
+# wrapper.
+# Note: The id parameter is used by the Disqus plugin to verify uniqueness.
+post_list = [
+    {
+        'title': 'About this website',
+        'route': '2015/10/31/this-website.html',
+        'date': datetime(2015, 10, 31),
+        'template': 'this-website.html'
+    },
+    {
+        'title': 'An exercise in probability',
+        'route': '2015/11/06/an-exercise-in-probability.html',
+        'date': datetime(2015, 11, 6),
+        'template': 'an-exercise-in-probability.html'
+    },
+    {
+        'title': 'Openness versus quality',
+        'route': '2015/12/12/openness-versus-quality.html',
+        'date': datetime(2015, 12, 11),
+        'template': 'openness-versus-quality.html'
+    },
+    {
+        'title': 'IBM Watson, Cultural Insight, and WatsonGraph',
+        'route': '2015/12/26/watson.html',
+        'date': datetime(2015, 12, 26),
+        'template': 'watson.html'
+    },
+    {
+        'title': 'Measuring Wikipedia Signpost popularity',
+        'route': '2016/01/17/signpost-views.html',
+        'date': datetime(2016, 1, 17),
+        'template': 'signpost-views.html'
+    },
+    {
+        'title': 'The decision to launch the Space Shuttle Challenger',
+        'route': '2016/02/07/space-shuttle-challenger.html',
+        'date': datetime(2016, 2, 7),
+        'template': 'space-shuttle-challenger.html'
+    },
+    {
+        'title': 'Is Starbucks really always two blocks away?',
+        'route': '2016/02/09/average-chain-distance.html',
+        'date': datetime(2016, 2, 9),
+        'template': 'average-chain-distance.html'
+    },
+    {
+        'title': 'Exploring the IBM Watson Concept Insights service using watsongraph',
+        'route': '2016/02/11/watsongraph-visualization.html',
+        'date': datetime(2016, 2, 11),
+        'template': 'watsongraph-visualization.html'
+    },
+    {
+        'title': 'Analyzing WikiProjects',
+        'route': '2016/02/15/wikiprojects.html',
+        'date': datetime(2016, 2, 15),
+        'template': 'wikiprojects.html'
+    },
+    {
+        'title': 'The executive crisis at the Wikimedia Foundation',
+        'route': '2016/02/20/wikimedia-foundation-turnover.html',
+        'date': datetime(2016, 2, 20),
+        'template': 'wikimedia-foundation-turnover.html'
+    }
+]
 
-@app.route('/')
-def home():
-    return render_template('about.html')
+raws_list = [
+    'challenger-compact-visualization.html',
+    'challenger-extended-visualization.html',
+    'gregorys-map-visualization.html',
+    'dunkin-donuts-map-visualization.html',
+    'starbucks-map-visualization.html',
+    'manhattan-point-cloud-visualization.html',
+    'average-chain-distance-visualization.html',
+    'contributions-force-graph-visualization.html',
+    'fortune-force-graph-visualization.html',
+    'planets-force-graph-visualization.html'
+    ]
 
-
-@app.route('/2015/11/06/an-exercise-in-probability.html')
-def first_post():
-    return render_template('an_exercise_in_probability.html', id=1)
-
-
-@app.route('/2015/10/31/this-website.html')
-def second_post():
-    return render_template('this_website.html', id=2)
-
-
-@app.route('/2015/12/12/openness-versus-quality.html')
-def third_post():
-    return render_template('openness_versus_quality.html', id=3)
-
-
-@app.route('/2015/12/26/watson.html')
-def fourth_post():
-    return render_template('watson.html', id=4)
-
-
-@app.route('/2016/01/17/signpost-views.html')
-def fifth_post():
-    return render_template('signpost_views.html', id=5)
-
-
-@app.route('/2016/02/07/space-shuttle-challenger.html')
-def sixth_post():
-    return render_template('challenger.html', id=6)
-
-
-@app.route('/2016/02/09/average-chain-distance.html')
-def average_chain_distance():
-    return render_template('average_chain_distance.html', id=7)
-
-
-@app.route('/2016/02/11/watsongraph-visualization.html')
-def watsongraph_visualization():
-    return render_template('watsongraph_visualization.html', id=8)
-
-@app.route('/2016/02/15/wikiprojects.html')
-def wikiprojects():
-    return render_template('wikiprojects.html', id=9)
-
-@app.route('/2016/02/20/wikmedia-foundation-turnover.html')
-def turnover():
-    return render_template('turnover.html', id=10)
-
-# RAW HOSTING
-@app.route('/raw/challenger-compact.html')
-def challenger_compact():
-    return render_template('raw_challenger_compact.html')
-
-
-@app.route('/raw/challenger-extended.html')
-def challenger_extended():
-    return render_template('raw_challenger_extended.html')
-
-
-@app.route('/raw/gregorys-map.html')
-def gregorys_map():
-    return render_template('raw_gregorys_map.html')
-
-
-@app.route('/raw/dunkin-donuts-map.html')
-def dunkin_map():
-    return render_template('raw_dunkin_donuts_map.html')
-
-
-@app.route('/raw/starbucks-map.html')
-def starbucks_map():
-    return render_template('raw_starbucks_map.html')
-
-
-@app.route('/raw/manhattan-point-cloud.html')
-def manhattan_point_cloud():
-    return render_template('manhattan_point_cloud.html')
+post_paths = [post['route'] for post in post_list]
 
 
-@app.route('/raw/average-chain-distance-viz.html')
-def average_chain_distance_viz():
-    return render_template('average_chain_distance_viz.html')
-
-
-@app.route('/raw/contributions-visualization.html')
-def raw_contributions():
-    return render_template('raw_contributions_visualization.html')
-
-
-@app.route('/raw/fortune-visualization.html')
-def raw_fortune():
-    return render_template('raw_fortune_visualization.html')
-
-
-@app.route('/raw/planets-visualization.html')
-def raw_planets():
-    return render_template('raw_planets_visualization.html')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path == '':
+        return render_template('about.html', most_recent=request.url_root + post_list[len(post_list) - 1]['route'])
+    if path in post_paths:
+        index = post_paths.index(path)
+        post = post_list[index]
+        return render_template(post['template'],
+                               id=index,
+                               date="{0:02d}/{1:02d}/{2}".format(post['date'].month, post['date'].day,
+                                                                 post['date'].year),
+                               title=post['title'],
+                               most_recent=request.url_root + post_list[len(post_list) - 1]['route']
+                               )
+    elif path in raws_list:
+        return render_template(path)
+    else:
+        abort(404)
 
 
 if __name__ == '__main__':
