@@ -7,16 +7,10 @@ from datetime import datetime
 app = Flask(__name__)
 
 
-# NOTE: IDs are used by the Disqus plug-in to distinguish betwixt pages.
-# NOTE: When updating with a new blog post:
-# 1. Create a new host method for it. Iterate the id.
-# 2. Update the Blog link in frame.html to point to the most recent post.
-# 3. Update the previously most recent Blog post to point to the new post as the new most recent one.
-# These URLs are generated within Jinja2 using eg. href='{{request.url_root}}2015/10/31/this-website.html'.
-
 # Note: Titles are assigned globally but may also be overwritten in the Jinja2 template using a {% posttitle %}
 # wrapper.
 # Note: The id parameter is used by the Disqus plugin to verify uniqueness.
+# TODO: This version of the code is currently ahead of the deployed version because of deploy issues that need fixing.
 post_list = [
     {
         'title': 'About this website',
