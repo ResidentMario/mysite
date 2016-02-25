@@ -10,7 +10,6 @@ app = Flask(__name__)
 # Note: Titles are assigned globally but may also be overwritten in the Jinja2 template using a {% posttitle %}
 # wrapper.
 # Note: The id parameter is used by the Disqus plugin to verify uniqueness.
-# TODO: This version of the code is currently ahead of the deployed version because of deploy issues that need fixing.
 post_list = [
     {
         'title': 'About this website',
@@ -99,7 +98,7 @@ def serve(path):
         index = post_paths.index(path)
         post = post_list[index]
         return render_template(post['template'],
-                               id=index,
+                               id=index + 1,
                                date="{0:02d}/{1:02d}/{2}".format(post['date'].month, post['date'].day,
                                                                  post['date'].year),
                                title=post['title'],
