@@ -94,10 +94,10 @@ post_paths = [post['route'] for post in post_list]
 def serve(path):
     if path == '':
         return render_template('about.html', most_recent=request.url_root + post_list[len(post_list) - 1]['route'])
-    if path in post_paths:
+    elif path in post_paths:
         index = post_paths.index(path)
         post = post_list[index]
-        return render_template(post['template'],
+        return render_template('posts/' + post['template'],
                                id=index + 1,
                                date="{0:02d}/{1:02d}/{2}".format(post['date'].month, post['date'].day,
                                                                  post['date'].year),
@@ -105,11 +105,11 @@ def serve(path):
                                most_recent=request.url_root + post_list[len(post_list) - 1]['route']
                                )
     elif path in raws_list:
-        return render_template(path)
+        return render_template('visualizations/' + path)
     else:
         abort(404)
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)

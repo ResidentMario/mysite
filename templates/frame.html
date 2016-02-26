@@ -2,9 +2,9 @@
 <!--{% set most_recent_blog_post_url = request.url_root + "2016/02/20/wikmedia-foundation-turnover.html" %}-->
 <html lang="en">
 <head>
-	<link rel= "stylesheet" type= "text/css" href= "{{request.url_root}}static/app.css">
+	<link rel= "stylesheet" type= "text/css" href= "{{request.url_root}}static/css/app.css">
 	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-	 <link rel="icon" type="image/x-icon" href="/static/code-writer-black.svg"/>
+	 <link rel="icon" type="image/x-icon" href="/static/design_elements/code-writer-black.svg"/>
     {% block scripts %}
     {% endblock %}
     <title>
@@ -17,12 +17,12 @@
 <body>
 	<div id="header">
 		{% block headertitle %} Aleksey Bilogur {% endblock %}&nbsp;
-		<img src="/static/code-writer.svg" alt="Icon." style="height:65px; position:absolute; top:5px"/>
+		<img src="/static/design_elements/code-writer.svg" alt="Icon." style="height:65px; position:absolute; top:5px"/>
 	</div>
 	<div id="navbar">
 	<!--<div style="float:left; font-size:20px;"><a href="/">About</a>&nbsp;&nbsp;<img src="/static/vertbar.svg" style="height:30px" alt="Vertical bar"/>&nbsp;&nbsp;<a href={{ most_recent_blog_post_url }}>Blog</a></div>-->
-	<div style="float:left; font-size:20px;"><a href="/">About</a>&nbsp;&nbsp;<img src="/static/vertbar.svg" style="height:30px"
-                                                                                   alt="Vertical bar"/>&nbsp;&nbsp;<a
+	<div style="float:left; font-size:20px;"><a href="/">About</a>&nbsp;&nbsp;<img src="/static/design_elements/vertbar.svg" style="height:30px"
+																				   alt="Vertical bar"/>&nbsp;&nbsp;<a
             href={{ most_recent }}>Blog</a></div>
 		<div style="float:right; padding-top:11px">
 				<a href="https://github.com/ResidentMario"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" style="height:32px" alt="Github logo"/></a>

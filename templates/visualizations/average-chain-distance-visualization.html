@@ -23,7 +23,7 @@
     var color_map = d3.scale.linear().domain([800, 12000]).range(["#0040ff", "#b3c6ff"]);
     var x_axis = d3.svg.axis().scale(axis_scale).orient("bottom").ticks(10);
 
-    d3.json("../static/chain_incidence.json", function(error, dataset) {
+    d3.json("../static/json/chain_incidence.json", function(error, dataset) {
         if (error) throw error;
 
         var frame = d3.select("body")

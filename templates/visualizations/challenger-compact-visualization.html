@@ -25,10 +25,10 @@
     // The axis scale is used to display the axis on the bottom of the visualization.
     // The actual elements are div and img though! The axis appears on the SVG overleaf.
     // To center the scale with respect to the rockets we add 16, one half of the width of the rockets, into the scale.
-    var axis_scale = d3.scale.linear().domain([29,81]).range([32 + 16, 928 + 16]);
+    var axis_scale = d3.scale.linear().domain([53,81]).range([32 + 16, 928 + 16]);
     var x_axis = d3.svg.axis().scale(axis_scale).orient("bottom").ticks(30);
 
-    d3.json("../static/challenger_data.json", function(error, dataset) {
+    d3.json("../static/json/challenger_data.json", function(error, dataset) {
         if (error) throw error;
 
         var frame = d3.select("body")
@@ -48,35 +48,19 @@
                 .append("span")
                 .style({
                     "position": "absolute",
-                    "width": "18px",
-                    "height": "60px",
-                    "left": function(d) { console.log(d[2]); return d[2] / 1.865 + 436 + "px"; },
-                    "bottom": function(d) { console.log(d[3]); return d[3] / 1.7 + 20 + "px"; }
+                    "width": "30px",
+                    "height": "120px",
+                    "left": function(d) { console.log(d[2]); return d[2] + "px"; },
+                    "bottom": function(d) { console.log(d[3]); return d[3] + "px"; }
                 })
                 .append("img")
                 .attr({
-                    "src": "../static/Shuttle Booster Diagram Small Simplified.svg",
-                    "width": "18"
+                    "src": "../static/post_assets/space-shuttle-challenger/Shuttle Booster Diagram Simplified.svg",
+                    "width": "30px"
                 })
                 .style({
                     "background-color": function(d) { return color_ramp(d[0]); }
                 });
-
-
-        frame.append("span")
-                .style({
-                    "position": "absolute",
-                    "width": "15px",
-                    "height": "60px",
-                    "left": "40px",
-                    "bottom": "30px"
-                })
-                .append("img")
-                .attr({
-                    "src": "../static/Shuttle Booster Diagram Small Simplified.svg",
-                    "width": "18"
-                })
-                .style("background", "#000000");
 
         var svg = frame.append("svg")
                 .attr({
