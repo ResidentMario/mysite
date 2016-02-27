@@ -1,17 +1,3 @@
-{% extends "frame.html" %}
-{% block pagetitle %} Blog {% endblock %}
-{% block contenttitle %}
-<h2>
-{% block posttitle %}
-    {{ title }}
-{% endblock %}
-</h2>
-<!--<span id="postdate">{% block postdate %}{% endblock %}</span>-->
-<span id="postdate">{{ date }}</span>
-
-{% endblock %}
-
-{% block extension_page_bottom %}
 <!DOCTYPE html>
 <meta charset="utf-8">
 <link rel= "stylesheet" type= "text/css" href= "/static/css/roboto.css">
@@ -73,7 +59,7 @@
     var maxdate = new Date(2016, 2, 1);
     var date_scale = d3.time.scale().domain([mindate, maxdate]).range([800, 0]);
 //    var x_axis = d3.svg.axis().scale(date_scale).orient("bottom").ticks(d3.time.month, 1);
-    var y_pos = 15;
+    var y_pos = 300;
     var offset = 60;
 
     var tip = d3.tip()
@@ -92,15 +78,15 @@
 //                "<img src='./static/post_snaps/average-chain-distance.png'" + "style='width:400px; height:200px;/>'";
       });
 
-    d3.json("/static/json/post_list.json", function(error, dataset) {
+    d3.json("../../static/json/post_list.json", function(error, dataset) {
 //    d3.json("../static/json/post_list.json", function(error, dataset) {
         if (error) throw error;
 
         var frame = d3.select("g")
                 .append("svg")
                 .attr({
-                    "width": "800px",
-                    "height": "30px"
+                    "width": "960px",
+                    "height": "320px"
                 });
         frame.call(tip);
 //        frame.append("line")
@@ -168,28 +154,3 @@
 <g>
 
 </g>
-
-<div id="blog_next_links">
-&lArr; {% block nextpost %}{% endblock %}
-</div>
-<div id="blog_previously_links">
-{% block previouspost %}
-{% endblock %}&rArr;
-</div>
-<div id="disqus_thread"></div>
-<script>
-    var disqus_config = function () {
-        this.page.url =  request.url;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = {{ id }}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        
-        s.src = '//alekseybilogur.disqus.com/embed.js';
-        
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-{% endblock %}

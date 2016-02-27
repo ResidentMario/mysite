@@ -6,6 +6,10 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+# CURRENT WORKFLOW:
+# 1. Add new post to post_list.
+# 2. Run munge_posts.py (this rewrites the `post_list.json` datafile used by the d3 timeline).
+# 3. Publish!
 
 # Note: Titles are assigned globally but may also be overwritten in the Jinja2 template using a {% posttitle %}
 # wrapper.
@@ -45,31 +49,36 @@ post_list = [
         'title': 'The decision to launch the Space Shuttle Challenger',
         'route': '2016/02/07/space-shuttle-challenger.html',
         'date': datetime(2016, 2, 7),
-        'template': 'space-shuttle-challenger.html'
+        'template': 'space-shuttle-challenger.html',
+        'snap': 'space-shuttle-challenger.png'
     },
     {
         'title': 'Is Starbucks really always two blocks away?',
         'route': '2016/02/09/average-chain-distance.html',
         'date': datetime(2016, 2, 9),
-        'template': 'average-chain-distance.html'
+        'template': 'average-chain-distance.html',
+        'snap': 'average-chain-distance.png'
     },
     {
         'title': 'Exploring the IBM Watson Concept Insights service using watsongraph',
         'route': '2016/02/11/watsongraph-visualization.html',
         'date': datetime(2016, 2, 11),
-        'template': 'watsongraph-visualization.html'
+        'template': 'watsongraph-visualization.html',
+        'snap': 'watsongraph-visualization.png'
     },
     {
         'title': 'Analyzing WikiProjects',
         'route': '2016/02/15/wikiprojects.html',
         'date': datetime(2016, 2, 15),
-        'template': 'wikiprojects.html'
+        'template': 'wikiprojects.html',
+        'snap': 'wikiprojects.png'
     },
     {
         'title': 'The executive crisis at the Wikimedia Foundation',
         'route': '2016/02/20/wikimedia-foundation-turnover.html',
         'date': datetime(2016, 2, 20),
-        'template': 'wikimedia-foundation-turnover.html'
+        'template': 'wikimedia-foundation-turnover.html',
+        'snap': 'wikimedia-foundation-turnover.png'
     }
 ]
 
@@ -83,7 +92,8 @@ raws_list = [
     'average-chain-distance-visualization.html',
     'contributions-force-graph-visualization.html',
     'fortune-force-graph-visualization.html',
-    'planets-force-graph-visualization.html'
+    'planets-force-graph-visualization.html',
+    'timeline.html'
     ]
 
 post_paths = [post['route'] for post in post_list]
