@@ -31,7 +31,7 @@ for post in dat:
             <title>{0}</title>
             <link>{1}</link>
             <guid>{1}</guid>
-            <pubdate>{2}</pubdate>
+            <pubDate>{2}</pubdate>
     """.format(post['title'], 'http:' + post['route'], datetime(post['year'], post['month'],
                                                                 post['day']).strftime('%a, %d %b %Y %H:00:00 EST'))
     xml += """</item>"""
