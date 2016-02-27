@@ -109,6 +109,8 @@ post_paths = [post['route'] for post in post_list]
 def serve(path):
     if path == '':
         return render_template('about.html', most_recent=request.url_root + post_list[len(post_list) - 1]['route'])
+    elif path == 'feed':
+        return render_template('rss.xml')
     elif path in post_paths:
         index = post_paths.index(path)
         post = post_list[index]

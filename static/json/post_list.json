@@ -1,82 +1,82 @@
 [
     {
-        "title": "About this website",
         "year": 2015,
-        "snap": "empty.png",
-        "route": "//residentmar.io/2015/10/31/this-website.html",
+        "month": 10,
         "day": 31,
-        "month": 10
+        "title": "About this website",
+        "route": "//residentmar.io/2015/10/31/this-website.html",
+        "snap": "empty.png"
     },
     {
-        "title": "An exercise in probability",
         "year": 2015,
-        "snap": "empty.png",
-        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
+        "month": 11,
         "day": 6,
-        "month": 11
+        "title": "An exercise in probability",
+        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
+        "snap": "empty.png"
     },
     {
+        "year": 2015,
+        "month": 12,
+        "day": 11,
         "title": "Openness versus quality",
-        "year": 2015,
-        "snap": "empty.png",
         "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "day": 11,
-        "month": 12
+        "snap": "empty.png"
     },
     {
-        "title": "IBM Watson, Cultural Insight, and WatsonGraph",
         "year": 2015,
-        "snap": "watson.svg",
-        "route": "//residentmar.io/2015/12/26/watson.html",
+        "month": 12,
         "day": 26,
-        "month": 12
+        "title": "IBM Watson, Cultural Insight, and WatsonGraph",
+        "route": "//residentmar.io/2015/12/26/watson.html",
+        "snap": "watson.svg"
     },
     {
-        "title": "Measuring Wikipedia Signpost popularity",
         "year": 2016,
-        "snap": "empty.png",
-        "route": "//residentmar.io/2016/01/17/signpost-views.html",
+        "month": 1,
         "day": 17,
-        "month": 1
+        "title": "Measuring Wikipedia Signpost popularity",
+        "route": "//residentmar.io/2016/01/17/signpost-views.html",
+        "snap": "empty.png"
     },
     {
-        "title": "The decision to launch the Space Shuttle Challenger",
         "year": 2016,
-        "snap": "space-shuttle-challenger.png",
-        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
+        "month": 2,
         "day": 7,
-        "month": 2
+        "title": "The decision to launch the Space Shuttle Challenger",
+        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
+        "snap": "space-shuttle-challenger.png"
     },
     {
-        "title": "Is Starbucks really always two blocks away?",
         "year": 2016,
-        "snap": "average-chain-distance.png",
-        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
+        "month": 2,
         "day": 9,
-        "month": 2
+        "title": "Is Starbucks really always two blocks away?",
+        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
+        "snap": "average-chain-distance.png"
     },
     {
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
         "year": 2016,
-        "snap": "watsongraph-visualization.png",
-        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
+        "month": 2,
         "day": 11,
-        "month": 2
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
+        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
+        "snap": "watsongraph-visualization.png"
     },
     {
-        "title": "Analyzing WikiProjects",
         "year": 2016,
-        "snap": "wikiprojects.png",
-        "route": "//residentmar.io/2016/02/15/wikiprojects.html",
+        "month": 2,
         "day": 15,
-        "month": 2
+        "title": "Analyzing WikiProjects",
+        "route": "//residentmar.io/2016/02/15/wikiprojects.html",
+        "snap": "wikiprojects.png"
     },
     {
-        "title": "The executive crisis at the Wikimedia Foundation",
         "year": 2016,
-        "snap": "wikimedia-foundation-turnover.png",
-        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
+        "month": 2,
         "day": 20,
-        "month": 2
+        "title": "The executive crisis at the Wikimedia Foundation",
+        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
+        "snap": "wikimedia-foundation-turnover.png"
     }
 ]

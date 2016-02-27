@@ -12,7 +12,35 @@ for post in dat:
     del post['template']
     post['route'] = '//residentmar.io/' + post['route']
 
-# print(dat)
+with open('./static/json/post_list.json', 'w') as outfile:
+    json.dump(dat, outfile, indent=4)
+
+xml = """<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+<title>Data Hacks</title>
+<link>http://www.residentmar.io/</link>
+<description>Data hacks and other musings by Aleksey Bilogur</description>
+"""
+
+for post in dat:
+    xml += """
+        <item>
+            <title>{0}</title>
+            <link>{1}</link>
+            <guid>{1}</guid>
+            <pubdate>{2}</pubdate>
+    """.format(post['title'], post['route'], str(post['year']) + '/' + str(post['month']) + '/' + str(post['day']))
+    xml += """
+    </item>"""
+
+xml += """
+</channel>
+</rss>
+"""
 
 with open('./static/json/post_list.json', 'w') as outfile:
     json.dump(dat, outfile, indent=4)
+
+with open('./templates/rss.xml', 'w') as outfile:
+    outfile.write(xml)
