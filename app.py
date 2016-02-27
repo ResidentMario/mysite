@@ -19,31 +19,36 @@ post_list = [
         'title': 'About this website',
         'route': '2015/10/31/this-website.html',
         'date': datetime(2015, 10, 31),
-        'template': 'this-website.html'
+        'template': 'this-website.html',
+        'snap': 'empty.png'
     },
     {
         'title': 'An exercise in probability',
         'route': '2015/11/06/an-exercise-in-probability.html',
         'date': datetime(2015, 11, 6),
-        'template': 'an-exercise-in-probability.html'
+        'template': 'an-exercise-in-probability.html',
+        'snap': 'empty.png'
     },
     {
         'title': 'Openness versus quality',
         'route': '2015/12/12/openness-versus-quality.html',
         'date': datetime(2015, 12, 11),
-        'template': 'openness-versus-quality.html'
+        'template': 'openness-versus-quality.html',
+        'snap': 'empty.png'
     },
     {
         'title': 'IBM Watson, Cultural Insight, and WatsonGraph',
         'route': '2015/12/26/watson.html',
         'date': datetime(2015, 12, 26),
-        'template': 'watson.html'
+        'template': 'watson.html',
+        'snap': 'watson.svg'
     },
     {
         'title': 'Measuring Wikipedia Signpost popularity',
         'route': '2016/01/17/signpost-views.html',
         'date': datetime(2016, 1, 17),
-        'template': 'signpost-views.html'
+        'template': 'signpost-views.html',
+        'snap': 'empty.png'
     },
     {
         'title': 'The decision to launch the Space Shuttle Challenger',
