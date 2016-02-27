@@ -110,7 +110,7 @@ def serve(path):
     if path == '':
         return render_template('about.html', most_recent=request.url_root + post_list[len(post_list) - 1]['route'])
     elif path == 'feed':
-        return render_template('rss.xml')
+        return render_template('rss.xml', mimetype='application/rss+xml')
     elif path in post_paths:
         index = post_paths.index(path)
         post = post_list[index]

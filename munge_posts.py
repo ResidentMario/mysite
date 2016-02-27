@@ -1,5 +1,6 @@
 import json
 import app
+from datetime import datetime
 # from time import strftime
 
 dat = app.post_list
@@ -16,8 +17,9 @@ with open('./static/json/post_list.json', 'w') as outfile:
     json.dump(dat, outfile, indent=4)
 
 xml = """<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
+<atom:link href="http://residentmar.io/feed" rel="self" type="application/rss+xml" />
 <title>Data Hacks</title>
 <link>http://www.residentmar.io/</link>
 <description>Data hacks and other musings by Aleksey Bilogur</description>
@@ -30,8 +32,7 @@ for post in dat:
             <link>{1}</link>
             <guid>{1}</guid>
             <pubdate>{2}</pubdate>
-    """.format(post['title'], 'http://' + post['route'], str(post['year']) + '/' + str(post['month']) + '/' + str(
-        post['day']))
+    """.format(post['title'], 'http:' + post['route'], str(datetime(post['year'], post['month'], post['day'])))
     xml += """
     </item>"""
 
