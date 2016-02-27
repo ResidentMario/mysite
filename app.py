@@ -20,21 +20,22 @@ post_list = [
         'route': '2015/10/31/this-website.html',
         'date': datetime(2015, 10, 31),
         'template': 'this-website.html',
-        'snap': 'empty.png'
+        'snap': 'this-website.png'
     },
     {
         'title': 'An exercise in probability',
         'route': '2015/11/06/an-exercise-in-probability.html',
         'date': datetime(2015, 11, 6),
         'template': 'an-exercise-in-probability.html',
-        'snap': 'empty.png'
+        'snap': 'an-exercise-in-probability.png'
     },
     {
         'title': 'Openness versus quality',
         'route': '2015/12/12/openness-versus-quality.html',
         'date': datetime(2015, 12, 11),
         'template': 'openness-versus-quality.html',
-        'snap': 'empty.png'
+        # 'snap': 'empty.png'
+        'snap': 'openness-versus-quality.png'
     },
     {
         'title': 'IBM Watson, Cultural Insight, and WatsonGraph',
@@ -48,7 +49,7 @@ post_list = [
         'route': '2016/01/17/signpost-views.html',
         'date': datetime(2016, 1, 17),
         'template': 'signpost-views.html',
-        'snap': 'empty.png'
+        'snap': 'signpost-views.png'
     },
     {
         'title': 'The decision to launch the Space Shuttle Challenger',
@@ -128,5 +129,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)

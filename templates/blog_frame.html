@@ -67,6 +67,8 @@
                     "xlink:href": function(d) { return d['route']; }
 //                    "xlink:title": function(d) { return d['title']; }
                 })
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide)
                 .append("circle")
                 .attr({
                     "class": "entry",
@@ -82,8 +84,8 @@
                     "fill": "#999",
                     "stroke-width": 4
                 })
-                .on('mouseover', tip.show)
-                .on('mouseout', tip.hide);
+                .on("mouseover", function() { d3.select(this).style("fill", "#252525").style("stroke-width", 2); })
+                .on("mouseout", function() { d3.select(this).style("fill", "#999").style("stroke-width", 4); });
         frame.append("text")
                 .attr({
                     "x": 0,
