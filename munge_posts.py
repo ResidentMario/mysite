@@ -1,7 +1,7 @@
 import json
 import app
 from datetime import datetime
-# from time import strftime
+from time import strftime
 
 dat = app.post_list
 for post in dat:
@@ -27,14 +27,14 @@ xml = """<?xml version="1.0" encoding="utf-8"?>
 
 for post in dat:
     xml += """
-        <item>
+    <item>
             <title>{0}</title>
             <link>{1}</link>
             <guid>{1}</guid>
             <pubdate>{2}</pubdate>
-    """.format(post['title'], 'http:' + post['route'], str(datetime(post['year'], post['month'], post['day'])))
-    xml += """
-    </item>"""
+    """.format(post['title'], 'http:' + post['route'], datetime(post['year'], post['month'],
+                                                                post['day']).strftime('%a, %d %b %Y %H:00:00 EST'))
+    xml += """</item>"""
 
 xml += """
 </channel>
