@@ -30,7 +30,8 @@ for post in dat:
             <link>{1}</link>
             <guid>{1}</guid>
             <pubdate>{2}</pubdate>
-    """.format(post['title'], post['route'], str(post['year']) + '/' + str(post['month']) + '/' + str(post['day']))
+    """.format(post['title'], 'http://' + post['route'], str(post['year']) + '/' + str(post['month']) + '/' + str(
+        post['day']))
     xml += """
     </item>"""
 

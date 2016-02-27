@@ -1,82 +1,82 @@
 [
     {
+        "route": "//residentmar.io/2015/10/31/this-website.html",
         "year": 2015,
         "month": 10,
+        "snap": "empty.png",
         "day": 31,
-        "title": "About this website",
-        "route": "//residentmar.io/2015/10/31/this-website.html",
-        "snap": "empty.png"
+        "title": "About this website"
     },
     {
+        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
         "year": 2015,
         "month": 11,
+        "snap": "empty.png",
         "day": 6,
-        "title": "An exercise in probability",
-        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
-        "snap": "empty.png"
+        "title": "An exercise in probability"
     },
     {
-        "year": 2015,
-        "month": 12,
-        "day": 11,
-        "title": "Openness versus quality",
         "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "snap": "empty.png"
-    },
-    {
         "year": 2015,
         "month": 12,
-        "day": 26,
-        "title": "IBM Watson, Cultural Insight, and WatsonGraph",
-        "route": "//residentmar.io/2015/12/26/watson.html",
-        "snap": "watson.svg"
+        "snap": "empty.png",
+        "day": 11,
+        "title": "Openness versus quality"
     },
     {
+        "route": "//residentmar.io/2015/12/26/watson.html",
+        "year": 2015,
+        "month": 12,
+        "snap": "watson.svg",
+        "day": 26,
+        "title": "IBM Watson, Cultural Insight, and WatsonGraph"
+    },
+    {
+        "route": "//residentmar.io/2016/01/17/signpost-views.html",
         "year": 2016,
         "month": 1,
+        "snap": "empty.png",
         "day": 17,
-        "title": "Measuring Wikipedia Signpost popularity",
-        "route": "//residentmar.io/2016/01/17/signpost-views.html",
-        "snap": "empty.png"
+        "title": "Measuring Wikipedia Signpost popularity"
     },
     {
-        "year": 2016,
-        "month": 2,
-        "day": 7,
-        "title": "The decision to launch the Space Shuttle Challenger",
         "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
-        "snap": "space-shuttle-challenger.png"
-    },
-    {
         "year": 2016,
         "month": 2,
-        "day": 9,
-        "title": "Is Starbucks really always two blocks away?",
+        "snap": "space-shuttle-challenger.png",
+        "day": 7,
+        "title": "The decision to launch the Space Shuttle Challenger"
+    },
+    {
         "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
-        "snap": "average-chain-distance.png"
-    },
-    {
         "year": 2016,
         "month": 2,
-        "day": 11,
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
+        "snap": "average-chain-distance.png",
+        "day": 9,
+        "title": "Is Starbucks really always two blocks away?"
+    },
+    {
         "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
-        "snap": "watsongraph-visualization.png"
-    },
-    {
         "year": 2016,
         "month": 2,
-        "day": 15,
-        "title": "Analyzing WikiProjects",
+        "snap": "watsongraph-visualization.png",
+        "day": 11,
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph"
+    },
+    {
         "route": "//residentmar.io/2016/02/15/wikiprojects.html",
-        "snap": "wikiprojects.png"
-    },
-    {
         "year": 2016,
         "month": 2,
-        "day": 20,
-        "title": "The executive crisis at the Wikimedia Foundation",
+        "snap": "wikiprojects.png",
+        "day": 15,
+        "title": "Analyzing WikiProjects"
+    },
+    {
         "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
-        "snap": "wikimedia-foundation-turnover.png"
+        "year": 2016,
+        "month": 2,
+        "snap": "wikimedia-foundation-turnover.png",
+        "day": 20,
+        "title": "The executive crisis at the Wikimedia Foundation"
     }
 ]
