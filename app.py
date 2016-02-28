@@ -2,6 +2,7 @@ from flask import Flask
 from flask import render_template
 from flask import abort
 from flask import request
+from flask import make_response
 from datetime import datetime
 
 app = Flask(__name__)
@@ -111,7 +112,10 @@ def serve(path):
     if path == '':
         return render_template('about.html', most_recent=request.url_root + post_list[len(post_list) - 1]['route'])
     elif path == 'feed':
-        return render_template('rss.xml', mimetype='application/rss+xml')
+        rss_xml = render_template('rss.xml')
+        response = make_response(rss_xml)
+        response.headers['Content-Type'] = 'application/rss+xml'
+        return response
     elif path in post_paths:
         index = post_paths.index(path)
         post = post_list[index]
