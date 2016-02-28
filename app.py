@@ -100,7 +100,7 @@ raws_list = [
     'contributions-force-graph-visualization.html',
     'fortune-force-graph-visualization.html',
     'planets-force-graph-visualization.html',
-    'timeline.html'
+    'navbar.html'
     ]
 
 post_paths = [post['route'] for post in post_list]

@@ -1,22 +1,55 @@
-{% extends "frame.html" %}
-{% block pagetitle %} Blog {% endblock %}
-{% block contenttitle %}
-<h2>
-{% block posttitle %}
-    {{ title }}
-{% endblock %}
-</h2>
-<!--<span id="postdate">{% block postdate %}{% endblock %}</span>-->
-<span id="postdate">{{ date }}</span>
+<!DOCTYPE html>
+<meta charset="utf-8">
 
-{% endblock %}
-
-{% block extension_page_bottom %}
-
-<!--<iframe src="{{request.url_root}}navbar.html" marginwidth="0" marginheight="0" scrolling="no"-->
-        <!--id="navbar_iframe"></iframe>-->
-
+<link rel= "stylesheet" type= "text/css" href= "/static/css/roboto.css">
 <script src="/static/js/d3.v3.js"></script>
+
+<style>
+    .posts_table, .post_descriptions {
+        width:800px;
+        margin: auto;
+        display: block;
+    }
+    .post_item {
+        border:1px solid black;
+        border-radius:2px;
+        padding:0;
+        width:260px;
+    }
+    .post_desc {
+        font-family: Roboto, sans serif;
+        font-weight:bold;
+        color:#252525;
+        text-align:center;
+        width:260px;
+    }
+    .post_image {
+        display:block;
+        width:260px;
+        height:130px;
+    }
+    /* unvisited link */
+    a:link {
+        color: #333;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    /* visited link */
+    a:visited {
+        color: #333;
+        text-decoration: none;
+    }
+    /* mouse over link */
+    a:hover {
+        color: #666;
+        text-decoration: none;
+    }
+    /* selected link */
+    a:active {
+        color: #BBB;
+        text-decoration: none;
+    }
+</style>
 
 <script>
     d3.json("/static/json/post_list.json", function(error, dataset) {
@@ -75,21 +108,3 @@
 <g>
 
 </g>
-
-<div id="disqus_thread"></div>
-<script>
-    var disqus_config = function () {
-        this.page.url =  request.url;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = {{ id }}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        
-        s.src = '//alekseybilogur.disqus.com/embed.js';
-        
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-{% endblock %}
