@@ -43,7 +43,7 @@ post_list = [
         'route': '2015/12/26/watson.html',
         'date': datetime(2015, 12, 26),
         'template': 'watson.html',
-        'snap': 'watson.svg'
+        'snap': 'watson.png'
     },
     {
         'title': 'Measuring Wikipedia Signpost popularity',
@@ -133,5 +133,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
