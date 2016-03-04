@@ -1,7 +1,6 @@
 import json
 import app
 from datetime import datetime
-from time import strftime
 
 dat = app.post_list
 for post in dat:

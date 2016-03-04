@@ -2,38 +2,93 @@
 {% block posttitle %}Exploring the IBM Watson Concept Insights service using <code class="inline_code">watsongraph</code>{%
 endblock %}
 {% block content %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+
+<img src="/static/post_assets/watsongraph-visualization/robotic_suggestions.jpg" style="width:400px;"
+     class="inline_image_full" alt="Robotic recommendations"/>
 
 <p>
-    I wrote a <a href="http://www.residentmar.io/2015/12/26/watson.html">blog post</a> a couple of weeks ago speaking of
-    my experience developing the <a href="https://pypi.python.org/pypi/watsongraph/">watsongraph</a> library, a
-    Pythonic concept mapping and exploration library based on the IBM Watson <a
-            href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/concept-insights.html">Concept
-        Insights</a> API.
+    Netfix and Amazon are two examples of companies with famously precise "recommendation engines": their entire
+    business model relies on being able to present their users with attractive products related to the ones that they
+    have already viewed. This kind of service is known as a "recommendation engine", and though each specific
+    implementation differs, the core idea&mdash;providing a way to map objects to and from one another&mdash;is
+    always the same.
 </p>
 
 <p>
-    Netfix and Amazon are two examples of companies with famously precise and well-developed recommendation engines:
-    their entire business model relies on being able to present their users with attractive products related to the
-    ones that they have already viewed.
-<p>
-
-    But though the implementations differ, the core idea of both of these focused systems&mdash;providing a way to map
-    objects to and from one another&mdash;is the same, as, indeed, it is for any company wishing to build such a
-    system. The watsongraph library is made to make it as easy as possible to map text to concepts and concepts to other
-    concepts, freeing up those working with concept mining or relationship analysis to focus on their actual datasets,
-    not the analytical tools that they are using. It does this by leveraging the massive size, flexibility, and power
-    of IBM's <code class="inline_code">wikipedia/en-20120601</code> cognitive graph, a Watsonian machine-learned model of the conceptual
-    interconnectedness of all of Wikipedia, allowing you to reconstruct flexible <code class="inline_code">ConceptMap</code> objects
-    relating the things you are studying to their associated concepts. These maps can in turn be measured for
-    their relative overlap, giving us a flexible yet durable way to model the relationships within almost any dataset.
+    The <code class="inline_code">watsongraph</code> Python library is makes it as easy to map text to concepts and
+    concepts to other concepts, freeing up those working with concept mining or relationship analysis to focus on
+    their actual datasets, not the analytical tools that they are using. To do this it uses the IBM Watson <a
+        href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/concept-insights.html">Concept
+    Insights</a> service and IBM's <code class="inline_code">wikipedia/en-20120601</code> cognitive graph, a
+    machine-learned model of the entire Wikipedian corpus, to reconstruct flexible <code class="inline_code">
+    ConceptMap</code> objects amongst concepts of intrest. These maps can in turn be measured for their relative
+    overlap, creating a flexible yet durable way to model the relationships within almost any dataset.
 </p>
 
 <p>
-    For more details on how to use the library see the <a
-        href="https://github.com/ResidentMario/watsongraph#documentation-and-examples">extensive documentation</a>.
+    The advantage of doing things this way is that you don't need to sink any time into the development of any
+    sophisticated probabilistic models: the system "just works" right out of the box. Creating relationships is as
+    simple as:
+</p>
+
+<pre><code class="language-python">
+    >>> from watsongraph.conceptmodel import ConceptModel
+    >>> ibm = ConceptModel(['IBM'])
+    >>> ibm.explode()
+    >>> ibm.concepts()
+    ['.NET Framework', 'ARM architecture', 'Advanced Micro Devices', ...]
+    >>> len(ibm.concepts())
+    37
+    >>> 'Server (computing)' in ibm.concepts()
+    True
+    >>> ibm.augment('Server (computing)')
+    >>> len(ibm.concepts())
+    58
+    >>> ibm.edges()
+    [(0.89564085, 'IBM', 'Digital Equipment Corporation'),
+     (0.8793883, 'Solaris (operating system)', 'Server (computing)'),
+     '...'
+    ]
+</code></pre>
+
+<p>
+    And modeling users (or user agents) using this system is easy too:
+</p>
+
+<pre><code class="language-python">
+    >>> from watsongraph.user import User
+    >>> from watsongraph.item import Item
+    >>> Bob = User(user_id="Bob")
+    >>> Bob.input_interests(["Data science", "Machine learning", "Big data", "Cognitive science"])
+    >>> meetup = Item("Meetup", "This is a description of a pretty awesome event...")
+    >>> relay = Item("Relay", "This is a description of another pretty awesome event...")
+    >>> Bob.interest_in(meetup)
+    1.633861635
+    >>> Bob.interest_in(relay)
+    1.54593405
+    # Update the "Bob" model to account for our new information on Bob's preferences.
+    >>> Bob.express_interest(meetup)
+</code></pre>
+
+<p>
+    Try it out yourself! <code class="inline_code">pip install watsongraph</code> and take a look at the <a
+        href="https://github.com/ResidentMario/watsongraph">source repository</a> on GitHub for more information.
+    Since this library talks to IBM's Bluemix cloud services, the only requirement to using it is that you will need
+    to generate an access token&mdash;see the <a
+        href="https://github.com/ResidentMario/watsongraph#documentation-and-examples">documentation</a> for more
+    information on that.
+</p>
+
+<p>
     In this post I will focus on a related but sort of meta-analytical issue: parametrizing Concept Insights output.
-    In order to do that I have using visualized relative conceptual interdependence, as Watson sees it, of several
-    different datasets.
+    After all, in order to use a "black box" system you will need to have some sense of what kind of output it will
+    give you for the domain you are applying it to. In order to demonstrate the range of such output I have
+    visualized relative conceptual interdependence, as Watson sees it, of several small but nevertheless interesting
+    datasets.
 </p>
 
 <p>

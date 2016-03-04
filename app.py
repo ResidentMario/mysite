@@ -38,13 +38,13 @@ post_list = [
         # 'snap': 'empty.png'
         'snap': 'openness-versus-quality.png'
     },
-    {
-        'title': 'IBM Watson, Cultural Insight, and WatsonGraph',
-        'route': '2015/12/26/watson.html',
-        'date': datetime(2015, 12, 26),
-        'template': 'watson.html',
-        'snap': 'watson.png'
-    },
+    # {
+    #     'title': 'IBM Watson, Cultural Insight, and WatsonGraph',
+    #     'route': '2015/12/26/watson.html',
+    #     'date': datetime(2015, 12, 26),
+    #     'template': 'watson.html',
+    #     'snap': 'watson.png'
+    # },
     {
         'title': 'Measuring Wikipedia Signpost popularity',
         'route': '2016/01/17/signpost-views.html',
@@ -133,5 +133,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
