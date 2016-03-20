@@ -1,0 +1,56 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/CartoDB%20Accident%20Time%20Snap.png"
+     class="inline_image" style="width:800px;" alt="Data."/>
+
+<h3>#1: Getting on the Brooklyn and Manhattan Bridges Sucks</h3>
+
+<p>
+    <code class="code_inline">(40.69603, -73.98453)</code> in DUMBO is the site of more accidents than any other
+    location in New York City&mdash;a whopping 585 of them&mdash;<b>more than a hundred accidents a year</b>.
+</p>
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/DUMBO%20Accident%20Location%20Google%20Maps.png"
+     class="inline_image_full" alt=""/>
+
+<p>
+    The Google Street Maps view reveals what makes this location so accident-prone. This intersection is the
+    first major street intersecting the off-ramp of the Brooklyn-Queens Expressway, a major arterial road for which
+    this is the last exit before the Manhattan <b>and</b> Brooklyn bridges. Drivers commuting to or from Manhattan
+    get off here and merge with locally inbound drivers also getting onto <b>both</b> bridges.
+</p>
+
+<p>
+    Considering that these two bridges together carry a huge chunk of the daily traffic into and out of Manhattan,
+    all of which must merge on this one street, it seems obvious that such a problem would occur. Accidents at the
+    foot of the bridges are so common that they likely have a significant negative impact on access to the bridges, and
+    one wonders how tired the local NYPD precinct&mdash;located quite literally down the block&mdash;gets of getting
+    called to this location. This is a horrible, mostly un-fixable intersection: of course the builders of the bridges
+    were not aware of modern traffic concerns when they were completed in 1883 and 1909, respectively.
+</p>
+
+<h3>#2: The Queensboro is Hardly Better</h3>
+
+<p>
+    Proving that bridge designers are equal-opportunity muck-ups, the second most accident-prone location in the city
+    (and the most accident-prone one in Manhattan), with 472 accidents total (still over 100 a year), is the
+    Manhattan on-ramp of the Queensboro Bridge.
+</p>
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Google%20Maps.png"
+     class="inline_image_full" alt=""/>
+
+<p>
+    The NYPD does seem to be doing its best keeping things moving, though. If there's any location that needs a 24/7
+    traffic officer it's this one.
+</p>
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Street%20View.png"
+     class="inline_image_full" alt=""/>
+
+{% endblock %}

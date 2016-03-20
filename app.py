@@ -88,7 +88,7 @@ post_list = [
         'snap': 'wikimedia-foundation-turnover.png'
     },
     {
-        'title': 'Worst places to drive in New York City',
+        'title': 'Addressing traffic fatalities in New York City',
         'route': '2016/03/19/nyc-motor-vehicle-collisions.html',
         'date': datetime(2016, 3, 19),
         'template': 'nyc-motor-vehicle-collisions.html',
@@ -135,10 +135,13 @@ def serve(path):
                                )
     elif path in raws_list:
         return render_template('visualizations/' + path)
+    # The following is a temporary working-space code.
+    elif path == 'draft':
+        return render_template('posts/worst-places-to-drive.html')
     else:
         abort(404)
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)

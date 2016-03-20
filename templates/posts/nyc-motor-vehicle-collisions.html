@@ -70,6 +70,7 @@
     to the physical condition of the victim(s). This information has been compressed, for the purposes of
     anonymization and analysis, into date, time, coordinates, streets, vehicle types, and contributing factors.
 </p>
+
 <p>
     There are <b>over 750,000 data points</b> in the dataset (769054 in this analysis), representing crash reporting
     going all the way back to January 2012. Not every accident results in a report: the NYPD are called to the scene
@@ -126,31 +127,35 @@
     shameful that such empty entries exist in the publicly accessible dataset!!!
 </p>
 
-<p>
-    I considered extending this to injury data as well, but calculated that doing so would require up to 15,000
-    geocoding requests. This is a scary large number, somewhere over half of the daily free allotment (25,000) that
-    Google provides and probably several hours worth of computation time. More to the point, it wouldn't add
-    anything to the analysis: this is so many entries missing the data that we can expect them to be just as
-    scattered as the valid entries, so we can use the latter to also drive conclusions about the former anyway.
-</p>
+<!--<p>-->
+    <!--I considered extending this to injury data as well, but calculated that doing so would require up to 15,000-->
+    <!--geocoding requests. This is a scary large number, somewhere over half of the daily free allotment (25,000) that-->
+    <!--Google provides and probably several hours worth of computation time. More to the point, it wouldn't add-->
+    <!--anything to the analysis: this is so many entries missing the data that we can expect them to be just as-->
+    <!--scattered as the valid entries, so we can use the latter to also drive conclusions about the former anyway.-->
+<!--</p>-->
 
 <h3>Analysis</h3>
 
 <p>
     Reams and reams and reams of reports, filings, and research studies have been done on the causes and trends
-    behind vehicular deaths in New York City and the wider world alike, and so even though one could derive a lot of
-    insights by looking through the contributing factor and vehicle types in this dataset we elected to focus
-    elsewhere. The causes and outcomes of automobile accidents are well-known and hard to address, and we found it
-    easier to focus on an aspect of the problem which is much easier to fix&mdash;its geography.
+    behind vehicular deaths in New York City and the wider world alike. The causes and outcomes of automobile
+    accidents are well-known and hard to address, and we found it easier to focus on an aspect of the problem which
+    is easier to fix&mdash;its geography.
 </p>
 
 <p>
-    We used <a href="http://www.tableau.com/">Tableau</a> to visualize traffic fatality hotspots in the city.
-    In the following visualization, coordinates in the dataset that get geo-tagged multiple times are represented by
-    size: the more reports, the wider the circle. The color of the circles, on the other hand, indicates the
-    accident deadliness at that location: the redder the circle, the higher the average number of deaths per
-    accident. Together this provides us with a summary of especially dangerous accident locations in the city.
+    We used <a href="http://www.tableau.com/">Tableau</a> to examine traffic fatality hotspots in the city.
+    In the following visualization, the number of accidents tagged to a particular location is represented by size:
+    the more reports, the wider the circle. The color of the circles, on the other hand, indicates the
+    fatalness at that location: the redder the circle, the higher the average number of deaths per accident.
+    Together this provides us with a summary of especially dangerous accident locations in the city.
 </p>
+
+<p><b>
+    The larger and brighter the circle, the stronger the evidence that that specific location is inherently
+    unsafe&mdash;and needs addressing.
+</b></p>
 
 <script type='text/javascript' src='https://public.tableau.com/javascripts/api/viz_v1.js'></script><div
         class='tableauPlaceholder' style='width: 982px; height: 742px; transform:translate(-100px, 0)'><noscript><a href='#'><img
@@ -158,77 +163,73 @@
         src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;NY&#47;NYCFatalMotorVehicleCollisionHotspots&#47;FatalCollisionHotspots&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' width='982' height='742' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='site_root' value='' /><param name='name' value='NYCFatalMotorVehicleCollisionHotspots&#47;FatalCollisionHotspots' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;NY&#47;NYCFatalMotorVehicleCollisionHotspots&#47;FatalCollisionHotspots&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='showVizHome' value='no' /><param name='showTabs' value='y' /><param name='bootstrapWhenNotified' value='true' /></object></div>
 
 <p>
-    Hover over the circles to see more information about the specific location in question. Use the "Average
-    Fatalness" filter to adjust the range of dangerousness represented in the data: if you set the minimum to 0.0 the
-    software will plot every single accident in the city; if you set the maximum to 1.0 it will include "singleton
-    points", places where only a single accident occurred but that lone accident was deadly (these are unlikely to be
-    addressable due to external factors and are mostly distributed by chance). Use the "Count" filter to filter the
-    number of accidents per site: again, setting this to 1 will plot every single point, while raising it to a high
-    value will plot only the most accident-prone locations.
-</p>
-
-<p><b>
-    The larger and brighter the circle, the stronger the evidence that that specific
-    location is inherently unsafe&mdash;and needs addressing.
-</b></p>
-
-<p>
-    This visualization is of course not definitive, but it gives us a strong basis from which we may begin
-    the fieldwork of investigating particular trouble spots and seeing what makes them dangerous.
-</p>
-
-<h3>Case Study #1: Getting on the Brooklyn and Manhattan Bridges Sucks</h3>
-
-<p>
-    <code class="code_inline">(40.69603, -73.98453)</code> in DUMBO is the site of more accidents than any other
-    location in New York City&mdash;a whopping 585 of them&mdash;<b>more than a hundred accidents a year</b>.
-</p>
-
-<img src="/static/post_assets/nyc-motor-vehicle-collisions/DUMBO%20Accident%20Location%20Google%20Maps.png"
-     class="inline_image_full" alt=""/>
-
-<p>
-    The Google Street Maps view immediately reveals what makes this location so accident-prone. This intersection is the
-    first major street intersecting the off-ramp of the Brooklyn-Queens Expressway, a major arterial road for which
-    this is the last exit before the Manhattan <b>and</b> Brooklyn bridges. Drivers commuting to or from Manhattan
-    get off here and merge with locally inbound drivers also getting onto <b>both</b> bridges.
+    Use the "Average Fatalness" filter to adjust the range of dangerousness represented in the data: if you set the
+    minimum to 0.0 the software will plot every single accident in the city; if you set the maximum to 1.0 it will
+    include "singleton points", places where only a single accident occurred but that lone accident was deadly. Use
+    the "Count" filter to filter the number of accidents per site: again, setting this to 1 will plot every single
+    point, while raising it to a high value will plot only the most accident-prone locations.
 </p>
 
 <p>
-    Considering that these two bridges together carry a huge chunk of the daily traffic into and out of Manhattan,
-    all of which must merge on this one street, it seems obvious that such a problem would occur. Accidents at the
-    foot of the bridges are so common that they likely have a significant negative impact on access to the bridges, and
-    one wonders how tired the local NYPD precinct&mdash;located quite literally down the block&mdash;gets of getting
-    called to this location. This is a horrible, mostly un-fixable intersection: of course the builders of the bridges
-    were not aware of modern traffic concerns when they were completed in 1883 and 1909, respectively.
+    This visualization is of course not definitive, but it gives us a basis from which to begin investigating
+    particularly outstanding points to see what makes them problematic.
 </p>
 
-<h3>Case Study #2: The Queensboro is Hardly Better</h3>
+<!--<h3>Case Study #1: Getting on the Brooklyn and Manhattan Bridges Sucks</h3>-->
+
+<!--<p>-->
+    <!--<code class="code_inline">(40.69603, -73.98453)</code> in DUMBO is the site of more accidents than any other-->
+    <!--location in New York City&mdash;a whopping 585 of them&mdash;<b>more than a hundred accidents a year</b>.-->
+<!--</p>-->
+
+<!--<img src="/static/post_assets/nyc-motor-vehicle-collisions/DUMBO%20Accident%20Location%20Google%20Maps.png"-->
+     <!--class="inline_image_full" alt=""/>-->
+
+<!--<p>-->
+    <!--The Google Street Maps view reveals what makes this location so accident-prone. This intersection is the-->
+    <!--first major street intersecting the off-ramp of the Brooklyn-Queens Expressway, a major arterial road for which-->
+    <!--this is the last exit before the Manhattan <b>and</b> Brooklyn bridges. Drivers commuting to or from Manhattan-->
+    <!--get off here and merge with locally inbound drivers also getting onto <b>both</b> bridges.-->
+<!--</p>-->
+
+<!--<p>-->
+    <!--Considering that these two bridges together carry a huge chunk of the daily traffic into and out of Manhattan,-->
+    <!--all of which must merge on this one street, it seems obvious that such a problem would occur. Accidents at the-->
+    <!--foot of the bridges are so common that they likely have a significant negative impact on access to the bridges, and-->
+    <!--one wonders how tired the local NYPD precinct&mdash;located quite literally down the block&mdash;gets of getting-->
+    <!--called to this location. This is a horrible, mostly un-fixable intersection: of course the builders of the bridges-->
+    <!--were not aware of modern traffic concerns when they were completed in 1883 and 1909, respectively.-->
+<!--</p>-->
+
+<!--<h3>Case Study #2: The Queensboro is Hardly Better</h3>-->
+
+<!--<p>-->
+    <!--Proving that bridge designers are equal-opportunity muck-ups, the second most accident-prone location in the city-->
+    <!--(and the most accident-prone one in Manhattan), with 472 accidents total (still over 100 a year), is the-->
+    <!--Manhattan on-ramp of the Queensboro Bridge.-->
+<!--</p>-->
+
+<!--<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Google%20Maps.png"-->
+     <!--class="inline_image_full" alt=""/>-->
+
+<!--<p>-->
+    <!--The NYPD does seem to be doing its best keeping things moving, though. If there's any location that needs a 24/7-->
+    <!--traffic officer it's this one.-->
+<!--</p>-->
+
+<!--<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Street%20View.png"-->
+     <!--class="inline_image_full" alt=""/>-->
+
+
+<h3>Case Study: Atlantic Avenue and the Van Wyck Expressway, Richmond Hill, Queens</h3>
 
 <p>
-    Proving that bridge designers are equal-opportunity muck-ups, the second most accident-prone location in the city
-    (and the most accident-prone one in Manhattan), with 472 accidents total (still over 100 a year), is the
-    Manhattan on-ramp of the Queensboro Bridge.
+    To get a feeling for the type of analysis that one might now want to do, let's take a look at an example accident
+    hotspot in the city.
 </p>
 
-<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Google%20Maps.png"
-     class="inline_image_full" alt=""/>
-
 <p>
-    The NYPD does seem to be doing its best keeping things moving, though. If there's any location that needs a 24/7
-    traffic officer it's this one.
-</p>
-
-<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Street%20View.png"
-     class="inline_image_full" alt=""/>
-
-
-<h3>Case Study #3: Atlantic Avenue and the Van Wyck Expressway, Richmond Hill, Queens</h3>
-
-<p>
-    Only one of the accidents amongst the two locations above was fatal (a motorcycle impact at the Brooklyn-Manhattan
-    on-ramp), so even though there are lots of accidents there, these accidents are very very rarely fatal. The
-    following location, the site of 44 accidents in the past four-and-a-half years, was the site of <a
+    The following location, the site of 44 accidents in the past four-and-a-half years, was the site of <a
         href="http://cityroom.blogs.nytimes.com/2012/07/22/5-dead-in-accident-on-van-wyck/">a particularly deadly
     accident which killed five</a>&mdash;single-handedly making it the location of more motor accident deaths than any
     other in New York City.
@@ -250,10 +251,38 @@
     The perennial New York City construction probably doesn't help.
 </p>
 
-<h3>Conclusions</h3>
+<h3>Analysis</h3>
 
 <p>
-    The intersection in case study #3 is the only place in the city to have suffered five deaths; another location at
+    The highest fatalness occurs at locations which have only suffered a single accident, but for which that lone
+    accident was deadly: there are nine such points in the city, corresponding with a fatalness of 1.0. However, a
+    single accident is not in and of itself strong evidence that a particular location is dangerous: this is
+    much more likely to be a case in which external factors, like speeding or drunk driving, were predominant.
+</p>
+
+<p>
+    For this reason it is necessary to augment this metric with an understanding of the number of accidents at the
+    location. The interpretative difficulty is that deadly accidents are a fundamentally rare event: a location which
+    happens to have suffered two fatal accidents will at first glance appear to be twice as deadly as another
+    neighboring one which suffered one, or none, even though (as often happens) that other location might
+    actually be <i>more</i> accident prone than its neighbor (in terms of the number of collisions recorded).
+</p>
+
+<p>
+    <b>Approximately 1.225 percent of reported accidents are deadly</b> (942 records out of 769,054 total).
+    However, highly accident-prone areas are <i>safer</i> than average, presumably because more thought and more
+    effort has gone, on the part of traffic controllers and of the community alike, towards improving traffic flow
+    there. So while the chances of getting into an accident getting onto the Manhattan, Brooklyn, or Queensboro
+    bridges is alarmingly high, the chances of worse are one in one thousand.
+</p>
+
+<p>
+    Counter-intuitively, <b>the most accident-prone locations in New York City are approximately half as dangerous
+    as average</b>.
+</p>
+
+<p>
+    The intersection in our case study is the only place in the city to have suffered five deaths; another location at
     the water's edge in Astoria <a
         href="http://www.nydailynews.com/new-york/queens/queens-creek-car-sinking-4-die-driver-escapes-911-article-1.1746727">killed four</a>
     in 2014. There are three locations which suffered three fatalities, a small enough number that these accident
@@ -265,22 +294,37 @@
     There are no points in New York City which are in and of themselves outstandingly dangerous, and so there's no
     way to say concretely that any one location is "the worst"&mdash;and, thankfully, this is to be expected, as any
     such location would have either long ago been addressed, or, more likely, never have been built at all.
-    Preventing accident pile-on points, on the other hand, seems to have proven to be a much harder task.
 </p>
 
 <p>
-    This visualization is nevertheless useful for is constructing an understanding, neighborhood-by-neighborhood, of
-    which areas and intersections in the area are most troubling. Try browsing through your own neighborhood,
-    workplace, or commute. What areas did you expect would be problematic? Were you correct in your supposition? Which
-    areas surprised you? Why is that?
+    Preventing accident pile-on points, on the other hand, seems to have proven to be a much harder task; but if our
+    goal is to reduce traffic <i>fatalities</i>, <i>accident</i> hotspots, though interesting in and of themselves
+    (and the subject of my next post!), are a red herring.
+</p>
+
+<h3>Conclusions</h3>
+
+<p>
+    Our data indicates that <b>the bulk of the addressable traffic fatality risk in New York City is diffusely
+    distributed amongst moderately-active local streets</b>.
 </p>
 
 <p>
-    Want to try working with this data yourself? The dataset takes a while to process and is large enough to exceed
-    GitHub's filesize limit. So generate it yourself: clone <a
-        href="https://github.com/ResidentMario/motor-vehicle-collisions">the responsible repository</a> and run <code
-        class="inline_code">NYPD Motor Vehicle Collisions.ipynb</code> to regenerate the enriched dataset
-    from scratch.
+    Thus though there are no commanding "it points" to be revealed in the data, this visualization is nevertheless
+    useful for is constructing a neighborhood-level understanding of which areas and intersections in the area are
+    most troubling. Try browsing through your own neighborhood, workplace, or commute. What areas did you expect
+    would be problematic? Were you correct in your supposition? Which areas surprised you? Why is that?
+</p>
+
+<p>
+    Find something interesting? Leave a message in the comment so that we can all hear about it!
+</p>
+
+<p class="addendum">
+    Want to try working with this data yourself? The dataset exceeds GitHub's filesize limit, so generate it
+    yourself: clone <a  href="https://github.com/ResidentMario/motor-vehicle-collisions">the responsible
+    repository</a> and run <code class="inline_code">NYPD Motor Vehicle Collisions.ipynb</code> to regenerate the
+    enriched dataset from scratch. Let me know what you find!
 </p>
 
 {% endblock %}
