@@ -1,74 +1,82 @@
 [
     {
-        "month": 10,
-        "day": 31,
         "snap": "this-website.png",
+        "year": 2015,
         "title": "About this website",
-        "route": "//residentmar.io/2015/10/31/this-website.html",
-        "year": 2015
+        "day": 31,
+        "month": 10,
+        "route": "//residentmar.io/2015/10/31/this-website.html"
     },
     {
-        "month": 11,
-        "day": 6,
         "snap": "an-exercise-in-probability.png",
+        "year": 2015,
         "title": "An exercise in probability",
-        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
-        "year": 2015
+        "day": 6,
+        "month": 11,
+        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html"
     },
     {
-        "month": 12,
-        "day": 11,
         "snap": "openness-versus-quality.png",
+        "year": 2015,
         "title": "Openness versus quality",
-        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "year": 2015
-    },
-    {
-        "month": 1,
-        "day": 17,
-        "snap": "signpost-views.png",
-        "title": "Measuring Wikipedia Signpost popularity",
-        "route": "//residentmar.io/2016/01/17/signpost-views.html",
-        "year": 2016
-    },
-    {
-        "month": 2,
-        "day": 7,
-        "snap": "space-shuttle-challenger.png",
-        "title": "The decision to launch the Space Shuttle Challenger",
-        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
-        "year": 2016
-    },
-    {
-        "month": 2,
-        "day": 9,
-        "snap": "average-chain-distance.png",
-        "title": "Is Starbucks really always two blocks away?",
-        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
-        "year": 2016
-    },
-    {
-        "month": 2,
         "day": 11,
+        "month": 12,
+        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html"
+    },
+    {
+        "snap": "signpost-views.png",
+        "year": 2016,
+        "title": "Measuring Wikipedia Signpost popularity",
+        "day": 17,
+        "month": 1,
+        "route": "//residentmar.io/2016/01/17/signpost-views.html"
+    },
+    {
+        "snap": "space-shuttle-challenger.png",
+        "year": 2016,
+        "title": "The decision to launch the Space Shuttle Challenger",
+        "day": 7,
+        "month": 2,
+        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html"
+    },
+    {
+        "snap": "average-chain-distance.png",
+        "year": 2016,
+        "title": "Is Starbucks really always two blocks away?",
+        "day": 9,
+        "month": 2,
+        "route": "//residentmar.io/2016/02/09/average-chain-distance.html"
+    },
+    {
         "snap": "watsongraph-visualization.png",
+        "year": 2016,
         "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
-        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
-        "year": 2016
+        "day": 11,
+        "month": 2,
+        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html"
     },
     {
-        "month": 2,
-        "day": 15,
         "snap": "wikiprojects.png",
+        "year": 2016,
         "title": "Analyzing WikiProjects",
-        "route": "//residentmar.io/2016/02/15/wikiprojects.html",
-        "year": 2016
+        "day": 15,
+        "month": 2,
+        "route": "//residentmar.io/2016/02/15/wikiprojects.html"
     },
     {
-        "month": 2,
-        "day": 20,
         "snap": "wikimedia-foundation-turnover.png",
+        "year": 2016,
         "title": "The executive crisis at the Wikimedia Foundation",
-        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
-        "year": 2016
+        "day": 20,
+        "month": 2,
+        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html"
+    },
+    {
+        "snap": "nyc-motor-vehicle-collisions.png",
+        "year": 2016,
+        "title": "Worst places to drive in New York City",
+        "day": 19,
+        "month": 3,
+        "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html"
     }
 ]

@@ -86,6 +86,13 @@ post_list = [
         'date': datetime(2016, 2, 20),
         'template': 'wikimedia-foundation-turnover.html',
         'snap': 'wikimedia-foundation-turnover.png'
+    },
+    {
+        'title': 'Worst places to drive in New York City',
+        'route': '2016/03/19/nyc-motor-vehicle-collisions.html',
+        'date': datetime(2016, 3, 19),
+        'template': 'nyc-motor-vehicle-collisions.html',
+        'snap': 'nyc-motor-vehicle-collisions.png'
     }
 ]
 
@@ -133,5 +140,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)

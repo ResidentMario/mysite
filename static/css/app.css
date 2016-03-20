@@ -100,7 +100,7 @@ body {
     margin: 40px auto;
 }
 .inline_image_full {
-    width:inherit;
+    width:800px;
     display:flex;
     margin: 40px auto;
 }

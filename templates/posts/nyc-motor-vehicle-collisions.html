@@ -1,0 +1,290 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/CartoDB%20Accident%20Time%20Snap.png"
+     class="inline_image" style="width:800px;" alt="Data."/>
+
+<h3>Background</h3>
+
+<p>
+    One of the most compelling trends in technology today is the open data and open governance
+    movement. It's not without reason that no less than Tim Berners-Lee himself, the creator of the worldwide web
+    and one of the most preeminent scholars of the Internet, is doing his latest work in getting more government
+    data on the web:  <a
+        href="http://bits.blogs.nytimes.com/2009/10/12/the-webs-inventor-regrets-one-small-thing/?_r=0">
+    in an interview with <i>The New York Times</i></a> a few years ago he spoke to how even records as mundane as
+    traffic statistics or weather data could drive tinkerers to "make government run better".
+</p>
+<p>
+    New York City has been at the forefront of this movement: mayor Bloomberg (you know, the guy that founded
+    <a href="http://www.bloomberg.com/">the largest multinational information broker in the world</a>) formalized
+    a citywide analytics team as the <a
+        href="http://www.governing.com/blogs/bfc/gov-new-york-city-data-driven-governance.html">Mayor's Office
+        for Data Analytics</a> in 2013, and the effort has continued under Mayor De Blasio, with the city cementing
+    its first <a href="http://www1.nyc.gov/site/analytics/index.page">Open Data Plan</a> in July 2015. The
+    resultant <a href="https://nycopendata.socrata.com/">NYC Open Data Portal</a> is populated with over 1300
+    well-maintained datasets.
+</p>
+
+<p>
+    One of the most hotly requested of these is the <a
+        href="https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95">motor vehicle
+    collision dataset</a>, a record of all motor vehicle collisions recorded by the NYPD going back to January 2012.
+    This data was so hotly desired (by everyone from journalists to computer geeks) that prior to release an
+    entire <a href="http://nypd.openscrape.com/#/">scaper project</a> existed for recompiling and enriching
+    incident reports which had previously been <a href="http://www.nyc.gov/html/nypd/html/traffic_reports/motor_vehicle_collision_data.shtml">locked into
+    PDFs</a> (where data goes to die) or <a
+        href="http://www.wnyc.org/story/nyc-opens-traffic-crash-data-finally/">unavailable except by legal
+    request</a>.
+</p>
+
+<p>
+    For this project I looked at how this crash data can be used to reduce traffic fatalaties in New York City. The
+    challenge: use data to find ways of helping to reduce the number of fatal crashes in New York City. Credit goes
+    to classmate (and fellow math nerd) Anthony Campanello, who did most of the wet-work in actually generating the
+    visualizations used for this project.
+</p>
+
+<h3>Data</h3>
+
+<p>
+    The <a href="http://project.wnyc.org/traffic-deaths-2015/">Mean Streets Project</a> recorded a total of 242 fatal
+    traffic crashes in 2015, a historic low for the city in a figure that has been in slow decline as the years go
+    by. Minimizing this figure, under the auspices of the <a
+        href="http://www.nyc.gov/html/visionzero/pages/home/home.shtml">Vision Zero campaign</a>, has been one of the
+    key aims of the De Blasio administration; this included initiatives like <a
+        href="http://www.wired.com/2014/11/lowering-nycs-speed-limit-just-5-mph-can-save-lot-lives/">lowering the
+    Manhattan speed limit</a> to 25 MPH (from 30 MPH), and the initiative overall is seen as having been modestly
+    successful in its aims.
+</p>
+
+<p>
+    Every time the NYPD is called to the site of a traffic accident, the responding officer fills out and files a
+    MV-104AN report. This is a chunky form (which you can <a
+        href="https://www.google.com/search?q=mv-104an&ie=utf-8&oe=utf-8">examine yourself</a>) with thirty mostly
+    numerical values to fill in, ranging from pedestrian action at time of incident and apparent contributing factors
+    to the physical condition of the victim(s). This information has been compressed, for the purposes of
+    anonymization and analysis, into date, time, coordinates, streets, vehicle types, and contributing factors.
+</p>
+<p>
+    There are <b>over 750,000 data points</b> in the dataset (769054 in this analysis), representing crash reporting
+    going all the way back to January 2012. Not every accident results in a report: the NYPD are called to the scene
+    of an accident usually only specifically when it is useful, for insurance purposes, for there to exist a record
+    of the accident, and so there is likely some number of unreported self-induced accidents&mdash;the NYPD form
+    calls these "collisions with fixed objects"&mdash;which are not represented in the dataset.
+</p>
+
+<p>
+    Officers file geographic information in terms of the street or intersection at which the accident occurred,
+    so it's unclear how the coordinates in the dataset were geocoded. Date, time, contributing factors, and the
+    distribution of injuries or deaths are the only columns present in every data point. Some data points lack
+    coordinate data but have street data, some lack street data but have coordinate data, and some lack both. As
+    expected, it's a bit of a mess: there are even a number of rows which do not indict any vehicle at all in the
+    accident! The number of records for each column is summarized in the table below.
+</p>
+
+
+<pre style="width:300px; margin:auto">
+    <code class="language-python">
+
+    DATE                             769054
+    TIME                             769054
+    BOROUGH                          584753
+    ZIP CODE                         584686
+    LOCATION                         647867
+    ...
+    ON STREET NAME                   655435
+    CROSS STREET NAME                655435
+    OFF STREET NAME                   23792
+    NUMBER OF PERSONS INJURED        769054
+    NUMBER OF PERSONS KILLED         769054
+    ...
+    CONTRIBUTING FACTOR VEHICLE 1    767363
+    CONTRIBUTING FACTOR VEHICLE 2    676675
+    CONTRIBUTING FACTOR VEHICLE 3     49848
+    CONTRIBUTING FACTOR VEHICLE 4     10256
+    CONTRIBUTING FACTOR VEHICLE 5      2569
+    VEHICLE TYPE CODE 1              768105
+    VEHICLE TYPE CODE 2              688860
+    VEHICLE TYPE CODE 3               49989
+    VEHICLE TYPE CODE 4               10260
+    VEHICLE TYPE CODE 5                2570
+    </code>
+</pre>
+
+<p>
+    As expected, the data took a little bit of effort to clean up and enrich. I used Python to merge the date and
+    time columns into a single datetime column and used the <a
+        href="https://developers.google.com/maps/documentation/geocoding/intro">Google Geocoding API</a> to attach
+    coordinates to records which had street data but lacked coordinates, of which there are approximately 150 (!). In a
+    few cases there were records in which fatalities occurred but for which there was <i>no geographic
+    information whatsoever</i>. That data was definitely present in the filing officers' reports&mdash;it's almost
+    shameful that such empty entries exist in the publicly accessible dataset!!!
+</p>
+
+<p>
+    I considered extending this to injury data as well, but calculated that doing so would require up to 15,000
+    geocoding requests. This is a scary large number, somewhere over half of the daily free allotment (25,000) that
+    Google provides and probably several hours worth of computation time. More to the point, it wouldn't add
+    anything to the analysis: this is so many entries missing the data that we can expect them to be just as
+    scattered as the valid entries, so we can use the latter to also drive conclusions about the former anyway.
+</p>
+
+<h3>Analysis</h3>
+
+<p>
+    Reams and reams and reams of reports, filings, and research studies have been done on the causes and trends
+    behind vehicular deaths in New York City and the wider world alike, and so even though one could derive a lot of
+    insights by looking through the contributing factor and vehicle types in this dataset we elected to focus
+    elsewhere. The causes and outcomes of automobile accidents are well-known and hard to address, and we found it
+    easier to focus on an aspect of the problem which is much easier to fix&mdash;its geography.
+</p>
+
+<p>
+    We used <a href="http://www.tableau.com/">Tableau</a> to visualize traffic fatality hotspots in the city.
+    In the following visualization, coordinates in the dataset that get geo-tagged multiple times are represented by
+    size: the more reports, the wider the circle. The color of the circles, on the other hand, indicates the
+    accident deadliness at that location: the redder the circle, the higher the average number of deaths per
+    accident. Together this provides us with a summarization of especially active, especially deadly accident
+    locations in the city.
+</p>
+
+<script type='text/javascript' src='https://public.tableau.com/javascripts/api/viz_v1.js'></script><div
+        class='tableauPlaceholder' style='width: 982px; height: 742px; transform:translate(-100px, 0)'><noscript><a href='#'><img
+        alt='Fatal Collision Hotspots '
+        src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;NY&#47;NYCFatalMotorVehicleCollisionHotspots&#47;FatalCollisionHotspots&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' width='982' height='742' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='site_root' value='' /><param name='name' value='NYCFatalMotorVehicleCollisionHotspots&#47;FatalCollisionHotspots' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;NY&#47;NYCFatalMotorVehicleCollisionHotspots&#47;FatalCollisionHotspots&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='showVizHome' value='no' /><param name='showTabs' value='y' /><param name='bootstrapWhenNotified' value='true' /></object></div>
+
+<p>
+    Hover over the circles to see more information about the specific location in question. Use the "Average
+    Fatalness" filter to adjust the range of dangerousness represented in the data: if you set the minimum to 0.0 the
+    software will plot every single accident in the city; if you set the maximum to 1.0 it will include "singleton
+    points", places where only a single accident occurred but that lone accident was deadly (these are unlikely to be
+    addressable due to external factors and are mostly distributed by chance). Use the "Count" filter to filter the
+    number of accidents per site: again, setting this to 1 will plot every single point, while raising it to a high
+    value will plot only the most accident-prone locations.
+</p>
+
+<p><b>
+    The larger and brighter the circle, the stronger the evidence that that specific
+    location is inherently unsafe&mdash;and needs addressing.
+</b></p>
+
+<p>
+    This visualization is of course not definitive, but it gives us a strong basis from which we may begin
+    the fieldwork of investigating particular trouble spots and seeing what makes them dangerous.
+</p>
+
+<h3>Case Study #1: Getting on the Brooklyn and Manhattan Bridges Sucks</h3>
+
+<p>
+    <code class="code_inline">(40.69603, -73.98453)</code> in DUMBO is the site of more accidents than any other
+    location in New York City&mdash;a whopping 585 of them&mdash;<b>more than a hundred accidents a year</b>.
+</p>
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/DUMBO%20Accident%20Location%20Google%20Maps.png"
+     class="inline_image_full" alt=""/>
+
+<p>
+    The Google Street Maps view immediately reveals what makes this location so accident-prone. This intersection is the
+    first major street intersecting the off-ramp of the Brooklyn-Queens Expressway, a major arterial road for which
+    this is the last exit before the Manhattan <b>and</b> Brooklyn bridges. Drivers commuting to or from Manhattan
+    get off here and merge with locally inbound drivers also getting onto <b>both</b> bridges.
+</p>
+
+<p>
+    Considering that these two bridges together carry a huge chunk of the daily traffic into and out of Manhattan,
+    all of which must merge on this one street, it seems obvious that such a problem would occur. Accidents at the
+    foot of the bridges are so common that they likely have a strong negative impact on access to the bridges, and
+    one wonders how tired the local NYPD precinct&mdash;locately quite literally down the block&mdash;gets of getting
+    called to this location. This is a horrible, mostly unfixable intersection: of course the builders of the bridges
+    were not aware of modern traffic concerns when they were completed in 1883 and 1909, respectively.
+</p>
+
+<h3>Case Study #2: The Queensboro is Hardly Better</h3>
+
+<p>
+    Proving that bridge designers are equal-opportunity muck-ups, the second most accident-prone location in the city
+    (and the most accident-prone one in Manhattan), with 472 accidents total (still over 100 a year), is the
+    Manhattan on-ramp of the Queensboro Bridge.
+</p>
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Google%20Maps.png"
+     class="inline_image_full" alt=""/>
+
+<p>
+    The NYPD does seem to be doing its best keeping things moving, though. If there's any location that needs a 24/7
+    traffic officer it's this one.
+</p>
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Street%20View.png"
+     class="inline_image_full" alt=""/>
+
+
+<h3>Case Study #3: Atlantic Avenue and the Van Wyck Expressway, Richmond Hill, Queens</h3>
+
+<p>
+    Only one of the accidents amongst the two locations above was fatal (a motorcycle impact at the Brooklyn-Manhattan
+    on-ramp), so even though there are lots of accidents there, these accidents are very very rarely fatal. The
+    following location, the site of 44 accidents in the past four-and-a-half years, was the site of <a
+        href="http://cityroom.blogs.nytimes.com/2012/07/22/5-dead-in-accident-on-van-wyck/">a particularly deadly
+    accident which killed five</a>&mdash;single-handidly making it the location of more motor accident deaths than any
+    other in New York City.
+</p>
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/Richmond%20Hill%20Accident%20Location%20Google%20Maps.png"
+     class="inline_image" style="width:800px;" alt=""/>
+
+<p>
+    A short traffic-controlled overpass on a major street (Atlantic Avenue) merging into a single
+    lane, intersecting the entrance onto a major expressway (the Van Wyck), with the bonus industrial chic of a
+    train overpass into an adjacent train yard? Yikes!
+</p>
+
+<img src="/static/post_assets/nyc-motor-vehicle-collisions/Richmond%20Hill%20Accident%20Location%20Street%20View.png"
+     class="inline_image" style="width:800px;" alt=""/>
+
+<p>
+    The perennial New York City construction probably doesn't help.
+</p>
+
+<h3>Conclusions</h3>
+
+<p>
+    The intersection in case study #3 is the only place in the city to have suffered five deaths; another location at
+    the water's edge in Astoria <a
+        href="http://www.nydailynews.com/new-york/queens/queens-creek-car-sinking-4-die-driver-escapes-911-article-1.1746727">killed four</a>
+    in 2014. There are three locations which suffered three fatalities, a small enough number that these accident
+    locations can be ascribed to chance. 25 locations have been the site of two deaths and 912 have been the site of
+    one deaths, for a total of 980 geographically-isolatable fatalities.
+</p>
+
+<p>
+    There are no points in New York City which are in and of themselves outstandingly dangerous, and so there's no
+    way to say concretely that any one location is "the worst"&mdash;and, thankfully, this is to be expected, as any
+    such location would have either long ago been addressed, or, more likely, never have been built at all.
+    Preventing accident pile-on points, on the other hand, seems to have proven to be a much harder task.
+</p>
+
+<p>
+    This visualization is nevertheless useful for is constructing an understanding, neighborhood-by-neighborhood, of
+    which areas and intersections in the area are most troubling. The feasibility of addressing these concerns is
+    another matter entirely.
+</p>
+
+<p>
+    Want to try working with this data yourself? The dataset takes a while to process and is large enough to exceed
+    GitHub's filesize limit. So generate it yourself: clone <a
+        href="https://github.com/ResidentMario/motor-vehicle-collisions">the responsible repository</a> and run <code
+        class="inline_code">NYPD Motor Vehicle Collisions.ipynb</code> to regenerate the enriched dataset
+    from scratch.
+</p>
+
+<p class="addendum">
+    Again, shout-out to Anthony Campanello for generating the visuals for this project!
+</p>
+
+{% endblock %}
