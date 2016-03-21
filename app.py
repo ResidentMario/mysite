@@ -93,6 +93,13 @@ post_list = [
         'date': datetime(2016, 3, 19),
         'template': 'nyc-motor-vehicle-collisions.html',
         'snap': 'nyc-motor-vehicle-collisions.png'
+    },
+    {
+        'title': 'The 25 worst places to drive in New York City',
+        'route': '2016/03/21/worst-places-to-drive.html',
+        'date': datetime(2016, 3, 21),
+        'template': 'worst-places-to-drive.html',
+        'snap': 'empty.png'
     }
 ]
 
@@ -136,8 +143,6 @@ def serve(path):
     elif path in raws_list:
         return render_template('visualizations/' + path)
     # The following is a temporary working-space code.
-    elif path == 'draft':
-        return render_template('posts/worst-places-to-drive.html')
     else:
         abort(404)
 

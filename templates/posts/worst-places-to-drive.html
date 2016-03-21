@@ -5,52 +5,121 @@
 {% endblock %}
 {% block content %}
 
-<img src="/static/post_assets/nyc-motor-vehicle-collisions/CartoDB%20Accident%20Time%20Snap.png"
-     class="inline_image" style="width:800px;" alt="Data."/>
-
-<h3>#1: Getting on the Brooklyn and Manhattan Bridges Sucks</h3>
-
 <p>
-    <code class="code_inline">(40.69603, -73.98453)</code> in DUMBO is the site of more accidents than any other
-    location in New York City&mdash;a whopping 585 of them&mdash;<b>more than a hundred accidents a year</b>.
-</p>
-
-<img src="/static/post_assets/nyc-motor-vehicle-collisions/DUMBO%20Accident%20Location%20Google%20Maps.png"
-     class="inline_image_full" alt=""/>
-
-<p>
-    The Google Street Maps view reveals what makes this location so accident-prone. This intersection is the
-    first major street intersecting the off-ramp of the Brooklyn-Queens Expressway, a major arterial road for which
-    this is the last exit before the Manhattan <b>and</b> Brooklyn bridges. Drivers commuting to or from Manhattan
-    get off here and merge with locally inbound drivers also getting onto <b>both</b> bridges.
+    Some roads are pleasure to drive on, but in New York City&mdash;where everyone always seems to be in a rush to get
+    somewhere, yet magically standing still&mdash;that rarely happens. Rare pleasures like the <a
+        href="https://www.youtube.com/watch?v=KLo3fJSqotw">green wave</a> (did you know that you can theoretically drive
+    55 streets in 6 minutes?) are drowned out by a sea of traffic logjams, itchy drivers, and, inevitably, automobile
+    accidents.
 </p>
 
 <p>
-    Considering that these two bridges together carry a huge chunk of the daily traffic into and out of Manhattan,
-    all of which must merge on this one street, it seems obvious that such a problem would occur. Accidents at the
-    foot of the bridges are so common that they likely have a significant negative impact on access to the bridges, and
-    one wonders how tired the local NYPD precinct&mdash;located quite literally down the block&mdash;gets of getting
-    called to this location. This is a horrible, mostly un-fixable intersection: of course the builders of the bridges
-    were not aware of modern traffic concerns when they were completed in 1883 and 1909, respectively.
+    For this analysis I focused on the raw numbers behind New York City's traffic accident distribution, using data
+    from the city's publicly available <a
+        href="https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95">motor vehicle
+    collision dataset</a> to map out the twenty-five worst intersections in the city, presented below.
 </p>
 
-<h3>#2: The Queensboro is Hardly Better</h3>
+<script type='text/javascript' src='https://public.tableau.com/javascripts/api/viz_v1.js'></script><div
+        class='tableauPlaceholder' style='width: 982px; height: 742px; transform:translate(-100px, 0)'><noscript><a href='#'><img
+        alt='Accident-Prone Locations '
+        src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;NY&#47;NYCMotorVehicleCollisionHotspots&#47;Accident-ProneLocations&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' width='982' height='742' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='site_root' value='' /><param name='name' value='NYCMotorVehicleCollisionHotspots&#47;Accident-ProneLocations' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;NY&#47;NYCMotorVehicleCollisionHotspots&#47;Accident-ProneLocations&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='showVizHome' value='no' /><param name='showTabs' value='y' /><param name='bootstrapWhenNotified' value='true' /></object></div>
 
 <p>
-    Proving that bridge designers are equal-opportunity muck-ups, the second most accident-prone location in the city
-    (and the most accident-prone one in Manhattan), with 472 accidents total (still over 100 a year), is the
-    Manhattan on-ramp of the Queensboro Bridge.
+    You can try playing around with this visualization yourself: be sure to use the filter tab at right to adjust the
+    size of the accident hotspots that you want to plot.
 </p>
-
-<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Google%20Maps.png"
-     class="inline_image_full" alt=""/>
 
 <p>
-    The NYPD does seem to be doing its best keeping things moving, though. If there's any location that needs a 24/7
-    traffic officer it's this one.
+    This data tells us some very interesting things.
 </p>
 
-<img src="/static/post_assets/nyc-motor-vehicle-collisions/Queensboro%20Accident%20Location%20Street%20View.png"
-     class="inline_image_full" alt=""/>
+<h3>Getting in and out of Manhattan is hazardous</h3>
+
+<p>
+    It should come as no surprise that many of the worst traffic intersections in the city are near on- and off-ramps
+    of major bridges and tunnels.
+</p>
+
+<p>
+    The intersection of Tillary Street and Flatbush Avenue in DUMBO&mdash;serving triple duty as the on-ramp to the
+    Manhattan Bridge, access road to the Brooklyn Bridge, and off-ramp of the the Brooklyn-Queens Expressway carrying
+    commutters tither&mdash;is the most accident-prone place in New York City, averaging almost 160 incidents a year.
+    One wonders how tired the local NYPD precinct&mdash;located quite literally down the block&mdash;gets of getting
+    called to this location.
+</p>
+
+<p>
+    The Manhattan side of the Manhattan Bridge fares better, but it's the Manhattan side of the Brooklyn which
+    qualifies as a feat of engineering: there are innumerable streets on the island which create more accidents than
+    the bridge's almost 125,000-strong daily traffic load.
+</p>
+
+<p>
+    The second worst place to drive in New York City is squarely in the center of its worst stretch&mdash;the
+    Manhattan side of the Queensboro bridge, which peaks at 130 accidents a year on 2nd Avenue and East 59th, but
+    spreads the pain out against a whopping 510 of them in between 57th and 63th on 2nd.
+</p>
+
+<p>
+    Another major uh-oh point is the intersection of Bowery and Delancey streets, where residual traffic from the
+    off-ramps of the Williamsburg and Manhattan bridges butt into one another, producing the sixth worst intersection
+    in the city, with almost 100 accidents a year.
+</p>
+
+<p>
+    The Holland Tunnel barely registers a blip, whilst the Manhattan ends of the Queens-Midtown and Lincoln tunnels
+    both weigh in at approximately 90 accidents a year.
+</p>
+
+<h3>Some Manhattan streets are worse than others</h3>
+
+<p>
+    When it comes to traffic collisions, Manhattan avenues fair much better than certain streets, something that, given
+    the much higher traffic load that avenues carry, might come as a surprise. Easily the worst of these is the site of
+    the third-worst intersection in the city, with over 120 collisions a year: West 42nd Street and 8th Avenue, one
+    block west of Times Square. The entirety of West 42nd Street sees over a thousand accidents a year&mdash;by
+    comparison 43rd Street, just one block up, sees somewhat more than 300.
+</p>
+
+<p>
+    Other problematic streets are Canal Street, Delancy Street, 14 Street, 23rd Street, 34th Street, 57th Street,
+    125th Street, and 145th Street.
+</p>
+
+<h3>Certain outer-borough arterial roads are worse than others</h3>
+
+<p>
+    The fourth and fifth -worst intersections in New York City take us to the outer boroughs, specifically the
+    intersections of Atlantic and Linder Boluveard with Pennsylvania Avenue, at the border of Brooklyn and Queens.
+    These are the intersections of local roads carrying almost exclusively passenger vehicle traffic, generating
+    about 115 accidents a year just twelve blocks from one another. The culprit is likely westbound traffic from JFK,
+    for which this is the most convenient route both to greater Brooklyn and Manhattan beyond.
+</p>
+
+<p>
+    For those heading into greater Queens, the triple intersection of Bushwick Avenue, Jamacia Avenue, and Jackie
+    Robinson Parkway just two blocks north creates another 80 accidents a year, as does the end of Conduit Boulevard,
+    which quite literally conduits JKF traffic onto Atlantic, and the intersection of Erksine Street with Seaview
+    Avenue to the south, which manages to do a particularly poor job conducting local traffic on and off the
+    otherwise sanguine Belt Parkway.
+</p>
+
+<p>
+    The remaining top 25 is rounded out by sub-100-a-year showings from elsewhere in the outer boroughs. Queens and
+    Woodhaven Boulevards create such a jam in front of Queens Center Mall, thanks to service from both Queens
+    Boulevard and the Long Island Expressway. One surprising hotspot is in the Bronx, at East 138th Street and
+    Alexander Avenue, an otherwise unassuming intersection with horizontal parking which happens to be located smack dab
+    in front of a police precinct.
+</p>
+
+<p>
+    And Staten Island&mdash;surprise!&mdash;is flawless.
+</p>
+
+<p class="addendum">
+    This project originally stemmed from another one examining ways of addressing traffic fatalities in New York
+    City: for more on that, <a href="http://127.0.0.1:5000/2016/03/19/nyc-motor-vehicle-collisions.html">go here</a>.
+</p>
 
 {% endblock %}

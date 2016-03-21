@@ -1,82 +1,90 @@
 [
     {
+        "year": 2015,
         "snap": "this-website.png",
         "day": 31,
-        "year": 2015,
+        "title": "About this website",
         "route": "//residentmar.io/2015/10/31/this-website.html",
-        "month": 10,
-        "title": "About this website"
+        "month": 10
     },
     {
+        "year": 2015,
         "snap": "an-exercise-in-probability.png",
         "day": 6,
-        "year": 2015,
+        "title": "An exercise in probability",
         "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
-        "month": 11,
-        "title": "An exercise in probability"
+        "month": 11
     },
     {
+        "year": 2015,
         "snap": "openness-versus-quality.png",
         "day": 11,
-        "year": 2015,
+        "title": "Openness versus quality",
         "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "month": 12,
-        "title": "Openness versus quality"
+        "month": 12
     },
     {
+        "year": 2016,
         "snap": "signpost-views.png",
         "day": 17,
-        "year": 2016,
+        "title": "Measuring Wikipedia Signpost popularity",
         "route": "//residentmar.io/2016/01/17/signpost-views.html",
-        "month": 1,
-        "title": "Measuring Wikipedia Signpost popularity"
+        "month": 1
     },
     {
+        "year": 2016,
         "snap": "space-shuttle-challenger.png",
         "day": 7,
-        "year": 2016,
+        "title": "The decision to launch the Space Shuttle Challenger",
         "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
-        "month": 2,
-        "title": "The decision to launch the Space Shuttle Challenger"
+        "month": 2
     },
     {
+        "year": 2016,
         "snap": "average-chain-distance.png",
         "day": 9,
-        "year": 2016,
+        "title": "Is Starbucks really always two blocks away?",
         "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
-        "month": 2,
-        "title": "Is Starbucks really always two blocks away?"
+        "month": 2
     },
     {
+        "year": 2016,
         "snap": "watsongraph-visualization.png",
         "day": 11,
-        "year": 2016,
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
         "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
-        "month": 2,
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph"
+        "month": 2
     },
     {
+        "year": 2016,
         "snap": "wikiprojects.png",
         "day": 15,
-        "year": 2016,
+        "title": "Analyzing WikiProjects",
         "route": "//residentmar.io/2016/02/15/wikiprojects.html",
-        "month": 2,
-        "title": "Analyzing WikiProjects"
+        "month": 2
     },
     {
+        "year": 2016,
         "snap": "wikimedia-foundation-turnover.png",
         "day": 20,
-        "year": 2016,
+        "title": "The executive crisis at the Wikimedia Foundation",
         "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
-        "month": 2,
-        "title": "The executive crisis at the Wikimedia Foundation"
+        "month": 2
     },
     {
+        "year": 2016,
         "snap": "nyc-motor-vehicle-collisions.png",
         "day": 19,
-        "year": 2016,
+        "title": "Addressing traffic fatalities in New York City",
         "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
-        "month": 3,
-        "title": "Addressing traffic fatalities in New York City"
+        "month": 3
+    },
+    {
+        "year": 2016,
+        "snap": "empty.png",
+        "day": 21,
+        "title": "The 25 worst places to drive in New York City",
+        "route": "//residentmar.io/2016/03/21/worst-places-to-drive.html",
+        "month": 3
     }
 ]
