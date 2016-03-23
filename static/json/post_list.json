@@ -1,90 +1,90 @@
 [
     {
-        "year": 2015,
-        "snap": "this-website.png",
         "day": 31,
-        "title": "About this website",
+        "snap": "this-website.png",
         "route": "//residentmar.io/2015/10/31/this-website.html",
+        "title": "About this website",
+        "year": 2015,
         "month": 10
     },
     {
-        "year": 2015,
-        "snap": "an-exercise-in-probability.png",
         "day": 6,
-        "title": "An exercise in probability",
+        "snap": "an-exercise-in-probability.png",
         "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
+        "title": "An exercise in probability",
+        "year": 2015,
         "month": 11
     },
     {
-        "year": 2015,
-        "snap": "openness-versus-quality.png",
         "day": 11,
-        "title": "Openness versus quality",
+        "snap": "openness-versus-quality.png",
         "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
+        "title": "Openness versus quality in the Wikipedia community",
+        "year": 2015,
         "month": 12
     },
     {
-        "year": 2016,
-        "snap": "signpost-views.png",
         "day": 17,
-        "title": "Measuring Wikipedia Signpost popularity",
+        "snap": "signpost-views.png",
         "route": "//residentmar.io/2016/01/17/signpost-views.html",
+        "title": "Measuring Wikipedia Signpost popularity",
+        "year": 2016,
         "month": 1
     },
     {
-        "year": 2016,
-        "snap": "space-shuttle-challenger.png",
         "day": 7,
-        "title": "The decision to launch the Space Shuttle Challenger",
+        "snap": "space-shuttle-challenger.png",
         "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
+        "title": "The decision to launch the Space Shuttle Challenger",
+        "year": 2016,
         "month": 2
     },
     {
-        "year": 2016,
-        "snap": "average-chain-distance.png",
         "day": 9,
-        "title": "Is Starbucks really always two blocks away?",
+        "snap": "average-chain-distance.png",
         "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
+        "title": "Is Starbucks really always two blocks away?",
+        "year": 2016,
         "month": 2
     },
     {
-        "year": 2016,
-        "snap": "watsongraph-visualization.png",
         "day": 11,
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
+        "snap": "watsongraph-visualization.png",
         "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
+        "year": 2016,
         "month": 2
     },
     {
-        "year": 2016,
-        "snap": "wikiprojects.png",
         "day": 15,
-        "title": "Analyzing WikiProjects",
+        "snap": "wikiprojects.png",
         "route": "//residentmar.io/2016/02/15/wikiprojects.html",
+        "title": "Analyzing WikiProjects on Wikipedia",
+        "year": 2016,
         "month": 2
     },
     {
-        "year": 2016,
-        "snap": "wikimedia-foundation-turnover.png",
         "day": 20,
-        "title": "The executive crisis at the Wikimedia Foundation",
+        "snap": "wikimedia-foundation-turnover.png",
         "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
+        "title": "The executive crisis at the Wikimedia Foundation",
+        "year": 2016,
         "month": 2
     },
     {
-        "year": 2016,
-        "snap": "nyc-motor-vehicle-collisions.png",
         "day": 19,
-        "title": "Addressing traffic fatalities in New York City",
+        "snap": "nyc-motor-vehicle-collisions.png",
         "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
+        "title": "Addressing traffic fatalities in New York City",
+        "year": 2016,
         "month": 3
     },
     {
-        "year": 2016,
-        "snap": "empty.png",
-        "day": 21,
-        "title": "The 25 worst places to drive in New York City",
+        "day": 23,
+        "snap": "worst-places-to-drive.png",
         "route": "//residentmar.io/2016/03/21/worst-places-to-drive.html",
+        "title": "The worst places to drive in New York City",
+        "year": 2016,
         "month": 3
     }
 ]

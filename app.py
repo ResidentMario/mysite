@@ -31,7 +31,7 @@ post_list = [
         'snap': 'an-exercise-in-probability.png'
     },
     {
-        'title': 'Openness versus quality',
+        'title': 'Openness versus quality in the Wikipedia community',
         'route': '2015/12/12/openness-versus-quality.html',
         'date': datetime(2015, 12, 11),
         'template': 'openness-versus-quality.html',
@@ -74,7 +74,7 @@ post_list = [
         'snap': 'watsongraph-visualization.png'
     },
     {
-        'title': 'Analyzing WikiProjects',
+        'title': 'Analyzing WikiProjects on Wikipedia',
         'route': '2016/02/15/wikiprojects.html',
         'date': datetime(2016, 2, 15),
         'template': 'wikiprojects.html',
@@ -95,11 +95,11 @@ post_list = [
         'snap': 'nyc-motor-vehicle-collisions.png'
     },
     {
-        'title': 'The 25 worst places to drive in New York City',
+        'title': 'The worst places to drive in New York City',
         'route': '2016/03/21/worst-places-to-drive.html',
-        'date': datetime(2016, 3, 21),
+        'date': datetime(2016, 3, 23),
         'template': 'worst-places-to-drive.html',
-        'snap': 'empty.png'
+        'snap': 'worst-places-to-drive.png'
     }
 ]
 
@@ -113,8 +113,7 @@ raws_list = [
     'average-chain-distance-visualization.html',
     'contributions-force-graph-visualization.html',
     'fortune-force-graph-visualization.html',
-    'planets-force-graph-visualization.html',
-    'navbar.html'
+    'planets-force-graph-visualization.html'
     ]
 
 post_paths = [post['route'] for post in post_list]
@@ -148,5 +147,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
