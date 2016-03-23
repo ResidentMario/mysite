@@ -1,90 +1,90 @@
 [
     {
-        "day": 31,
-        "snap": "this-website.png",
         "route": "//residentmar.io/2015/10/31/this-website.html",
-        "title": "About this website",
+        "day": 31,
         "year": 2015,
-        "month": 10
+        "month": 10,
+        "snap": "this-website.png",
+        "title": "About this website"
     },
     {
-        "day": 6,
-        "snap": "an-exercise-in-probability.png",
         "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
-        "title": "An exercise in probability",
+        "day": 6,
         "year": 2015,
-        "month": 11
+        "month": 11,
+        "snap": "an-exercise-in-probability.png",
+        "title": "An exercise in probability"
     },
     {
-        "day": 11,
-        "snap": "openness-versus-quality.png",
         "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "title": "Openness versus quality in the Wikipedia community",
-        "year": 2015,
-        "month": 12
-    },
-    {
-        "day": 17,
-        "snap": "signpost-views.png",
-        "route": "//residentmar.io/2016/01/17/signpost-views.html",
-        "title": "Measuring Wikipedia Signpost popularity",
-        "year": 2016,
-        "month": 1
-    },
-    {
-        "day": 7,
-        "snap": "space-shuttle-challenger.png",
-        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
-        "title": "The decision to launch the Space Shuttle Challenger",
-        "year": 2016,
-        "month": 2
-    },
-    {
-        "day": 9,
-        "snap": "average-chain-distance.png",
-        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
-        "title": "Is Starbucks really always two blocks away?",
-        "year": 2016,
-        "month": 2
-    },
-    {
         "day": 11,
-        "snap": "watsongraph-visualization.png",
+        "year": 2015,
+        "month": 12,
+        "snap": "openness-versus-quality.png",
+        "title": "Openness versus quality in the Wikipedia community"
+    },
+    {
+        "route": "//residentmar.io/2016/01/17/signpost-views.html",
+        "day": 17,
+        "year": 2016,
+        "month": 1,
+        "snap": "signpost-views.png",
+        "title": "Measuring Wikipedia Signpost popularity"
+    },
+    {
+        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
+        "day": 7,
+        "year": 2016,
+        "month": 2,
+        "snap": "space-shuttle-challenger.png",
+        "title": "The decision to launch the Space Shuttle Challenger"
+    },
+    {
+        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
+        "day": 9,
+        "year": 2016,
+        "month": 2,
+        "snap": "average-chain-distance.png",
+        "title": "Is Starbucks really always two blocks away?"
+    },
+    {
         "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
+        "day": 11,
         "year": 2016,
-        "month": 2
+        "month": 2,
+        "snap": "watsongraph-visualization.png",
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph"
     },
     {
-        "day": 15,
-        "snap": "wikiprojects.png",
         "route": "//residentmar.io/2016/02/15/wikiprojects.html",
-        "title": "Analyzing WikiProjects on Wikipedia",
+        "day": 15,
         "year": 2016,
-        "month": 2
+        "month": 2,
+        "snap": "wikiprojects.png",
+        "title": "Analyzing WikiProjects on Wikipedia"
     },
     {
-        "day": 20,
-        "snap": "wikimedia-foundation-turnover.png",
         "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
-        "title": "The executive crisis at the Wikimedia Foundation",
+        "day": 20,
         "year": 2016,
-        "month": 2
+        "month": 2,
+        "snap": "wikimedia-foundation-turnover.png",
+        "title": "The executive crisis at the Wikimedia Foundation"
     },
     {
-        "day": 19,
-        "snap": "nyc-motor-vehicle-collisions.png",
         "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
-        "title": "Addressing traffic fatalities in New York City",
+        "day": 19,
         "year": 2016,
-        "month": 3
+        "month": 3,
+        "snap": "nyc-motor-vehicle-collisions.png",
+        "title": "Addressing traffic fatalities in New York City"
     },
     {
+        "route": "//residentmar.io/2016/03/23/worst-places-to-drive.html",
         "day": 23,
-        "snap": "worst-places-to-drive.png",
-        "route": "//residentmar.io/2016/03/21/worst-places-to-drive.html",
-        "title": "The worst places to drive in New York City",
         "year": 2016,
-        "month": 3
+        "month": 3,
+        "snap": "worst-places-to-drive.png",
+        "title": "The worst places to drive in New York City"
     }
 ]

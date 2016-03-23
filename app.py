@@ -96,7 +96,7 @@ post_list = [
     },
     {
         'title': 'The worst places to drive in New York City',
-        'route': '2016/03/21/worst-places-to-drive.html',
+        'route': '2016/03/23/worst-places-to-drive.html',
         'date': datetime(2016, 3, 23),
         'template': 'worst-places-to-drive.html',
         'snap': 'worst-places-to-drive.png'
@@ -147,5 +147,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
