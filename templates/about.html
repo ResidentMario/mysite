@@ -18,4 +18,78 @@
 
 <p>For more on what I do check out my <a href={{ most_recent }}>blog</a>!</p>
 
+<script src="/static/js/d3.v3.js"></script>
+<!--<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>-->
+<script src="/static/js/d3.tip.js"></script>
+
+<script>
+    var mindate = new Date(2015, 10, 1);
+    var maxdate = new Date(2016, 4, 1);
+    var offset = 40;
+    var date_scale = d3.time.scale().domain([mindate, maxdate]).range([800, 20]);
+//    var x_axis = d3.svg.axis().scale(date_scale).orient("bottom").ticks(d3.time.month, 1);
+    var y_pos = 15;
+    var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([-10, 0])
+      .html(function(d) {
+        return "<img src='/static/post_snaps/" + d['snap'] + "' style='height:200px; width:400px;'/>" +
+                "<div style='padding:10px;'>" +
+                d['title'] +
+                "</div>";
+      });
+    d3.json("/static/json/post_list.json", function(error, dataset) {
+        if (error) throw error;
+        var frame = d3.select("g")
+                .append("svg")
+                .attr({
+                    "width": "800px",
+                    "height": "30px"
+                });
+        frame.call(tip);
+//        frame.append("line")
+//                .attr({
+//                    "y1": y_pos,
+//                    "y2": y_pos,
+//                    "x1": offset,
+//                    "x2": 800 + offset
+//                })
+//                .style({
+//                    "stroke":"gray",
+//                    "stroke-width": 5,
+//                });
+        frame.selectAll("g")
+                .data(dataset)
+                .enter()
+                .append("a")
+                .attr({
+                    "xlink:href": function(d) { return d['route']; }
+//                    "xlink:title": function(d) { return d['title']; }
+                })
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide)
+                .append("circle")
+                .attr({
+                    "class": "entry",
+                    "cy": y_pos,
+                    "cx": function(d) {
+                        var date = new Date(d['year'], d['month'], d['day']);
+                        return date_scale(date) + offset; },
+                    "r": 10
+                })
+                .style({
+                    "stroke": "#252525",
+                    "fill": "#999",
+                    "stroke-width": 4
+                })
+                .on("mouseover", function() { d3.select(this).style("fill", "#252525").style("stroke-width", 0); })
+                .on("mouseout", function() { d3.select(this).style("fill", "#999").style("stroke-width", 4); });
+    });
+</script>
+
+<h3>Blog Posts</h3>
+<g style="border-top:4px solid #252525;">
+
+</g>
+
 {% endblock %}
