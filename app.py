@@ -106,7 +106,7 @@ post_list = [
         'route': '2016/03/28/missingno.html',
         'date': datetime(2016, 3, 28),
         'template': 'missingno.html',
-        'snap': 'empty.png'
+        'snap': 'missingno.png'
     }
 ]
 
