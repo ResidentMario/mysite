@@ -1,90 +1,98 @@
 [
     {
-        "route": "//residentmar.io/2015/10/31/this-website.html",
         "day": 31,
-        "year": 2015,
         "month": 10,
-        "snap": "this-website.png",
-        "title": "About this website"
+        "route": "//residentmar.io/2015/10/31/this-website.html",
+        "year": 2015,
+        "title": "About this website",
+        "snap": "this-website.png"
     },
     {
-        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
         "day": 6,
-        "year": 2015,
         "month": 11,
-        "snap": "an-exercise-in-probability.png",
-        "title": "An exercise in probability"
-    },
-    {
-        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "day": 11,
+        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
         "year": 2015,
-        "month": 12,
-        "snap": "openness-versus-quality.png",
-        "title": "Openness versus quality in the Wikipedia community"
+        "title": "An exercise in probability",
+        "snap": "an-exercise-in-probability.png"
     },
     {
-        "route": "//residentmar.io/2016/01/17/signpost-views.html",
-        "day": 17,
-        "year": 2016,
-        "month": 1,
-        "snap": "signpost-views.png",
-        "title": "Measuring Wikipedia Signpost popularity"
-    },
-    {
-        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
-        "day": 7,
-        "year": 2016,
-        "month": 2,
-        "snap": "space-shuttle-challenger.png",
-        "title": "The decision to launch the Space Shuttle Challenger"
-    },
-    {
-        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
-        "day": 9,
-        "year": 2016,
-        "month": 2,
-        "snap": "average-chain-distance.png",
-        "title": "Is Starbucks really always two blocks away?"
-    },
-    {
-        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
         "day": 11,
-        "year": 2016,
-        "month": 2,
-        "snap": "watsongraph-visualization.png",
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph"
+        "month": 12,
+        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
+        "year": 2015,
+        "title": "Openness versus quality in the Wikipedia community",
+        "snap": "openness-versus-quality.png"
     },
     {
-        "route": "//residentmar.io/2016/02/15/wikiprojects.html",
+        "day": 17,
+        "month": 1,
+        "route": "//residentmar.io/2016/01/17/signpost-views.html",
+        "year": 2016,
+        "title": "Measuring Wikipedia Signpost popularity",
+        "snap": "signpost-views.png"
+    },
+    {
+        "day": 7,
+        "month": 2,
+        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
+        "year": 2016,
+        "title": "The decision to launch the Space Shuttle Challenger",
+        "snap": "space-shuttle-challenger.png"
+    },
+    {
+        "day": 9,
+        "month": 2,
+        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
+        "year": 2016,
+        "title": "Is Starbucks really always two blocks away?",
+        "snap": "average-chain-distance.png"
+    },
+    {
+        "day": 11,
+        "month": 2,
+        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
+        "year": 2016,
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
+        "snap": "watsongraph-visualization.png"
+    },
+    {
         "day": 15,
-        "year": 2016,
         "month": 2,
-        "snap": "wikiprojects.png",
-        "title": "Analyzing WikiProjects on Wikipedia"
+        "route": "//residentmar.io/2016/02/15/wikiprojects.html",
+        "year": 2016,
+        "title": "Analyzing WikiProjects on Wikipedia",
+        "snap": "wikiprojects.png"
     },
     {
-        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
         "day": 20,
-        "year": 2016,
         "month": 2,
-        "snap": "wikimedia-foundation-turnover.png",
-        "title": "The executive crisis at the Wikimedia Foundation"
+        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
+        "year": 2016,
+        "title": "The executive crisis at the Wikimedia Foundation",
+        "snap": "wikimedia-foundation-turnover.png"
     },
     {
-        "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
         "day": 19,
-        "year": 2016,
         "month": 3,
-        "snap": "nyc-motor-vehicle-collisions.png",
-        "title": "Addressing traffic fatalities in New York City"
+        "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
+        "year": 2016,
+        "title": "Addressing traffic fatalities in New York City",
+        "snap": "nyc-motor-vehicle-collisions.png"
     },
     {
-        "route": "//residentmar.io/2016/03/23/worst-places-to-drive.html",
         "day": 23,
-        "year": 2016,
         "month": 3,
-        "snap": "worst-places-to-drive.png",
-        "title": "The worst places to drive in New York City"
+        "route": "//residentmar.io/2016/03/23/worst-places-to-drive.html",
+        "year": 2016,
+        "title": "The worst places to drive in New York City",
+        "snap": "worst-places-to-drive.png"
+    },
+    {
+        "day": 28,
+        "month": 3,
+        "route": "//residentmar.io/2016/03/28/missingno.html",
+        "year": 2016,
+        "title": "Using the missingno package to visualize missing data",
+        "snap": "empty.png"
     }
 ]

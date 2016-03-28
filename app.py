@@ -100,6 +100,13 @@ post_list = [
         'date': datetime(2016, 3, 23),
         'template': 'worst-places-to-drive.html',
         'snap': 'worst-places-to-drive.png'
+    },
+    {
+        'title': 'Using the missingno package to visualize missing data',
+        'route': '2016/03/28/missingno.html',
+        'date': datetime(2016, 3, 28),
+        'template': 'missingno.html',
+        'snap': 'empty.png'
     }
 ]
 

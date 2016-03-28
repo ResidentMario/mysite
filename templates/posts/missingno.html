@@ -5,6 +5,8 @@
 {% endblock %}
 {% block content %}
 
+<h3>Background</h3>
+
 <p>
     Once your data is safely localized, one of the first and most important things that you have to do at the beginning
     of any data analytics project is taking "a lay of the land" with your data. Data is fundamentally messy: full of
@@ -13,7 +15,77 @@
 </p>
 
 <p>
-
+    When I got to work with the <a href="{{request.url_root}}2016/03/19/nyc-motor-vehicle-collisions.html">motor
+    collision dataset</a> that consumed all of my time last weekend I was surprised to find the extent to which
+    missing entries populated the picture. After digging around a bit I discovered that though Python has
+    world-beating facilities for handling missing data, there isn't much out there in terms of visual summary (no,
+    <code class="inline_code">pd.describe()</code> doesn't count!).
 </p>
+
+<p>
+    I was looking in particular for some way of constructing a missing data matrix: take a sample of some thousand or
+    so entries in your dataset and throw it at the wall to see which columns stick and which ones don't.
+    Surprisingly, as far as I can tell (and do inform me if I'm wrong, reader) there is nothing optimized
+    for this task off-the-shelf. I mean, it's not hard to whip out a crude <a
+        href="https://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.heatmap.html">seaborn.heatmap</a>, but
+    the result is distinctly visually wanting.
+</p>
+
+<p>
+    So build one, I said! And like any good developer on a hunch I ignored all that other life stuff to punch one
+    out.
+</p>
+
+<h3>Results</h3>
+
+<p>
+    The <a href="https://pypi.python.org/pypi/missingno/0.1.2">missingno</a> package on PyPI
+    (<a href="https://en.wikipedia.org/wiki/MissingNo.">still can't believe that package name was never taken</a>)
+    exposes the top-level <code class="inline_code">missingno</code> function, which takes a pandas
+    <code class="inline_code">DataFrame</code> as an input and returns an up-tweaked data nullity matrix
+    visualization, built with <code class="inline_code">matplotlib</code>, in return.
+</p>
+
+<p>
+    For the purposes of demonstration, let's download and visualize 100 random records in the New York City Motor
+    Vehicle Collisions dataset. Once you have the data localized in a DataFrame, all you have to do is:
+</p>
+
+<pre>
+    <code class="language-python">
+        >>> from missingno import missingno
+        >>> missingno(df.sample(100))
+    </code>
+</pre>
+
+<p>
+    Which results in:
+</p>
+
+<img src="/static/post_assets/missingno/missingno_one_hundred.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    The grays are filled values while the whites are missing data, while the sparkline on the right-hand side visually
+    summarizes data completeness (here you can see that data completeness shelves fairly strongly against 23 values
+    filled). <code style="code_inline">missingno</code> will summarize whatever size DataFrame you throw at
+    it&mdash;here is what it looks like with 1000 samples:
+</p>
+
+<img src="/static/post_assets/missingno/missingno_one_thousand.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    <code class="inline_code">missingno</code> takes optional arguments controlling figure size, width ratio, color,
+    and font size, all of whcih are documented over at <a href="https://github.com/ResidentMario/missingno">the
+    GitHub repository</a>. Head over there to learn more, or <code class="inline_code">pip install missingno</code>
+    right away to start using it right away.
+</p>
+
+<p class="addendum">
+    If you like this project, be sure to also check out Jos Polfliet's fantastic <a
+        href="https://github.com/JosPolfliet/pandas-profiling">pandas profiling</a> tool.
+</p>
+
 
 {% endblock %}

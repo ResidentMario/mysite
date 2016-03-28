@@ -72,5 +72,11 @@
             <guid>http://residentmar.io/2016/03/23/worst-places-to-drive.html</guid>
             <pubDate>Wed, 23 Mar 2016 00:00:00 EST</pubDate>
     </item>
+    <item>
+            <title>Using the missingno package to visualize missing data</title>
+            <link>http://residentmar.io/2016/03/28/missingno.html</link>
+            <guid>http://residentmar.io/2016/03/28/missingno.html</guid>
+            <pubDate>Mon, 28 Mar 2016 00:00:00 EST</pubDate>
+    </item>
 </channel>
 </rss>
