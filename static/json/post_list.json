@@ -16,20 +16,20 @@
         "month": 11
     },
     {
-        "snap": "openness-versus-quality.png",
-        "title": "Openness versus quality in the Wikipedia community",
-        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "year": 2015,
-        "day": 11,
-        "month": 12
-    },
-    {
         "snap": "signpost-views.png",
         "title": "Measuring Wikipedia Signpost popularity",
         "route": "//residentmar.io/2016/01/17/signpost-views.html",
         "year": 2016,
         "day": 17,
         "month": 1
+    },
+    {
+        "snap": "openness-versus-quality.png",
+        "title": "Openness versus quality in the Wikipedia community",
+        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
+        "year": 2015,
+        "day": 11,
+        "month": 12
     },
     {
         "snap": "space-shuttle-challenger.png",

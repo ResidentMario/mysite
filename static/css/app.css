@@ -38,28 +38,11 @@ body {
     width:inherit;
     margin:auto;
     font-size:14px;
-    /*font-family: 'Garamond', 'sans-serif';*/
     color:#888888;
 }
 #blog_navbar {
     width:inherit;
     margin:auto;
-}
-#blog_previously_links {
-    font-size:20px;
-    margin-bottom:50px;
-    font-style: italic;
-    max-width:400px;
-    float:right;
-    margin-top:50px;
-}
-#blog_next_links {
-    font-size:20px;
-    margin-bottom:50px;
-    font-style: italic;
-    max-width:400px;
-    float:left;
-    margin-top:50px;
 }
 #postdate {
     color:#aaa;
@@ -173,9 +156,6 @@ a:active {
     text-decoration: none;
 }
 .blog-frame {
-    font-weight: bold;
-    font-family: Roboto, sans serif;
-    color:#252525;
     text-align:center;
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }

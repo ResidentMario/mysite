@@ -31,26 +31,19 @@ post_list = [
         'snap': 'an-exercise-in-probability.png'
     },
     {
+        'title': 'Measuring Wikipedia Signpost popularity',
+        'route': '2016/01/17/signpost-views.html',
+        'date': datetime(2016, 1, 17),
+        'template': 'signpost-views.html',
+        'snap': 'signpost-views.png'
+    },
+    {
         'title': 'Openness versus quality in the Wikipedia community',
         'route': '2015/12/12/openness-versus-quality.html',
         'date': datetime(2015, 12, 11),
         'template': 'openness-versus-quality.html',
         # 'snap': 'empty.png'
         'snap': 'openness-versus-quality.png'
-    },
-    # {
-    #     'title': 'IBM Watson, Cultural Insight, and WatsonGraph',
-    #     'route': '2015/12/26/watson.html',
-    #     'date': datetime(2015, 12, 26),
-    #     'template': 'watson.html',
-    #     'snap': 'watson.png'
-    # },
-    {
-        'title': 'Measuring Wikipedia Signpost popularity',
-        'route': '2016/01/17/signpost-views.html',
-        'date': datetime(2016, 1, 17),
-        'template': 'signpost-views.html',
-        'snap': 'signpost-views.png'
     },
     {
         'title': 'The decision to launch the Space Shuttle Challenger',
@@ -154,5 +147,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
