@@ -2,94 +2,65 @@
 {% block pagetitle %} About {% endblock %}
 {% block content %}
 
-<div style="padding-left:100px; padding-right:100px;">"She knows, now, absolutely, hearing the white noise that is London, that Damien's theory of jet
+<div style="padding-left:100px; padding-right:100px;">
+    "She knows, now, absolutely, hearing the white noise that is London, that Damien's theory of jet
     lag is correct: that her mortal soul is leagues behind her, being reeled in on some ghostly umbilical down the
     vanished wake of the plane that brought her here, hundreds of thousands of feet above the Atlantic. Souls can't
-    move that quickly, and are left behind, and must be awaited, upon arrival, like lost luggage."<br/><span
-            style="float:right; font-size:12px">&mdash; William Gibson, Pattern Recognition</span></div>
+    move that quickly, and are left behind, and must be awaited, upon arrival, like lost luggage."
+    <br/>
+    <span style="float:right; font-size:12px">
+        &mdash; William Gibson, Pattern Recognition
+    </span>
+</div>
 <br/>
 
-<p>I am a Python programmer and an undergraduate student of mathematics attending <a
+<p>
+    I am a Python programmer and an undergraduate student of mathematics attending <a
         href="http://www.baruch.cuny.edu/">CUNY Baruch College</a>. My interests lie in the computational
     applications of statistics and probability; this website is meant to serve as a collection space for my
     ruminations on topics in data science, machine learning, web programming, mathematics, and whatever other sorts of
     mischief I get myself into. I am also an English minor, <a href="https://en.wikipedia.org/wiki/User:Resident_Mario">avid
-        Wikipedian</a>, and journalist thereof.</p>
+        Wikipedian</a>, and journalist thereof.
+</p>
 
-<p>For more on what I do check out my <a href={{ most_recent }}>blog</a>!</p>
+<g style="width:960px; display:block; transform:translate(-95px, 0); border:1px solid black;
+border-radius:5px; overflow:hidden; padding-top:8px; margin-bottom:20px; height:628px;">
+</g>
 
 <script src="/static/js/d3.v3.js"></script>
-<!--<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>-->
-<script src="/static/js/d3.tip.js"></script>
 
 <script>
-    var mindate = new Date(2015, 10, 1);
-    var maxdate = new Date(2016, 4, 1);
-    var offset = 40;
-    var date_scale = d3.time.scale().domain([mindate, maxdate]).range([800, 20]);
-//    var x_axis = d3.svg.axis().scale(date_scale).orient("bottom").ticks(d3.time.month, 1);
-    var y_pos = 15;
-    var tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .offset([-10, 0])
-      .html(function(d) {
-        return "<img src='/static/post_snaps/" + d['snap'] + "' style='height:200px; width:400px;'/>" +
-                "<div style='padding:10px;'>" +
-                d['title'] +
-                "</div>";
-      });
     d3.json("/static/json/post_list.json", function(error, dataset) {
         if (error) throw error;
+
         var frame = d3.select("g")
-                .append("svg")
-                .attr({
-                    "width": "800px",
-                    "height": "30px"
-                });
-        frame.call(tip);
-//        frame.append("line")
-//                .attr({
-//                    "y1": y_pos,
-//                    "y2": y_pos,
-//                    "x1": offset,
-//                    "x2": 800 + offset
-//                })
-//                .style({
-//                    "stroke":"gray",
-//                    "stroke-width": 5,
-//                });
-        frame.selectAll("g")
+                .selectAll("a")
                 .data(dataset)
-                .enter()
+                .enter();
+
+        frame
+                .append("span")
+                .style({
+                    "position": "relative",
+                    "width": "320px",
+                    "height": "160px"
+                })
+                .attr("class", "post-frame")
                 .append("a")
                 .attr({
-                    "xlink:href": function(d) { return d['route']; }
-//                    "xlink:title": function(d) { return d['title']; }
+                    "href": function(d) { return d['route']; },
+                    "class": "blog-frame"
                 })
-                .on('mouseover', tip.show)
-                .on('mouseout', tip.hide)
-                .append("circle")
+                .append("img")
                 .attr({
-                    "class": "entry",
-                    "cy": y_pos,
-                    "cx": function(d) {
-                        var date = new Date(d['year'], d['month'], d['day']);
-                        return date_scale(date) + offset; },
-                    "r": 10
+                    "src": function(d) { return "/static/post_snaps/" + d['snap']; }
                 })
                 .style({
-                    "stroke": "#252525",
-                    "fill": "#999",
-                    "stroke-width": 4
-                })
-                .on("mouseover", function() { d3.select(this).style("fill", "#252525").style("stroke-width", 0); })
-                .on("mouseout", function() { d3.select(this).style("fill", "#999").style("stroke-width", 4); });
+                    "width": "320px",
+                    "margin-top": "-8px"
+                });
     });
+
 </script>
-
-<h3>Blog Posts</h3>
-<g style="border-top:4px solid #252525;">
-
-</g>
 
 {% endblock %}
