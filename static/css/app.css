@@ -172,11 +172,10 @@ a:active {
     color: #BBB;
     text-decoration: none;
 }
-/* experimental */
 .blog-frame {
     font-weight: bold;
     font-family: Roboto, sans serif;
     color:#252525;
     text-align:center;
-    /*width:400px;*/
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }

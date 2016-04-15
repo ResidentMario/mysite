@@ -39,26 +39,25 @@ border-radius:5px; overflow:hidden; padding-top:8px; margin-bottom:20px; height:
                 .enter();
 
         frame
-                .append("span")
-                .style({
-                    "position": "relative",
-                    "width": "320px",
-                    "height": "160px"
-                })
-                .attr("class", "post-frame")
                 .append("a")
                 .attr({
                     "href": function(d) { return d['route']; },
                     "class": "blog-frame"
                 })
-                .append("img")
-                .attr({
-                    "src": function(d) { return "/static/post_snaps/" + d['snap']; }
-                })
+                .append("div")
                 .style({
                     "width": "320px",
-                    "margin-top": "-8px"
-                });
+                    "height": "160px",
+                    "background-image": function(d) { return "url(\"/static/post_snaps/" + d['snap'] + "\")"; },
+                    "background-size": "320px 160px",
+                    "display": "table-cell"
+                })
+//                .append("span")
+//                .style({
+//                    "display": "inline-block",
+//                    "padding": "15px"
+//                })
+//                .text(function(d) { return d['title']; });
     });
 
 </script>
