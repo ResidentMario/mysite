@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+#boroughs {
+    fill: #eee;
+    stroke: gray;
+    stroke-width: 1px;
+    display: block;
+}
+
+.location {
+    fill: black;
+    stroke-width: 1px;
+    stroke: white;
+}
+
+.location:hover {
+    fill: white;
+    stroke-width: 1px;
+    stroke: white;
+}
+
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+    font-family: Roboto;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}
+
+#ranking-type, #entity-type {
+    font-family:Roboto;
+    padding:10px;
+    font-size: 16px;
+    width:400px;
+    border:1px solid black;
+}
+
+#left-button, #right-button {
+    font-size:14px;
+    /*width:40px;*/
+    /*background:lightgreen;*/
+    /*height:50px;*/
+    /*border-width:0*/
+}
+</style>
+
+<!-- Import the scripts. -->
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+<!-- Define the graph structure: single SVG pane above, two divs below for the selectors. -->
+<body>
+<div id="svg_holder">
+</div>
+<br clear="all"/>
+<div style="width:800px;">
+<div id="type_selector_holder" style="width:380px; font-family:Roboto; float:left;"> <!-- margin:0
+auto; -->
+</div>
+<div id="entity_selector_holder" style="width:380px; font-family:Roboto; float:right;"> <!--
+ margin:0 auto; -->
+</div>
+</div>
+<script>
+
+    // Set plot size parameters and append the SVG.
+    var width = 800,
+       height = 500;
+
+
+    var svg = d3.select("#svg_holder").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    // Set up the display tooltip, needs to be called against the SVG.
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+            return d['properties']['address'];
+    });
+
+    svg.call(tip);
+
+    // Explicitly call layers in order to always stack points on the map and not the other way around.
+    var layer1 = svg.append('g');
+    var layer2 = svg.append('g');
+
+    // Set up the New York City shape.
+    // If you change the scaling factors here be sure to change them for the points below too!
+    d3.json("../static/json/nyc.json", function(error, nyb) {
+
+        // Set up a projection.
+        var proj = d3.geo.mercator()
+                .center([-74.04, 40.70])
+                .scale(50000)
+                .translate([(width) / 2, (height)/2]);
+
+        var path = d3.geo.path()
+                .projection(proj);
+
+        // Load and plot the points.
+        layer1
+                .attr("id", "boroughs")
+                .selectAll(".state")
+                .data(nyb.features)
+                .enter().append("path")
+                .attr("class", function(d){ return d.properties.name; })
+                .attr("d", path);
+
+    });
+
+    // Initially populate the graph using Columbia enumeration values.
+    d3.json("../static/post_assets/landowners/geojson/mepl/Trustees of Columbia.geojson", function(error, columbia) {
+
+        var proj = d3.geo.mercator()
+                .center([-74.04, 40.70])
+                .scale(50000)
+                .translate([(width) / 2, (height)/2]);
+
+        var path = d3.geo.path()
+                .projection(proj);
+
+        layer2
+                .attr("id", "locations")
+                .selectAll(".state")
+                .data(columbia.features)
+                .enter().append("circle")
+                .attr("class", "location")
+                .attr("r", "4px")
+                .attr("cx", function(d) { return proj(d['geometry']['coordinates'])[0]; })
+                .attr("cy", function(d) { return proj(d['geometry']['coordinates'])[1]; })
+                .attr("d", path)
+                // Set up the d3-tip tool.
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
+//                .each(pulse);
+//
+//		function pulse() {
+//            var circle = svg.selectAll(".location");
+//            (function repeat() {
+//                circle = circle.transition()
+//                        .duration(2000)
+//                        .attr("r", 2)
+//                        .transition()
+//                        .duration(2000)
+//                        .attr("r", 5)
+//                        .ease('sine')
+//                        .each("end", repeat);
+//            })();
+//        }
+
+        // Set up the initial big text label.
+        svg.append("text")
+                .attr({
+                    "x": 25,
+                    "y": 25,
+                    "font-family": "Roboto",
+                    "font-weight": "bold",
+                    "font-size": "26px"
+                })
+                .text("Trustees of Columbia")
+                .attr("id", "title-label");
+
+        // Set up the initial ranking label.
+        svg.append("text")
+                .attr({
+                    "x": 25,
+                    "y": 45,
+                    "font-family": "Roboto",
+                    "font-size": "12px"
+                })
+                .text("Ranked #1 In Number Of Addresses (209)")
+                .attr("id", "rank-label");
+
+
+        // Set up the description.
+        // Because text boxes cannot be fit to a certain width by default in SVG--there's no bounding box!---I elected
+        // to dump it over it using an absolutely-positioned div.
+        d3.select("#svg_holder")
+                .append("div")
+                .attr("id", "description-text")
+                .style({
+                    "position": "absolute",
+                    "left": "35px",
+                    "top": "100px",
+                    "font-family": "Roboto",
+                    "font-size": "12px",
+                    "width": "350px"
+                })
+                .text("Columbia University is the largest landowner in New York City by number of addresses by a long shot, owning 209 properties—twice the number owned properties as the next largest private property-holder, the Duestche Bank National Trust, and almost three times the 72 addresses allotted to the New York Public Library, for comparison. It is also a common candidate in the media for the biggest landowner in New York City, period, and indeed according to the public record the university is first in number, second in size, and third in wealth—losing by a sizable margin to NYU on that last count.");
+
+    });
+
+    // Set up the dropdown menu.
+    var dropDown = d3.select("#type_selector_holder")
+            .text("Ranking")
+            .style({
+                "font-size": "20px",
+                "font-weight": "bold"
+            })
+            .append("select")
+            .attr("name", "ranking-type")
+            .attr("id", "ranking-type");
+
+    var options = dropDown.selectAll("option")
+            .data(['Most Enumerate', 'Largest', 'Wealthiest'])
+            .enter()
+            .append("option");
+
+
+    // Will need the data, easiest to just paste it here as a list.
+    var lpl = ['Riverbay Corporation',
+            'Trustees Of Columbia',
+            'ST-DIL LLC',
+            'Starrett City, Inc.',
+            'Rochdale Village Inc',
+            'New York University',
+            "St. John's University",
+            'RCPI Landmark Properties LLC',
+            'New York-Presbyterian Hospital',
+            'North Shore Towers Apartments',
+            'Trinity Hudson Holdings',
+            'Parkchester South Condominiums',
+            'New Water Street Corporation',
+            'New York Convention Center Corporation',
+            'Mount Sinai Hospital',
+            '1-10 Bush Terminal Owner LP',
+            'SL Green Realty Corporation',
+            'Queens Fresh Meadows',
+            'PCVST-DIL LLC',
+            'Fordham University'];
+
+    var mepl = ['Trustees Of Columbia',
+                 'Duestche Bank National Trust',
+                 'Spring Creek Nehemaih',
+                 'Northeastern Conference of Seventh-Day Adventists',
+                 'New York University',
+                 'U.S. Bank National Association',
+                 'Consolidated Edison Company',
+                 'Maguire Avenue Realty',
+                 'New York Garden Trust',
+                 'Greater New York Conference of Seventh-day Adventists',
+                 'Housing Partnership Development Corporation',
+                 'Roman Catholic Church',
+                 'Baiano Development LLC',
+                 'Yeshiva University',
+                 'Silvershore Properties',
+                 'Casa Mason Corporation',
+                 'Clinton Graham',
+                 'Mg Richmond LLC',
+                 'Hpeny Housing Development Fund Company',
+                 'Prol Properties Corporation'];
+
+    var wpl = ['New York University',
+             ' RCPI Landmark Properties LLC',
+             'Trustees Of Columbia',
+             'One Bryant Park',
+             '767 Fifth Partnerns LLC',
+             'New York Convention Center Corporation',
+             'BPP ST Owner LLC',
+             'Citifield',
+             'SL Green Realty Corporation',
+             'Arena Nominee Sub B, LLC',
+             '200 Park, L.P.',
+             '1345 Leasehold LLC',
+             'Mount Sinai Hospital',
+             'Trinity Hudson Holdings',
+             'HMC Times Square Hotel LP',
+             'PGREF I 1633 Broadway Tower, L.P.',
+             '1221 Avenue Holdings',
+             'Bop 245 Park LLC',
+             'Solovieff Realty Company',
+             'New York-Presbyterian Hospital'];
+
+
+    options
+            .attr("value", function(d) { console.log(d); return d; })
+            .text(function(d) { return d; });
+
+
+    // Set up the entity selection.
+    var entitySelection = d3.select("#entity_selector_holder")
+            .text("Entity")
+            .style({
+                "font-size": "20px",
+                "font-weight": "bold"
+            })
+            .append("select")
+            .attr("name", "entity-selection")
+            .attr("id", "entity-type");
+
+
+    var entities = entitySelection.selectAll("option")
+            .data(mepl)
+            .enter()
+            .append("option");
+
+    entities
+            .attr("value", function(d) { console.log(d); return d; })
+            .text(function(d, i) { return i + 1 + ". " + d; });
+
+    // Set up the changed-state calls.
+    dropDown.on("change", criteriaChanged);
+    entitySelection.on("change", selectionChanged);
+    // We will define these functions a little later on.
+
+    // Set up the left-right buttons, using an absolutely positioned div element.
+    d3.select("#svg_holder")
+            .append("button")
+            .attr("id", "left-button")
+            .attr("onclick", "goLeft()")
+            .style({
+                "position": "absolute",
+                "left": "35px",
+                "top": "65px"
+            })
+            .text("←");
+    d3.select("#svg_holder")
+            .append("button")
+            .attr("id", "right-button")
+            .attr("onclick", "goRight()")
+            .style({
+                "position": "absolute",
+                "left": "85px",
+                "top": "65px"
+            })
+            .text("→");
+    // The left button should be disabled by default.
+     document.getElementById("left-button").disabled = true;
+
+
+    // Now we can start defining functional events.
+    // This event is called whenever the criteria used for ranking is changed.
+    function criteriaChanged() {
+        var selectedValue = d3.event.target.value;
+        // Which file we draw the update from depends on which criteria we have listed.
+        if (selectedValue == 'Largest') {
+            entities
+                    .attr("value", function (d, i) {
+                        console.log(lpl[i]);
+                        return lpl[i];
+                    })
+                    .text(function (d, i) {
+                        return i + 1 + ". " + lpl[i];
+                    });
+        }
+        if (selectedValue == 'Most Enumerate') {
+            entities
+                    .attr("value", function (d, i) {
+                        console.log(mepl[i]);
+                        return mepl[i];
+                    })
+                    .text(function (d, i) {
+                        return i + 1 + ". " + mepl[i];
+                    });
+        }
+        if (selectedValue == 'Wealthiest') {
+            entities
+                    .attr("value", function (d, i) {
+                        console.log(wpl[i]);
+                        return wpl[i];
+                    })
+                    .text(function (d, i) {
+                        return i + 1 + ". " + wpl[i];
+                    });
+        }
+        // For convenience's sake, let's set the index when an update is called back to 0.
+        var entity_selection = document.getElementById('entity-type');
+        entity_selection.selectedIndex = 0;
+        // Now we update the selection using the below.
+        selectionChanged();
+    }
+
+    // This event is called whenever the entity selection is changed, OR the criteria selection is changed.
+    // Clicking buttons calls goLeft() or goRight(), which do some checks before running this, too.
+    function selectionChanged() {
+        var entity_selection = document.getElementById('entity-type');
+        var selectedValue = entity_selection.options[entity_selection.selectedIndex].value;
+
+        // The below is a standard way of doing this but I fell back to pure JavaScript because I needed the selection
+        // and the plot to update when the ranking being used changed. That wouldn't push an event to the d3 stream,
+        // so for that case we need to manually inspect...
+        // var selectedValue = d3.event.target.value;
+        // ...as below.
+        var selectedIndex = document.getElementById('entity-type').selectedIndex + 1;
+
+        // Reset the buttons if appropriate!
+        if(entity_selection.selectedIndex == 20) {
+             document.getElementById("right-button").disabled = true;
+        }
+        if(entity_selection.selectedIndex == 0) {
+             document.getElementById("left-button").disabled = true;
+        }
+        else {
+             document.getElementById("left-button").disabled = false;
+             document.getElementById("right-button").disabled = false;
+        }
+
+        var old_points = d3.selectAll('.location');
+        // Reset the old points.
+        old_points.remove();
+
+
+        // In order to do any of the rest we need to inspect the ranking type so we map to the correct subdirectory.
+        var selection;
+        var type_selection = document.getElementById('ranking-type');
+        var sel = type_selection.options[type_selection.selectedIndex].value;
+        if (sel == 'Largest') {
+            selection = 'lpl';
+        }
+        if (sel == 'Most Enumerate') {
+            selection = 'mepl'
+        }
+        if (sel == 'Wealthiest') {
+            selection = 'wpl';
+        }
+
+        d3.json("../static/post_assets/landowners/geojson/" + selection + '/' + selectedValue + '.geojson', function (error, ent) {
+            // the user clicks on the go left/go right buttons.
+            //the name isn't important, but has to match the name
+            //you added to the menu's "change" event listener.
+
+            // Remove the labels, now we reset them based on the new data.
+            d3.select("#title-label").remove();
+            svg.append("text")
+                .attr({
+                    "x": 25,
+                    "y": 25,
+                    "font-family": "Roboto",
+                    "font-weight": "bold",
+                    "font-size": "26px"
+                })
+                .text(function(d) { return selectedValue; })
+                .attr("id", "title-label");
+
+            d3.select("#rank-label").remove();
+            if (sel == 'Largest') {
+                svg.append("text")
+                        .attr({
+                            "x": 25,
+                            "y": 45,
+                            "font-family": "Roboto",
+                            "font-size": "12px"
+                        })
+                        .text(function(d) { return "Ranked " + "#" + selectedIndex + " In Total Building Area (" +
+                                ent['properties']['square footage'] + " square feet)"; })
+                        .attr("id", "rank-label");
+            }
+            if (sel == 'Most Enumerate') {
+                svg.append("text")
+                        .attr({
+                            "x": 25,
+                            "y": 45,
+                            "font-family": "Roboto",
+                            "font-size": "12px"
+                        })
+                        .text(function(d) { return "Ranked " + "#" + selectedIndex + " In Number Of Addresses (" +
+                                ent['properties']['addresses'] + ")"; })
+                        .attr("id", "rank-label");
+
+            }
+            if (sel == 'Wealthiest') {
+                svg.append("text")
+                        .attr({
+                            "x": 25,
+                            "y": 45,
+                            "font-family": "Roboto",
+                            "font-size": "12px"
+                        })
+                        .text(function(d) { return "Ranked " + "#" + selectedIndex + " In Total Building Value (" +
+                                ent['properties']['total value'] + "$)"; })
+                        .attr("id", "rank-label");
+            }
+
+
+            var proj = d3.geo.mercator()
+                    .center([-74.04, 40.70])
+                    .scale(50000)
+                    .translate([(width) / 2, (height) / 2]);
+            var path = d3.geo.path()
+                    .projection(proj);
+            layer2
+                    .attr("id", "locations")
+                    .selectAll(".state")
+                    .data(ent.features)
+                    .enter().append("circle")
+                    .attr("class", "location")
+                    .attr("r", "4px")
+                    .attr("cx", function (d) {
+                        return proj(d['geometry']['coordinates'])[0];
+                    })
+                    .attr("cy", function (d) {
+                        return proj(d['geometry']['coordinates'])[1];
+                    })
+                    .attr("d", path)
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide);
+//                            .each(pulse);
+//
+//            		function pulse() {
+//                        var circle = svg.selectAll(".location");
+//                        (function repeat() {
+//                            circle = circle.transition()
+//                                    .duration(2000)
+//                                    .attr("r", 2)
+//                                    .transition()
+//                                    .duration(2000)
+//                                    .attr("r", 5)
+//                                    .ease('sine')
+//                                    .each("end", repeat);
+//                        })();
+//                    }
+        });
+
+        // We need to use a completely different file, descriptions.json, to populate the description text.
+        d3.json("../static/post_assets/landowners/descriptions.json", function (error, desc) {
+            console.log(selectedValue);
+            console.log(desc);
+            // Remove the old text.
+            d3.select("#description-text").remove();
+            // Place a new one!
+            d3.select("#svg_holder")
+                    .append("div")
+                    .attr("id", "description-text")
+                    .style({
+                        "position": "absolute",
+                        "left": "35px",
+                        "top": "100px",
+                        "font-family": "Roboto",
+                        "font-size": "12px",
+                        "width": "350px"
+                    })
+                    .text(desc[selectedValue]);
+        });
+
+    }
+
+
+    // Method called whenever the go-right button is called.
+    // Uses some additional logic to wrap entity selection via the menu. Calls selectionChanged().
+    function goRight() {
+        var entity_selection = document.getElementById('entity-type');
+//        var selectedValue = entity_selection.options[entity_selection.selectedIndex].value;
+        var newIndex = entity_selection.selectedIndex + 1;
+        var newValue = entity_selection[newIndex].text;
+        if(newIndex == 19) {
+             document.getElementById("right-button").disabled = true;
+        }
+        if(newIndex == 1) {
+             document.getElementById("left-button").disabled = false;
+        }
+        entity_selection.selectedIndex = newIndex;
+        selectionChanged();
+    }
+
+    // Method called whenever the go-left button is called.
+    // Uses some additional logic to wrap entity selection via the menu. Calls selectionChanged().
+    function goLeft() {
+        var entity_selection = document.getElementById('entity-type');
+//        var selectedValue = entity_selection.options[entity_selection.selectedIndex].value;
+        var newIndex = entity_selection.selectedIndex - 1;
+        var newValue = entity_selection[newIndex].text;
+        if(newIndex == 19) {
+             document.getElementById("right-button").disabled = false;
+        }
+        if(newIndex == 0) {
+             document.getElementById("left-button").disabled = true;
+        }
+        entity_selection.selectedIndex = newIndex;
+        selectionChanged();
+    }
+
+</script>
+</body>

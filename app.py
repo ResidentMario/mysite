@@ -113,7 +113,8 @@ raws_list = [
     'average-chain-distance-visualization.html',
     'contributions-force-graph-visualization.html',
     'fortune-force-graph-visualization.html',
-    'planets-force-graph-visualization.html'
+    'planets-force-graph-visualization.html',
+    'biggest-landowners-geo-visualization.html'
     ]
 
 post_paths = [post['route'] for post in post_list]
