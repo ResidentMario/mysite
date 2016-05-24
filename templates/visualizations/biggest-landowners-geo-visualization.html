@@ -1,3 +1,15 @@
+<!--
+    A standalone version of this graphic is published as final-data-visualization.html in the nyc-buildings repository.
+    To configure that file so that it works here simply requires configuring imports and storing your files somewhere.
+-->
+<!--
+    TODO: Add a growing-circle transition-when a new entity is being examined the bubbles should grow into being.
+    TODO: Add the pulsation transition.
+    TODO: Comb the data to replace further geocoding mis-placements. Do this in the root repository and copy here!
+    TODO: Comb the data to replace entities that I suspect were miscoded. Do this in the root repository and copy here!
+    TODO: Reorganize the nyc-buildings repository so that everything is tidy.
+    TODO: Reorganize my file structure on the website-get rid of the json folder, move assets to post_assets instead.
+-->
 <!DOCTYPE html>
 <meta charset="utf-8">
 
@@ -113,7 +125,7 @@ auto; -->
 
     // Set up the New York City shape.
     // If you change the scaling factors here be sure to change them for the points below too!
-    d3.json("../static/json/nyc.json", function(error, nyb) {
+    d3.json("../static/post_assets/landowners/nyc.json", function(error, nyb) {
 
         // Set up a projection.
         var proj = d3.geo.mercator()
