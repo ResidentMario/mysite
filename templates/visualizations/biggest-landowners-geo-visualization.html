@@ -6,9 +6,8 @@
     TODO: Add a growing-circle transition-when a new entity is being examined the bubbles should grow into being.
     TODO: Add the pulsation transition.
     TODO: Comb the data to replace further geocoding mis-placements. Do this in the root repository and copy here!
-    TODO: Comb the data to replace entities that I suspect were miscoded. Do this in the root repository and copy here!
+    TODO: Comb the data to replace entities that I suspect were miscoded.
     TODO: Reorganize the nyc-buildings repository so that everything is tidy.
-    TODO: Reorganize my file structure on the website-get rid of the json folder, move assets to post_assets instead.
 -->
 <!DOCTYPE html>
 <meta charset="utf-8">
@@ -81,9 +80,9 @@
 </style>
 
 <!-- Import the scripts. -->
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<script src="/static/js/d3.v3.js"></script>
+<script src="/static/js/d3.tip.js"></script>
+<link href='/static/css/roboto.css' rel='stylesheet' type='text/css'>
 
 <!-- Define the graph structure: single SVG pane above, two divs below for the selectors. -->
 <body>
@@ -148,7 +147,7 @@ auto; -->
     });
 
     // Initially populate the graph using Columbia enumeration values.
-    d3.json("../static/post_assets/landowners/geojson/mepl/Trustees of Columbia.geojson", function(error, columbia) {
+    d3.json("../static/post_assets/landowners/geojson/mepl/Trustees Of Columbia.geojson", function(error, columbia) {
 
         var proj = d3.geo.mercator()
                 .center([-74.04, 40.70])
@@ -312,7 +311,7 @@ auto; -->
 
 
     options
-            .attr("value", function(d) { console.log(d); return d; })
+            .attr("value", function(d) { return d; })
             .text(function(d) { return d; });
 
 
@@ -334,7 +333,7 @@ auto; -->
             .append("option");
 
     entities
-            .attr("value", function(d) { console.log(d); return d; })
+            .attr("value", function(d) { return d; })
             .text(function(d, i) { return i + 1 + ". " + d; });
 
     // Set up the changed-state calls.
@@ -375,7 +374,6 @@ auto; -->
         if (selectedValue == 'Largest') {
             entities
                     .attr("value", function (d, i) {
-                        console.log(lpl[i]);
                         return lpl[i];
                     })
                     .text(function (d, i) {
@@ -385,7 +383,6 @@ auto; -->
         if (selectedValue == 'Most Enumerate') {
             entities
                     .attr("value", function (d, i) {
-                        console.log(mepl[i]);
                         return mepl[i];
                     })
                     .text(function (d, i) {
@@ -395,7 +392,6 @@ auto; -->
         if (selectedValue == 'Wealthiest') {
             entities
                     .attr("value", function (d, i) {
-                        console.log(wpl[i]);
                         return wpl[i];
                     })
                     .text(function (d, i) {
@@ -552,8 +548,8 @@ auto; -->
 
         // We need to use a completely different file, descriptions.json, to populate the description text.
         d3.json("../static/post_assets/landowners/descriptions.json", function (error, desc) {
-            console.log(selectedValue);
-            console.log(desc);
+            // console.log(selectedValue);
+            // console.log(desc);
             // Remove the old text.
             d3.select("#description-text").remove();
             // Place a new one!

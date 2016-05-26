@@ -28,7 +28,7 @@
     var axis_scale = d3.scale.linear().domain([29,81]).range([32 + 16, 928 + 16]);
     var x_axis = d3.svg.axis().scale(axis_scale).orient("bottom").ticks(30);
 
-    d3.json("../static/json/challenger_data.json", function(error, dataset) {
+    d3.json("../static/post_assets/space-shuttle-challenger/challenger_data.json", function(error, dataset) {
         if (error) throw error;
 
         var frame = d3.select("body")
@@ -50,8 +50,8 @@
                     "position": "absolute",
                     "width": "18px",
                     "height": "60px",
-                    "left": function(d) { console.log(d[2]); return d[2] / 1.865 + 436 + "px"; },
-                    "bottom": function(d) { console.log(d[3]); return d[3] / 1.7 + 20 + "px"; }
+                    "left": function(d) { return d[2] / 1.865 + 436 + "px"; },
+                    "bottom": function(d) { return d[3] / 1.7 + 20 + "px"; }
                 })
                 .append("img")
                 .attr({
