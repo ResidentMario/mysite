@@ -5,9 +5,7 @@
 <!--
     TODO: Add a growing-circle transition-when a new entity is being examined the bubbles should grow into being.
     TODO: Add the pulsation transition.
-    TODO: Comb the data to replace further geocoding mis-placements. Do this in the root repository and copy here!
-    TODO: Comb the data to replace entities that I suspect were miscoded.
-    TODO: Reorganize the nyc-buildings repository so that everything is tidy.
+    TODO: For some reason the descriptions are not populating correctly from the file, investigate.
 -->
 <!DOCTYPE html>
 <meta charset="utf-8">
@@ -72,10 +70,6 @@
 
 #left-button, #right-button {
     font-size:14px;
-    /*width:40px;*/
-    /*background:lightgreen;*/
-    /*height:50px;*/
-    /*border-width:0*/
 }
 </style>
 
@@ -246,68 +240,38 @@ auto; -->
 
 
     // Will need the data, easiest to just paste it here as a list.
-    var lpl = ['Riverbay Corporation',
-            'Trustees Of Columbia',
-            'ST-DIL LLC',
-            'Starrett City, Inc.',
-            'Rochdale Village Inc',
-            'New York University',
-            "St. John's University",
-            'RCPI Landmark Properties LLC',
-            'New York-Presbyterian Hospital',
-            'North Shore Towers Apartments',
-            'Trinity Hudson Holdings',
-            'Parkchester South Condominiums',
-            'New Water Street Corporation',
-            'New York Convention Center Corporation',
-            'Mount Sinai Hospital',
-            '1-10 Bush Terminal Owner LP',
-            'SL Green Realty Corporation',
-            'Queens Fresh Meadows',
-            'PCVST-DIL LLC',
-            'Fordham University'];
+    var mepl = ['Trustees of Columbia', 'New York University',
+       'Duestche Bank National Trust', 'Penrith Urf LLC',
+       'Nehemaih Housing Development',
+       'Northeastern Conference of Seventh-Day Adventists',
+       'Mutual Housing Association Of New York',
+       'U.S. Bank National Association', 'Consolidated Edison Company',
+       'Silvershore Properties', 'Impacct Housing Development Corporation',
+       'Roman Catholic Church', 'Wells Fargo Bank, N.A',
+       'Maguire Avenue Realty', 'New York Garden Trust',
+       'Casa Mason Corporation', 'Clinton Graham', 'MG Richmond LLC',
+       'Hpeny Housing Development Corporation',
+       'Prol Properties Corporation'];
 
-    var mepl = ['Trustees Of Columbia',
-                 'Duestche Bank National Trust',
-                 'Spring Creek Nehemaih',
-                 'Northeastern Conference of Seventh-Day Adventists',
-                 'New York University',
-                 'U.S. Bank National Association',
-                 'Consolidated Edison Company',
-                 'Maguire Avenue Realty',
-                 'New York Garden Trust',
-                 'Greater New York Conference of Seventh-day Adventists',
-                 'Housing Partnership Development Corporation',
-                 'Roman Catholic Church',
-                 'Baiano Development LLC',
-                 'Yeshiva University',
-                 'Silvershore Properties',
-                 'Casa Mason Corporation',
-                 'Clinton Graham',
-                 'Mg Richmond LLC',
-                 'Hpeny Housing Development Fund Company',
-                 'Prol Properties Corporation'];
+    var lpl = ['Riverbay Corporation', 'Trustees Of Columbia',
+       'New York University', 'BPP ST Owner LLC', 'Starrett City, Inc.',
+       'Parkchester South Condominiums', 'Rochdale Village Inc',
+       "St. John's University", 'Rcpi Holdco Lcc',
+       'New York-Presbyterian Hospital', 'North Shore Towers Apartments',
+       'Newton Street Corp', 'New York Convention Center Corporation',
+       'Mount Sinai Hospital', '1-10 Bush Terminal Owner LP',
+       'Bpp Pcv Owner Llc', 'Fordham University',
+       'Amalgamated Warbasse Houses', 'SL Green Realty Corporation'];
 
-    var wpl = ['New York University',
-             ' RCPI Landmark Properties LLC',
-             'Trustees Of Columbia',
-             'One Bryant Park',
-             '767 Fifth Partnerns LLC',
-             'New York Convention Center Corporation',
-             'BPP ST Owner LLC',
-             'Citifield',
-             'SL Green Realty Corporation',
-             'Arena Nominee Sub B, LLC',
-             '200 Park, L.P.',
-             '1345 Leasehold LLC',
-             'Mount Sinai Hospital',
-             'Trinity Hudson Holdings',
-             'HMC Times Square Hotel LP',
-             'PGREF I 1633 Broadway Tower, L.P.',
-             '1221 Avenue Holdings',
-             'Bop 245 Park LLC',
-             'Solovieff Realty Company',
-             'New York-Presbyterian Hospital'];
+    var wpl = ['New York University', 'Trustees Of Columbia',
+       ' RCPI Landmark Properties LLC', 'One Bryant Park',
+       '767 Fifth Partnerns LLC', 'New York Convention Center Corporation',
+       'BPP ST Owner LLC', 'Citifield', 'SL Green Realty Corporation',
+       'Arena Nominee Sub B, LLC', '200 Park, L.P.', '1345 Leasehold LLC',
+       'Mount Sinai Hospital', 'Trinity Hudson Holdings',
+       'HMC Times Square Hotel LP', 'PGREF I 1633 Broadway Tower, L.P.',
+       '1221 Avenue Holdings', 'Bop 245 Park LLC',
+       'Solovieff Realty Company', 'New York-Presbyterian Hospital'];
 
 
     options
@@ -549,7 +513,7 @@ auto; -->
         // We need to use a completely different file, descriptions.json, to populate the description text.
         d3.json("../static/post_assets/landowners/descriptions.json", function (error, desc) {
             // console.log(selectedValue);
-            // console.log(desc);
+             console.log(desc);
             // Remove the old text.
             d3.select("#description-text").remove();
             // Place a new one!
