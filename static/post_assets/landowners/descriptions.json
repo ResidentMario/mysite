@@ -1,8 +1,9 @@
 {
-  	"Trustees of Columbia": "Columbia University is the largest landowner in New York City by number of addresses by a long shot, owning 209 properties—twice the number owned properties as the next largest private property-holder, the Duestche Bank National Trust, and almost three times the 72 addresses allotted to the New York Public Library, for comparison. It is also a common candidate in the media for the biggest landowner in New York City, period, and indeed according to the public record the university is first in number, second in size, and third in wealth—though losing by a sizable margin to NYU on that last count.",
+  	"Trustees Of Columbia": "Columbia University is the largest landowner in New York City by number of addresses by a long shot, owning 209 properties—twice the number owned properties as the next largest private property-holder, the Duestche Bank National Trust, and almost three times the 72 addresses allotted to the New York Public Library, for comparison. It is also a common candidate in the media for the biggest landowner in New York City, period, and indeed according to the public record the university is first in number, second in size, and third in wealth—though losing by a sizable margin to NYU on that last count.",
 	"Duestche Bank National Trust" : "There is little information available on this shady entity, but signs point to a foreclosure operation seemingly not limited to any single borough.",
     "Nehemaih Housing Development": "Spring Creek Nehemaih is a small-unit affordable housing project in East Brooklyn. It has received praise from The Daily News in the past, which refered to it as 'an affordable housing success story.'",
     "Penrith Urf LLC": "The fourth most enumerate landowner  in New York City appears to be a Delaware-registered limited liability corporation with less than a year's existance on record.",
+    "BPP ST Owner LLC": "The enigmantically-named owner of the famous Stuyvesant Town on the east side of Manhattan, a post-war housing complex built in the years after World War II and easily the most recognizable co-op in New York City",
     "Mutual Housing Association Of New York": "One of a number of large affordable housing non-profits that appear at the top of the counts.",
     "Impacct Housing Development Corporation": "One of a number of large affordable housing non-profits that appear at the top of the counts.",
     "Hpeny Housing Development Corporation": "One of a number of large affordable housing non-profits that appear at the top of the counts.",
@@ -10,7 +11,7 @@
     "New York University": "NYU is, according to the public record, hands-down the wealthiest landowner in New York City, beating rival third-place finisher Columbia by a sizable margin. All that wealth and, with its recent expansion plan, it wants to take over even more of Greenich Village? This New Yorker is skeptical. Otherwise it is the fifth most enumerate and sixth largest private landowner in the city (the high value of property in Greenwich Village accounts for the difference).",
     "U.S. Bank National Association": "Just like the higher-ranked Duestche Bank National Trust, this appears to be a foreclosure holding entity.",
     "Consolidated Edison Company": "ConEd makes a surprise appearance as the only company on this; fitting, as it's a untility. Almost all companies lease all of their space; for instance Wells Fargo owns just 42 properties in the city outright.",
-    "Maguire Avenue Realty": "A small real estate agency in Manhattan.",
+    "Maguire Avenue Realty": "A small real estate agency in Staten Island.",
     "New York Garden Trust": "From this group's official website: 'all of our gardens, eighteen in the Bronx and fourteen in Manhattan, were slated for sale by the city in 1999, which would have led to their certain demolition. Today these 32 vibrant, thriving gardens are managed by borough based land trusts—the Bronx Land Trust and Manhattan Land Trust.' Amazing!",
     "Greater New York Conference of Seventh-day Adventists": "The conference is a religious institution which operates both public-benefit projects and house churches through all five boroughs. Small in size, but large in number.",
     "Housing Partnership Development Corporation": "An interesting public-benefit non-profit which owns and manages a chunk of the city's public housing in a public-private partnership.",
@@ -28,7 +29,7 @@
     "ST-DIL LLC": "The holding company for Stuyvesant Town, the planned housing block on the East River which came about as a result of the post-war housing boom in the 40s (and a very confusing place to be if you're used to the street grid).",
     "Starrett City, Inc.": "A co-op housing organization in outer Brooklyn.",
     "Rochdale Village Inc": "A co-op housing organization in outer Queens.",
-    "St. John's University": "St. John's also owns some property in Manhattan and elsewhere which was included in this total but didn't geocoded well.",
+    "St. John's University": "St. John's Queens campus is apparently large enough to earn it a spot on the rankings.",
     " RCPI Landmark Properties LLC": "This is the holding company for Rockefeller Center.",
     "RCPI Landmark Properties LLC": "This is the holding company for Rockefeller Center.",
     "New York-Presbyterian Hospital": "The New York-Presbyterian has campuses associated with both Cornell and Columbia.",
@@ -41,8 +42,14 @@
     "1-10 Bush Terminal Owner LP": "A weird name for a organization on which little could be found",
     "SL Green Realty Corporation": "According to their Wikipedia entry: 'SL Green Realty Corporation New York City's largest office landlord, is the only fully integrated real estate investment trust, or REIT, that is focused primarily on acquiring, managing and maximizing value of Manhattan commercial properties.'",
     "Queens Fresh Meadows": "A neighborhood, but apparently also a legal entity of some sort?",
-    "PCVST-DIL LLC": "Peter Cooper Village is the smaller (clearly) brother of Stuy Town, located across the street.",
+    "BPP PCV Owner LLC": "Peter Cooper Village is the smaller brother of Stuyvesant Town, located across the street.",
+    "767 Fifth Partnerns LLC": "This is the holding company which owns the General Motors Building, a huge office building in Midtown",
     "Fordham University": "A sizable public university located primarily in the Bronx.",
     "One Bryant Park": "One Bryant Park includes the Bank of America Tower, one of the newest and glossiest of the skyscrapers in New York City, completed in 2009.",
-    "200 Park, L.P.": "200 Park Avenue is better known as the MetLife Building."
+    "200 Park, L.P.": "200 Park Avenue is better known as the iconic MetLife Building towering over Grand Central.",
+    "Newton Street Corp": "The Newton Street Corporation owns 55 Water Street, the most voluminous office building in New York City.",
+    "Citifield": "Citifield is the stadium of the New York Mets in Queens. Its high valuation is a function of its multi city block footprint.",
+    "Arena Nominee Sub B, LLC": "An oddly named holding company which owns Barclay's Center, the enormous multi-event venue, in Brooklyn.",
+    "Solovieff Realty Company": "Owners of 9 West 57th Street, better known as the Solow Building."
+
 }

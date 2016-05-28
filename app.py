@@ -100,6 +100,13 @@ post_list = [
         'date': datetime(2016, 3, 28),
         'template': 'missingno.html',
         'snap': 'missingno.png'
+    },
+    {
+        'title': 'Who are the biggest landowners in New York City?',
+        'route': '2016/05/27/biggest-landowners-nyc.html',
+        'date': datetime(2016, 5, 27),
+        'template': 'biggest-landowners-nyc.html',
+        'snap': 'empty.png'
     }
 ]
 
@@ -114,7 +121,9 @@ raws_list = [
     'contributions-force-graph-visualization.html',
     'fortune-force-graph-visualization.html',
     'planets-force-graph-visualization.html',
-    'biggest-landowners-geo-visualization.html'
+    'biggest-landowners-geo-visualization.html',
+    'most-enumerate-landowners-geo-visualization.html',
+    'largest-landowners-geo-visualization.html'
     ]
 
 post_paths = [post['route'] for post in post_list]

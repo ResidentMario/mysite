@@ -199,7 +199,7 @@ auto; -->
             .attr("id", "ranking-type");
 
     var options = dropDown.selectAll("option")
-            .data(['Most Enumerate', 'Largest', 'Wealthiest'])
+            .data(['Largest'])
             .enter()
             .append("option");
 
@@ -296,6 +296,7 @@ auto; -->
 
     // Initial-populate the frame.
     selectionChanged();
+    criteriaChanged();
 
     ////////////
     // EVENTS //

@@ -1,0 +1,136 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    An important and oftentimes conscientious aspect of a city’s social fabric is the way in which it houses its
+    residents; you can learn a <i>lot</i> about a city from its real estate, and nowhere is this more true than it is
+    in New York City.
+</p>
+
+<p>
+    In this post I used data from the New York City Department of Planning's <a
+        href="http://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page">NYC PLUTO dataset</a>, a
+    massive dataset containing building-granularity information on every so-called "Borough Block
+    Lot" identifier in New York City, and the <a
+        href="https://www1.nyc.gov/site/finance/taxes/property-assessments.page">RPAD dataset</a>, the New York
+    City Department of Finance's record of property value assessments, to try to answer a basic question that's
+    proven to be very popular in the media: <b>who are the biggest landowners in New York City?</b>
+</p>
+
+<!--<p>-->
+    <!--When the dataset was first released in 2013 it represented an unprecedented-->
+    <!--level of detail on the structure of New York City as well as a <a-->
+        <!--href="http://www.wired.com/2013/08/nyc-pluto-data-map-party/">much-heralded win</a> on the part of the city's-->
+    <!--open data community (see <a href="http://andrewxhill.com/cartodb-examples/scroll-story/pluto/#0">Andrew Hill's-->
+    <!--tour</a> for a succinct tour).-->
+<!--</p>-->
+
+<!--<p>-->
+    <!--Thanks to the murky waters of the real estate ownership business, the public record can't exactly tell you, for-->
+    <!--example, how much money Donald Trump has invested in New York City real estate. We can nevertheless draw some-->
+    <!--interesting lessons from what we find.-->
+<!--</p>-->
+
+<h3>Counting Addresses</h3>
+
+<p>
+    If by "largest" you mean "owner of the most unique addresses" (on further consideration a pretty terrible metric,
+    but nevertheless an interesting place to start), here are the top ten raw winners:
+</p>
+
+<img src="/static/post_assets/landowners/top-ten-most-enumerate-landowners-raw.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    Somewhat unsurprisingly <a>the single largest property-holder in New York City is city government</a>, with various
+    agencies taking all but one of the top 10 and most of the top 50 slots. The sole exception
+    is sixth biggest property-owner <code class="inline_code">OWNER / AGENT</code>—a mildly alarming
+    instance of indeterminate ownership in the public record. There is also an option for the 33 properties in the
+    city for whom an owner is apparently simply <code class="inline_code">UNKNOWN</code>.
+</p>
+
+<p>
+    However, the public record of public asset ownership is a little haphazard. In additional to dedicated
+    points for each of the individual city agenices there are several variations on "the City of New York"
+    (<code class="inline_code">CITY OF NEW YORK</code>, <code class="inline_code">THE CITY OF NEW YORK</code>, etc.), and a
+    similar situation exists for federal and state agencies,
+    which are listed either individually or as part of the <code class="inline_code">UNITED STATES GOVERNMENT</code>,
+    <code class="inline_code">NEW YORK STATE</code>, or even <code class="inline_code">THE PEOPLE OF THE STATE
+    OF NEW YORK</code>. To explore the raw data yourself, <a
+        href="https://gist.github.com/ResidentMario/387694c44045b3601c0fac8eee46f52f">check out this Gist</a>.
+</p>
+
+<p>
+    It's easier for us to examine private entity data. A <a
+        href="http://www.nytimes.com/1994/10/16/nyregion/fyi-531286.html">Q&A published in The New York Times in
+    1994</a> fingers
+    Columbia University, NYU, Trinity Church, and a handful of developers as the biggest in terms of private
+    addresses held. What does the picture look like today? Filtering out public services, here is what the public
+    record has to say about the 20 private owners with the largest number of buildings:
+</p>
+
+<!--<img src="/static/post_assets/landowners/top-twenty-most-enumerate-private-landowners.png"-->
+     <!--class="inline_image_full" alt="Data."/>-->
+
+<iframe src="{{request.url_root}}most-enumerate-landowners-geo-visualization.html" marginwidth="0" marginheight="0"
+        scrolling="no" style="width:960px; height:600px; border:0; overflow:hidden;"></iframe>
+
+<!--<p>-->
+    <!--<b>Columbia University easily owns more individual addresses than any other private entity in New York City</b>,-->
+    <!--with over 200 properties to its name. NYU comes in distant second place with 95 addresses, followed by the shady-->
+    <!--Duestche Bank National Trust (on which almost nothing can be found online, signs pointing to a foreclosure-->
+    <!--clearing house). For the purposes of comparison Columbia's count is, for example, almost triple the 72 addresses-->
+    <!--allotted to the New York Public Library system.-->
+<!--</p>-->
+
+<!--<p>-->
+    <!--The rest are an very interesting blend of large utility companies, church groups, private brokerage firms,-->
+    <!--affordable housing corporations and non-profits, and, further down the line, private investors. Indeed, the data-->
+    <!--points to a more heterogeneous ownership situation than I had expected. <b>Almost four-fifths of addresses in New-->
+    <!--York City are owned by organizations or individuals who own no other property</b>.-->
+    <!--&lt;!&ndash;17th-most-enumerate real estate owner Clinton Graham, for instance, has <a&ndash;&gt;-->
+        <!--&lt;!&ndash;href="http://www.wnyc.org/story/79636-huge-rezoning-planned-for-jamaica-queens/">a very interesting&ndash;&gt;-->
+    <!--&lt;!&ndash;story</a> behind his consolidation of properties in Jamaica, Queens.&ndash;&gt;-->
+<!--</p>-->
+
+<p>
+    Why aren't there more, or indeed, almost any, large corporations on the listing? Because even though many
+    companies call New York City their home, either or both in workforce and in headquarters, <b>corporations own very
+    little of the land they use</b>. Companies strongly prefer renting or leasing their space instead. Wells Fargo is
+    seemingly the largest casually recognizable corporate landowner in New York City—yet it owns just 52 locations,
+    a far cry from the hundred-fold branches that it operates.
+</p>
+
+<h3>Summing Land Ownership</h3>
+
+<p>
+    Another measure of "largest" is "owner of the most building area". This probably gets closer to the intent of the
+    question, and so, using that metric, once again here is our top ten:
+</p>
+
+<img src="/static/post_assets/landowners/top-ten-largest-landowners-raw.png"
+     class="inline_image" style="width:250px;" alt="Data."/>
+
+<p>
+    <b>The New York City Housing Authority and the Department of Education are easily the largest landowners in New
+    York City</b>. Interestingly this means that there is 30% more affordable housing than public school to the city.
+</p>
+
+<p>
+    If we combine "United States Of America" with all of the US Government sub-entities in the dataset—the National Park
+    Service, USPS, etc.—it is probably the third largest landowner in the city. The National Park Service on its own
+    is fourth largest.
+</p>
+
+<p>
+    Filtering down to private entities once more:
+</p>
+
+<iframe src="{{request.url_root}}largest-landowners-geo-visualization.html" marginwidth="0" marginheight="0"
+        scrolling="no" style="width:960px; height:600px; border:0; overflow:hidden;"></iframe>
+
+{% endblock %}
