@@ -12,13 +12,10 @@
 </p>
 
 <p>
-    In this post I use data from the New York City Department of Planning's <a
-        href="http://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page">NYC PLUTO dataset</a>, a
-    massive dataset containing building-granularity information on every so-called "Borough Block
-    Lot" identifier in New York City, and the <a
-        href="https://www1.nyc.gov/site/finance/taxes/property-assessments.page">RPAD dataset</a>, the New York
-    City Department of Finance's record of property value assessments, to try to answer a basic question that's
-    proven to be very popular in the media: <b>who are the biggest landowners in New York City?</b>
+    In this post I use data from a combination of New York City Department of Planning and Department of Finance
+    datasets (<a href="http://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page">PLUTO</a> and <a
+        href="https://www1.nyc.gov/site/finance/taxes/property-assessments.page">RPAD</a>) to try to answer a
+    question popular in the media: who are the biggest landowners in New York City?
 </p>
 
 <!--<p>-->
@@ -38,8 +35,7 @@
 <h3>Counting Addresses</h3>
 
 <p>
-    If by "largest" you mean "owner of the most unique addresses" (on further consideration a pretty terrible metric,
-    but nevertheless an interesting place to start), here are the top ten raw winners:
+    If by "largest" you mean "owner of the most unique addresses", here are the top ten raw winners:
 </p>
 
 <img src="/static/post_assets/landowners/top-ten-most-enumerate-landowners-raw.png"
@@ -54,8 +50,8 @@
 </p>
 
 <p>
-    However, the public record of public asset ownership is a little haphazard. In additional to dedicated
-    points for each of the individual city agenices there are several variations on "the City of New York"
+    However, public asset ownership is a little haphazard. In additional to dedicated
+    names for each of the individual city agenices there are several variations on "the City of New York"
     (<code class="inline_code">CITY OF NEW YORK</code>, <code class="inline_code">THE CITY OF NEW YORK</code>, etc.), and a
     similar situation exists for federal and state agencies,
     which are listed either individually or as part of the <code class="inline_code">UNITED STATES GOVERNMENT</code>,
@@ -76,14 +72,19 @@
      class="inline_image_full" alt="Data."/>
 
 <p>
-    The result is surprisingly outstanding: <b>Columbia University easily owns more addresses than any other private
-    entity in New York City.</b> In fact, the university's 206 properties easily trump both second-place finisher
-    NYU, which owns 95 addresses, and the New York Public Library, which has 72&mdash;almost a third as many.
+    <b>Columbia University easily owns more addresses than any other private entity in New York City.</b>
+</p>
+
+<p>
+    In fact, the university's 206 properties easily trump both second-place finisher
+    NYU, which owns 95 addresses, and for the purposes of comparison, the New York Public Library, which has
+    72&mdash;almost a third as many.
 </p>
 
 <p>
     The following visualization lets you explore this in more detail:
 </p>
+<br/>
 
 <iframe src="{{request.url_root}}most-enumerate-landowners-geo-visualization.html" marginwidth="0" marginheight="0"
         scrolling="no" style="width:960px; height:600px; border:0; overflow:hidden;"></iframe>
@@ -107,10 +108,13 @@
 <!--</p>-->
 
 <p>
-    The data points to a more heterogeneous ownership situation than I had expected. <b>Almost four-fifths of
-    addresses in New York City are owned by organizations or individuals who own no other property</b>. To explore
-    the raw data yourself, <a href="https://gist.github.com/ResidentMario/387694c44045b3601c0fac8eee46f52f">check
-    out this Gist</a>.
+    <b>Almost four-fifths of addresses in New York City are owned by organizations or individuals who own no other
+        property</b>.
+</p>
+
+<p>
+    To explore the raw data yourself, <a
+        href="https://gist.github.com/ResidentMario/387694c44045b3601c0fac8eee46f52f">check out this Gist</a>.
 </p>
 
 <h3>Summing Land Ownership</h3>
