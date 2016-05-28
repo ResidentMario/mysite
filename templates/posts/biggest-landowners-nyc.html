@@ -12,7 +12,7 @@
 </p>
 
 <p>
-    In this post I used data from the New York City Department of Planning's <a
+    In this post I use data from the New York City Department of Planning's <a
         href="http://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page">NYC PLUTO dataset</a>, a
     massive dataset containing building-granularity information on every so-called "Borough Block
     Lot" identifier in New York City, and the <a
@@ -60,8 +60,7 @@
     similar situation exists for federal and state agencies,
     which are listed either individually or as part of the <code class="inline_code">UNITED STATES GOVERNMENT</code>,
     <code class="inline_code">NEW YORK STATE</code>, or even <code class="inline_code">THE PEOPLE OF THE STATE
-    OF NEW YORK</code>. To explore the raw data yourself, <a
-        href="https://gist.github.com/ResidentMario/387694c44045b3601c0fac8eee46f52f">check out this Gist</a>.
+    OF NEW YORK</code>.
 </p>
 
 <p>
@@ -73,8 +72,18 @@
     record has to say about the 20 private owners with the largest number of buildings:
 </p>
 
-<!--<img src="/static/post_assets/landowners/top-twenty-most-enumerate-private-landowners.png"-->
-     <!--class="inline_image_full" alt="Data."/>-->
+<img src="/static/post_assets/landowners/top-twenty-most-enumerate-private-landowners.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    The result is surprisingly outstanding: <b>Columbia University easily owns more addresses than any other private
+    entity in New York City.</b> In fact, the university's 206 properties easily trump both second-place finisher
+    NYU, which owns 95 addresses, and the New York Public Library, which has 72&mdash;almost a third as many.
+</p>
+
+<p>
+    The following visualization lets you explore this in more detail:
+</p>
 
 <iframe src="{{request.url_root}}most-enumerate-landowners-geo-visualization.html" marginwidth="0" marginheight="0"
         scrolling="no" style="width:960px; height:600px; border:0; overflow:hidden;"></iframe>
@@ -98,39 +107,192 @@
 <!--</p>-->
 
 <p>
-    Why aren't there more, or indeed, almost any, large corporations on the listing? Because even though many
-    companies call New York City their home, either or both in workforce and in headquarters, <b>corporations own very
-    little of the land they use</b>. Companies strongly prefer renting or leasing their space instead. Wells Fargo is
-    seemingly the largest casually recognizable corporate landowner in New York City—yet it owns just 52 locations,
-    a far cry from the hundred-fold branches that it operates.
+    The data points to a more heterogeneous ownership situation than I had expected. <b>Almost four-fifths of
+    addresses in New York City are owned by organizations or individuals who own no other property</b>. To explore
+    the raw data yourself, <a href="https://gist.github.com/ResidentMario/387694c44045b3601c0fac8eee46f52f">check
+    out this Gist</a>.
 </p>
 
 <h3>Summing Land Ownership</h3>
 
 <p>
-    Another measure of "largest" is "owner of the most building area". This probably gets closer to the intent of the
-    question, and so, using that metric, once again here is our top ten:
+    How does the picture change we look at square footage? That is, according to public record, who is the largest
+    landowner in New York City?
+</p>
+
+<p>
+    The average single-bedroom apartment in New York City is 750 square feet (<a
+        href="http://www.nakedapartments.com/nyc/one-bedroom-apartments-nyc">source</a>). Dividing our raw data
+    building area totals by this metric, here are the twenty largest private entities in New York City by their
+    single-bedroom index, if you will:
 </p>
 
 <img src="/static/post_assets/landowners/top-ten-largest-landowners-raw.png"
-     class="inline_image" style="width:250px;" alt="Data."/>
+     class="inline_image_full" alt="Data."/>
 
 <p>
-    <b>The New York City Housing Authority and the Department of Education are easily the largest landowners in New
-    York City</b>. Interestingly this means that there is 30% more affordable housing than public school to the city.
+    The New York City public housing system serves around 400,000 residents, so if every public housing project in
+    New York City consisted solely of averagely-sized one-bedrooms, according to our figures that would mean two
+    residents per apartment exactly. Public schools meanwhile would have approximately an 280,000-person
+    footprint&mdash;meaning that approximately 30% more real estate is allotted to public housing than schools in New
+    York City.
 </p>
 
 <p>
-    If we combine "United States Of America" with all of the US Government sub-entities in the dataset—the National Park
-    Service, USPS, etc.—it is probably the third largest landowner in the city. The National Park Service on its own
-    is fourth largest.
+    If we combine "United States Of America" with all of the federal entities in the dataset—the postal service
+    and so on—<b>the federal government at large is probably the third largest landowner in the city</b>.
 </p>
 
 <p>
-    Filtering down to private entities once more:
+    The National Park Service on its own is fourth largest.
+</p>
+
+<p>
+    Focusing on private entities once more:
+</p>
+
+<img src="/static/post_assets/landowners/top-twenty-largest-private-landowners.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    Once again we have a single outstanding result: <b>Riverbay Corporation, which owns Co-Op City in the Bronx, is
+    easily the largest landowner in New York City</b>. Co-Op City's footprint is absolutely colossal. Approximately
+    43,000 people live there, a number large enough that, were it its own municipality, it would be the tenth largest
+    in New York State.
+</p>
+
+<p>
+    Columbia and NYU at second and third are close competitors in terms of total space utilization, each using up
+    around 15,000 single bedroom apartment's worth of space. St. John's University and Fordham University, two
+    smaller schools with large outer-borough campuses, also make an appearance.
+</p>
+
+<p>
+    Housing cooperatives is general rate well here, though BPP ST Owner LLC, owner of Stuyvesant Town on
+    the East Side of Manhattan and second-largest co-op on the list, is still less than half a Co-Op City in size.
+</p>
+
+<p>
+    Some of the largest skyscrapers in New York City make an appearance too: RCPI Holdo LLC (wonderfully descriptive
+    name) owns the cumulative grandeur of Rockefeller Center, for example, while the Newton Street Corporation owns
+    55 Water Street, competitive with One World Trade Center (owned by the Port Authority and thus not on this list)
+    in size.
+</p>
+
+<p>
+    Finally, two of New York City's largest hospital campuses&mdash;Mount Sinai and New York-Presbyterian&mdash;also
+    make an appearance.
+</p>
+
+<p>
+    You can drill into more details below.
 </p>
 
 <iframe src="{{request.url_root}}largest-landowners-geo-visualization.html" marginwidth="0" marginheight="0"
         scrolling="no" style="width:960px; height:600px; border:0; overflow:hidden;"></iframe>
+
+<p>
+    To explore the raw data yourself check out <a
+        href="https://gist.github.com/ResidentMario/d22750cb329fa8b3ff4e6f7bd13a72b0">this Gist</a>.
+</p>
+
+<h3>Measuring Wealth</h3>
+
+<p>
+    Finally we arrive at what is perhaps the most telling metric of them all. Who's invested more in New York City real
+    estate than anyone else?
+</p>
+
+<p>
+    Once again here is the raw top ten:
+</p>
+
+<img src="/static/post_assets/landowners/top-ten-wealthiest-landowners-raw.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    <b>According to city government records, the richest landowner in New York City is the Department of
+    Education</b>&mdash;logical enough, it's the largest school system in the country. The Port Authority of New York
+    and New Jersey follows closly, which seems strange: are bridges and tunnels really worth all that much? That is,
+    until you realize that 99.99% of this valuation consists of just two properties: 154-68 BROOKVILLE BOULEVARD in
+    Queens, better known as John F. Kennedy International Airport, worth 15 billion (ever try to sell an airport? me
+    neither!); and 185 GREENWICH STREET in Manhattan, better known as One World Trade Center, worth 1.15 billion.
+    Well, after hideous cost overruns, One World Trade Center famously cost 3.9 billion to build, so that fact alone
+    is sobering.
+</p>
+
+<p>
+    The trouble with numbers this big is that after a certain point they lose meaning. It's easy to imagine what
+    100 thousand is, maybe you can stretch it to 1 million, but 10 billion? No way.
+</p>
+
+<p>
+    The building with the lowest signal-to-noise ratio of any building ever constructed in the history of humanity,
+    ever, is the World Trade Center Transportation Hub, better known as the Oculus, a gleaming 4 billion dollar...train
+    station...located right next to (the marginally less expensive) One World Trade Center. To hammer the point home,
+    let's re-index the chart above by Oculuses built (or World Trade Centers completed, if you prefer):
+</p>
+
+<img src="/static/post_assets/landowners/top-ten-wealthiest-landowners-raw-alt.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    So if you liquidated every single public housing project in New York City (which, again, houses 400,000 people)
+    you would earn yourself...just over 2 Oculi.
+</p>
+
+<p>
+    But on to the private count:
+</p>
+
+<img src="/static/post_assets/landowners/top-twenty-wealthiest-private-landowners.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    According to the public record, <b>NYU is the wealthiest private landowner in New York City</b>. Although Columbia
+    University owns more units and more land than NYU, it does so in a quiet upper Manhattan location, while
+    NYU's position in Washington Square Park puts it into one of the most expensive real estate markets in the city,
+    and thereof, the world. This hands NYU the victory, with a small margin, in expense.
+</p>
+
+<p>
+    Perhaps this lends credence to concerns, oft-cited amongst disenchanted students, that NYU is a real estate
+    business in disguise.
+</p>
+
+<p>
+    Trinity Church has been a
+    Trinity Church's holding company, TRINITY HUDSON HOLDING, weighs in at 1.02 billion dollars: a lot, certainly,
+    but well short of the 2 billion figure cited as "wealthiest in New York City" in reports from a few years ago.
+</p>
+
+<p>
+    Aside from that, given that almost four-fifths of landowners in New York City only own a single property, it doesn't
+    come as a surprise that <b>owning a skyscraper in Manhattan is enough to make you one of the wealthiest real
+    estate barons in New York City</b>. Most of the rest of this list consists of holding companies, some eponymous,
+    some not, for various skyscrapers and skyscraper complexes in New York City.
+</p>
+
+<p>
+    You can explore the full data below:
+</p>
+
+<iframe src="{{request.url_root}}wealthiest-landowners-geo-visualization.html" marginwidth="0"
+        marginheight="0" scrolling="no" style="width:960px; height:600px; border:0; overflow:hidden;"></iframe>
+
+<p>
+    If you prefer to see the raw data for yourself, once again <a
+        href="https://gist.github.com/ResidentMario/176f203ec75956649277a94c0aa3efb6">here's the link</a>.
+</p>
+
+<p>
+    If you'd like to explore all of the visualizations above in one handy chart, <a
+        href="{{request.url_root}}biggest-landowners-geo-visualization.html">go here</a>.
+</p>
+
+<p>
+    Thus concludes my spiel on real estate wealth in New York City. In my next post I'll use PLUTO to explore the
+    city's addressing system, so stay tuned for more!
+</p>
 
 {% endblock %}
