@@ -107,6 +107,13 @@ post_list = [
         'date': datetime(2016, 5, 27),
         'template': 'biggest-landowners-nyc.html',
         'snap': 'landowners.png'
+    },
+    {
+        'title': 'Addressing in New York City',
+        'route': '2016/05/29/nyc-addresses.html',
+        'date': datetime(2016, 5, 29),
+        'template': 'nyc-addresses.html',
+        'snap': 'empty.png'
     }
 ]
 
@@ -158,5 +165,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)

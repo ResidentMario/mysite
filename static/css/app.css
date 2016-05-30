@@ -1,10 +1,11 @@
+/* Body of the page, overflow-x is necessary for the top navbar. */
 body {
     background-color: white;
     overflow-x:hidden;
     font-family: 'Roboto', 'Helvetica Neue', sans-serif;
 }
 #header {
-    /* Slightly hacky CSS to get the top navbar to align flush. */
+    /* Slightly hacky CSS to get the top banner to align flush. */
     background: black;
     margin-top:-10px;
     margin-left: -20px;
@@ -18,42 +19,45 @@ body {
     letter-spacing: 2px;
     color: white;
 }
+/* Holds the navbar and content. */
 #frame {
     width:800px;
     margin:auto;
     background:transparent;
 }
+/* Holds site navigation */
 #navbar {
     width:800px;
     margin:auto;
     z-index: -1;
 }
+/* Holds the actual site content. */
 #content {
     font-size:17px;
     line-height:1.5em;
     color: #252525;
     margin-top:45px;
 }
+/* Holds the navigation footer at the bottom of the page. */
 #footer {
     width:inherit;
     margin:auto;
     font-size:14px;
     color:#888888;
 }
-#blog_navbar {
-    width:inherit;
-    margin:auto;
-}
+/* Post date formatting. */
 #postdate {
     color:#aaa;
     font-style:italic;
 }
-#navbar_iframe {
-    width:800px;
-    height:215px;
-    border:0;
-    overflow:hidden;
+/* CSS for the d3-built master navigation template on the About page. */
+.blog-frame {
+    text-align:center;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    font-weight: bold;
+    color: red;
 }
+/* Hover-enabled quote formatting. */
 .inline_quote {
     width:inherit;
     padding: 0 0 0 25px;
@@ -61,32 +65,38 @@ body {
     /*background:#f0f5f5;*/
     color:#595959;
 }
+/* Hover-enabled quote formatting. */
 .inline_quote:hover {
     border-left:5px solid #262626;
     color:#252525;
 }
+/* <code class="language-python"> is the Prism code highlighting trigger. This adds on to it. */
 .language-python {
     font-size: 12px;
 }
+/* For little bits of code within the body of the page. Avoids the code element CSS selector because of the above. */
 .inline_code {
     font-family:Courier,monospace;
     font-size:14px;
-    border:1px solid gray;
-    padding-left:2px;
-    padding-right:2px;
-    background:#eee;
-    font-weight:bold;
+    padding:3px;
+    padding-left:5px;
+    padding-right:5px;
+    background:#eeeeee;
+    white-space: nowrap;
 }
+/* For smaller inline images. */
 .inline_image {
     width:50%;
     display:flex;
     margin: 40px auto;
 }
+/* For full-width inline images. */
 .inline_image_full {
     width:800px;
     display:flex;
     margin: 40px auto;
 }
+/* For full-width, 980x500px iframes. Occasionally the height gets overwritten for even longer visualizations! */
 .inline_iframe {
     transform:translate(-95px, 0);
     width:960px;
@@ -94,21 +104,25 @@ body {
     border:0;
     overflow:hidden;
 }
+/* For additional text at the end of an article. */
 .addendum {
     width:inherit;
     color:#aaa;
 }
+/* CSS used for the post navigation in the article footer. */
 .posts_table, .post_descriptions {
     width:800px;
     margin: auto;
     display: block;
 }
+/* CSS used for the post navigation in the article footer. */
 .post_item {
     border:1px solid black;
     border-radius:2px;
     padding:0;
     width:260px;
 }
+/* CSS used for the post navigation in the article footer. */
 .post_desc {
     font-family: Roboto, sans serif;
     font-weight:bold;
@@ -116,46 +130,70 @@ body {
     text-align:center;
     width:260px;
 }
+/* CSS used for the post navigation in the article footer. */
 .post_image {
     display:block;
     width:260px;
     height:130px;
 }
+/* CSS used for the blog post headline. */
 h2 {
-    font-size:26px;
+    font-size:30px;
     color: #252525;
     margin-bottom:0;
+    margin-top:60px;
 }
+/* CSS used for the blog post section header. */
 h3 {
-    font-size:20px;
-    color: black;
-    border-bottom:2px solid #3E4349;
+    margin-top:80px;
+    font-size:24px;
+    /*color: #555;*/
+    /*border-bottom:2px solid #3E4349;*/
 }
+/* CSS used for the blog post writing format. */
 p {
     margin-bottom:1.5em;
 }
-/* unvisited link */
+/* unvisited body link */
 a:link {
-    color: #333;
+    color: #428bca;
     text-decoration: none;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
-/* visited link */
+/* visited body link */
 a:visited {
-    color: #333;
+    color: #428bca;
     text-decoration: none;
 }
-/* mouse over link */
+/* mouse over body link */
 a:hover {
-    color: #666;
+    color: #2d6a9f;
     text-decoration: none;
 }
-/* selected link */
+/* selected body link */
 a:active {
     color: #BBB;
     text-decoration: none;
 }
-.blog-frame {
-    text-align:center;
-    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+
+/* unvisited navigation link */
+.navigation-link:link {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+/* visited navigation link */
+.navigation-link:visited {
+    color: #333;
+    text-decoration: none;
+}
+/* mouse over navigation link */
+.navigation-link:hover {
+    color: #666;
+    text-decoration: none;
+}
+/* selected navigation link */
+.navigation-link:active {
+    color: #BBB;
+    text-decoration: none;
 }

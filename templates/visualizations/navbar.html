@@ -4,53 +4,6 @@
 <link rel= "stylesheet" type= "text/css" href= "/static/css/roboto.css">
 <script src="/static/js/d3.v3.js"></script>
 
-<style>
-    .posts_table, .post_descriptions {
-        width:800px;
-        margin: auto;
-        display: block;
-    }
-    .post_item {
-        border:1px solid black;
-        border-radius:2px;
-        padding:0;
-        width:260px;
-    }
-    .post_desc {
-        font-family: Roboto, sans serif;
-        font-weight:bold;
-        color:#252525;
-        text-align:center;
-        width:260px;
-    }
-    .post_image {
-        display:block;
-        width:260px;
-        height:130px;
-    }
-    /* unvisited link */
-    a:link {
-        color: #333;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    /* visited link */
-    a:visited {
-        color: #333;
-        text-decoration: none;
-    }
-    /* mouse over link */
-    a:hover {
-        color: #666;
-        text-decoration: none;
-    }
-    /* selected link */
-    a:active {
-        color: #BBB;
-        text-decoration: none;
-    }
-</style>
-
 <script>
     d3.json("/static/json/post_list.json", function(error, dataset) {
         if (error) throw error;
@@ -98,9 +51,9 @@
                 .data(rand_post_nums)
                 .enter()
                 .append("td")
-                .attr("class", "post_desc")
                 .append("a")
                 .attr("href", function(d) { return dataset[d]['route']; })
+                .attr("class", "post_desc navigation-link")
                 .text(function(d) { return dataset[d]['title']; })
     });
 </script>

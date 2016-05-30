@@ -1,0 +1,305 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    Last week I tackled <a href="http://www.residentmar.io/2016/05/27/biggest-landowners-nyc.html">private
+    landownership in New York City</a>, using entity information in the public <a
+        href="http://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page">PLUTO dataset</a> to
+    examine the largest public and private landowners in the city. This week I'm continuing my exploration of the
+    dataset by looking at addressing in New York City: after all once can do some interesting things with a record of
+    every single address New York City!
+</p>
+
+<h3>Address Density</h3>
+
+<p>
+    To start with let's take a look at the number of addresses by borough:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/address-count-by-borough.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    <b>Queens and Brooklyn together comprise 70% of the addresses in New York City</b>. Manhattan by contrast
+    provides just 5% of them, while Staten Island and the Bronx split the remaining difference at around 12.5% each.
+    In other words, for every 20 addresses 1 is in Manhattan, 2 are in the Bronx, 3 are in Staten Island, 6 are in
+    Brooklyn, and 8 are in Queens.
+</p>
+
+<p>
+    The scale of the difference between the number of residences in Manhattan and the number in the other boroughs
+    is surprising, but remember: Manhattan squeezes about two-thirds the population of Queens onto an island
+    one-quarter the size.
+</p>
+
+<p>
+    A city block in Manhattan is wider than it is long, with each horizontal avenue measuring out approximately
+    three diagonal streets in length. <a
+        href="http://www.nytimes.com/2006/09/17/nyregion/thecity/17fyi.html?_r=0">Using a figure given by <i>The New
+    York Times</i> in 2006</a> (if you like this sort of thing&mdash;I know I do&mdash;also check out <a
+        href="http://stuffnobodycaresabout.com/2012/11/19/all-new-york-city-streets-are-not-created-equal/">the
+    breakdown given in the 1892 World Almanac</a>), this makes for 140 streets per square mile. By summing up the
+    total lot areas and filtering out parks and greenspaces we can measure the average number of properties per city
+    block by borough:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/addresses-per-block-by-borough.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Brooklyn is easily the densest of the boroughs, packing twice as many addresses per block as Manhattan, the land
+    of skyscrapers.
+</p>
+
+<p>
+    Staten Island is comparably dense with Manhattan. Staten Island is the most suburban of the five boroughs, so
+    lots there are larger as a natural consequence of its lower population density. The Bronx by contrast, is the
+    most consolidated of the outer boroughs.
+</p>
+
+<p>
+    These facts becomes easy to see if we swap to measuring density by number of persons per address:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/persons-per-address-by-borough.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Manhattan absolutely crushes this ranking, packing fifteen times as many people per address (61) as
+    Staten Island does (4)! If you ever wondered why people try so hard to live in "the City", this is why.
+</p>
+
+<p>
+    As per our discussion before, the Bronx (approximately 18 residents per addresss) is two-and-a-half as dense per
+    address as runner-up Queens is (approximately 7 residents per address).
+</p>
+
+<p>
+    Queens fits somewhat fewer people (2.3 versus 2.6 million) onto a significantly greater area (109 versus 71 square
+    miles), yet&mdash;as a consequence of having such a smaller lot size&mdash;Brooklyn nevertheless has
+    a comparable number of residents per building (approximately 5 residents per address).
+</p>
+
+<p>
+    If we mix these two metrics up we can compute the average number of people per block for each of the boroughs:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/persons-per-block-by-borough.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Though Brooklyn and Queens again swap places, the overall picture is about the same.
+</p>
+
+<h3>Address Length</h3>
+
+<p>
+    Now that we're done counting addresses let's examine what they actually look like, starting with their
+    length.
+</p>
+
+<p>
+    Not every property in New York City has an address: parks don't, for instance, nor do many empty lots, though
+    others get assigned the name of the nearest street. There are also a handful of "other options" in the
+    dataset as well: for instance there are several entities addressed as <code class="inline_code">BODY OF
+    WATER</code>, and at least one, I kid you not, <code class="inline_code">CLIFF</code>.
+</p>
+
+<p>
+    Let's assume that a valid address is of the form <code class="inline_code">120 COURT STREET</code>, that is, an address
+    number followed by at least two strings seperate strings for the street. There's one important exception to this
+    rule&mdash;Manhattan piers are simply a pier and a number, e.g. <code class="inline_code">PIER 19</code>. We'll include
+    those, too.
+</p>
+
+<img src="/static/post_assets/nyc-addresses/total-number-of-addresses-by-length.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    It seems that address lengths are approximately normally distributed in New York City, and surprisingly tightly
+    so: <b>half of the addresses in New York City are 14, 15, or 16 non-space characters long</b>.
+</p>
+
+<p>
+    Non-mean address lengths distribute approximately evenly into either tail, but the right tail is slightly
+    thinner and longer&mdash;e.g. "long" addresses tend to be especially long, whilst "short" addresses tend to be
+    only somewhat shorter than average.
+</p>
+
+<p>
+    There is no single shortest address in New York City: there are a number of two-number piers, e.g. <code
+        class="inline_code">PIER 40</code> etc. Following up on these, there are a sizable number of short
+    place-names, such as <code class="inline_code">74 6 ROAD</code> in Queens or <code class="inline_code">5 3
+    PLACE</code> in Brooklyn, which seem to occur mostly in these two boroughs.
+</p>
+
+<p>
+    There is also no single longest address: there are over a hundred addresses in Queens on Woodhaven Boulevard
+    with names like <code class="inline_code">103-29A WOODHAVEN BOULEVARD</code> which take the prize for longest in
+    the city.
+</p>
+
+<h3>Address Characteristics</h3>
+
+<p>
+    Let's tokenize address endings to see which words (excluding individual numbers and letters) are most common.
+    Amazingly there are just 100 of them in the entire city! Here's a work cloud with every single option:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/endings-word-cloud.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Of course a handful of these endings dominate the entire set:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/most-common-address-endings.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Indeed, place-name endings have very little variety. <b>82% of the addresses in New York City end in either
+    "Street" or "Avenue"</b>.
+</p>
+
+<p>
+    The top 20 most common endings, shown here, cover 99% of addresses in New York City!
+</p>
+
+<h3>Address Depth</h3>
+
+<p>
+    Broadway appears on the list above because of its almost unique habit of naming addresses all on its own: whilst a
+    building on another avenue would be "123 3rd Avenue", when they are on Broadway they are more usually, though not
+    always, simply 123 Broadway. Combined with the fact that the Broadway is the longest street in New York
+    City, this makes Broadway one of the more heavily addressed street in New York City, with 1118 addresses overall.
+</p>
+
+<p>
+    Expanding on this observation, here are the five most heavily addressed streets in each borough:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/most-heavily-addressed-streets-per-borough.png" class="inline_image_full"
+     alt="Data." style="width:700px;"/>
+
+<p>
+    But this analysis is highly limited. Not only is addressing not totally correlated with length, but we've also
+    constrained ourselves by naively examining streets on a per-borough basis. But we have a complete record not only
+    of the addresses associated with each street but also of their coordinates&mdash;can't we take that and somehow
+    transform it into a representation of the streets themselves?
+</p>
+
+<p>
+    This is a very algorithmically interesting question with a very non-trivial solution that I thought I would say a
+    few words about for the interested. Using Broadway as our (above averagely complex) test case, here are the
+    points that I start with:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/broadway-initial-points.png" class="inline_image_full"
+     alt="Data." style="width:350px;"/>
+
+<p>
+    This is just a cloud of points in no particular order; to get a line out of it we first have to order it somehow.
+    I fitted a linear regression equation against the cloud and ranked each point based on the order in which the
+    origin of its residual appeared on the resultant regression line. This gets us pretty far, but remember how
+    buildings appear on either side of a street, not in its middle?
+</p>
+
+<img src="/static/post_assets/nyc-addresses/broadway-polyline-problem.png" class="inline_image_full"
+     alt="Data."/>
+
+<p>
+    So the next step was calculated a rolling average of centroids for each five-tuple of points. This doesn't help
+    too much with smoothing the curve, but by taking the center of mass of a bunch of points around a street we
+    (mostly) succeed in getting points on it instead. Finally we run the points through the <a
+        href="https://bost.ocks.org/mike/simplify/">Visvalingam line simplification algorithm</a> to get our final
+    result&mdash;one reasonably well-fitted, reasonably simple Broadway street polyline:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/broadway-final-polyline.png" class="inline_image"
+     alt="Data." style="width:40%"/>
+
+<p>
+    At the risk of making everyone's eyes glaze over, here's the code that solves the problem:
+</p>
+
+<pre><code class="language-python">
+from pyproj import Proj
+import scipy
+import visvalingamwyatt as vw
+import math
+
+projstr = '+proj=lcc +lat_1=40.66666666666666 +lat_2=41.03333333333333 +lat_0=40.16666666666666' +
+    '+lon_0=-74 +x_0=300000 +y_0=0 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs'
+pnyc = Proj(projstr,
+            preserve_units=True)
+
+def generate(df, proj, street_name, n=20):
+    # Extract non-empty coordinates.
+    coords = df[df['Street'].map(lambda a: street_name in str(a))][['XCoord', 'YCoord', 'Borough']]
+    coords = coords.dropna()
+    coords = [proj(x, y, inverse=True) for x, y in zip(coords['XCoord'], coords['YCoord'])]
+    # Apply a linear regression to get general orientation.
+    slope, intercept, r_value, p_value, std_err =
+        scipy.stats.linregress([c[0] for c in coords], [c[1] for c in coords])
+    # Get the coordinate on the line each point is closest to by solving for the residual.
+    r_slope = -1/slope
+    closest_linear_coords = []
+    for x, y in coords:
+        b = y - r_slope*x
+        x_int = (intercept - b)/(r_slope - slope)
+        y_int = slope*x_int + intercept
+        closest_linear_coords.append((x_int, y_int))
+    # Since we now have a line we can pick a major axis and rank points based on their position on that axis.
+    x_extent = max([c[0] for c in closest_linear_coords]) - min([c[0] for c in closest_linear_coords])
+    y_extent = max([c[1] for c in closest_linear_coords]) - min([c[1] for c in closest_linear_coords])
+    if x_extent >= y_extent:
+        array = np.array([c[0] for c in closest_linear_coords])
+    else:
+        array = np.array([c[1] for c in closest_linear_coords])
+    order = array.argsort()
+    ranks = order.argsort()
+    sorted_coords = list(zip([c[0] for c in coords], [c[1] for c in coords], ranks))
+    sorted_coords.sort(key=lambda x: x[2])
+    sorted_coords = [(x, y) for x, y, rank in sorted_coords]
+    # Remove false positive coordinates which are more than a certain distance from their preceding neighbor.
+    # Otherwise random buildings with the same street in their address get included in the plot!
+    i = 1
+    while True:
+        if math.sqrt((sorted_coords[i][0] - sorted_coords[i - 1][0])**2
+                        + (sorted_coords[i][1] - sorted_coords[i - 1][1])**2) > 0.01:
+            del sorted_coords[i]
+        else:
+            i += 1
+        if i > len(sorted_coords) - 1:
+            break
+    centroid_coords = []
+    for i in range(0, len(sorted_coords) - 4):
+        x_c = (sorted_coords[i][0] + sorted_coords[i + 1][0] + sorted_coords[i + 2][0]
+                + sorted_coords[i + 3][0] + sorted_coords[i + 4][0]) / 5
+        y_c = (sorted_coords[i][1] + sorted_coords[i + 1][1] + sorted_coords[i + 2][1]
+                + sorted_coords[i + 3][1] + sorted_coords[i + 4][1]) / 5
+        centroid_coords.append((x_c, y_c))
+    simplifier = vw.Simplifier(centroid_coords)
+    # simplified_coords = simplifier.simplify(ratio=0.05)
+    simplified_coords = simplifier.simplify(number=n)
+    return simplified_coords
+
+</code></pre>
+
+<p>
+    This is a pretty powerful result. Give me the name of any street in New York City and I can give you the polyline
+    encoding it! Aside from manipulating the Google Directions API or defining the coordinates by hand, both of which
+    are limited in scope to case-by-case bases, I don't know if any other way of getting this information.
+</p>
+
+<p>
+    For now I'm just going to use this fancy new tool to generate what we both really want to see. Without further
+    ado, here are the twenty longest streets in New York City:
+</p>
+
+<!--<h3>Address Numbering</h3>-->
+
+<p class="addendum">
+    If you're interested in Manhattan addressing Ben Wellington of IQuantNY awhile ago published <a
+        href="http://iquantny.tumblr.com/post/102509139169/colorfully-decoding-manhattans-address-system">an
+    excellent analysis on the subject</a>, also using PLUTO data, that's well worth reading!
+</p>
+
+{% endblock %}

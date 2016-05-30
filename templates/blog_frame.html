@@ -63,6 +63,7 @@
                 .append("td")
                 .attr("class", "post_desc")
                 .append("a")
+                .attr("class", "navigation-link")
                 .attr("href", function(d) { return dataset[d]['route']; })
                 .text(function(d) { return dataset[d]['title']; })
     });
