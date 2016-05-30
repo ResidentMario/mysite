@@ -131,7 +131,8 @@ raws_list = [
     'biggest-landowners-geo-visualization.html',
     'most-enumerate-landowners-geo-visualization.html',
     'largest-landowners-geo-visualization.html',
-    'wealthiest-landowners-geo-visualization.html'
+    'wealthiest-landowners-geo-visualization.html',
+    'longest-streets.html'
     ]
 
 post_paths = [post['route'] for post in post_list]

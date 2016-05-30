@@ -186,7 +186,7 @@
 </p>
 
 <p>
-    This is a very algorithmically interesting question with a very non-trivial solution that I thought I would say a
+    This is an algorithmically interesting question with a very non-trivial solution that I thought I would say a
     few words about for the interested. Using Broadway as our (above averagely complex) test case, here are the
     points that I start with:
 </p>
@@ -290,9 +290,24 @@ def generate(df, proj, street_name, n=20):
 </p>
 
 <p>
-    For now I'm just going to use this fancy new tool to generate what we both really want to see. Without further
-    ado, here are the twenty longest streets in New York City:
+    For now I'm just going to use this fancy new tool to generate what we both really want to see.
 </p>
+
+<p>
+    Our algorithm discovers 1788 uniquely identifiable streets in New York City (note that since I made no effort
+    to split different streets with the same name, this is actually an undercount). If we sort them all by
+    length we find that street length fits a very neat exponential curve:
+</p>
+
+<img src="/static/post_assets/nyc-addresses/streets-by-length.png" class="inline_image_full"
+     alt="Data.""/>
+
+<p>
+    And, finally, we focus in on our winners:
+</p>
+
+<!-- Build a d3 for it! -->
+<!-- Selectable bar chart above. Plot of the actual street below. -->
 
 <!--<h3>Address Numbering</h3>-->
 
