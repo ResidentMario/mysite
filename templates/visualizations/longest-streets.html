@@ -1,432 +1,82 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-
 <style>
-#boroughs {
-    fill: #eee;
-    stroke: gray;
-    stroke-width: 1px;
-    display: block;
+
+.bar {
+  fill: steelblue;
 }
 
-.d3-tip {
-    line-height: 1;
-    font-weight: bold;
-    padding: 12px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    border-radius: 2px;
-    font-family: Roboto;
+.bar:hover {
+  fill: brown;
 }
 
-/* Creates a small triangle extender for the tooltip */
-.d3-tip:after {
-    box-sizing: border-box;
-    display: inline;
-    font-size: 10px;
-    width: 100%;
-    line-height: 1;
-    color: rgba(0, 0, 0, 0.8);
-    content: "\25BC";
-    position: absolute;
-    text-align: center;
+.axis {
+  font: 10px sans-serif;
 }
 
-/* Style northward tooltips differently */
-.d3-tip.n:after {
-    margin: -1px 0 0 0;
-    top: 100%;
-    left: 0;
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
+
+.x.axis path {
+  display: none;
+}
+
 </style>
+<script src="//d3js.org/d3.v3.min.js"></script>
 
-<!-- Import the scripts. -->
-<script src="/static/js/d3.v3.js"></script>
-<script src="/static/js/d3.tip.js"></script>
-<link href='/static/css/roboto.css' rel='stylesheet' type='text/css'>
-
-<!-- Define the graph structure: one SVG pane above, one below. -->
 <body>
-<div id="bar_holder">
-</div>
-<br clear="all"/>
-<div id="map_holder"></div>
+    <div id="chart">
+
+    </div>
+</body>
 
 <script>
 
-    ////////////////
-    // INITIALIZE //
-    ////////////////
+    d3.json("../static/post_assets/nyc-addresses/streets.geojson", function(error, nyb) {
 
-    // The following set of code initializes the visualization.
-    // Set plot size parameters and append the SVG.
-    var bar_width = 960;
-    var bar_height = 300;
-    var map_width = 960;
-    var map_height = 500;
+        var street_lengths = [];
+        for(var i = 0; i <= nyb['features'].length - 1; i++) {
+            street_lengths.push(nyb['features'][i]['properties']['distance']);
+        }
 
+        // Data is stored in order so we can get the maximum by simply accessing the first.
+        var max_street_length = nyb['features'][0]['properties']['distance'];
 
-    svg = d3.select("#bar_holder")
-            .append("svg")
-            .attr("width", bar_width)
-            .attr("height", bar_height);
+        var svg = d3.select("#chart").append("svg");
+        var w = 960;
+        var h = 250;
+        var bar_padding = 1;
+        var bar_width = w / street_lengths.length - bar_padding;
+        var max_height = h;
+        var scaled_unit = h / max_street_length;
+        svg.attr({
+            "width": w,
+            "height": h,
+            "shape-rendering": "crispEdges"
+        });
 
-    d3.json("../static/post_assets/nyc-addresses/streets.geojson", function(error, streets) {
+        var y = d3.scale.linear().domain([10, 0]).range([30, max_height - 5]);
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+
         svg.append("g")
-                .data(streets)
-                .enter()
-                .append("rect")
-                .attr({
-                    "class": "bar",
-                    "x": 50,
-                    "y": 50,
-                    "height": 100,
-                    "width": 100,
-                    "test": function(d) { console.log("Hello!"); }
-                })
+            .attr("class", "axis")
+            .attr("transform", "translate(" + 50 + ",0)")
+            .call(yAxis);
+
+        svg.selectAll("rect").data(street_lengths).enter().append("rect").attr({
+            "fill": "steelblue",
+            "width": bar_width,
+            "height": function(d) { return 250 - y(d) - 5; },
+            "x": function(d, i) { return ((bar_width + 1) * i) + 55; },
+            "y": function(d, i) { return y(d); }
+        });
     });
 
-//    // Set up the New York City shape.
-//    // If you change the scaling factors here be sure to change them for the points below too!
-//    d3.json("../static/post_assets/landowners/nyc.json", function(error, nyb) {
-//
-//        // Set up a projection.
-//        var proj = d3.geo.mercator()
-//                .center([-74.04, 40.70])
-//                .scale(50000)
-//                .translate([(width) / 2, (height)/2]);
-//
-//        var path = d3.geo.path()
-//                .projection(proj);
-//
-//        // Load and plot the points.
-//        layer1
-//                .attr("id", "boroughs")
-//                .selectAll(".state")
-//                .data(nyb.features)
-//                .enter().append("path")
-//                .attr("class", function(d){ return d.properties.name; })
-//                .attr("d", path);
-//
-//    });
-//
-//    // Set up the dropdown menu.
-//    var dropDown = d3.select("#type_selector_holder")
-//            .text("Ranking")
-//            .style({
-//                "font-size": "20px",
-//                "font-weight": "bold"
-//            })
-//            .append("select")
-//            .attr("name", "ranking-type")
-//            .attr("id", "ranking-type");
-//
-//    var options = dropDown.selectAll("option")
-//            .data(['Largest'])
-//            .enter()
-//            .append("option");
-//
-//
-//    // Will need the data, easiest to just paste it here as a list.
-//    var mepl = ['Trustees Of Columbia', 'New York University',
-//       'Duestche Bank National Trust', 'Penrith Urf LLC',
-//       'Nehemaih Housing Development',
-//       'Northeastern Conference of Seventh-Day Adventists',
-//       'Mutual Housing Association Of New York',
-//       'U.S. Bank National Association', 'Consolidated Edison Company',
-//       'Silvershore Properties', 'Impacct Housing Development Corporation',
-//       'Roman Catholic Church', 'Wells Fargo Bank, N.A',
-//       'Maguire Avenue Realty', 'New York Garden Trust',
-//       'Casa Mason Corporation', 'Clinton Graham', 'MG Richmond LLC',
-//       'Hpeny Housing Development Corporation',
-//       'Prol Properties Corporation'];
-//
-//    var lpl = ['Riverbay Corporation', 'Trustees Of Columbia',
-//       'New York University', 'BPP ST Owner LLC', 'Starrett City, Inc.',
-//       'Parkchester South Condominiums', 'Rochdale Village Inc',
-//       "St. John's University", 'RCPI Landmark Properties LLC',
-//       'New York-Presbyterian Hospital', 'North Shore Towers Apartments',
-//       'Newton Street Corp', 'New York Convention Center Corporation',
-//       'Mount Sinai Hospital', '1-10 Bush Terminal Owner LP',
-//       'BPP PCV Owner LLC', 'Fordham University',
-//       'Amalgamated Warbasse Houses', 'SL Green Realty Corporation'];
-//
-//    var wpl = ['New York University', 'Trustees Of Columbia',
-//       ' RCPI Landmark Properties LLC', 'One Bryant Park',
-//       '767 Fifth Partners LLC', 'New York Convention Center Corporation',
-//       'BPP ST Owner LLC', 'Citifield', 'SL Green Realty Corporation',
-//       'Arena Nominee Sub B, LLC', '200 Park, L.P.', '1345 Leasehold LLC',
-//       'Mount Sinai Hospital', 'Trinity Hudson Holdings',
-//       'HMC Times Square Hotel LP', 'PGREF I 1633 Broadway Tower, L.P.',
-//       '1221 Avenue Holdings', 'Bop 245 Park LLC',
-//       'Solovieff Realty Company', 'New York-Presbyterian Hospital'];
-//
-//
-//    options
-//            .attr("value", function(d) { return d; })
-//            .text(function(d) { return d; });
-//
-//
-//    // Set up the entity selection.
-//    var entitySelection = d3.select("#entity_selector_holder")
-//            .text("Entity")
-//            .style({
-//                "font-size": "20px",
-//                "font-weight": "bold"
-//            })
-//            .append("select")
-//            .attr("name", "entity-selection")
-//            .attr("id", "entity-type");
-//
-//
-//    var entities = entitySelection.selectAll("option")
-//            .data(lpl)
-//            .enter()
-//            .append("option");
-//
-//    entities
-//            .attr("value", function(d) { return d; })
-//            .text(function(d, i) { return i + 1 + ". " + d; });
-//
-//    // Set up the changed-state calls.
-//    dropDown.on("change", criteriaChanged);
-//    entitySelection.on("change", selectionChanged);
-//    // We will define these functions a little later on.
-//
-//    // Set up the left-right buttons, using an absolutely positioned div element.
-//    d3.select("#svg_holder")
-//            .append("button")
-//            .attr("id", "left-button")
-//            .attr("onclick", "goLeft()")
-//            .style({
-//                "position": "absolute",
-//                "left": "35px",
-//                "top": "65px"
-//            })
-//            .text("←");
-//    d3.select("#svg_holder")
-//            .append("button")
-//            .attr("id", "right-button")
-//            .attr("onclick", "goRight()")
-//            .style({
-//                "position": "absolute",
-//                "left": "85px",
-//                "top": "65px"
-//            })
-//            .text("→");
-//    // The left button should be disabled by default.
-//     document.getElementById("left-button").disabled = true;
-//
-//    // Initial-populate the frame.
-//    selectionChanged();
-//    criteriaChanged();
-//
-//    ////////////
-//    // EVENTS //
-//    ////////////
-//
-//    // Now we can start defining functional events.
-//    // This event is called whenever the criteria used for ranking is changed.
-//    function criteriaChanged() {
-//        var selectedValue = d3.event.target.value;
-//        // Which file we draw the update from depends on which criteria we have listed.
-//        if (selectedValue == 'Largest') {
-//            entities
-//                    .attr("value", function (d, i) {
-//                        return lpl[i];
-//                    })
-//                    .text(function (d, i) {
-//                        return i + 1 + ". " + lpl[i];
-//                    });
-//        }
-//        if (selectedValue == 'Most Enumerate') {
-//            entities
-//                    .attr("value", function (d, i) {
-//                        return mepl[i];
-//                    })
-//                    .text(function (d, i) {
-//                        return i + 1 + ". " + mepl[i];
-//                    });
-//        }
-//        if (selectedValue == 'Wealthiest') {
-//            entities
-//                    .attr("value", function (d, i) {
-//                        return wpl[i];
-//                    })
-//                    .text(function (d, i) {
-//                        return i + 1 + ". " + wpl[i];
-//                    });
-//        }
-//        // For convenience's sake, let's set the index when an update is called back to 0.
-//        var entity_selection = document.getElementById('entity-type');
-//        entity_selection.selectedIndex = 0;
-//        // Now we update the selection using the below.
-//        selectionChanged();
-//    }
-//
-//    // This event is called whenever the entity selection is changed, OR the criteria selection is changed.
-//    // Clicking buttons calls goLeft() or goRight(), which do some checks before running this, too.
-//    function selectionChanged() {
-//        var entity_selection = document.getElementById('entity-type');
-//        var selectedValue = entity_selection.options[entity_selection.selectedIndex].value;
-//
-//        // The below is a standard way of doing this but I fell back to pure JavaScript because I needed the selection
-//        // and the plot to update when the ranking being used changed. That wouldn't push an event to the d3 stream,
-//        // so for that case we need to manually inspect...
-//        // var selectedValue = d3.event.target.value;
-//        // ...as below.
-//        var selectedIndex = document.getElementById('entity-type').selectedIndex + 1;
-//
-//        // Reset the buttons if appropriate!
-//        if(entity_selection.selectedIndex == 19) {
-//            document.getElementById("left-button").disabled = false;
-//            document.getElementById("right-button").disabled = true;
-//        }
-//        else if(entity_selection.selectedIndex == 0) {
-//            document.getElementById("left-button").disabled = true;
-//            document.getElementById("right-button").disabled = false;
-//        }
-//        else {
-//            document.getElementById("left-button").disabled = false;
-//            document.getElementById("right-button").disabled = false;
-//        }
-//
-//        var old_points = d3.selectAll('.location');
-//        // Reset the old points.
-//        old_points.remove();
-//
-//
-//        // In order to do any of the rest we need to inspect the ranking type so we map to the correct subdirectory.
-//        var selection;
-//        var type_selection = document.getElementById('ranking-type');
-//        var sel = type_selection.options[type_selection.selectedIndex].value;
-//        if (sel == 'Largest') {
-//            selection = 'lpl';
-//        }
-//        if (sel == 'Most Enumerate') {
-//            selection = 'mepl'
-//        }
-//        if (sel == 'Wealthiest') {
-//            selection = 'wpl';
-//        }
-//
-//        d3.json("../static/post_assets/landowners/geojson/" + selection + '/' + selectedValue + '.geojson', function (error, ent) {
-//            // the user clicks on the go left/go right buttons.
-//            //the name isn't important, but has to match the name
-//            //you added to the menu's "change" event listener.
-//
-//            // Remove the labels, now we reset them based on the new data.
-//            d3.select("#title-label").remove();
-//            svg.append("text")
-//                .attr({
-//                    "x": 25,
-//                    "y": 25,
-//                    "font-family": "Roboto",
-//                    "font-weight": "bold",
-//                    "font-size": "26px"
-//                })
-//                .text(function(d) { return selectedValue; })
-//                .attr("id", "title-label");
-//
-//            d3.select("#rank-label").remove();
-//            if (sel == 'Largest') {
-//                svg.append("text")
-//                        .attr({
-//                            "x": 25,
-//                            "y": 45,
-//                            "font-family": "Roboto",
-//                            "font-size": "12px"
-//                        })
-//                        .text(function(d) { return "Ranked " + "#" + selectedIndex + " In Total Building Area (" +
-//                                ent['properties']['square footage'] + " square feet)"; })
-//                        .attr("id", "rank-label");
-//            }
-//            if (sel == 'Most Enumerate') {
-//                svg.append("text")
-//                        .attr({
-//                            "x": 25,
-//                            "y": 45,
-//                            "font-family": "Roboto",
-//                            "font-size": "12px"
-//                        })
-//                        .text(function(d) { return "Ranked " + "#" + selectedIndex + " In Number Of Addresses (" +
-//                                ent['properties']['addresses'] + ")"; })
-//                        .attr("id", "rank-label");
-//
-//            }
-//            if (sel == 'Wealthiest') {
-//                svg.append("text")
-//                        .attr({
-//                            "x": 25,
-//                            "y": 45,
-//                            "font-family": "Roboto",
-//                            "font-size": "12px"
-//                        })
-//                        .text(function(d) { return "Ranked " + "#" + selectedIndex + " In Total Building Value (" +
-//                                ent['properties']['total value'] + "$)"; })
-//                        .attr("id", "rank-label");
-//            }
-//
-//
-//            var proj = d3.geo.mercator()
-//                    .center([-74.04, 40.70])
-//                    .scale(50000)
-//                    .translate([(width) / 2, (height) / 2]);
-//            var path = d3.geo.path()
-//                    .projection(proj);
-//            layer2
-//                    .attr("id", "locations")
-//                    .selectAll(".state")
-//                    .data(ent.features)
-//                    .enter().append("circle")
-//                    .attr("class", "location")
-//                    .attr("r", "4px")
-//                    .attr("cx", function (d) {
-//                        return proj(d['geometry']['coordinates'])[0];
-//                    })
-//                    .attr("cy", function (d) {
-//                        return proj(d['geometry']['coordinates'])[1];
-//                    })
-//                    .attr("d", path)
-//                    .on('mouseover', tip.show)
-//                    .on('mouseout', tip.hide);
-////                    .each(pulse);
-////
-////            		function pulse() {
-////                        var circle = svg.selectAll(".location");
-////                        (function repeat() {
-////                            circle = circle.transition()
-////                                    .duration(2000)
-////                                    .attr("stroke-width", 4)
-////                                    .transition()
-////                                    .duration(2000)
-////                                    .attr("stroke-width", 1)
-////                                    .ease('sine')
-////                                    .each("end", repeat);
-////                        })();
-////                    }
-//        });
-//
-//        // We need to use a completely different file, descriptions.json, to populate the description text.
-//        d3.json("../static/post_assets/landowners/descriptions.json", function (error, desc) {
-//            // Remove the old text.
-//            d3.select("#description-text").remove();
-//            // Place a new one!
-//            d3.select("#svg_holder")
-//                    .append("div")
-//                    .attr("id", "description-text")
-//                    .style({
-//                        "position": "absolute",
-//                        "left": "35px",
-//                        "top": "100px",
-//                        "font-family": "Roboto",
-//                        "font-size": "12px",
-//                        "width": "350px"
-//                    })
-//                    .text(desc[selectedValue]);
-//        });
-//
-//    }
-
 </script>
-</body>
