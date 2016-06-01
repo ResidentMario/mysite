@@ -50,7 +50,7 @@
         var w = 960;
         var h = 250;
         var bar_padding = 1;
-        var bar_width = w / street_lengths.length - bar_padding;
+        var bar_width = (w - 50) / street_lengths.length - bar_padding;
         var max_height = h;
         var scaled_unit = h / max_street_length;
         svg.attr({
@@ -62,21 +62,52 @@
         var y = d3.scale.linear().domain([10, 0]).range([30, max_height - 5]);
 
         var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
+                .scale(y)
+                .orient("left");
 
         svg.append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(" + 50 + ",0)")
-            .call(yAxis);
+                .attr("class", "axis")
+                .attr("transform", "translate(" + 50 + ",0)")
+                .call(yAxis);
 
-        svg.selectAll("rect").data(street_lengths).enter().append("rect").attr({
-            "fill": "steelblue",
-            "width": bar_width,
-            "height": function(d) { return 250 - y(d) - 5; },
-            "x": function(d, i) { return ((bar_width + 1) * i) + 55; },
-            "y": function(d, i) { return y(d); }
-        });
+        svg.selectAll("rect")
+                .data(nyb.features)
+                .enter()
+                .append("rect")
+                .attr({
+                    "fill": "steelblue",
+                    "width": bar_width,
+                    "height": function(d) { return 250 - y(d.properties.distance) - 5; },
+                    "x": function(d, i) { return ((bar_width + 1) * i) + 55; },
+                    "y": function(d) { return y(d.properties.distance); }
+                });
+
+        svg.selectAll("text")
+                .data(nyb.features)
+                .enter()
+                .append("text")
+                .attr({
+                    "fill": "red",
+                    "x": function(d, i) { console.log(i); return ((bar_width + 1) * i) + 55; },
+                    "y": function(d) { return y(d.properties.distance); }
+                })
+                .text("Hello World!");
+
+//        svg.selectAll("rect").data(street_lengths).enter().append("rect").attr({
+//            "fill": "steelblue",
+//            "width": bar_width,
+//            "height": function(d) { return 250 - y(d) - 5; },
+//            "x": function(d, i) { return ((bar_width + 1) * i) + 55; },
+//            "y": function(d, i) { return y(d); }
+//        });
+
+//        svg.selectAll("text").data(street_lengths).enter().append("text")
+//                .attr({
+//                    "color": "red",
+//                    "x": function(d, i) { return ((bar_width + 1) * i) + 55; },
+//                    "y": function(d, i) { return y(d); }
+//                })
+//                .text("Hello!")
     });
 
 </script>
