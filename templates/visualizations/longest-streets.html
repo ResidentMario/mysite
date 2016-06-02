@@ -2,12 +2,21 @@
 <meta charset="utf-8">
 <style>
 
+#boroughs {
+    fill: #eee;
+    stroke: gray;
+    stroke-width: 1px;
+    display: block;
+}
+
 .bar {
-  fill: steelblue;
+    fill: steelblue;
 }
 
 .bar:hover {
-  fill: brown;
+    fill: brown;
+    stroke-width: 2;
+    stroke: black;
 }
 
 .axis {
@@ -26,37 +35,69 @@
 }
 
 </style>
-<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="/static/js/d3.v3.js"></script>
+<link href='/static/css/roboto.css' rel='stylesheet' type='text/css'>
 
 <body>
-    <div id="chart">
+    <div id="geo_viz">
+
+    </div>
+    <div id="bar_chart">
 
     </div>
 </body>
 
 <script>
 
-    d3.json("../static/post_assets/nyc-addresses/streets.geojson", function(error, nyb) {
-
-        var street_lengths = [];
-        for(var i = 0; i <= nyb['features'].length - 1; i++) {
-            street_lengths.push(nyb['features'][i]['properties']['distance']);
-        }
+    d3.json("../static/post_assets/nyc-addresses/streets.geojson", function(error, streets) {
 
         // Data is stored in order so we can get the maximum by simply accessing the first.
-        var max_street_length = nyb['features'][0]['properties']['distance'];
+        var bar_svg = d3.select("#bar_chart").append("svg");
 
-        var svg = d3.select("#chart").append("svg");
-        var w = 960;
-        var h = 250;
+        var max_street_length = streets['features'][0]['properties']['distance'];
+        var width = 960;
+        var bar_chart_height = 250;
         var bar_padding = 1;
-        var bar_width = (w - 50) / street_lengths.length - bar_padding;
-        var max_height = h;
-        var scaled_unit = h / max_street_length;
-        svg.attr({
-            "width": w,
-            "height": h,
+        var bar_width = (width - 55) / streets['features'].length - bar_padding;
+        var max_height = bar_chart_height;
+        var scaled_unit = bar_chart_height / max_street_length;
+        bar_svg.attr({
+            "width": width,
+            "height": bar_chart_height,
             "shape-rendering": "crispEdges"
+        });
+
+        var map_height = 500;
+
+        var proj = d3.geo.mercator()
+                .center([-74.00, 40.70])
+                .scale(50000)
+                .translate([(width) / 2, (map_height) / 2]);
+
+        var path = d3.geo.path()
+                .projection(proj);
+
+        var geo_svg = d3.select("#geo_viz").append("svg");
+        d3.json("../static/post_assets/landowners/nyc.json", function(error, nyb) {
+
+            geo_svg.attr({
+                        "width": width,
+                        "height": map_height
+//                        "shape-rendering": "crispEdges"
+                    });
+
+
+            // Load and plot the points.
+            geo_svg
+                    .attr("id", "boroughs")
+                    .selectAll(".state")
+                    .data(nyb.features)
+                    .enter().append("path")
+                    .attr("class", function (d) {
+                        return d.properties.name;
+                    })
+                    .attr("d", path);
+
         });
 
         var y = d3.scale.linear().domain([10, 0]).range([30, max_height - 5]);
@@ -65,49 +106,73 @@
                 .scale(y)
                 .orient("left");
 
-        svg.append("g")
+        bar_svg.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(" + 50 + ",0)")
                 .call(yAxis);
 
-        svg.selectAll("rect")
-                .data(nyb.features)
+        bar_svg.selectAll(".bar")
+                .data(streets.features)
                 .enter()
                 .append("rect")
                 .attr({
+                    "class": "bar",
                     "fill": "steelblue",
                     "width": bar_width,
                     "height": function(d) { return 250 - y(d.properties.distance) - 5; },
                     "x": function(d, i) { return ((bar_width + 1) * i) + 55; },
                     "y": function(d) { return y(d.properties.distance); }
+                })
+                .on("mouseover", function(d) {
+                    geo_svg.append("path")
+                            .attr({
+                                "class": "display-path",
+                                "d": path(d),
+                                "stroke": "steelblue",
+                                "stroke-width": 2,
+                                "fill": "transparent"
+                            });
+                })
+                .on("mouseout", function(d) {
+                    d3.select(".display-path").remove();
                 });
 
-        svg.selectAll("text")
-                .data(nyb.features)
+        bar_svg.selectAll(".length-label")
+                .data(streets.features)
                 .enter()
                 .append("text")
                 .attr({
-                    "fill": "red",
-                    "x": function(d, i) { console.log(i); return ((bar_width + 1) * i) + 55; },
-                    "y": function(d) { return y(d.properties.distance); }
+                    "fill": "black",
+                    "x": function(d, i) { return ((bar_width + 1) * i) + 55 + bar_width / 2; },
+                    "y": function(d) { return y(d.properties.distance) - 5; },
+                    "text-anchor": "middle",
+                    "font-size": 12,
+                    "font-family": "Roboto"
                 })
-                .text("Hello World!");
+                .text(function(d) { return Math.round(d.properties.distance * 100) / 100; } );
 
-//        svg.selectAll("rect").data(street_lengths).enter().append("rect").attr({
-//            "fill": "steelblue",
-//            "width": bar_width,
-//            "height": function(d) { return 250 - y(d) - 5; },
-//            "x": function(d, i) { return ((bar_width + 1) * i) + 55; },
-//            "y": function(d, i) { return y(d); }
-//        });
+        // From http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        }
 
-//        svg.selectAll("text").data(street_lengths).enter().append("text")
-//                .attr({
-//                    "color": "red",
-//                    "x": function(d, i) { return ((bar_width + 1) * i) + 55; },
-//                    "y": function(d, i) { return y(d); }
-//                })
-//                .text("Hello!")
+        bar_svg.selectAll(".street-label")
+                .data(streets.features)
+                .enter()
+                .append("text")
+                .attr({
+                    "class": "street-label",
+                    "fill": "white",
+                    "x": 0,
+                    "y": 0,
+                    "font-size": 14,
+                    "font-family": "Roboto",
+                    "alignment-baseline": "middle",
+                    "font-weight": "bold",
+                    "transform": function(d, i) { return "translate(" + (((bar_width + 1) * i) + 60 + bar_width / 2) +
+                            "," + (bar_chart_height - 10) + ")rotate(-90)" }
+                })
+                .text(function(d) { return toTitleCase(d.properties.name); } );
     });
 
 </script>
