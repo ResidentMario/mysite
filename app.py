@@ -113,7 +113,7 @@ post_list = [
         'route': '2016/06/01/nyc-addresses.html',
         'date': datetime(2016, 6, 1),
         'template': 'nyc-addresses.html',
-        'snap': 'empty.png'
+        'snap': 'nyc-addresses.png'
     }
 ]
 
@@ -160,7 +160,6 @@ def serve(path):
                                )
     elif path in raws_list:
         return render_template('visualizations/' + path)
-    # The following is a temporary working-space code.
     else:
         abort(404)
 
