@@ -56,7 +56,7 @@
 
         var max_street_length = streets['features'][0]['properties']['distance'];
         var width = 960;
-        var bar_chart_height = 250;
+        var bar_chart_height = 240;
         var bar_padding = 1;
         var bar_width = (width - 55) / streets['features'].length - bar_padding;
         var max_height = bar_chart_height;
@@ -67,11 +67,11 @@
             "shape-rendering": "crispEdges"
         });
 
-        var map_height = 500;
+        var map_height = 450;
 
         var proj = d3.geo.mercator()
                 .center([-74.00, 40.70])
-                .scale(50000)
+                .scale(45000)
                 .translate([(width) / 2, (map_height) / 2]);
 
         var path = d3.geo.path()
@@ -100,7 +100,7 @@
 
         });
 
-        var y = d3.scale.linear().domain([10, 0]).range([30, max_height - 5]);
+        var y = d3.scale.linear().domain([16, 0]).range([30, max_height - 5]);
 
         var yAxis = d3.svg.axis()
                 .scale(y)

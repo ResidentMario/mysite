@@ -110,8 +110,8 @@ post_list = [
     },
     {
         'title': 'Addressing in New York City',
-        'route': '2016/05/29/nyc-addresses.html',
-        'date': datetime(2016, 5, 29),
+        'route': '2016/06/01/nyc-addresses.html',
+        'date': datetime(2016, 6, 1),
         'template': 'nyc-addresses.html',
         'snap': 'empty.png'
     }
@@ -166,5 +166,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)

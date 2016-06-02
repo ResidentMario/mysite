@@ -290,20 +290,18 @@ def generate(df, proj, street_name, n=20):
 </p>
 
 <p>
-    For now I'm just going to use this fancy new tool to generate what we both really want to see.
+    For now I'm just going to use this fancy new tool to look at the longest streets in New York City.
 </p>
 
 <p>
-    Our algorithm discovers 1788 uniquely identifiable streets in New York City (note that since I made no effort
-    to split different streets with the same name, this is actually an undercount). If we sort them all by
-    length we find that street length fits a very neat exponential curve:
+    If you sort all of the streets in New York City by length you get a neat if slightly exaggerated exponential curve:
 </p>
 
 <img src="/static/post_assets/nyc-addresses/streets-by-length.png" class="inline_image_full"
      alt="Data.""/>
 
 <p>
-    And, finally, we focus in on our winners:
+    And, finally, we focus in on our winners&mdash;the ten longest streets in New York City (units in miles):
 </p>
 
 <!-- Build a d3 for it! -->
@@ -311,10 +309,13 @@ def generate(df, proj, street_name, n=20):
 
 <!--<h3>Address Numbering</h3>-->
 
+<iframe src="{{request.url_root}}longest-streets.html" marginwidth="0" marginheight="0" scrolling="no"
+        style="transform:translate(-95px, 0); height:750px" class="inline_iframe"></iframe>
+
 <p class="addendum">
-    If you're interested in Manhattan addressing Ben Wellington of IQuantNY awhile ago published <a
+    Want more? Ben Wellington of IQuantNY awhile ago published <a
         href="http://iquantny.tumblr.com/post/102509139169/colorfully-decoding-manhattans-address-system">an
-    excellent analysis on the subject</a>, also using PLUTO data, that's well worth reading!
+    excellent analysis on Manhattan addressing</a>, also using PLUTO data, that's well worth reading!
 </p>
 
 {% endblock %}
