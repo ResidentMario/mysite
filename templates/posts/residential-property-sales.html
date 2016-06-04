@@ -1,0 +1,47 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    Someone in the <a href="https://www.reddit.com/r/dataisbeautiful/">/r/dataisbeautiful</a> community posted an
+    absolutely beautiful and very popular visualization of <a
+        href="https://www.reddit.com/r/dataisbeautiful/comments/4m0y4y/london_mapped_by_residential_property_sales_oc_cp/">a map of London based on property sales</a>:
+</p>
+
+<a href="http://i.imgur.com/oOHpyEq.png">
+<img src="/static/post_assets/residential-property-sales/london_real_estate_sales_by_category.png"
+     class="inline_image_full" alt="Data."/>
+</a>
+
+<p>
+    This got me thinking&mdash;I've been doing a lot of work with New York City real
+    estate data lately, and I really love choropleths; done right they're just such a visually stunning way of
+    communicating geographic information. Maybe I could use this data to build something similar?
+</p>
+
+<p>
+    And so I have. The geospatial service at my own home institution, CUNY Baruch, had laced together a very similar
+    dataset out of <a href="https://www.baruch.cuny.edu/confluence/display/geoportal/Datasets">NYC Geocoded Real
+    Estate Sales</a> going back to 2003. I translated the UK English housing types to their informative approximate
+    American equivalents and got cracking.
+    The geography I used is the highest-resolution geographic breakdown possible (New York City's <a
+        href="https://github.com/dwillis/nyc-maps/blob/master/census_tracts_2010.geojson">2010 census tracts</a>).
+    The raw visualizations were prepared using the newly released and very highly recommendable <code
+        class="inline_code"><a href="https://github.com/newsappsio/spam">spam.js</a></code> library (it took hours to
+    get the data into shape and five minutes to visualize it&mdash;wow) and composed using <a
+        href="https://inkscape.org/en/">Inkscape</a>.
+</p>
+
+<p>
+    A panel display of four choropleths makes for a poster-quality visualization that you can hang at home! Take a look:
+</p>
+
+<a href="/static/post_assets/residential-property-sales/nyc_real_estate_sales_by_category.png">
+<img src="/static/post_assets/residential-property-sales/nyc_real_estate_sales_by_category.png"
+     class="inline_image_full" alt="Data."/>
+</a>
+
+{% endblock %}

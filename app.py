@@ -114,6 +114,13 @@ post_list = [
         'date': datetime(2016, 6, 1),
         'template': 'nyc-addresses.html',
         'snap': 'nyc-addresses.png'
+    },
+    {
+        'title': 'Residential property sales in New York City',
+        'route': '2016/06/03/residential-property-sales.html',
+        'date': datetime(2016, 6, 3),
+        'template': 'residential-property-sales.html',
+        'snap': 'residential-property-sales.png'
     }
 ]
 

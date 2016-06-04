@@ -1,114 +1,122 @@
 [
     {
         "route": "//residentmar.io/2015/10/31/this-website.html",
-        "year": 2015,
-        "snap": "this-website.png",
-        "title": "About this website",
         "day": 31,
+        "snap": "this-website.png",
+        "year": 2015,
+        "title": "About this website",
         "month": 10
     },
     {
         "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
-        "year": 2015,
-        "snap": "an-exercise-in-probability.png",
-        "title": "An exercise in probability",
         "day": 6,
+        "snap": "an-exercise-in-probability.png",
+        "year": 2015,
+        "title": "An exercise in probability",
         "month": 11
     },
     {
         "route": "//residentmar.io/2016/01/17/signpost-views.html",
-        "year": 2016,
-        "snap": "signpost-views.png",
-        "title": "Measuring Wikipedia Signpost popularity",
         "day": 17,
+        "snap": "signpost-views.png",
+        "year": 2016,
+        "title": "Measuring Wikipedia Signpost popularity",
         "month": 1
     },
     {
         "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "year": 2015,
-        "snap": "openness-versus-quality.png",
-        "title": "Openness versus quality in the Wikipedia community",
         "day": 11,
+        "snap": "openness-versus-quality.png",
+        "year": 2015,
+        "title": "Openness versus quality in the Wikipedia community",
         "month": 12
     },
     {
         "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
-        "year": 2016,
-        "snap": "space-shuttle-challenger.png",
-        "title": "The decision to launch the Space Shuttle Challenger",
         "day": 7,
+        "snap": "space-shuttle-challenger.png",
+        "year": 2016,
+        "title": "The decision to launch the Space Shuttle Challenger",
         "month": 2
     },
     {
         "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
-        "year": 2016,
-        "snap": "average-chain-distance.png",
-        "title": "Is Starbucks really always two blocks away?",
         "day": 9,
+        "snap": "average-chain-distance.png",
+        "year": 2016,
+        "title": "Is Starbucks really always two blocks away?",
         "month": 2
     },
     {
         "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
-        "year": 2016,
-        "snap": "watsongraph-visualization.png",
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
         "day": 11,
+        "snap": "watsongraph-visualization.png",
+        "year": 2016,
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
         "month": 2
     },
     {
         "route": "//residentmar.io/2016/02/15/wikiprojects.html",
-        "year": 2016,
-        "snap": "wikiprojects.png",
-        "title": "Analyzing WikiProjects on Wikipedia",
         "day": 15,
+        "snap": "wikiprojects.png",
+        "year": 2016,
+        "title": "Analyzing WikiProjects on Wikipedia",
         "month": 2
     },
     {
         "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
-        "year": 2016,
-        "snap": "wikimedia-foundation-turnover.png",
-        "title": "The executive crisis at the Wikimedia Foundation",
         "day": 20,
+        "snap": "wikimedia-foundation-turnover.png",
+        "year": 2016,
+        "title": "The executive crisis at the Wikimedia Foundation",
         "month": 2
     },
     {
         "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
-        "year": 2016,
-        "snap": "nyc-motor-vehicle-collisions.png",
-        "title": "Addressing traffic fatalities in New York City",
         "day": 19,
+        "snap": "nyc-motor-vehicle-collisions.png",
+        "year": 2016,
+        "title": "Addressing traffic fatalities in New York City",
         "month": 3
     },
     {
         "route": "//residentmar.io/2016/03/23/worst-places-to-drive.html",
-        "year": 2016,
-        "snap": "worst-places-to-drive.png",
-        "title": "The worst places to drive in New York City",
         "day": 23,
+        "snap": "worst-places-to-drive.png",
+        "year": 2016,
+        "title": "The worst places to drive in New York City",
         "month": 3
     },
     {
         "route": "//residentmar.io/2016/03/28/missingno.html",
-        "year": 2016,
-        "snap": "missingno.png",
-        "title": "Using the missingno package to visualize missing data",
         "day": 28,
+        "snap": "missingno.png",
+        "year": 2016,
+        "title": "Using the missingno package to visualize missing data",
         "month": 3
     },
     {
         "route": "//residentmar.io/2016/05/27/biggest-landowners-nyc.html",
-        "year": 2016,
-        "snap": "landowners.png",
-        "title": "Who are the biggest landowners in New York City?",
         "day": 27,
+        "snap": "landowners.png",
+        "year": 2016,
+        "title": "Who are the biggest landowners in New York City?",
         "month": 5
     },
     {
         "route": "//residentmar.io/2016/06/01/nyc-addresses.html",
-        "year": 2016,
-        "snap": "nyc-addresses.png",
-        "title": "Addressing in New York City",
         "day": 1,
+        "snap": "nyc-addresses.png",
+        "year": 2016,
+        "title": "Addressing in New York City",
+        "month": 6
+    },
+    {
+        "route": "//residentmar.io/2016/06/03/residential-property-sales.html",
+        "day": 3,
+        "snap": "residential-property-sales.png",
+        "year": 2016,
+        "title": "Residential property sales in New York City",
         "month": 6
     }
 ]
