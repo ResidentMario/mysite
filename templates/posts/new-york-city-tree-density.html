@@ -1,0 +1,29 @@
+{% extends "blog_frame.html" %}
+{% block content %}
+
+<p>
+    I had a great time at today's <a
+        href="https://www.eventbrite.com/e/treescount-data-jam-registration-25235073785?aff=betanyc">Tree Count Data
+    Jam</a>, a National Day of Civic Hacking hackathon put on by BetaNYC, the New York City Parks Department,
+    Civic Hall, and a field of well-involved community sponsors (CartoDB, Microsoft, etc.).
+</p>
+
+<p>
+    Following up on my success with <code class="inline_code">spam.js</code> from <a
+        href="http://www.residentmar.io/2016/06/03/residential-property-sales.html">yesterday</a>, my team put
+    together another viz using the library, this time with a selector for painting a chloropleth by
+    selection&mdash;using either population density or area&mdash;for understanding the distribution throughout the
+    boroughs of the subject of the day's hacking, the results (still partial, mind) of the <a
+        href="https://treescount.nycgovparks.org/">2015 Street Tree Census</a>.
+</p>
+
+<p>
+    Despite the limited time we had to work on it, the result is nevertheless beautiful. Our team was me, Nayoung
+    Ahn, Sri Nandula, and Alec Barrett&mdash;who handled all of the data munging operations in <code
+        class="inline_code">R</code>.
+</p>
+
+<iframe src="{{request.url_root}}new-york-city-tree-density-viz.html" marginwidth="0" marginheight="0" scrolling="no"
+        style="height:900px; width:800px; border:0"></iframe>
+
+{% endblock %}

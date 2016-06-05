@@ -121,6 +121,13 @@ post_list = [
         'date': datetime(2016, 6, 3),
         'template': 'residential-property-sales.html',
         'snap': 'residential-property-sales.png'
+    },
+    {
+        'title': 'NYC Parks Tree Count Data Jam',
+        'route': '2016/06/04/new-york-city-tree-density.html',
+        'date': datetime(2016, 6, 4),
+        'template': 'new-york-city-tree-density.html',
+        'snap': 'new-york-city-real-estate.png'
     }
 ]
 
@@ -139,7 +146,8 @@ raws_list = [
     'most-enumerate-landowners-geo-visualization.html',
     'largest-landowners-geo-visualization.html',
     'wealthiest-landowners-geo-visualization.html',
-    'longest-streets.html'
+    'longest-streets.html',
+    'new-york-city-tree-density-viz.html'
     ]
 
 post_paths = [post['route'] for post in post_list]

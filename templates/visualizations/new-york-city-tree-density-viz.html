@@ -1,0 +1,257 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="//d3js.org/topojson.v1.min.js"></script>
+<script src="//cdn.rawgit.com/mourner/rbush/master/rbush.js"></script>
+<script src="//cdn.rawgit.com/newsappsio/spam/master/spam.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/1.10.0/d3-legend.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/1.10.0/d3-legend.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<style>
+select {
+    "position": absolute,
+}
+.legend {
+    display: table;
+    margin: 0 auto;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    width: 400px;
+    height: 50px;
+    font-weight: normal;
+}
+</style>
+
+<body>
+<div>
+    <select id="selectMenu" style="position:absolute; left:80px; top:120px;">
+        <option>Density by Area</option>
+        <option>Density by Population</option>
+    </select>
+</div>
+<div style="position:absolute; left:80px; top:20px; font-family:Roboto; font-weight:bold; font-size:30px;">
+    New York City Tree Density<br/>by Neighborhood
+</div>
+<div id="mapHolder">
+
+</div>
+
+<script type='text/javascript'>
+
+    d3.select("#selectMenu")
+            .on("change", criteriaChanged);
+
+    function criteriaChanged() {
+        var entity_selection = document.getElementById('selectMenu');
+        var newIndex = entity_selection.selectedIndex;
+        var newValue = entity_selection[newIndex].text;
+        d3.select("canvas").remove();
+        paint(newValue);
+    }
+
+    var tree_by_area_color = d3.scale.linear()
+            .domain([0, 5845])
+            .range(['#f7fcf5', '#00441b']);
+
+    var tree_by_population_color = d3.scale.linear()
+            .domain([0.003144, 0.0209, 0.03466, 0.043656, 0.054486, 0.075988, 0.1120, 3.024])
+            .range(['#f7fbff','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594']);
+
+
+    var colorvar = 'ntrees';
+
+    paint("Density by Area");
+
+color_old = d3.scale.linear()
+        .domain([0, 5000])
+        .range(['#f7fcf5', '#00441b']);
+
+function color_with_nulls(prop) {
+    if(isNaN(prop)) {
+        return "#eee";
+    }
+    else if(prop == 0) {
+        return '#eee';
+    }
+    else {
+        return color_old(prop);
+    }
+}
+
+function color(selection, d) {
+    if(isNaN(d.properties.ntrees / d.properties.area)) {
+        return "#eee";
+    }
+    else if(d.properties.ntrees / d.properties.area == 0) {
+        return '#eee';
+    }
+    else {
+        if (selection == "Density by Area") {
+            return tree_by_area_color(d.properties.ntrees / d.properties.area);
+        }
+        else {
+            return tree_by_population_color(d.properties.ntrees / d.properties.pop2010);
+        }
+    }
+}
+
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+
+
+var mouseX, mouseY;
+var hover = null;
+
+var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 1);
+
+document.onmousemove = handleMouseMove;
+function handleMouseMove(event) {
+    mouseX = event.pageX;
+    mouseY = event.pageY;
+    tooltip
+        .style("left", mouseX - 100 + "px")
+        .style("top", mouseY + 25 + "px")
+}
+
+
+function paint(selection){
+    d3.json("/static/post_assets/new-york-city-tree-density/merge_clean.json", function(error, data) {
+        var map = new StaticCanvasMap({
+            element: "#mapHolder",
+            width: 800,
+            height: 800,
+            projection: d3.geo.mercator()
+                    .center([-73.925, 40.79])
+                    .scale(80000),
+            data: [{
+                    features: data,
+                    static: {
+                        paintfeature: function(parameters, d) {
+                            parameters.context.fillStyle = color(selection, d);
+                            parameters.context.fill();
+                        }
+                    },
+                    dynamic: {
+                        postpaint: function(parameters) {
+                            if (!hover) {
+                                tooltip.style("opacity", 0);
+                                return
+                            }
+
+                            parameters.context.beginPath();
+                            parameters.context.lineWidth = 1 / parameters.scale;
+                            parameters.path(hover);
+                            parameters.context.stroke();
+
+                            tooltip.style("opacity", 1)
+                                .html('<div style="padding:5px; background:#eee; border:1px solid #333; border-radius:5px;">' +
+                                                "<strong>Neighborhood:&nbsp;</strong>" +
+                                                "<span>"+ hover.properties.NTAName +"</span><br/>" +
+                                        "<strong>Population (2010):&nbsp;</strong>" +
+                                        "<span>"+ hover.properties.pop2010 + "</span><br />" +
+                                        "<strong>Number of Trees:&nbsp;</strong>" +
+                                        "<span>" + hover.properties.ntrees + "</span><br/>" +
+                                        "<strong>Area:&nbsp;</strong>" +
+                                        "<span>" + hover.properties.area + "</span><br/>" +
+                                                "<strong>Top Five Species:&nbsp;</strong>" +
+                                                "<span><br/><ol><li>"+ replaceAll(hover.properties.top5, ";", "</li><li>") +"</li></ol></span>"
+                                + "</div>")
+                        }
+                    },
+                    events: {
+                        hover: function(parameters, d) {
+                            hover = d;
+
+                            parameters.map.paint()
+                        }
+                    }
+     }
+            ]
+        });
+        map.init();
+
+        d3.select(".legend").remove();
+
+        d3.select("body").append("svg")
+                .attr({
+                    "class": "legend"
+                })
+                .style({
+                    "position": "absolute",
+                    "left": 40,
+                    "top": 40
+                });
+
+        if(selection == "Density by Population") {
+            var legend = d3.legend.color()
+                .shapeHeight(15)
+                .shapeWidth(40)
+                .shapePadding(0)
+                .cells([0.003144, 0.0209, 0.03466, 0.043656, 0.054486, 0.075988, 0.1120, 3.024])
+                .labelOffset(5)
+                .labelFormat(d3.format('.03f'))
+                .orient("horizontal")
+                .labelAlign("center")
+                .scale(tree_by_population_color);
+
+            d3.select(".legend")
+                .call(legend)
+                .style({
+                    "position": "absolute",
+                    "left": 80,
+                    "top": 160
+                });
+        }
+
+        if(selection == "Density by Area") {
+            var legend = d3.legend.color()
+                .shapeHeight(15)
+                .shapeWidth(40)
+                .shapePadding(0)
+                .cells(8)
+                .labelOffset(5)
+                .labelFormat(d3.format('.00f'))
+                .orient("horizontal")
+                .labelAlign("center")
+                .scale(tree_by_area_color);
+
+            d3.select(".legend")
+                .call(legend)
+                .style({
+                    "position": "absolute",
+                    "left": 80,
+                    "top": 160
+                });
+        }
+
+        d3.select(".legend_label").remove();
+
+        d3.select("body").append("div")
+                .attr("class", "legend_label")
+                .style({
+                    "position": "absolute",
+                    "left": "260px",
+                    "top": "121px",
+                    "font-family": "Roboto",
+                    "font-weight": "bold",
+                    "font-size": "14px"
+                })
+                .text(function(d) {
+                    if(selection == "Density by Population") {
+                        return "(Trees / Person)";
+                    }
+                    else {
+                        return "(Trees / Square Mile)"
+                    }
+                });
+        });
+}
+
+</script>

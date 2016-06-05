@@ -1,122 +1,130 @@
 [
     {
-        "route": "//residentmar.io/2015/10/31/this-website.html",
-        "day": 31,
         "snap": "this-website.png",
+        "day": 31,
+        "month": 10,
         "year": 2015,
-        "title": "About this website",
-        "month": 10
+        "route": "//residentmar.io/2015/10/31/this-website.html",
+        "title": "About this website"
     },
     {
-        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
-        "day": 6,
         "snap": "an-exercise-in-probability.png",
+        "day": 6,
+        "month": 11,
         "year": 2015,
-        "title": "An exercise in probability",
-        "month": 11
+        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
+        "title": "An exercise in probability"
     },
     {
-        "route": "//residentmar.io/2016/01/17/signpost-views.html",
-        "day": 17,
         "snap": "signpost-views.png",
+        "day": 17,
+        "month": 1,
         "year": 2016,
-        "title": "Measuring Wikipedia Signpost popularity",
-        "month": 1
+        "route": "//residentmar.io/2016/01/17/signpost-views.html",
+        "title": "Measuring Wikipedia Signpost popularity"
     },
     {
-        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
-        "day": 11,
         "snap": "openness-versus-quality.png",
-        "year": 2015,
-        "title": "Openness versus quality in the Wikipedia community",
-        "month": 12
-    },
-    {
-        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
-        "day": 7,
-        "snap": "space-shuttle-challenger.png",
-        "year": 2016,
-        "title": "The decision to launch the Space Shuttle Challenger",
-        "month": 2
-    },
-    {
-        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
-        "day": 9,
-        "snap": "average-chain-distance.png",
-        "year": 2016,
-        "title": "Is Starbucks really always two blocks away?",
-        "month": 2
-    },
-    {
-        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
         "day": 11,
+        "month": 12,
+        "year": 2015,
+        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
+        "title": "Openness versus quality in the Wikipedia community"
+    },
+    {
+        "snap": "space-shuttle-challenger.png",
+        "day": 7,
+        "month": 2,
+        "year": 2016,
+        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
+        "title": "The decision to launch the Space Shuttle Challenger"
+    },
+    {
+        "snap": "average-chain-distance.png",
+        "day": 9,
+        "month": 2,
+        "year": 2016,
+        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
+        "title": "Is Starbucks really always two blocks away?"
+    },
+    {
         "snap": "watsongraph-visualization.png",
+        "day": 11,
+        "month": 2,
         "year": 2016,
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
-        "month": 2
+        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph"
     },
     {
-        "route": "//residentmar.io/2016/02/15/wikiprojects.html",
-        "day": 15,
         "snap": "wikiprojects.png",
+        "day": 15,
+        "month": 2,
         "year": 2016,
-        "title": "Analyzing WikiProjects on Wikipedia",
-        "month": 2
+        "route": "//residentmar.io/2016/02/15/wikiprojects.html",
+        "title": "Analyzing WikiProjects on Wikipedia"
     },
     {
-        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
-        "day": 20,
         "snap": "wikimedia-foundation-turnover.png",
+        "day": 20,
+        "month": 2,
         "year": 2016,
-        "title": "The executive crisis at the Wikimedia Foundation",
-        "month": 2
+        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
+        "title": "The executive crisis at the Wikimedia Foundation"
     },
     {
-        "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
-        "day": 19,
         "snap": "nyc-motor-vehicle-collisions.png",
+        "day": 19,
+        "month": 3,
         "year": 2016,
-        "title": "Addressing traffic fatalities in New York City",
-        "month": 3
+        "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
+        "title": "Addressing traffic fatalities in New York City"
     },
     {
-        "route": "//residentmar.io/2016/03/23/worst-places-to-drive.html",
-        "day": 23,
         "snap": "worst-places-to-drive.png",
+        "day": 23,
+        "month": 3,
         "year": 2016,
-        "title": "The worst places to drive in New York City",
-        "month": 3
+        "route": "//residentmar.io/2016/03/23/worst-places-to-drive.html",
+        "title": "The worst places to drive in New York City"
     },
     {
-        "route": "//residentmar.io/2016/03/28/missingno.html",
-        "day": 28,
         "snap": "missingno.png",
+        "day": 28,
+        "month": 3,
         "year": 2016,
-        "title": "Using the missingno package to visualize missing data",
-        "month": 3
+        "route": "//residentmar.io/2016/03/28/missingno.html",
+        "title": "Using the missingno package to visualize missing data"
     },
     {
-        "route": "//residentmar.io/2016/05/27/biggest-landowners-nyc.html",
-        "day": 27,
         "snap": "landowners.png",
+        "day": 27,
+        "month": 5,
         "year": 2016,
-        "title": "Who are the biggest landowners in New York City?",
-        "month": 5
+        "route": "//residentmar.io/2016/05/27/biggest-landowners-nyc.html",
+        "title": "Who are the biggest landowners in New York City?"
     },
     {
-        "route": "//residentmar.io/2016/06/01/nyc-addresses.html",
-        "day": 1,
         "snap": "nyc-addresses.png",
+        "day": 1,
+        "month": 6,
         "year": 2016,
-        "title": "Addressing in New York City",
-        "month": 6
+        "route": "//residentmar.io/2016/06/01/nyc-addresses.html",
+        "title": "Addressing in New York City"
     },
     {
-        "route": "//residentmar.io/2016/06/03/residential-property-sales.html",
-        "day": 3,
         "snap": "residential-property-sales.png",
+        "day": 3,
+        "month": 6,
         "year": 2016,
-        "title": "Residential property sales in New York City",
-        "month": 6
+        "route": "//residentmar.io/2016/06/03/residential-property-sales.html",
+        "title": "Residential property sales in New York City"
+    },
+    {
+        "snap": "new-york-city-real-estate.png",
+        "day": 4,
+        "month": 6,
+        "year": 2016,
+        "route": "//residentmar.io/2016/06/04/new-york-city-tree-density.html",
+        "title": "NYC Parks Tree Count Data Jam"
     }
 ]
