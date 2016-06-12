@@ -1,0 +1,305 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    One of the most important realizations of working with information is that data never comes neatly organized. Real
+    world data is, merely by its numerical nature, invariably messy, requiring significant clean-up (and oftentimes
+    domain expertise) to render usable. This is <strong>data noise</strong>.
+</p>
+<p>
+    For example, suppose a dataset extracted from a SQL table containing a column of addresses stored in a
+    fixed-width 20-character SQL table. Then for example the address <code class="inline_code">5 AVENUE OF THE
+    AMERICAS</code> would be cut off as <code class="inline_code">5 AVENUE OF THE AMER</code>, a partial data which
+    could only be converted to an actual address either by hand or through the additional application (and work) of
+    invoking a <em>very</em> good <a href="https://en.wikipedia.org/wiki/Geocoding">geocoder</a>.
+</p>
+<p>
+    This isn't a made-up example—this is exactly what New York City's <a
+        href="http://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page">PLUTO</a>, a record of
+    all buildings in New York City, does.
+</p>
+<p>
+    Almost all datasets contain some noise, and the less noise there is, the better ("cleaner") the dataset. Some
+    kinds of noise are easier to correct than others; sometimes removing the noise completely is simply impossible
+    and all you can do is resample or hope for the best, keeping in mind that <a
+        href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out">when garbage goes in, garbage comes out</a>.
+</p>
+<p>
+    This post explores a form of both noise and not-noise that's often discussed but rarely quantified, and critical
+    to understand: <strong>null data</strong>. We'll dive into nullity semantics, look at why these representations
+    are useful, discuss the technical implementation and limitations of nullity in Python, and look at a few
+    practical examples.
+</p>
+
+<h2>So what is missing data?</h2>
+
+<p>
+    Not all null data is equal. At the heart of the matter is the need to distinguish between two types of nullity.
+</p>
+
+<p>
+    What do I mean by that? Let's take an illustrative example. Suppose you had the following data (a sample of
+    columns from the <a
+        href="https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95">NYPD Motor
+    Vehicle Collision Dataset</a>):
+</p>
+
+<img src="/static/post_assets/null-and-missing-data-python/table_1.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Each of these records corresponds with an accident reported and tended to by the New York City Police Department
+    (NYPD), so obviously each incident described by each record has some concrete location. Yet as this selection
+    shows, there are some records which are <em>completely</em> missing one!
+</p>
+<p>
+    This is an example of <strong>missing data</strong>—data that we know exists, but which, due to sparse or
+    incomplete data collection, we do not actually know the value of.
+</p>
+<p>
+    Here's another illustrative example. Take the following chloropleth visualization of income inequality in the
+    United States, taken from <a
+        href="http://www.nytimes.com/2013/07/22/business/in-climbing-income-ladder-location-matters.html?_r=0">an
+    excellent <em>New York Times</em> article on the subject</a> from a few years ago:
+</p>
+
+<img src="/static/post_assets/null-and-missing-data-python/nyt-income-mobility-example.png"
+     class="inline_image_full" alt="Data."/>
+
+<p>
+    Notice that there are certain counties in this map—one in Georgia, one in Texas, and so on—which lack
+    information. This isn't because there isn't income inequality in these areas, or because there are no people in
+    these areas; rather this is because whatever method the <em>Times</em> used to gather this information failed in
+    these 11 specific cases. There is some sort of data there that defied measurement, making these counties once
+    again instances of <strong>missing data</strong>.
+</p>
+
+<p>
+    But not all data is merely incomplete. Sometimes it really doesn't exist. Let's return to our earlier NYPD dataset:
+</p>
+
+<img src="/static/post_assets/null-and-missing-data-python/table_2.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    A collision location is recorded as a combination of <code class="inline_code">ON STREET</code> and <code
+        class="inline_code">CROSS STREET</code> in incidents in which cars collide mid-street or mid-avenue. But not
+    all collisions occur on streets; some occur <code class="inline_code">OFF STREET</code>, like, say, in parking
+    lots. Obviously a car can't be in two places at one time.
+</p>
+<p>
+    How do we address this clearly? By, as in this dataset, creating three columns and coding in either only the
+    first two or only the last one, as appropriate.
+</p>
+<p>
+    Then the other columns don't carry any informational content at all, making them examples of the second type of
+    null data: <strong>non-data</strong>.
+</p>
+<p>
+    Let's look at a second illustrative example, again a chloropleth—this time a map of all single-family home property
+    sales in New York City (from one of my own projects):
+</p>
+
+<img src="/static/post_assets/null-and-missing-data-python/single-family-home-sales.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Notice that there are certain areas, corresponding with structures like Central Park, Greenwood Cemetery,
+    LaGuardia Airport, etc. which are grayed out. The reason for this is that these places simply do not contain
+    anything that could reasonably be construed as a residential property in the first place. As any elementary
+    schoolchild knows, one can't divide by zero—these areas are examples of <strong>non-data</strong>.
+</p>
+<p>
+    This means that when answering the question "is this data entry filled?" one must actually consider three
+    possible answers: "Yes", "No, but it can be", and "No, and it cannot be".
+</p>
+
+<h2>Why does null data matter?</h2>
+
+
+<p>
+    Non-data isn't erronous—it's just existentially undefined, part of the structure of the data you are working
+    with. Missing data, meanwhile, is a question of actionability: is this data noise something that I, the
+    programmer, can reasonably attempt to correct?
+</p>
+<p>
+    Statisticians distinguish between two types of missing data.
+</p>
+<p>
+    <strong>Data missing at random</strong> is a nullity pattern which occurs randomly. For example, in the motor
+    vehicle collision dataset above it seems reasonable to assume that observations missing collision streetnames
+    are randomly distributed throughout the city.
+</p>
+<p> In the simple case of having a sufficiently large number of observations for such data to be statistically
+    irrelevant, you can safely drop these observations using e.g. <a
+            href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.drop.html"><code
+            class="inline_code">pd.DataFrame.drop()</code></a>.
+</p>
+<p>
+    Far more troubling is <strong>data not missing at random</strong>. For example, for the motor vehicle collision
+    dataset I discovered that NYPD officers merely provide streetnames in their collision reports—the <code>LOCATION
+</code> column is geocoded from there. Since <code class="inline_code">ROOSEVELT AVENUE AND 83 STREET</code> is far
+    easier to geocode than <code class="inline_code">PARKING LOT OF 79-15 MAIN STREET</code> is, off-street
+    collisions are missing coordinate data at a higher rate than on-street collisions, a difference in nullity
+    pattern which absolutely must be taken into account in interpreting the dataset as a whole. Again, remember: <a
+        href="https://en.wikipedia.org/wiki/Garbage_in,_garbage_out">garbage in, garbage out</a>.
+</p>
+<p>
+    When you know or have reason to believe that data is not missing at random, dropping the data and modeling
+    what's left would result in falsehoods, ignoring a potentially important determinant variable or variables
+    which, for convience's sake, you have simply removed from consideration. In these cases interpolation techniques
+    become a necessity—<code class="inline_code">pandas</code> has a <a
+        href="http://pandas.pydata.org/pandas-docs/stable/missing_data.html">whole tutorial</a> on the subject.
+</p>
+<p>
+    There's a lot of definitions floating around at this point, so here's a sketch of what to keep in mind:
+</p>
+
+<img src="/static/post_assets/null-and-missing-data-python/null-data-venn-diagram.svg" class="inline_image_full" alt="Data."/>
+
+<h2>How is null data implemented in Python?</h2>
+
+<p>
+    <code class="inline_code">R</code> is the only programming language which handles null semantics with what is known as a
+    <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/NA.html"><strong>true NA</strong></a>. In <code
+            class="inline_code">R</code> there is a distinction between <code class="inline_code">null</code> values and
+    <code class="inline_code">NA</code> values, allowing <code class="inline_code">R</code> users to easily implement
+    the distinction between missing data and non-data with very little mental overhead.
+</p>
+<p>
+    Most every other programming language, Python included, has only a single null datatype: <code
+        class="inline_code">None</code> (or <code class="inline_code">float.NaN</code>) in Python. This means that
+    Python programs have to virtualize <code class="inline_code">NA</code> ourselves somehow. Generally speaking
+    there are two ways of doing this.
+</p>
+
+<p>
+    The first method is to use a <strong>sentinal value</strong>, a special bit pattern in the data column's native
+    type flagging a missing value. This is a traditional way of indicating missing data—recording unknown income as
+    <code class="inline_code">-99</code> or an unknown year as <code class="inline_code">0</code>, for example—which is
+    used in-place (hopefully with documentation!) by many datasets.
+</p>
+<p>
+    This should seem familiar:
+</p>
+
+<img src="/static/post_assets/null-and-missing-data-python/sentinal-value-histogram-example.svg"
+      class="inline_image_full" alt="Data."/>
+
+<p>
+    The trouble is that sentinal values are in no way durable. <code class="inline_code">-99</code> could be a valid year
+    and <code class="inline_code">0</code> could be a valid income! Without a special reserved keyword, a sentinal
+    robs you of a value that you might otherwise want to use. They have to be considered on a case-by-case,
+    column-by-column basis, a burdensome thing.
+</p>
+<p>
+    The second method is to use a <strong>mask</strong>: a seperate boolean array to "mask" the data whenever
+    missing data needs to be represented. The advantage here is that since your nullity pattern is encoded (quite
+    literally) in a whole second array you don't need to reserve any representations in your core data, meaning that
+    this design pattern is more robust:
+</p>
+
+<img src="/static/post_assets/null-and-missing-data-python/mask-example.svg" class="inline_image_full" alt="Data."/>
+
+<p>
+    The disadvantage is that now you've got a second object to update, track, and keep in mind—trading complexity
+    for durability.
+</p>
+<p>
+    The numerical core of the Python scientific library and the level at which this problem ought to be mediated is
+    the <a href="http://www.numpy.org/"><code class="inline_code">numpy</code></a> library, which defines all of the
+    efficient linear algebra and matrix manipulation methods necessary for computerized computations. <code
+        class="inline_code">numpy</code> provides <code class="inline_code">np.nan</code>, a computationally improved
+    version of Python's base <code class="inline_code">None</code>, but it does <em>not</em> provide a true NA
+    datatype!
+</p>
+<p>
+    <code class="inline_code">numpy</code> does provide a mask, the <a
+        href="http://docs.scipy.org/doc/numpy-1.10.1/reference/maskedarray.generic.html"><code class="inline_code">
+    numpy.ma</code></a> module, which implements a masked <code class="inline_code">ndarray</code> subtype called
+    <code class="inline_code">MaskedArray</code>. But this implementation is not performant enough, for whatever
+    reason, for general purpose use.
+</p>
+<p>
+    This issue has proved to be conscientious. In a document <a
+        href="http://www.numpy.org/NA-overview.html">summarizing the great NA debate</a> <code class="inline_code">
+    numpy</code> core developers stated that:</p>
+
+<div class="inline_quote">
+    <p>After <code class="inline_code">R</code>, <code class="inline_code">numpy.ma</code> is probably the most mature
+        source of experience on missing-data-related APIs...while it seems to be generally considered sub-optimal for
+        general use, it’s hard to pin down whether this is because the API is immature but basically good, or the API
+        is fundamentally broken, or the API is great but the code should be faster, or what. We looked at some of
+        those users to try and get a better idea...
+    </p>
+    <p>...these examples make it clear that there is demand for a convenient way to keep a data array and a mask
+        array (or even a floating point array) bundled up together and “aligned”. But they don’t tell us much about
+        what semantics the resulting object should have with respect to ufuncs and friends.
+    </p>
+</div>
+<p>
+    This reflection hits the nail on the head. By failing to coerce a true NA type as a part of its standard API
+    <code class="inline_code">numpy</code> fails to standardize and routinize handling the data it ought to
+    represent, forcing users and packages using <code class="inline_code">numpy</code> to track both objects
+    themselves instead.
+</p>
+<p>
+    This proves to be such a big burden that the <code class="inline_code">pandas</code> library, the workhorse of
+    data-driven Python (built atop <code class="inline_code">numpy</code>) actually <em>eschews</em> using the <code
+        class="inline_code">ma</code> mask!
+</p>
+<p>
+    It actually takes a step backwards, coercing all null data into <code class="inline_code">NaN</code> (or <code
+        class="inline_code">NaT</code>, a thin time-series wrapper).
+</p>
+<p>
+    The <code class="inline_code">pandas</code> <a href="http://pandas.pydata.org/pandas-docs/stable/missing_data.html">missing data
+    tutorial</a> says:</p>
+
+<div class="inline_quote">
+    <p>
+        The choice of using NaN internally to denote missing data was largely for simplicity and performance
+        reasons...we are hopeful that NumPy will soon be able to provide a native NA type solution (similar to R)
+        performant enough to be used in pandas.
+    </p>
+</div>
+
+<p>
+    In "Python for Data Analytics" Wes McKinney, the creator of <code class="inline_code">pandas</code>, states
+    further:
+</p>
+
+<div class="inline_quote">
+    <p>
+        I do not claim that pandas's NA representation is optimal, but it is simple and reasoably consistent. It's the
+        best solution, with good all-around performance characterists and a simple API, that I could concoct in the
+        absence of a true NA data type or bit pattern in NumPy's data types. Ongoing development work in NumPy may
+        change this in the future.
+    </p>
+</div>
+
+<p>
+    Nevertheless this situation stands today. Most of the time it is up to you, the developer, to keep track of your
+    data nullity pattern yourself. For instance in <a
+        href="http://stackoverflow.com/questions/28654325/what-is-pythons-equivalent-of-rs-na">answering a question
+    about nullity in Python machine learning</a> a core <code class="inline_code">scikit-learn</code> developer had
+    to say:
+</p>
+
+<div class="inline_quote">
+    <p>
+        Scikit-learn doesn't handle missing values currently. For most machine learning algorithms, it is unclear how
+        to handle missing values, and so we rely on the user of handling them prior to giving them to the algorithm.
+        Numpy doesn't have a "missing" value. Pandas uses NaN, but inside numeric algorithms that might lead to
+        confusion. It is possible to use masked arrays, but we don't do that in scikit-learn (yet).
+    </p>
+</div>
+<p>
+    I think this is the biggest <code class="inline_code">numpy</code> limitation today. A native NA type would have a profound impact,
+    freeing data-driven Python developers and modules from having to manage ambigouous nullity patterns at all
+    times. But such a far-reaching change would require a re-thought of the <code class="inline_code">numpy</code> library, which—such
+    far—hasn't happened.
+</p>
+
+{% endblock %}

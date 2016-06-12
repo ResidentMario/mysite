@@ -128,6 +128,13 @@ post_list = [
         'date': datetime(2016, 6, 4),
         'template': 'new-york-city-tree-density.html',
         'snap': 'new-york-city-real-estate.png'
+    },
+    {
+        'title': 'Null and missing data in Python',
+        'route': '2016/06/12/null-and-missing-data-python.html',
+        'date': datetime(2016, 6, 12),
+        'template': 'null-and-missing-data-python.html',
+        'snap': 'empty.png'
     }
 ]
 
@@ -180,5 +187,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
