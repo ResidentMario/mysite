@@ -134,7 +134,7 @@ post_list = [
         'route': '2016/06/12/null-and-missing-data-python.html',
         'date': datetime(2016, 6, 12),
         'template': 'null-and-missing-data-python.html',
-        'snap': 'empty.png'
+        'snap': 'null-and-missing-data-python.png'
     }
 ]
 
@@ -187,5 +187,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)

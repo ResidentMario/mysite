@@ -102,5 +102,11 @@
             <guid>http://residentmar.io/2016/06/04/new-york-city-tree-density.html</guid>
             <pubDate>Sat, 04 Jun 2016 00:00:00 EST</pubDate>
     </item>
+    <item>
+            <title>Null and missing data in Python</title>
+            <link>http://residentmar.io/2016/06/12/null-and-missing-data-python.html</link>
+            <guid>http://residentmar.io/2016/06/12/null-and-missing-data-python.html</guid>
+            <pubDate>Sun, 12 Jun 2016 00:00:00 EST</pubDate>
+    </item>
 </channel>
 </rss>
