@@ -1,0 +1,150 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/randomly-popular/Answer_to_Life.png"
+     class="inline_image" alt="42."/>
+
+<p>
+    Wherever there are probabilities, there are <a
+        href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator">pseudo-random
+    number generators</a>. RNGs generate nominally random numbers but can be made deterministic by passing a "random
+    seed". Though the output <i>looks</i> random to us, it's easily reproducible&mdash;as long as you use the same
+    seed, the output will be the same. This makes debugging probabilitic algorithms much easier, and since probabilities
+    are everywhere, random seeds are too.
+</p>
+
+<p>
+    The trouble is that random seeds are fixed numbers (they serve no purpose otherwise), which means that get
+    picked by humans, and humans are terrible random number generators. Here, <a
+        href="http://www.loper-os.org/bad-at-entropy/manmach.html">try it yourself!</a>. What's worse, random seeds
+    are chosen not just by humans but by <i>programmers</i>, indiviudals who like to think that they are quirky and
+    different but oftentimes quirk and differentiate themselves right back into their own peculiar mean.
+</p>
+
+<p>
+    Case in point: the number 42, the "ordinary, smallish number" chosen by English writer Douglass Adams to be
+    "<a href="https://www.goodreads.com/quotes/tag/42">the Answer to the Ultimate Question of Life, the Universe,
+    and Everything</a>" in the science fiction series "Hitchhiker's Guide to the Galaxy". But if you are reading this
+    blog you probably already know that&mdash;the series is a cultural touchstone of the dog-eared programmer of the
+    day. Even Python BDFL (benevolent dictator for life, a term commonly endowed to the creator of a popular
+    programming language&mdash;see what I mean?) Guido van Rossum <a href="https://youtu.be/ugqu10JV7dk?t=2870">has
+    been known to name-drop it from time to time</a>.
+</p>
+
+<p>
+    <b>I was curious what random seeds people were choosing for their programs, and where the number 42 would rank.</b>
+</p>
+
+<p>
+    Popular code-hosting website GitHub <a
+        href="https://github.com/blog/2201-making-open-source-data-more-available">recently announced a searchable
+    Google BigQuery index</a> of all of the contents of all open source code that they host, and this was a perfect
+    opportunity to give it a whirl.
+</p>
+
+<p>
+    I threw the following query at the Google BigQuery interface:
+</p>
+
+<pre>
+    <code class="language-python">
+SELECT extract, COUNT(extract)
+    FROM
+    (SELECT REGEXP_EXTRACT(content, r'(random_state=\d*|seed=\d*|random_seed=\d*|random_number=\d*)')
+        AS extract
+        FROM [fh-bigquery:github_extracts.contents_py])
+    GROUP BY extract
+    </code>
+</pre>
+
+<p>
+    And, <a href="https://github.com/ResidentMario/seed/blob/master/process-seeds.ipynb">a small amount of
+    processing later</a>, here are the top 20 results:
+</p>
+
+<table border="0" style="font-size: 16px; padding:10px; margin:auto">
+  <tbody>
+    <tr>
+      <th style="text-align:right">0</th>
+      <td style="padding-left:50px;">40.0%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">42</th>
+      <td style="padding-left:50px;">17.3%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">1</th>
+      <td style="padding-left:50px;">16.8%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">1234</th>
+      <td style="padding-left:50px;">4.14%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">123</th>
+      <td style="padding-left:50px;">1.75%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">10</th>
+      <td style="padding-left:50px;">1.41%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">3</th>
+      <td style="padding-left:50px;">1.25%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">12345</th>
+      <td style="padding-left:50px;">1.10%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">2</th>
+      <td style="padding-left:50px;">1.03%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">5</th>
+      <td style="padding-left:50px;">0.70%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">100</th>
+      <td style="padding-left:50px;">0.61%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">4</th>
+      <td style="padding-left:50px;">0.41%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">13</th>
+      <td style="padding-left:50px;">0.40%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">11</th>
+      <td style="padding-left:50px;">0.38%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">1999</th>
+      <td style="padding-left:50px;">0.36%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">113</th>
+      <td style="padding-left:50px;">0.34%</td>
+    </tr>
+    <tr>
+      <th style="text-align:right">8</th>
+      <td style="padding-left:50px;">0.33%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+    Fascinating!
+</p>
+
+<p>
+    You can see the full output <a href="https://github.com/ResidentMario/seed/blob/master/seeds.csv">on GitHub</a>.
+</p>
+
+{% endblock %}

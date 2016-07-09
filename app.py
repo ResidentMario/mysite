@@ -135,6 +135,13 @@ post_list = [
         'date': datetime(2016, 6, 12),
         'template': 'null-and-missing-data-python.html',
         'snap': 'null-and-missing-data-python.png'
+    },
+    {
+        'title': 'What are the most popular random seeds?',
+        'route': '2016/07/08/randomly-popular.html',
+        'date': datetime(2016, 7, 8),
+        'template': 'randomly-popular.html',
+        'snap': 'randomly-popular.png'
     }
 ]
 
