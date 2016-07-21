@@ -39,3 +39,4 @@ pip-delete-this-directory.txt
 bin/
 include/
 pip-selfcheck.json
+dependencies/citibike/mlab_instance_api_key.json

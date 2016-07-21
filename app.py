@@ -1,20 +1,12 @@
-from flask import Flask
-from flask import render_template
-from flask import abort
-from flask import request
-from flask import make_response
+from flask import (Flask, render_template, abort, request, make_response, jsonify)
 from datetime import datetime
-
+from dependencies.citibike.datastore import DataStore
 app = Flask(__name__)
 
-# CURRENT WORKFLOW:
-# 1. Add new post to post_list.
-# 2. Run munge_posts.py (this rewrites the `post_list.json` datafile used by the d3 timeline).
-# 3. Publish!
+# Initialize the MongoDB connection once.
+db = DataStore(credentials_file='dependencies/citibike/mlab_instance_api_key.json')
 
-# Note: Titles are assigned globally but may also be overwritten in the Jinja2 template using a {% posttitle %}
-# wrapper.
-# Note: The id parameter is used by the Disqus plugin to verify uniqueness.
+
 post_list = [
     {
         'title': 'About this website',
@@ -167,17 +159,35 @@ raws_list = [
 post_paths = [post['route'] for post in post_list]
 
 
-@app.route('/', defaults={'path': ''})
+@app.route('/')
+def main_page():
+    return render_template('about.html', most_recent=request.url_root + post_list[len(post_list) - 1]['route'])
+
+
+@app.route('/feed')
+def rss_feed():
+    rss_xml = render_template('rss.xml')
+    response = make_response(rss_xml)
+    response.headers['Content-Type'] = 'application/rss+xml'
+    return response
+
+
+@app.route('/visualizations/<path:path>')
+def display_visualization(path):
+    return render_template('visualizations/' + path)
+
+
+@app.route('/citibike-api/random-sample')
+def citibike_sample():
+    sample = db.sample()
+    return jsonify(sample)
+    # for sample in db.sample():
+    #     return str(sample)
+
+
 @app.route('/<path:path>')
 def serve(path):
-    if path == '':
-        return render_template('about.html', most_recent=request.url_root + post_list[len(post_list) - 1]['route'])
-    elif path == 'feed':
-        rss_xml = render_template('rss.xml')
-        response = make_response(rss_xml)
-        response.headers['Content-Type'] = 'application/rss+xml'
-        return response
-    elif path in post_paths:
+    if path in post_paths:
         index = post_paths.index(path)
         post = post_list[index]
         return render_template('posts/' + post['template'],
@@ -187,8 +197,6 @@ def serve(path):
                                title=post['title'],
                                most_recent=request.url_root + post_list[len(post_list) - 1]['route']
                                )
-    elif path in raws_list:
-        return render_template('visualizations/' + path)
     else:
         abort(404)
 
