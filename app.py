@@ -1,10 +1,13 @@
-from flask import (Flask, render_template, abort, request, make_response, jsonify)
 from datetime import datetime
-from dependencies.citibike.datastore import DataStore
+
+from flask import (Flask, render_template, abort, request, make_response, jsonify)
+
+from static.post_assets.citibike.datastore import DataStore
+
 app = Flask(__name__)
 
 # Initialize the MongoDB connection once.
-db = DataStore(credentials_file='dependencies/citibike/mlab_instance_api_key.json')
+db = DataStore(credentials_file='static/post_assets/citibike/mlab_instance_api_key.json')
 
 
 post_list = [
@@ -153,7 +156,8 @@ raws_list = [
     'largest-landowners-geo-visualization.html',
     'wealthiest-landowners-geo-visualization.html',
     'longest-streets.html',
-    'new-york-city-tree-density-viz.html'
+    'new-york-city-tree-density-viz.html',
+    'life-of-a-citibike.html'
     ]
 
 post_paths = [post['route'] for post in post_list]
@@ -181,8 +185,6 @@ def display_visualization(path):
 def citibike_sample():
     sample = db.sample()
     return jsonify(sample)
-    # for sample in db.sample():
-    #     return str(sample)
 
 
 @app.route('/<path:path>')
@@ -202,5 +204,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
