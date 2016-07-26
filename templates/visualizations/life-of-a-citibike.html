@@ -34,17 +34,21 @@
         var mapOverlay = L.d3SvgOverlay(function(sel,proj){
 
             // Paints a single sampler path.
-            function paintPath(linearray) {
-                console.log(linearray);
+            // Accepts a linearray (an array of points) as input, as well as the position of the line being drawn in
+            // placement order (used to implement the intro visualization speedup).
+            function paintPath(linearray, index) {
 
-                // Define x and y conversions.
+                // The timeout callback wrapper causes the drawing function inside to fire at the odd interval we
+                // want for the purposes of our intro.
                 var line = d3.svg.line()
-                        .x(function(d) { console.log(d); return proj.latLngToLayerPoint(d).x})
-                        .y(function(d) { console.log(d); return proj.latLngToLayerPoint(d).y});
+                        .x(function(d) { return proj.latLngToLayerPoint(d).x})
+                        .y(function(d) { return proj.latLngToLayerPoint(d).y})
+                        .interpolate("basic-open");
 
-                console.log(line);
-
-                sel.append("path")
+                // TODO: Learn why this is different from below.
+                var updateSelection = sel.selectAll('path').data(linearray);
+                updateSelection.enter()
+                        .append("path")
                         .datum(linearray)
                         // TODO: Troubleshoot why the line is so funky.
                         .attr({
@@ -52,9 +56,37 @@
                             "d": line,
                             "fill": "transparent",
                             "stroke": "steelblue",
-                            "stroke-width": 1,
+                            "stroke-width": 2,
                             "shape-rendering": "crispEdges"
-                        })
+                        });
+
+                // Old code with a working time-out, before the multi-plot fix arrived.
+//                setTimeout(function() {
+//                    // Define x and y conversions.
+//                    var line = d3.svg.line()
+//                            .x(function(d) {
+////                                console.log(d);
+////                                console.log(proj.latLngToLayerPoint(d));
+////                                console.log(proj.latLngToLayerPoint(d).x);
+//                                return proj.latLngToLayerPoint(d).x
+//                            })
+//                            .y(function(d) { return proj.latLngToLayerPoint(d).y});
+//
+////                    console.log(line(linearray));
+//
+//                    sel.append("path")
+//                            // TODO: Troubleshoot why the line is so funky.
+//                            .attr({
+//                                "class": "sample-line",
+////                                "d": line(linearray),
+//                                "d": "M964,313L963,315L962,317L961,320L960,322L959,323L958,324L958,325L957,327L957,327L952,324L952,324L950,323L947,322L946,321L944,320L944,320L944,320L944,321L943,323L943,324",
+//                                "fill": "none",
+//                                "stroke": "steelblue",
+//                                "stroke-width": 1
+//                            });
+//                            // TODO: Implement a transition to create a glow and an after wait time.
+//                    // TODO: Continue to fiddle with the easing time function.
+//                }, 500 + i*50 + i^1.05);
             }
 
             // Paints a single sampler path (paints things as a pile of points).
@@ -68,22 +100,23 @@
                         .append('circle')
                         .attr({
                             "cx": function (d) {
-                                return proj.latLngToLayerPoint([d[0], d[1]]).x;
+                                return proj.latLngToLayerPoint(d).x;
                             },
                             "cy": function (d) {
-                                return proj.latLngToLayerPoint([d[0], d[1]]).y;
+                                return proj.latLngToLayerPoint(d).y;
                             },
-                            "r": 1
+                            "r": 0.2
                         });
             }
 
-            // Paints all of the paths.
+            // Paint all of the sampler paths.
             function paintPathSampler() {
                 d3.json("../../static/post_assets/citibike/bike_week_sampler.json", function (data) {
-                    console.log(data[0]);
-
-                    paintPath(data[0]);
-
+                    for(i=0; i<data.length; i++) {
+                        paintPath(data[i], i)
+                    }
+//                    paintPath(data[0]);
+//                    paintPath(data[1]);
                 });
             }
 
