@@ -7,7 +7,15 @@
         html { height: 100% }
         body { height: 100%; margin: 0; padding: 0 }
         #map-canvas { height: 100% }
+        /*Note that I use a CSS control to change the cursor from a draggy hand to a regular one as well in order to*/
+        /*keep users from thinking it is interactive at the beginning.*/
+        /*This is necessary because to keep from distractions the intro animation has zoom and pan disabled.*/
+        .leaflet-container {
+            cursor: default !important;
+        }
     </style>
+
+
     <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css'
     	rel='stylesheet' type='text/css'/>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -22,7 +30,16 @@
     <script>
 
         // Initializes the basemap.
-        var map = L.map("map-canvas",{center:[40.773889, -73.983611],zoom:12});
+        var map = L.map("map-canvas", {
+            center: [40.7270355,-74.0143414,13],
+            zoom: 13,
+            zoomControl: false, // No zooming on initialization because it messes with the drawing.
+            scrollWheelZoom: false
+        });
+        // No panning either, for the same reason.
+        map.dragging.disable();
+        // Note that I use a CSS control to change the cursor from a draggy hand to a regular one as well in order to
+        // keep users from thinking it is interactive at the beginning.
         L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
@@ -36,132 +53,89 @@
             // Paints a single sampler path.
             // Accepts a linearray (an array of points) as input, as well as the position of the line being drawn in
             // placement order (used to implement the intro visualization speedup).
+            // Note that this method is called every time that the paths must be redrawn, and since the paths are
+            // redrawn (by L.d3SvgOverlay) every time the zoom level is changed, each time that occurs all of the paths
+            // have to be deleted and recreated. This method only handles creating one single line again; the
+            // paintPointPath method, which is what is actually called every time a redraw occurs, handles deleting and
+            // recalling this function to re-plot all of the lines.
             function paintPath(linearray, index) {
 
-                // The timeout callback wrapper causes the drawing function inside to fire at the odd interval we
-                // want for the purposes of our intro.
+                // Define the SVG line reprojection function.
                 var line = d3.svg.line()
                         .x(function(d) { return proj.latLngToLayerPoint(d).x})
-                        .y(function(d) { return proj.latLngToLayerPoint(d).y})
-                        .interpolate("basic-open");
+                        .y(function(d) { return proj.latLngToLayerPoint(d).y});
 
-                // TODO: Learn why this is different from below.
-                var updateSelection = sel.selectAll('path').data(linearray);
-                updateSelection.enter()
-                        .append("path")
-                        .datum(linearray)
-                        // TODO: Troubleshoot why the line is so funky.
-                        .attr({
-                            "class": "sample-line",
-                            "d": line,
-                            "fill": "transparent",
-                            "stroke": "steelblue",
-                            "stroke-width": 2,
-                            "shape-rendering": "crispEdges"
-                        });
-
-                // Old code with a working time-out, before the multi-plot fix arrived.
-//                setTimeout(function() {
-//                    // Define x and y conversions.
-//                    var line = d3.svg.line()
-//                            .x(function(d) {
-////                                console.log(d);
-////                                console.log(proj.latLngToLayerPoint(d));
-////                                console.log(proj.latLngToLayerPoint(d).x);
-//                                return proj.latLngToLayerPoint(d).x
-//                            })
-//                            .y(function(d) { return proj.latLngToLayerPoint(d).y});
-//
-////                    console.log(line(linearray));
-//
-//                    sel.append("path")
-//                            // TODO: Troubleshoot why the line is so funky.
-//                            .attr({
-//                                "class": "sample-line",
-////                                "d": line(linearray),
-//                                "d": "M964,313L963,315L962,317L961,320L960,322L959,323L958,324L958,325L957,327L957,327L952,324L952,324L950,323L947,322L946,321L944,320L944,320L944,320L944,321L943,323L943,324",
-//                                "fill": "none",
-//                                "stroke": "steelblue",
-//                                "stroke-width": 1
-//                            });
-//                            // TODO: Implement a transition to create a glow and an after wait time.
-//                    // TODO: Continue to fiddle with the easing time function.
-//                }, 500 + i*50 + i^1.05);
+                // Create a path, bind the line array to its __data__, and call line on it to generate the line-code.
+                // TODO: More points! Muh ha ha.
+                setTimeout(function() {
+                    sel.append('path').datum(linearray)
+                            .attr({
+                                "class": "sample-line",
+                                "d": line,
+                                "fill": "transparent",
+                                "stroke": "white",
+                                "stroke-width": 3,
+                                "vector-effect": "non-scaling-stroke"
+                            })
+                            .transition()
+                            .duration(2500)
+                            .attr({
+                                "stroke": "steelblue"
+                            })
+                }, 25*i);
             }
 
-            // Paints a single sampler path (paints things as a pile of points).
-            // Test method, now disused.
-            function paintPointPath(pointarray) {
-                console.log(pointarray);
-                sel.append('g')
-                        .selectAll('circle')
-                        .data(pointarray)
-                        .enter()
-                        .append('circle')
-                        .attr({
-                            "cx": function (d) {
-                                return proj.latLngToLayerPoint(d).x;
-                            },
-                            "cy": function (d) {
-                                return proj.latLngToLayerPoint(d).y;
-                            },
-                            "r": 0.2
-                        });
-            }
-
-            // Paint all of the sampler paths.
+            // Paint all of the sampler paths. Wraps paintPath(), above, with consideration removing old paths.
             function paintPathSampler() {
+                // Remove all of the existing paths first, otherwise we keep old ones!
+                sel.selectAll('path').remove();
+
                 d3.json("../../static/post_assets/citibike/bike_week_sampler.json", function (data) {
                     for(i=0; i<data.length; i++) {
-                        paintPath(data[i], i)
+                        console.log(i);
+                        paintPath(data[i], i);
                     }
-//                    paintPath(data[0]);
-//                    paintPath(data[1]);
                 });
             }
 
-//            function paintPathSampler() {
-//                d3.json("../../static/post_assets/citibike/bike_week_sampler.json", function (data) {
-//                    console.log(data);
-//                    console.log(data[0]);
-//
-//                    paintPointPath(data[0]);
-//
-//                });
-//            }
-
-            function delayedHello(callback) {
+            // Simple test method.
+            function delayedHello() {
                 setTimeout(function() {
                     console.log("Hello!");
-                    callback(null);
               }, 10);
             }
 
-            q = d3.queue();
-            q.defer(paintPathSampler);
-            q.defer(delayedHello);
-            q.await(function(error) {
-                if (error) throw error;
-                console.log("Goodbye!");
-            });
+            // Waits the amount of time necessary to let the animation finish and pulls up the information screen.
+            function displayInfo() {
 
-            // ACTUAL CODE
-            // Now we define the functions to be called as part of the visualization.
+                sel.append("rect")
+                        .attr({
+                            "fill": "#eee",
+                            "width": "100%",
+                            "height": "100%",
+                            "fill-opacity": 0.0
+                        })
+                        .transition()
+                        .delay(4000)
+                        .duration(2500)
+                        .attr("fill-opacity", 1);
 
+                // TODO: Implement a frame around the line draw.
+                // TODO: As further transitions, populate the info text and the Watch A Bike buttons.
+            }
 
-            // Set up a d3 queue for managing event order.
-//            var q = d3.queue();
-//            d3.csv("nyc-starbucks-locations.csv", function(data) {
-//                sel.selectAll('circle')
-//                        .data(data)
-//                        .enter()
-//                        .append('circle')
-//                        .attr({
-//                            "cx": function(d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).x; },
-//                            "cy": function(d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).y; },
-//                            "r": 4
-//                        });
+            // SVG images preserve the order of the elements that are placed on them, so the information pane's overlay
+            // (with transparent opacity) must be placed first, and the sampler points afterwards.
+            paintPathSampler();
+            displayInfo();
+//            q = d3.queue();
+//            q.defer(paintPathSampler);
+//            q.defer(delayedHello);
+//            q.await(function(error) {
+//                if (error) throw error;
+//                console.log("Goodbye!");
 //            });
+
         });
 
         // Add overlay to map.
