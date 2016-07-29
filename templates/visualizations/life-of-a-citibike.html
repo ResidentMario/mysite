@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>A Week in the Life of a CitiBike</title>
+    <title>A Week in the Life of CitiBike</title>
 
     <style type="text/css">
         html { height: 100% }
@@ -36,8 +36,9 @@
             zoomControl: false, // No zooming on initialization because it messes with the drawing.
             scrollWheelZoom: false
         });
-        // No panning either, for the same reason.
+        // No drag or keyboard panning either, for the same reason.
         map.dragging.disable();
+        map.keyboard.disable();
         // Note that I use a CSS control to change the cursor from a draggy hand to a regular one as well in order to
         // keep users from thinking it is interactive at the beginning.
         L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -92,36 +93,66 @@
 
                 d3.json("../../static/post_assets/citibike/bike_week_sampler.json", function (data) {
                     for(i=0; i<data.length; i++) {
-                        console.log(i);
                         paintPath(data[i], i);
                     }
                 });
             }
 
-            // Simple test method.
-            function delayedHello() {
-                setTimeout(function() {
-                    console.log("Hello!");
-              }, 10);
-            }
-
-            // Waits the amount of time necessary to let the animation finish and pulls up the information screen.
+            // Waits the amount of time necessary to let the into anim finish and pulls up the intro screen.
             function displayInfo() {
 
+                // Fade the background to white after a certain amount of time.
                 sel.append("rect")
                         .attr({
                             "fill": "#fff",
                             "width": "100%",
                             "height": "100%",
-                            "fill-opacity": 0.0
+                            "fill-opacity": 0.0,
+                            "class": "background-panel"
                         })
                         .transition()
-                        .delay(4000)
-                        .duration(2500)
-                        .attr("fill-opacity", 1);
+                        .delay(3500)
+                        .duration(2000)
+                        .attr("fill-opacity", 0.65);
 
-                // TODO: Implement a frame around the line draw.
-                // TODO: As further transitions, populate the info text and the Watch A Bike buttons.
+                // Append the intro text (body) after a certain amount of time.
+                // I want to align the description with the map, but the exact position of the map (in terms of its y
+                // coordinates) varies with the height of the screen. So I was a little bit clever and calculated the
+                // x and y coordinates of the northmost CitiBike station, using the projection, and then calculated a
+                // pixel offset from there.
+                setTimeout(function() {
+                    d3.select("#map-canvas")
+                            .append("div")
+                            .attr("id", "description-block")
+                            .style({
+                                "position": "absolute",
+                                "width": "400px",
+                                "height": "640px",
+                                "top": proj.latLngToLayerPoint([40.784642, -73.970002]).y + "px",
+                                "left": proj.latLngToLayerPoint([40.784642, -73.970002]).x - 710 + "px",
+                                "background": "#fff",
+                                "border-radius": "25px",
+                                "opacity": 0.0,
+                                "padding": "10px"
+                            })
+                            .transition()
+                            .duration(2000)
+                            .style({
+                                "opacity": 1.0
+                            });
+
+                    // Append title.
+                    d3.select("#description-block")
+                            .append("div")
+                            .style({
+                                "font-size": "24px",
+                                "font-family": "Roboto",
+                                "font-weight": "bold",
+                                "text-align": "center"
+                            })
+                            .text("Lorem Ipsum")
+                }, 6000);
+
             }
 
             // SVG images preserve the order of the elements that are placed on them, so the information pane's overlay
