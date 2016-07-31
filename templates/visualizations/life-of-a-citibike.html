@@ -141,10 +141,8 @@
                         .attr("fill-opacity", 0.65);
 
                 // Append the intro text (body) after a certain amount of time.
-                // I want to align the description with the map, but the exact position of the map (in terms of its y
-                // coordinates) varies with the height of the screen. So I was a little bit clever and calculated the
-                // x and y coordinates of the northmost CitiBike station, using the projection, and then calculated a
-                // pixel offset from there.
+                // Since the height and width and whatnot of the display depends on the device, all of the sizing
+                // for this box are calculated with respect to extrema on the map.
                 setTimeout(function() {
                     d3.select("#map-canvas")
                             .append("div")
@@ -152,9 +150,11 @@
                             .style({
                                 "position": "absolute",
                                 "width": "400px",
-                                "height": "640px",
+                                "height": (proj.latLngToLayerPoint([40.70122128,-74.01234218]).y -
+                                            proj.latLngToLayerPoint([40.784642, -73.970002]).y) + "px",
                                 "top": proj.latLngToLayerPoint([40.784642, -73.970002]).y + "px",
-                                "left": proj.latLngToLayerPoint([40.784642, -73.970002]).x - 720 + "px",
+                                "left": proj.latLngToLayerPoint([40.704556, -74.026222]).x - 400 + "px",
+                                // ^ (point in the Hudson river) - (width of the box).
                                 "background": "#fff",
                                 "border-radius": "25px",
                                 "opacity": 0.0,
