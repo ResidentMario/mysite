@@ -150,11 +150,11 @@
                             .style({
                                 "position": "absolute",
                                 "width": "400px",
-                                "height": (proj.latLngToLayerPoint([40.70122128,-74.01234218]).y -
-                                            proj.latLngToLayerPoint([40.784642, -73.970002]).y) + "px",
+//                                "height": (proj.latLngToLayerPoint([40.70122128,-74.01234218]).y -
+//                                            proj.latLngToLayerPoint([40.784642, -73.970002]).y) + "px",
                                 "top": proj.latLngToLayerPoint([40.784642, -73.970002]).y + "px",
-                                "left": proj.latLngToLayerPoint([40.704556, -74.026222]).x - 400 + "px",
-                                // ^ (point in the Hudson river) - (width of the box).
+                                "left": proj.latLngToLayerPoint([40.704556, -74.026222]).x - 400 - 20 + "px",
+                                // ^ (point in the Hudson river) - (width of the box) - (bit of additional padding).
                                 "background": "#fff",
                                 "border-radius": "25px",
                                 "opacity": 0.0,
@@ -329,9 +329,10 @@
             // Set up the display tip, which displays on hovering over a station.
             var tip = d3.tip()
                 .attr('class', 'd3-tip')
-                .offset(function() {
-                    return [-20, -30]
-                })
+                // TODO: Fix offset to be cross-platform.
+//                .offset(function() {
+//                    return [-20, -30]
+//                })
                 .html(function(d) {
                     return  "<div style='text-align:center'>" +
                             "<span style='font-weight:bold; font-size:16px;'>" +
