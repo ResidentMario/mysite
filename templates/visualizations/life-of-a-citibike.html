@@ -1,7 +1,15 @@
+<!--
+    TODO: (1) Station selection (toggle on click).
+    TODO: (2) Station select counter in the corner.
+    TODO: (3) Plot station polylines on click (possibly with loading pane).
+    TODO: (4) Possibly add box select?
+    TODO: (5) Launch buttons.
+    TODO: (6) Description, launch button text that loads on hover.
+-->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>A Week in the Life of CitiBike</title>
+    <title>A Day in the Life of CitiBike</title>
 
     <style type="text/css">
         html { height: 100% }
@@ -12,6 +20,16 @@
         /*This is necessary because to keep from distractions the intro animation has zoom and pan disabled.*/
         .leaflet-container {
             cursor: default !important;
+        }
+        /*Code for d3.tip*/
+        .d3-tip {
+            line-height: 1.25;
+            padding: 12px;
+            background: whitesmoke;
+            color: black;
+            border-radius: 2px;
+            font-family: Roboto;
+            border:1px solid #999;
         }
     </style>
 
@@ -27,11 +45,13 @@
     <script src="/static/js/d3.v3.js"></script>
     <script src="https://d3js.org/d3-queue.v3.js"></script>
     <script src="/static/js/L.D3SvgOverlay.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script>
 
         // Initializes the basemap.
         var map = L.map("map-canvas", {
-            center: [40.7400355,-74.0143414,13],
+            center: [40.7300355,-74.0143414,13],
             zoom: 13,
             zoomControl: false, // No zooming on initialization because it messes with the drawing.
             scrollWheelZoom: false
@@ -91,7 +111,7 @@
                 // Remove all of the existing paths first, otherwise we keep old ones!
                 sel.selectAll('path').remove();
 
-                d3.json("../../static/post_assets/citibike/bike_week_sampler.json", function (data) {
+                d3.json("../../static/post_assets/citibike/sample_trips.json", function (data) {
                     for(i=0; i<data.length; i++) {
                         paintPath(data[i], i);
                     }
@@ -129,7 +149,7 @@
                                 "width": "400px",
                                 "height": "640px",
                                 "top": proj.latLngToLayerPoint([40.784642, -73.970002]).y + "px",
-                                "left": proj.latLngToLayerPoint([40.784642, -73.970002]).x - 710 + "px",
+                                "left": proj.latLngToLayerPoint([40.784642, -73.970002]).x - 720 + "px",
                                 "background": "#fff",
                                 "border-radius": "25px",
                                 "opacity": 0.0,
@@ -150,15 +170,94 @@
                                 "font-weight": "bold",
                                 "text-align": "center"
                             })
-                            .text("Lorem Ipsum")
+                            .text("A Day in the Life of CitiBike")
                 }, 6000);
 
             }
+
+            // Paints the stations on the map.
+            function paintStations() {
+                d3.csv("../../static/post_assets/citibike/july_22_station_metadata.csv", function(error, dataset) {
+                    if (error) throw error;
+
+                    // 1431 is the observed maximum bike trip count---Pershing Square North @ Grand Central Station.
+                    station_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
+
+                    setTimeout(function() {
+                        sel
+                                .append("g")
+                                .selectAll("circle")
+                                .data(dataset)
+                                .enter()
+                                .append("circle")
+                                .attr({
+                                    "cx": function (d) {
+                                        return proj.latLngToLayerPoint([d.latitude, d.longitude]).x
+                                    },
+                                    "cy": function (d) {
+                                        return proj.latLngToLayerPoint([d.latitude, d.longitude]).y
+                                    },
+                                    "r": 0,
+                                    "stroke": "white",
+                                    "stroke-width": 2,
+//                                    "fill": "steelblue"
+                                    "fill": function(d) {
+//                                        console.log(d['all trips'] + " " + station_color_scale(d['total trips']));
+                                        return station_color_scale(d['all trips']);
+                                    }
+                                })
+                                .on('mouseover', function(d, i){
+                                    d3.select(this)
+                                        .attr({
+                                            "stroke": "white",
+                                            "stroke-width": 4,
+                                            "r": 10
+                                        });
+                                    tip.show(d, i);
+                                })
+                                .on('mouseout', function(d, i) {
+                                    d3.select(this)
+                                            .attr({
+                                                "stroke": "white",
+                                                "stroke-width": 2,
+                                                "r": 5
+                                            });
+                                    tip.hide(d, i);
+                                })
+                                .transition()
+                                .duration(500)
+                                .attr({
+                                    "r": 5
+                                })
+                    }, 6000);
+                });
+            }
+
+            // Set up the display tip.
+            var tip = d3.tip()
+                .attr('class', 'd3-tip')
+                .offset(function() {
+                    return [-20, -30]
+                })
+                .html(function(d) {
+                    return  "<div style='text-align:center'>" +
+                            "<span style='font-weight:bold; font-size:16px;'>" +
+                            d['station name'] +
+                            "</span><br/><span style='font-size:12px;'>" +
+                            d['all trips'] +
+                            " &#128690; Trips ("
+                            + d['incoming trips']
+                            + " In, "
+                            + d['outgoing trips'] + " Out)"
+                            + "</span></div>";
+            });
+            sel.call(tip);
 
             // SVG images preserve the order of the elements that are placed on them, so the information pane's overlay
             // (with transparent opacity) must be placed first, and the sampler points afterwards.
             paintPathSampler();
             displayInfo();
+            paintStations();
 //            q = d3.queue();
 //            q.defer(paintPathSampler);
 //            q.defer(delayedHello);
