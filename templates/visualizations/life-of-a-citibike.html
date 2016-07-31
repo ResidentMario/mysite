@@ -1,5 +1,6 @@
 <!--
-    TODO: (0) Cross-device compatibility fixes.
+    TODO: (0) Cross-device compatibility fixes (test this visualization out on tons of devices and fix broken bits).
+    TODO: (0.1) Manually implement tooltip because d3-tip does not understand projections. (ugh)
     TODO: (1) Station selection (toggle on click).
     TODO: (2) Station select counter in the corner.
     TODO: (3) Populate interface buttons.
@@ -42,6 +43,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 </head>
 <body>
+
     <div id="map-canvas"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
@@ -52,39 +54,56 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script>
 
+        /////////////////////////
+        // MAP INITIALIZATION  //
+        /////////////////////////
+        // About:
+        // The map is Leaflet goodness, with all drawings and animations implemented on top using L.d3SvgOverlay.
+        //
+
         // Initializes the basemap. Disable animations.
         var map = L.map("map-canvas", {
             zoomControl: false, // No zooming on initialization because it messes with the drawing.
             scrollWheelZoom: false
         });
         // Using Leaflet's fitBounds method ensures that the resultant map contains all of the points on all display
-        // devices.
-//        map.setView(new L.LatLng(40.7300355,-74.0143414,13));
+        // devices. The precise points were arrived at by the high scientific method of guess-and-check.
         map.fitBounds([[40.6794268,-73.92989109999999], [40.789747, -74.075979]]);
         // More disabling things.
         map.dragging.disable();
         map.keyboard.disable();
         map.doubleClickZoom.disable();
-        // Note that I use a CSS control to change the cursor from a draggy hand to a regular one as well in order to
+        // I also use a CSS control to change the cursor from a draggy hand to a regular one as well in order to
         // keep users from thinking it is interactive at the beginning.
+        // Gib tile layer.
         L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
             maxZoom: 19
         }).addTo(map);
+        // Thx.
 
         // D3-SVG-Overlay callback wrapper. Leaflet is used only for the base map, all of the programmatic action occurs
         // in d3 code inside of this callback.
         var mapOverlay = L.d3SvgOverlay(function(sel,proj){
 
-            // Paints a single sampler path.
-            // Accepts a linearray (an array of points) as input, as well as the position of the line being drawn in
-            // placement order (used to implement the intro visualization speedup).
-            // Note that this method is called every time that the paths must be redrawn, and since the paths are
-            // redrawn (by L.d3SvgOverlay) every time the zoom level is changed, each time that occurs all of the paths
-            // have to be deleted and recreated. This method only handles creating one single line again; the
-            // paintPointPath method, which is what is actually called every time a redraw occurs, handles deleting and
-            // recalling this function to re-plot all of the lines.
+            //////////////////////
+            // INTRO ANIMATION  //
+            //////////////////////
+            // Design:
+            // For the introduction I wanted to dynamically render a random set of paths (200 of them in the final
+            // visualization) before painting the rest of the introductory scene.
+            //
+            // Implementation:
+            // runIntroAnimation() -> paintPathSampler() -> paintPath()
+            //                     -> paintBackgroundPanel()
+            //                     -> paintStations()
+            //                     -> drawInfoBox() [function from the "infobox" section, the intro adds a timeout]
+
+
+            // Paints a single sampler path. Accepts a linearray (an array of points) as input, as well as the position
+            // of the line being drawn in placement order. paintPathSampler is the method which actually handles the
+            // entire path-sampling introductory animation, and it implements this method over a loop to do that.
             function paintPath(linearray, index) {
 
                 // Define the SVG line reprojection function.
@@ -112,6 +131,8 @@
             }
 
             // Paint all of the sampler paths. Wraps paintPath(), above, with consideration removing old paths.
+            // The data file itself, `sample_trips.json`, was generated using Python---specifically the path_sampler.py
+            // script.
             function paintPathSampler() {
                 // Remove all of the existing paths first, otherwise we keep old ones!
                 sel.selectAll('path').remove();
@@ -123,10 +144,9 @@
                 });
             }
 
-            // Waits the amount of time necessary to let the into anim finish and pulls up the intro screen.
-            function displayInfo() {
-
-                // Fade the background to white after a certain amount of time.
+            // Fade the background to white after a certain amount of time. This background panel is then used as a
+            // part of the animation transitions later on.
+            function paintBackgroundPanel() {
                 sel.append("rect")
                         .attr({
                             "fill": "#fff",
@@ -139,45 +159,6 @@
                         .delay(3500)
                         .duration(2000)
                         .attr("fill-opacity", 0.65);
-
-                // Append the intro text (body) after a certain amount of time.
-                // Since the height and width and whatnot of the display depends on the device, all of the sizing
-                // for this box are calculated with respect to extrema on the map.
-                setTimeout(function() {
-                    d3.select("#map-canvas")
-                            .append("div")
-                            .attr("id", "description-block")
-                            .style({
-                                "position": "absolute",
-                                "width": "400px",
-//                                "height": (proj.latLngToLayerPoint([40.70122128,-74.01234218]).y -
-//                                            proj.latLngToLayerPoint([40.784642, -73.970002]).y) + "px",
-                                "top": proj.latLngToLayerPoint([40.784642, -73.970002]).y + "px",
-                                "left": proj.latLngToLayerPoint([40.704556, -74.026222]).x - 400 - 20 + "px",
-                                // ^ (point in the Hudson river) - (width of the box) - (bit of additional padding).
-                                "background": "#fff",
-                                "border-radius": "25px",
-                                "opacity": 0.0,
-                                "padding": "10px"
-                            })
-                            .transition()
-                            .duration(2000)
-                            .style({
-                                "opacity": 1.0
-                            });
-
-                    // Append title.
-                    d3.select("#description-block")
-                            .append("div")
-                            .style({
-                                "font-size": "24px",
-                                "font-family": "Roboto",
-                                "font-weight": "bold",
-                                "text-align": "center"
-                            })
-                            .text("A Day in the Life of CitiBike")
-                }, 6000);
-
             }
 
             // Paints the stations on the map.
@@ -230,9 +211,76 @@
                 });
             }
 
-            // Now for toggle-selecting a station. This is called directly when the user clicks on a station,
-            // and indirectly by the box zoom tool.
+            // This function runs the intro animation.
+            function runIntroAnimation() {
+                paintPathSampler();  // Animate the sample paths.
+                paintBackgroundPanel(); // Animate the background fadeout.
+                paintStations();  // Animate the stations.
+                setTimeout(function() {
+                    drawInfoBox(); // Append the intro text box. This method is from the Info Box code segment.
+                }, 6000);
+            }
 
+            //////////////
+            // INFO BOX //
+            //////////////
+            // Design:
+            // Handles the information display on the left-hand side. A different one is created every time the viz
+            // mode is switched.
+            //
+            // Implementation:
+            // {paintIntroInfo(), paintStationsInfo(), paintBikesInfo()} -> drawInfoBox()
+
+            // Draws the info box. This method is used by the information pane painters (there are three, one for each
+            // viz mode: intro, stations, bikes). Since the height and width and whatnot of the display depends on the
+            // device, all of the sizing for this box are calculated with respect to extrema on the map.
+            function drawInfoBox() {
+                // Remove any pre-existing ones, we re-draw every time we return.
+                sel.select("description-block").remove();
+
+                d3.select("#map-canvas")
+                        .append("div")
+                        .attr("id", "description-block")
+                        .style({
+                            "position": "absolute",
+                            "width": "400px",
+                            // It's easiest to just let height be whatever height the whole thing ends up at.
+//                                "height": (proj.latLngToLayerPoint([40.70122128,-74.01234218]).y -
+//                                            proj.latLngToLayerPoint([40.784642, -73.970002]).y) + "px",
+                            "top": proj.latLngToLayerPoint([40.784642, -73.970002]).y + "px",
+                            "left": proj.latLngToLayerPoint([40.704556, -74.026222]).x - 400 - 20 + "px",
+                            // ^ (point in the Hudson river) - (width of the box) - (bit of additional padding).
+                            "background": "#fff",
+                            "border-radius": "25px",
+                            "opacity": 0.0,
+                            "padding": "10px"
+                        })
+                        .transition()
+                        .duration(2000)
+                        .style({
+                            "opacity": 1.0
+                        });
+
+                // Append title.
+                d3.select("#description-block")
+                        .append("div")
+                        .style({
+                            "font-size": "24px",
+                            "font-family": "Roboto",
+                            "font-weight": "bold",
+                            "text-align": "center"
+                        })
+                        .text("A Day in the Life of CitiBike")
+            }
+
+
+            ///////////////////////
+            // STATION SELECTION //
+            ///////////////////////
+            // Design:
+            // This code handles when a user clicks on a station, uses the box select, or hits clear selection.
+            //
+            // Implementation:
             // In order to implement the station toggle selection we need to implement a global struct which stores
             // stations selected and the paths that have been drawn associated with them. The structure is thus:
             // {'<first station id>':
@@ -241,7 +289,7 @@
             //      }
             //  '<second station id>':
             //      { ... }
-            // ...
+            //  ...
             // }
             // This data structure is unware of what the provenance of the trips it stores is, it merely stores them.
             // Accessing trips allows us to do either/or of the two viz modes.
@@ -326,12 +374,25 @@
                 }
             }
 
-            // Set up the display tip, which displays on hovering over a station.
+            /////////////
+            // TOOLTIP //
+            /////////////
+            // Design:
+            // On hovering over one of the stations a tooltip displays with information on what that station is. Super
+            // useful for navigation purposes.
+            //
+            // Implementation:
+            // I originally hoped I could use d3.tip for this (and implemented it that way) but it turns out that
+            //  d3.tip cannot deal with projections at all, so I have to hard-code my own tooltip design---sigh.
+            //
             var tip = d3.tip()
                 .attr('class', 'd3-tip')
                 // TODO: Fix offset to be cross-platform.
+                .offset(function() {
+                    return [-20, -30]
+                })
 //                .offset(function() {
-//                    return [-20, -30]
+//                    return [d3.event.pageX + 16, d3.event.pageY + 16]
 //                })
                 .html(function(d) {
                     return  "<div style='text-align:center'>" +
@@ -347,22 +408,21 @@
             });
             sel.call(tip);
 
-            // SVG images preserve the order of the elements that are placed on them, so the information pane's overlay
-            // (with transparent opacity) must be placed first, and the sampler points afterwards.
-            paintPathSampler();
-            displayInfo();
-            paintStations();
-//            q = d3.queue();
-//            q.defer(paintPathSampler);
-//            q.defer(delayedHello);
-//            q.await(function(error) {
-//                if (error) throw error;
-//                console.log("Goodbye!");
-//            });
+            /////////////////
+            // MAIN METHOD //
+            /////////////////
+            // This is the method runs the whole thing.
+            // No seriously. That's it.
+            // Everything else hooks into this one call.
+            // Ain't JavaScript a beaut?
+            runIntroAnimation();
 
         });
 
-        // Add overlay to map.
+        /////////////
+        // RUNTIME //
+        /////////////
+        // That was a d3SvgOverlay callback, the execution of which is handled by this one-liner.
         mapOverlay.addTo(map);
     </script>
 </body>
