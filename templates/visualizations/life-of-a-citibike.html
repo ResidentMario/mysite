@@ -1,4 +1,5 @@
 <!--
+    TODO: (0) Cross-device compatibility fixes.
     TODO: (1) Station selection (toggle on click).
     TODO: (2) Station select counter in the corner.
     TODO: (3) Populate interface buttons.
@@ -51,14 +52,16 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script>
 
-        // Initializes the basemap.
+        // Initializes the basemap. Disable animations.
         var map = L.map("map-canvas", {
-            center: [40.7300355,-74.0143414,13],
-            zoom: 13,
             zoomControl: false, // No zooming on initialization because it messes with the drawing.
             scrollWheelZoom: false
         });
-        // No drag or keyboard panning or double-click zoom either, for the same reason.
+        // Using Leaflet's fitBounds method ensures that the resultant map contains all of the points on all display
+        // devices.
+//        map.setView(new L.LatLng(40.7300355,-74.0143414,13));
+        map.fitBounds([[40.6794268,-73.92989109999999], [40.789747, -74.075979]]);
+        // More disabling things.
         map.dragging.disable();
         map.keyboard.disable();
         map.doubleClickZoom.disable();
