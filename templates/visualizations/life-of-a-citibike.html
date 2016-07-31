@@ -1,10 +1,12 @@
 <!--
     TODO: (1) Station selection (toggle on click).
     TODO: (2) Station select counter in the corner.
-    TODO: (3) Plot station polylines on click (possibly with loading pane).
-    TODO: (4) Possibly add box select?
-    TODO: (5) Launch buttons.
-    TODO: (6) Description, launch button text that loads on hover.
+    TODO: (3) Populate interface buttons.
+    TODO: (4) Populate interface text.
+    TODO: (5) Plot station polylines on click (possibly with loading pane). HARD!
+    TODO: (6) Possibly add box select?
+    TODO: (7) Description, launch button text that loads on hover.
+    TODO: (8) Investigate the handful of stations which have no rides that day, but ought to have.
 -->
 <!DOCTYPE html>
 <html>
@@ -43,7 +45,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
     <script src="/static/js/d3.v3.js"></script>
-    <script src="https://d3js.org/d3-queue.v3.js"></script>
+    <!--<script src="https://d3js.org/d3-queue.v3.js"></script>-->
     <script src="/static/js/L.D3SvgOverlay.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
@@ -56,9 +58,10 @@
             zoomControl: false, // No zooming on initialization because it messes with the drawing.
             scrollWheelZoom: false
         });
-        // No drag or keyboard panning either, for the same reason.
+        // No drag or keyboard panning or double-click zoom either, for the same reason.
         map.dragging.disable();
         map.keyboard.disable();
+        map.doubleClickZoom.disable();
         // Note that I use a CSS control to change the cursor from a draggy hand to a regular one as well in order to
         // keep users from thinking it is interactive at the beginning.
         L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -87,7 +90,6 @@
                         .y(function(d) { return proj.latLngToLayerPoint(d).y});
 
                 // Create a path, bind the line array to its __data__, and call line on it to generate the line-code.
-                // TODO: More points! Muh ha ha.
                 setTimeout(function() {
                     sel.append('path').datum(linearray)
                             .attr({
@@ -181,7 +183,7 @@
                     if (error) throw error;
 
                     // 1431 is the observed maximum bike trip count---Pershing Square North @ Grand Central Station.
-                    station_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
+                    var station_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
 
                     setTimeout(function() {
                         sel
@@ -191,25 +193,17 @@
                                 .enter()
                                 .append("circle")
                                 .attr({
-                                    "cx": function (d) {
-                                        return proj.latLngToLayerPoint([d.latitude, d.longitude]).x
-                                    },
-                                    "cy": function (d) {
-                                        return proj.latLngToLayerPoint([d.latitude, d.longitude]).y
-                                    },
+                                    "cx": function (d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).x },
+                                    "cy": function (d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).y },
                                     "r": 0,
                                     "stroke": "white",
                                     "stroke-width": 2,
-//                                    "fill": "steelblue"
-                                    "fill": function(d) {
-//                                        console.log(d['all trips'] + " " + station_color_scale(d['total trips']));
-                                        return station_color_scale(d['all trips']);
-                                    }
+                                    "cursor": "pointer",
+                                    "fill": function(d) { return station_color_scale(d['all trips']); }
                                 })
                                 .on('mouseover', function(d, i){
                                     d3.select(this)
                                         .attr({
-                                            "stroke": "white",
                                             "stroke-width": 4,
                                             "r": 10
                                         });
@@ -218,12 +212,12 @@
                                 .on('mouseout', function(d, i) {
                                     d3.select(this)
                                             .attr({
-                                                "stroke": "white",
                                                 "stroke-width": 2,
                                                 "r": 5
                                             });
                                     tip.hide(d, i);
                                 })
+                                .on("click", toggleStation)
                                 .transition()
                                 .duration(500)
                                 .attr({
@@ -233,7 +227,103 @@
                 });
             }
 
-            // Set up the display tip.
+            // Now for toggle-selecting a station. This is called directly when the user clicks on a station,
+            // and indirectly by the box zoom tool.
+
+            // In order to implement the station toggle selection we need to implement a global struct which stores
+            // stations selected and the paths that have been drawn associated with them. The structure is thus:
+            // {'<first station id>':
+            //      { 'station':<first station selection>,
+            //        'trips': [<first trip selection>, <second trip selection>, ...]
+            //      }
+            //  '<second station id>':
+            //      { ... }
+            // ...
+            // }
+            // This data structure is unware of what the provenance of the trips it stores is, it merely stores them.
+            // Accessing trips allows us to do either/or of the two viz modes.
+            // They're stored under stations to allow implementing a highlighter later on.
+            var selected_stations = {};
+            var viz_mode = 'intro';  // options are 'intro', 'stations', 'bikes'. We start in 'intro'.
+
+            // Now the function itself. As a UX decision I decided to split *generating* a selection from plotting its
+            // data. I did this to allow doing selections on the introduction pane, before the user chooses a
+            // visualization mode. For a UX standpoint this is necessary because not having that there would make it
+            // awkward for the user to realize that they can click on things later.
+            //
+            // From a developer standpoint this means that selected_stations can contain just stations without any data
+            // bound to them, necessitating that, on triggering a visualization mode, we call a function which checks
+            // and binds data to the current selection, if necessary. It also requires a global flag for what mode
+            // the visualization is in, intro or stations or bikes. This is `viz_mode` above.
+            function toggleStation(d) {
+                var sel_station = d3.select(this);
+                if(!(d['station id'] in selected_stations)) {
+                    // Station is not currently in the selection, so add it.
+                    selected_stations[d['station id']] = sel_station;
+                    if(!(viz_mode == 'intro')) {
+                        // We are not currently on the introduction screen, so we can't just bind the element, we have
+                        // to fire populating the lines as well.
+                        // TODO: Implement this. Requires working the API first.
+                    }
+                    // Update the display element.
+                    updateSelectionDisplay();
+                    // Change the circle mark to match.
+                    sel_station.attr({"stroke": "black"});
+                }
+                else {
+                    // The element is already in the selection, so remove it (this is a toggle after all).
+                    delete selected_stations[d['station id']];
+                    // Update the display element.
+                    updateSelectionDisplay();
+                    // Change the circle mark to match.
+                    sel_station.attr({"stroke": "white"});
+                }
+            }
+
+            // The following helper method updates the selection display.
+            // It is called by toggleStation() whenever a station is added to the selection or removed from it.
+            function updateSelectionDisplay() {
+                var selection_size = Object.keys(selected_stations).length;
+                if(selection_size == 0) {
+                    // If no stations are selected then we just removed our last selection, so remove the display.
+                    d3.select("#selection-display").remove();
+                }
+                else {
+                    // If there's just one selection that means we just selected our first station.
+                    // So create the display element.
+                    // Note: the display element is drawn on the HTML map canvas level, not the SVG level. This is
+                    // because it's rather difficult to get an SVG box into the top right corner, but trivial to
+                    // do so in HTML.
+                    d3.select("#selection-display").remove();
+                    d3.select("#map-canvas").append("div")
+                            .attr({
+                                "id": "selection-display"
+                            })
+                            .style({
+                                "position": "absolute",
+                                "top": "20px",
+                                "right": "20px",
+                                "width": "400px",
+                                "background": "transparent",
+//                                    "border": "1px solid black",
+                                "text-align": "right"
+                            })
+                            .html(function(d) {
+                                // Deal with pluralization!
+                                var s = "";
+                                if(selection_size > 1) {
+                                    s = "s";
+                                }
+                                // Get total trip counts.
+                                // TODO: Write this logic and add it to the display.
+                                // Write the string.
+                                return "<div style='font-weight: bold; font-size: 24px; font-family:Roboto;'>" +
+                                        selection_size + " Station" + s + " Selected</div>"
+                            });
+                }
+            }
+
+            // Set up the display tip, which displays on hovering over a station.
             var tip = d3.tip()
                 .attr('class', 'd3-tip')
                 .offset(function() {
