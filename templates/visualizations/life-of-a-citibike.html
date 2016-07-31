@@ -26,7 +26,7 @@
             cursor: default !important;
         }
         /*Code for d3.tip*/
-        .d3-tip {
+        .station-tip {
             line-height: 1.25;
             padding: 12px;
             background: whitesmoke;
@@ -191,7 +191,7 @@
                                             "stroke-width": 4,
                                             "r": 10
                                         });
-                                    tip.show(d, i);
+                                    showTooltip(d);
                                 })
                                 .on('mouseout', function(d, i) {
                                     d3.select(this)
@@ -199,7 +199,7 @@
                                                 "stroke-width": 2,
                                                 "r": 5
                                             });
-                                    tip.hide(d, i);
+                                    hideTip();
                                 })
                                 .on("click", toggleStation)
                                 .transition()
@@ -383,8 +383,40 @@
             //
             // Implementation:
             // I originally hoped I could use d3.tip for this (and implemented it that way) but it turns out that
-            //  d3.tip cannot deal with projections at all, so I have to hard-code my own tooltip design---sigh.
+            //  d3.tip cannot deal with projections at all, so I have to hard-code my own tooltip design.
             //
+
+            // Displays the appropriate tooltip for the selected station.
+            function showTooltip(d) {
+                var sel_station = d3.select(this);
+                d3.select("#map-canvas")
+                        .append("div")
+                        .attr({"class": "station-tip"})
+                        .style({
+                            "position": "absolute",
+                            "top": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).y -
+                                   35 + "px",
+                            "left": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).x + 20 + "px"
+                        })
+                        .html("<div style='text-align:center'>" +
+                                "<span style='font-weight:bold; font-size:16px;'>" +
+                                d['station name'] +
+                                "</span><br/><span style='font-size:12px;'>" +
+                                d['all trips'] +
+                                " &#128690; Trips ("
+                                + d['incoming trips']
+                                + " In, "
+                                + d['outgoing trips'] + " Out)"
+                                + "</span></div>"
+                        );
+            }
+
+            // Removes the tooltip.
+            function hideTip() {
+                d3.select(".station-tip").remove();
+            }
+
+
             var tip = d3.tip()
                 .attr('class', 'd3-tip')
                 // TODO: Fix offset to be cross-platform.
