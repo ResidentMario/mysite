@@ -1,12 +1,13 @@
 <!--
-    TODO: (0) Cross-device compatibility fixes (test this visualization out on tons of devices and fix broken bits).
-    TODO: (0.1) Manually implement tooltip because d3-tip does not understand projections. (ugh)
-    TODO: (1) Station selection (toggle on click).
-    TODO: (2) Station select counter in the corner.
-    TODO: (3) Populate interface buttons.
-    TODO: (4) Populate interface text.
+    TODO: (1) Finish stubbing out menus.
+    TODO: (2) Implement the Clear Selection button.
+    TODO: (3) Add a stations trip counter component to the station info display w/ statements about high path counts.
+    TODO: (4) Go back into Python and implement a trip counter for bikes mode.
+    TODO: (5) Add that count to the interface.
+
+    --- LATER ---
     TODO: (5) Plot station polylines on click (possibly with loading pane). HARD!
-    TODO: (6) Possibly add box select?
+    TODO: (6) Possibly add box select? https://github.com/d3/d3-3.x-api-reference/blob/master/Drag-Behavior.md
     TODO: (7) Description, launch button text that loads on hover.
     TODO: (8) Investigate the handful of stations which have no rides that day, but ought to have.
 -->
@@ -19,13 +20,13 @@
         html { height: 100% }
         body { height: 100%; margin: 0; padding: 0 }
         #map-canvas { height: 100% }
-        /*Note that I use a CSS control to change the cursor from a draggy hand to a regular one as well in order to*/
-        /*keep users from thinking it is interactive at the beginning.*/
-        /*This is necessary because to keep from distractions the intro animation has zoom and pan disabled.*/
+        /* Note that I use a CSS control to change the cursor from a draggy hand to a regular one as well in order to */
+        /* keep users from thinking it is interactive at the beginning. */
+        /* This is necessary because to keep from distractions the intro animation has zoom and pan disabled. */
         .leaflet-container {
             cursor: default !important;
         }
-        /*Code for d3.tip*/
+        /* Station tooltip */
         .station-tip {
             line-height: 1.25;
             padding: 12px;
@@ -35,11 +36,41 @@
             font-family: Roboto;
             border:1px solid #999;
         }
+        /* Pure CSS buttons! From http://cssdeck.com/labs/purely-css. Blue one first. */
+        button.btn {
+            display: inline-block;
+            color: #666;
+            background-color: #eee;
+            text-transform: uppercase;
+            font-size: 12px;
+            padding: 10px 30px;
+            border-radius: 5px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border: 1px solid rgba(0,0,0,0.3);
+            border-bottom-width: 3px;
+            cursor: pointer;
+        }
+        button.btn.btn-blue {
+            background-color: #699DB6;
+            border-color: rgba(0,0,0,0.3);
+            text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+            color: #FFF;
+        }
+        button.btn.btn-blue:hover {
+            background-color: #4F87A2;
+            border-color: rgba(0,0,0,0.5);
+        }
+        button.btn.btn-blue:active {
+            background-color: #3C677B;
+            border-color: rgba(0,0,0,0.9);
+        }
     </style>
 
 
     <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css'
     	rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 </head>
 <body>
@@ -48,10 +79,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
     <script src="/static/js/d3.v3.js"></script>
-    <!--<script src="https://d3js.org/d3-queue.v3.js"></script>-->
     <script src="/static/js/L.D3SvgOverlay.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script>
 
         /////////////////////////
@@ -99,6 +127,8 @@
             //                     -> paintBackgroundPanel()
             //                     -> paintStations()
             //                     -> drawInfoBox() [function from the "infobox" section, the intro adds a timeout]
+            //
+            // TODO: Scale station circle size to the zoom level selected by Leaflet. (later)
 
 
             // Paints a single sampler path. Accepts a linearray (an array of points) as input, as well as the position
@@ -217,7 +247,7 @@
                 paintBackgroundPanel(); // Animate the background fadeout.
                 paintStations();  // Animate the stations.
                 setTimeout(function() {
-                    drawInfoBox(); // Append the intro text box. This method is from the Info Box code segment.
+                    paintIntroInfo(); // Append the intro text box. This method is from the Info Box code segment.
                 }, 6000);
             }
 
@@ -230,14 +260,16 @@
             //
             // Implementation:
             // {paintIntroInfo(), paintStationsInfo(), paintBikesInfo()} -> drawInfoBox()
+            //
 
             // Draws the info box. This method is used by the information pane painters (there are three, one for each
             // viz mode: intro, stations, bikes). Since the height and width and whatnot of the display depends on the
             // device, all of the sizing for this box are calculated with respect to extrema on the map.
             function drawInfoBox() {
                 // Remove any pre-existing ones, we re-draw every time we return.
-                sel.select("description-block").remove();
+                d3.select("#description-block").remove();
 
+                // Create the container.
                 d3.select("#map-canvas")
                         .append("div")
                         .attr("id", "description-block")
@@ -253,7 +285,9 @@
                             "background": "#fff",
                             "border-radius": "25px",
                             "opacity": 0.0,
-                            "padding": "10px"
+                            "padding": "10px",
+                            "font-family": "Roboto",
+                            "text-align": "center"
                         })
                         .transition()
                         .duration(2000)
@@ -266,13 +300,108 @@
                         .append("div")
                         .style({
                             "font-size": "24px",
-                            "font-family": "Roboto",
-                            "font-weight": "bold",
-                            "text-align": "center"
+                            "font-weight": "bold"
                         })
-                        .text("A Day in the Life of CitiBike")
+                        .text("A Day in the Life of CitiBike");
+
             }
 
+            // Paints the introductory info box.
+            // TODO: Implement
+            function paintIntroInfo() {
+                drawInfoBox();
+
+                var text_holder = d3.select("#description-block")
+                        .append("div")
+                        .style({
+                            "text-align": "left"
+                        });
+                var button_holder = d3.select("#description-block")
+                        .append("div")
+                        .style({
+                            "width": "100%",
+                            "margin-top": "30px"
+                        });
+
+                d3.json("../../static/post_assets/citibike/content_descriptions.json", function (text) {
+                    text_holder.html(text["intro"]);
+                });
+
+                button_holder.append("button")
+                        .attr({
+                            "type": "button",
+                            "class": "btn btn-blue"
+                        })
+                        .style({
+                            "width": "50%"
+                        })
+                        .text("Follow Stations")
+                        .on("click", function() {
+                            // TODO: Implement a full transition.
+                            paintStationsInfo();
+                            switchToStationsMode();
+                        });
+
+                button_holder.append("button")
+                        .attr({
+                            "type": "button",
+                            "class": "btn btn-blue"
+                        })
+                        .style({
+                            "width": "50%"
+                        })
+                        .text("Follow Bikes")
+                        .on("click", function() {
+                            // TODO: Implement a full transition.
+                            switchToBikesMode();
+                        });
+            }
+
+            // Paints the stations info box.
+            // TODO: Implement
+            function paintStationsInfo() {
+                drawInfoBox();
+
+                var text_holder = d3.select("#description-block")
+                        .append("div")
+                        .style({
+                            "text-align": "left"
+                        });
+                var button_holder = d3.select("#description-block")
+                        .append("div")
+                        .style({
+                            "width": "100%",
+                            "margin-top": "30px"
+                        });
+
+                d3.json("../../static/post_assets/citibike/content_descriptions.json", function (text) {
+                    text_holder.html(text["stations"]);
+                });
+
+            }
+
+            // Paints the bikes info box.
+            // TODO: Implement
+            function paintBikesInfo() {
+                drawInfoBox();
+
+                var text_holder = d3.select("#description-block")
+                        .append("div")
+                        .style({
+                            "text-align": "left"
+                        });
+                var button_holder = d3.select("#description-block")
+                        .append("div")
+                        .style({
+                            "width": "100%",
+                            "margin-top": "30px"
+                        });
+
+                d3.json("../../static/post_assets/citibike/content_descriptions.json", function (text) {
+                    text_holder.html(text["bikes"]);
+                });
+
+            }
 
             ///////////////////////
             // STATION SELECTION //
@@ -416,29 +545,37 @@
                 d3.select(".station-tip").remove();
             }
 
+            ////////////////////
+            // MODAL SWITCHES //
+            ////////////////////
+            // Design:
+            // When you click the modal buttons, this code takes you to that visualization mode. What happens then is
+            // TBD.
+            //
 
-            var tip = d3.tip()
-                .attr('class', 'd3-tip')
-                // TODO: Fix offset to be cross-platform.
-                .offset(function() {
-                    return [-20, -30]
-                })
-//                .offset(function() {
-//                    return [d3.event.pageX + 16, d3.event.pageY + 16]
-//                })
-                .html(function(d) {
-                    return  "<div style='text-align:center'>" +
-                            "<span style='font-weight:bold; font-size:16px;'>" +
-                            d['station name'] +
-                            "</span><br/><span style='font-size:12px;'>" +
-                            d['all trips'] +
-                            " &#128690; Trips ("
-                            + d['incoming trips']
-                            + " In, "
-                            + d['outgoing trips'] + " Out)"
-                            + "</span></div>";
-            });
-            sel.call(tip);
+            // Once you have gotten as far as selecting a visualization type the sampler paths go bye-bye.
+            function fadeOutSamplerPaths() {
+                var sample_lines = d3.selectAll(".sample-line");
+                sample_lines
+                        .transition()
+                        .duration(2000)
+                        .style({"opacity": 0})
+                        .remove();
+            }
+
+            // TODO: Implement!
+            function switchToBikesMode() {
+                viz_mode = "bikes";
+                fadeOutSamplerPaths();
+                paintBikesInfo();
+            }
+
+            // TODO: Implement!
+            function switchToStationsMode() {
+                viz_mode = "stations";
+                fadeOutSamplerPaths();
+                paintStationsInfo();
+            }
 
             /////////////////
             // MAIN METHOD //
