@@ -1,15 +1,13 @@
 <!--
-    TODO: (1) Finish stubbing out menus.
-    TODO: (2) Implement the Clear Selection button.
-    TODO: (3) Add a stations trip counter component to the station info display w/ statements about high path counts.
-    TODO: (4) Go back into Python and implement a trip counter for bikes mode.
-    TODO: (5) Add that count to the interface.
+    TODO: (1) Go back into Python and add an outbound trip counter for bikes mode to the dataset.
+    TODO: (2) Implement box select.
+    TODO: (2) Add a stations trip counter component to the station info display.
+    TODO: (3) Add that count to the interface.
 
     --- LATER ---
     TODO: (5) Plot station polylines on click (possibly with loading pane). HARD!
     TODO: (6) Possibly add box select? https://github.com/d3/d3-3.x-api-reference/blob/master/Drag-Behavior.md
     TODO: (7) Description, launch button text that loads on hover.
-    TODO: (8) Investigate the handful of stations which have no rides that day, but ought to have.
 -->
 <!DOCTYPE html>
 <html>
@@ -51,6 +49,32 @@
             border-bottom-width: 3px;
             cursor: pointer;
         }
+
+        button.btn:hover {
+            background-color: #e3e3e3;
+            border-color: rgba(0,0,0,0.5);
+        }
+
+        button.btn:active {
+            background-color: #CCC;
+            border-color: rgba(0,0,0,0.9);
+        }
+
+        button.btn-disabled {
+            display: inline-block;
+            color: #aaa;
+            border-color: #aaa;
+            background: #e3e3e3;
+            text-transform: uppercase;
+            font-size: 12px;
+            padding: 10px 30px;
+            border-radius: 5px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border: 1px solid rgba(0,0,0,0.3);
+            border-bottom-width: 3px;
+        }
+
         button.btn.btn-blue {
             background-color: #699DB6;
             border-color: rgba(0,0,0,0.3);
@@ -207,13 +231,21 @@
                                 .enter()
                                 .append("circle")
                                 .attr({
+                                    "class": "station",
                                     "cx": function (d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).x },
                                     "cy": function (d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).y },
                                     "r": 0,
                                     "stroke": "white",
                                     "stroke-width": 2,
                                     "cursor": "pointer",
-                                    "fill": function(d) { return station_color_scale(d['all trips']); }
+                                    "fill": function(d) {
+                                        if(d['kind'] == 'active') {
+                                            return station_color_scale(d['all trips']);
+                                        }
+                                        else if(d['kind'] == 'inactive') {
+                                            return "#ddbfa7";
+                                        }
+                                    }
                                 })
                                 .on('mouseover', function(d, i){
                                     d3.select(this)
@@ -307,7 +339,6 @@
             }
 
             // Paints the introductory info box.
-            // TODO: Implement
             function paintIntroInfo() {
                 drawInfoBox();
 
@@ -337,8 +368,6 @@
                         })
                         .text("Follow Stations")
                         .on("click", function() {
-                            // TODO: Implement a full transition.
-                            paintStationsInfo();
                             switchToStationsMode();
                         });
 
@@ -352,13 +381,62 @@
                         })
                         .text("Follow Bikes")
                         .on("click", function() {
-                            // TODO: Implement a full transition.
                             switchToBikesMode();
+                        });
+
+            }
+
+            // Removes everything from the selection. Used by the Reset GUI element. It's factored out because it's
+            // common to both functions.
+            // This really ought to be in the station selection block, but for some reason when it's there it breaks my
+            // build.
+            function clearSelection() {
+                d3.selectAll(".station").attr({
+                    "stroke": "white"
+                });
+                selected_stations = {};
+                updateSelectionDisplay();
+                updateResetButtonStyle();
+            }
+
+            // This helper function creates and appends a button that when in station mode or in bike mode and hit
+            // bounces you back to the intro. It's factored out because it's common to both functions.
+            function appendMenuGoBack(button_holder) {
+                button_holder.append("button")
+                        .attr({
+                            "type": "button",
+                            "class": "btn"
+                        })
+                        .style({
+                            "width": "33%"
+                        })
+                        .text("Go Back")
+                        .on("click", function() {
+                            switchToIntroMode();
                         });
             }
 
+            // This helper function creates and appends a button that when in station mode or in bike mode and hit
+            // removes all of the stations in your current selection. It's factored out because it's common to both
+            // functions.
+            function appendMenuReset(button_holder) {
+                button_holder.append("button")
+                        .attr({
+                            "type": "button",
+                            "class": "btn-disabled",
+                            "id": "reset-button"
+                        })
+                        .style({
+                            "width": "33%"
+                        })
+                        .text("Reset")
+                        .on("click", function() {
+                            clearSelection();  // in the station selection section.
+                        });
+                updateResetButtonStyle();  // Necessary in case there are preexisting selections.
+            }
+
             // Paints the stations info box.
-            // TODO: Implement
             function paintStationsInfo() {
                 drawInfoBox();
 
@@ -378,10 +456,25 @@
                     text_holder.html(text["stations"]);
                 });
 
+                appendMenuGoBack(button_holder);
+                appendMenuReset(button_holder);
+
+                button_holder.append("button")
+                        .attr({
+                            "type": "button",
+                            "class": "btn btn-blue"
+                        })
+                        .style({
+                            "width": "33%"
+                        })
+                        .text("Launch")
+                        .on("click", function() {
+                            // TODO: Implement.
+                        });
+
             }
 
             // Paints the bikes info box.
-            // TODO: Implement
             function paintBikesInfo() {
                 drawInfoBox();
 
@@ -400,6 +493,22 @@
                 d3.json("../../static/post_assets/citibike/content_descriptions.json", function (text) {
                     text_holder.html(text["bikes"]);
                 });
+
+                appendMenuGoBack(button_holder);
+                appendMenuReset(button_holder);
+
+                button_holder.append("button")
+                        .attr({
+                            "type": "button",
+                            "class": "btn btn-blue"
+                        })
+                        .style({
+                            "width": "33%"
+                        })
+                        .text("Launch")
+                        .on("click", function() {
+                            // TODO: Implement.
+                        });
 
             }
 
@@ -437,26 +546,29 @@
             // the visualization is in, intro or stations or bikes. This is `viz_mode` above.
             function toggleStation(d) {
                 var sel_station = d3.select(this);
-                if(!(d['station id'] in selected_stations)) {
-                    // Station is not currently in the selection, so add it.
-                    selected_stations[d['station id']] = sel_station;
-                    if(!(viz_mode == 'intro')) {
-                        // We are not currently on the introduction screen, so we can't just bind the element, we have
-                        // to fire populating the lines as well.
-                        // TODO: Implement this. Requires working the API first.
+                // Do nothing if the station is inactive.
+                if(d['kind'] == 'active') {
+                    if(!(d['station id'] in selected_stations)) {
+                        // Station is not currently in the selection, so add it.
+                        selected_stations[d['station id']] = sel_station;
+                        if(!(viz_mode == 'intro')) {
+                            // We are not currently on the introduction screen, so we can't just bind the element, we have
+                            // to fire populating the lines as well.
+                            // TODO: Implement this. Requires working the API first.
+                        }
+                        // Change the circle mark to match.
+                        sel_station.attr({"stroke": "black"});
                     }
-                    // Update the display element.
+                    else {
+                        // The element is already in the selection, so remove it (this is a toggle after all).
+                        delete selected_stations[d['station id']];
+                        // Update the display element.
+                        // Change the circle mark to match.
+                        sel_station.attr({"stroke": "white"});
+                    }
+                    // Update the display elements.
                     updateSelectionDisplay();
-                    // Change the circle mark to match.
-                    sel_station.attr({"stroke": "black"});
-                }
-                else {
-                    // The element is already in the selection, so remove it (this is a toggle after all).
-                    delete selected_stations[d['station id']];
-                    // Update the display element.
-                    updateSelectionDisplay();
-                    // Change the circle mark to match.
-                    sel_station.attr({"stroke": "white"});
+                    updateResetButtonStyle();
                 }
             }
 
@@ -501,6 +613,18 @@
                                         selection_size + " Station" + s + " Selected</div>"
                             });
                 }
+
+            }
+
+            function updateResetButtonStyle() {
+                var selection_size = Object.keys(selected_stations).length;
+                if(selection_size == 0) {
+                    // If no stations are selected then we just removed our last selection, so remove the display.
+                    d3.select("#reset-button").attr({"class": "btn-disabled"});
+                }
+                else {
+                    d3.select("#reset-button").attr({"class": "btn"});
+                }
             }
 
             /////////////
@@ -527,17 +651,34 @@
                                    35 + "px",
                             "left": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).x + 20 + "px"
                         })
-                        .html("<div style='text-align:center'>" +
+                        .html(function() {
+                            var underline = null;
+                            if(d['kind'] == 'inactive') {
+                                underline = "Out of Service" + "</span></div>";
+                            }
+                            else {
+                                if(viz_mode == 'intro') {
+                                    underline = "</span></div>";  // TODO: Change this to a dual-display one liner.
+                                    // Format for one-liner: 445 Trips to/from Station; 1020 Outbound Trips
+                                    // Or something like that.
+                                }
+                                else if(viz_mode == 'stations') {
+                                    underline = d['all trips'] +
+                                    " &#128690; Trips ("
+                                    + d['incoming trips']
+                                    + " In, "
+                                    + d['outgoing trips'] + " Out)"
+                                    + "</span></div>";
+                                }
+                                else if(viz_mode == 'bikes') {
+                                    underline = "</span></div>"; // TODO: Implement!
+                                }
+                            }
+                            return "<div style='text-align:center'>" +
                                 "<span style='font-weight:bold; font-size:16px;'>" +
                                 d['station name'] +
-                                "</span><br/><span style='font-size:12px;'>" +
-                                d['all trips'] +
-                                " &#128690; Trips ("
-                                + d['incoming trips']
-                                + " In, "
-                                + d['outgoing trips'] + " Out)"
-                                + "</span></div>"
-                        );
+                                "</span><br/><span style='font-size:12px;'>" + underline;
+                        });
             }
 
             // Removes the tooltip.
@@ -563,18 +704,21 @@
                         .remove();
             }
 
-            // TODO: Implement!
             function switchToBikesMode() {
                 viz_mode = "bikes";
                 fadeOutSamplerPaths();
                 paintBikesInfo();
             }
 
-            // TODO: Implement!
             function switchToStationsMode() {
                 viz_mode = "stations";
                 fadeOutSamplerPaths();
                 paintStationsInfo();
+            }
+
+            function switchToIntroMode() {
+                viz_mode = "intro";
+                paintIntroInfo();
             }
 
             /////////////////
