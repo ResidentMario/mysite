@@ -1,8 +1,10 @@
 <!--
-    TODO: (1) Go back into Python and add an outbound trip counter for bikes mode to the dataset.
-    TODO: (2) Implement box select.
-    TODO: (2) Add a stations trip counter component to the station info display.
-    TODO: (3) Add that count to the interface.
+    TODO: (0) Verify that the outbound trip counter is actually correct (watch the map).
+    TODO: (1) Add outbound trip counting to the tooltip and to the selection display.
+    TODO: (2) Implement station colormap swapping between intro, stations, bikes modes.
+    TODO: (3) Implement muting all non-selected stations a tad bit when the user has selections active.
+    TODO: (4) Implement returning the sampler paths when the view is switched back to intro mode.
+    TODO: (5) Implement box select.
 
     --- LATER ---
     TODO: (5) Plot station polylines on click (possibly with loading pane). HARD!
@@ -658,7 +660,10 @@
                             }
                             else {
                                 if(viz_mode == 'intro') {
-                                    underline = "</span></div>";  // TODO: Change this to a dual-display one liner.
+                                    underline = d['all trips'] +
+                                            " Trips To/From, " +
+                                            d['outbound trips'] + " Trips Outbound" +
+                                            "</span></div>";  // TODO: Change this to a dual-display one liner.
                                     // Format for one-liner: 445 Trips to/from Station; 1020 Outbound Trips
                                     // Or something like that.
                                 }
@@ -671,7 +676,11 @@
                                     + "</span></div>";
                                 }
                                 else if(viz_mode == 'bikes') {
-                                    underline = "</span></div>"; // TODO: Implement!
+                                    underline =  d['bikes outbound'] +
+                                    " &#128690; Starts ("
+                                    + d['outbound trips']
+                                    + " Trips Total)"
+                                    + "</span></div>";
                                 }
                             }
                             return "<div style='text-align:center'>" +
