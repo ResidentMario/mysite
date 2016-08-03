@@ -1,13 +1,12 @@
 <!--
-    TODO: (2) Implement fading out all non-selected stations a tad bit when the user has selections active.
-    TODO: (3) Implement box select.
-    TODO: (4) Double click un-select.
-    TODO: (5) Implement zooming.
-    TODO: (6) Intro box text.
+    --- NOW ---
+    TODO: Python API.
 
     --- LATER ---
-    TODO: (5) Plot station polylines on click (possibly with loading pane). HARD!
-    TODO: (6) Continue thinking about color maps.
+    TODO: Fix the wonky-ass tooltip positioning.
+    TODO: Box select.
+    TODO: Double-click unselect.
+    TODO: Intro box text.
 -->
 <!DOCTYPE html>
 <html>
@@ -21,9 +20,9 @@
         /* Note that I use a CSS control to change the cursor from a draggy hand to a regular one as well in order to */
         /* keep users from thinking it is interactive at the beginning. */
         /* This is necessary because to keep from distractions the intro animation has zoom and pan disabled. */
-        .leaflet-container {
-            cursor: default !important;
-        }
+        /*.leaflet-container {*/
+            /*cursor: default !important;*/
+        /*}*/
         /* Station tooltip */
         .station-tip {
             line-height: 1.25;
@@ -115,8 +114,9 @@
 
         // Initializes the basemap. Disable animations.
         var map = L.map("map-canvas", {
-            zoomControl: false, // No zooming on initialization because it messes with the drawing.
-            scrollWheelZoom: false
+            zoomControl: false,  // Zooming and scrolling disabled to start with, it turns back on later.
+            scrollWheelZoom: false,
+            minZoom: 11
         });
         // Using Leaflet's fitBounds method ensures that the resultant map contains all of the points on all display
         // devices. The precise points were arrived at by the high scientific method of guess-and-check.
@@ -135,6 +135,41 @@
         }).addTo(map);
         // Thx.
 
+        //////////////////////
+        // GLOBAL VARIABLES //
+        //////////////////////
+        // Variables declared inside of the draw callback will be reset every time that the map zoom level is changed.
+        // Therefore variables which have to exist outside of the draw state live here.
+
+        // While the intro animation is playing we disable map interactions because d3SvgOverlay doesn't handle
+        // having to redraw things that are partially animated. So we store a global for this purpose. Once the
+        // intro animation is done we switch this to false and enable interactions. Future draws refer this variable
+        // when deciding how to repaint.
+        var is_intro_anim = true;
+
+        // The scale factor global is used while redrawing to keep interactive display elements at a reasonable size at
+        // all zoom levels. This is necessary because by default d3SvgOverlay will simply keep the objects at the same
+        // size at all zoom levels, which causes massive blobs at high zoom levels and tiny specks at low ones.
+        var scale_factor = Math.max(1 / Math.pow(2, map.getZoom() - 13), 0.0625);
+
+        // In order to implement the station toggle selection we need to implement a global struct which stores
+        // stations selected and the paths that have been drawn associated with them. The structure is thus:
+        // {'<first station id>':
+        //      { 'station':<first station selection>,
+        //        'trips': [<first trip selection>, <second trip selection>, ...]
+        //      }
+        //  '<second station id>':
+        //      { ... }
+        //  ...
+        // }
+        // This data structure is unaware of what the provenance of the trips it stores is, it merely stores them.
+        // Accessing trips allows us to do either/or of the two viz modes.
+        // They're stored under stations to allow implementing a highlighter later on.
+        var selected_stations = {};
+
+        // The current visualization mode.
+        var viz_mode = "intro";
+
         // D3-SVG-Overlay callback wrapper. Leaflet is used only for the base map, all of the programmatic action occurs
         // in d3 code inside of this callback.
         var mapOverlay = L.d3SvgOverlay(function(sel,proj){
@@ -151,9 +186,12 @@
             //                     -> paintBackgroundPanel()
             //                     -> paintStations()
             //                     -> drawInfoBox() [function from the "infobox" section, the intro adds a timeout]
+            //                     -> enableInteractions()
             //
-            // TODO: Scale station circle size to the zoom level selected by Leaflet. (later)
-
+            // Notes:
+            // * Zooming and panning are disabled while the introduction is playing. They are re-enabled once it's over.
+            // * The sample paths fade out as soon as the user zooms in or selects a visualization mode.
+            // * The `is_intro_anim` global boolean tells the main scene painter (way below) how to behave.
 
             // Paints a single sampler path. Accepts a linearray (an array of points) as input, as well as the position
             // of the line being drawn in placement order. paintPathSampler is the method which actually handles the
@@ -185,8 +223,7 @@
             }
 
             // Paint all of the sampler paths. Wraps paintPath(), above, with consideration removing old paths.
-            // The data file itself, `sample_trips.json`, was generated using Python---specifically the path_sampler.py
-            // script.
+            // The data file itself, `sample_trips.json`, was generated using Python.
             function paintPathSampler() {
                 // Remove all of the existing paths first, otherwise we keep old ones!
                 sel.selectAll('path').remove();
@@ -200,28 +237,26 @@
 
             // Fade the background to white after a certain amount of time. This background panel is then used as a
             // part of the animation transitions later on.
-            function paintBackgroundPanel() {
-                sel.append("rect")
-                        .attr({
-                            "fill": "#fff",
-                            "width": "100%",
-                            "height": "100%",
-                            "fill-opacity": 0.0,
-                            "class": "background-panel"
-                        })
-                        .transition()
-                        .delay(3500)
-                        .duration(2000)
-                        .attr("fill-opacity", 0)
-            }
+            // TODO: Decide whether to keep this.
+//            function paintBackgroundPanel() {
+//                sel.append("rect")
+//                        .attr({
+//                            "fill": "#fff",
+//                            "width": "100%",
+//                            "height": "100%",
+//                            "fill-opacity": 0.0,
+//                            "class": "background-panel"
+//                        })
+//                        .transition()
+//                        .delay(3500)
+//                        .duration(2000)
+//                        .attr("fill-opacity", 0)
+//            }
 
-            // Paints the stations on the map.
+            // Paints all of the stations on the map.
             function paintStations() {
                 d3.csv("../../static/post_assets/citibike/june_22_station_metadata.csv", function(error, dataset) {
                     if (error) throw error;
-
-                    // 1431 is the observed maximum bike trip count---Pershing Square North @ Grand Central Station.
-//                    var station_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
 
                     setTimeout(function() {
                         sel
@@ -251,7 +286,8 @@
                                     d3.select(this)
                                         .attr({
                                             "stroke-width": 4,
-                                            "r": 10
+                                            "r": 10,
+                                            "id": "hovered-station"
                                         });
                                     showTooltip(d);
                                 })
@@ -259,7 +295,8 @@
                                     d3.select(this)
                                             .attr({
                                                 "stroke-width": 2,
-                                                "r": 5
+                                                "r": 5,
+                                                "id": null
                                             });
                                     hideTip();
                                 })
@@ -273,13 +310,26 @@
                 });
             }
 
+            // Enables interactions (meant to be used once the animation is done playing).
+            function enableInteractions() {
+                is_intro_anim = false;
+                map.dragging.enable();
+                map.keyboard.enable();
+                map.scrollWheelZoom.enable();
+            }
+
             // This function runs the intro animation.
             function runIntroAnimation() {
+                d3.select("#map-canvas").style("cursor", "default");  // change cursor to the default while animating.
                 paintPathSampler();  // Animate the sample paths.
-                paintBackgroundPanel(); // Animate the background fadeout.
+//                paintBackgroundPanel(); // Animate the background fadeout.
                 paintStations();  // Animate the stations.
                 setTimeout(function() {
                     paintIntroInfo();  // Append the intro text box. This method is from the Info Box code segment.
+                }, 6000);
+                setTimeout(function() {
+                    enableInteractions();
+                    d3.select("#map-canvas").style("cursor", null);  // then back to a grabby hand after
                 }, 6000);
             }
 
@@ -319,7 +369,8 @@
                             "opacity": 0.0,
                             "padding": "10px",
                             "font-family": "Roboto",
-                            "text-align": "center"
+                            "text-align": "center",
+                            "cursor": "default"
                         })
                         .transition()
                         .duration(1000)
@@ -391,12 +442,13 @@
             // This really ought to be in the station selection block, but for some reason when it's there it breaks my
             // build.
             function clearSelection() {
-                d3.selectAll(".station").attr({
-                    "stroke": "white"
+                d3.selectAll(".station-selected").attr({
+                    "stroke": "white",
+                    "class": "station"
                 });
                 selected_stations = {};
                 updateSelectionDisplay();
-                updateResetButtonStyle();
+                updateResetAndLaunchButtonStyles();
             }
 
             // This helper function creates and appends a button that when in station mode or in bike mode and hit
@@ -417,13 +469,51 @@
             }
 
             // This helper function creates and appends a button that when in station mode or in bike mode and hit
+            // launches the visualization. It's factored out because it's common to both functions.
+            function appendMenuLaunch(button_holder) {
+                button_holder.append("button")
+                        .attr({
+                            "type": "button",
+                            "id": "launch-button",
+                            "class": function() {
+                                var selection_size = Object.keys(selected_stations).length;
+                                if(selection_size == 0) {
+                                    return "btn-disabled";
+                                }
+                                else {
+                                    return "btn btn-blue";
+                                }
+                            }
+                        })
+                        .style({
+                            "width": "33%"
+                        })
+                        .text("Launch")
+                        .on("click", function() {
+                            if(viz_mode == "stations") {
+                                launchStationsViz();
+                            }
+                            else if(viz_mode == "bikes") {
+                                launchBikesViz();
+                            }
+                        });
+            }
+
+            // This helper function creates and appends a button that when in station mode or in bike mode and hit
             // removes all of the stations in your current selection. It's factored out because it's common to both
             // functions.
             function appendMenuReset(button_holder) {
                 button_holder.append("button")
                         .attr({
                             "type": "button",
-                            "class": "btn-disabled",
+                            "class": function() {
+                                if(Object.keys(selected_stations).length == 0) {
+                                    return "btn-disabled";
+                                }
+                                else {
+                                    return "btn"
+                                }
+                            },
                             "id": "reset-button"
                         })
                         .style({
@@ -432,8 +522,9 @@
                         .text("Reset")
                         .on("click", function() {
                             clearSelection();  // in the station selection section.
+                            updateSelectionDisplay();  // Necessary in case there are preexisting selections.
+                            updateResetAndLaunchButtonStyles();
                         });
-                updateResetButtonStyle();  // Necessary in case there are preexisting selections.
             }
 
             // Paints the stations info box.
@@ -458,19 +549,7 @@
 
                 appendMenuGoBack(button_holder);
                 appendMenuReset(button_holder);
-
-                button_holder.append("button")
-                        .attr({
-                            "type": "button",
-                            "class": "btn btn-blue"
-                        })
-                        .style({
-                            "width": "33%"
-                        })
-                        .text("Launch")
-                        .on("click", function() {
-                            // TODO: Implement.
-                        });
+                appendMenuLaunch(button_holder);
 
             }
 
@@ -496,19 +575,7 @@
 
                 appendMenuGoBack(button_holder);
                 appendMenuReset(button_holder);
-
-                button_holder.append("button")
-                        .attr({
-                            "type": "button",
-                            "class": "btn btn-blue"
-                        })
-                        .style({
-                            "width": "33%"
-                        })
-                        .text("Launch")
-                        .on("click", function() {
-                            // TODO: Implement.
-                        });
+                appendMenuLaunch(button_holder);
 
             }
 
@@ -518,22 +585,6 @@
             // Design:
             // This code handles when a user clicks on a station, uses the box select, or hits clear selection.
             //
-            // Implementation:
-            // In order to implement the station toggle selection we need to implement a global struct which stores
-            // stations selected and the paths that have been drawn associated with them. The structure is thus:
-            // {'<first station id>':
-            //      { 'station':<first station selection>,
-            //        'trips': [<first trip selection>, <second trip selection>, ...]
-            //      }
-            //  '<second station id>':
-            //      { ... }
-            //  ...
-            // }
-            // This data structure is unware of what the provenance of the trips it stores is, it merely stores them.
-            // Accessing trips allows us to do either/or of the two viz modes.
-            // They're stored under stations to allow implementing a highlighter later on.
-            var selected_stations = {};
-            var viz_mode = 'intro';  // options are 'intro', 'stations', 'bikes'. We start in 'intro'.
 
             // Now the function itself. As a UX decision I decided to split *generating* a selection from plotting its
             // data. I did this to allow doing selections on the introduction pane, before the user chooses a
@@ -551,11 +602,6 @@
                     if(!(d['station id'] in selected_stations)) {
                         // Station is not currently in the selection, so add it.
                         selected_stations[d['station id']] = sel_station;
-                        if(!(viz_mode == 'intro')) {
-                            // We are not currently on the introduction screen, so we can't just bind the element, we have
-                            // to fire populating the lines as well.
-                            // TODO: Implement this. Requires working the API first.
-                        }
                         // Change the circle mark to match.
                         sel_station.attr({"stroke": "black", "class": "station station-selected"});
                     }
@@ -568,7 +614,7 @@
                     }
                     // Update the display elements.
                     updateSelectionDisplay();
-                    updateResetButtonStyle();
+                    updateResetAndLaunchButtonStyles();
                 }
             }
 
@@ -629,13 +675,14 @@
                                 // "outbound trips" plus "inbound trips".
                                 console.log(all_selected_stations_data);
                                 console.log(all_selected_stations_data.length);
+                                var i = 0;
                                 if(viz_mode == "stations") {
-                                    for(var i = 0; i < all_selected_stations_data.length; i++) {
+                                    for(i = 0; i < all_selected_stations_data.length; i++) {
                                         total_trips += +all_selected_stations_data[i]['all trips'];
                                     }
                                 }
                                 else if(viz_mode == "bikes") {
-                                    for(var i = 0; i < all_selected_stations_data.length; i++) {
+                                    for(i = 0; i < all_selected_stations_data.length; i++) {
                                         total_trips += +all_selected_stations_data[i]['outbound trips'];
                                         total_trips += +all_selected_stations_data[i]['inbound trips'];
                                     }
@@ -652,14 +699,18 @@
 
             }
 
-            function updateResetButtonStyle() {
+            // Sets or unsets updateButton clickiness based on whether or not there are stations are in the current
+            // selection.
+            function updateResetAndLaunchButtonStyles() {
                 var selection_size = Object.keys(selected_stations).length;
                 if(selection_size == 0) {
                     // If no stations are selected then we just removed our last selection, so remove the display.
                     d3.select("#reset-button").attr({"class": "btn-disabled"});
+                    d3.select("#launch-button").attr({"class": "btn-disabled"});
                 }
                 else {
                     d3.select("#reset-button").attr({"class": "btn"});
+                    d3.select("#launch-button").attr({"class": "btn btn-blue"});
                 }
             }
 
@@ -677,15 +728,19 @@
 
             // Displays the appropriate tooltip for the selected station.
             function showTooltip(d) {
-                var sel_station = d3.select(this);
+                var sel_station = d3.select("#hovered-station");
                 d3.select("#map-canvas")
                         .append("div")
                         .attr({"class": "station-tip"})
                         .style({
                             "position": "absolute",
+                            // TODO: Fix this broken-ass positioning...
+//                            "top": +sel_station.attr("cy") - +30 + "px",
+//                            "left": +sel_station.attr("cx") + +20 + "px"
                             "top": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).y -
-                                   35 + "px",
-                            "left": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).x + 20 + "px"
+                            (30 * scale_factor) + "px",
+                            "left": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).x +
+                            (20 * scale_factor) + "px"
                         })
                         .html(function() {
                             var underline = null;
@@ -850,15 +905,73 @@
                         });
             }
 
+            //////////////////
+            // RE-RENDERING //
+            //////////////////
+            // Design:
+            // These methods handle tweaking stations and jittering the hover tooltip when the map is zoomed, so that
+            // everything stays in the correct place and has the correct size.
+
+            function rerenderStations() {
+                d3.selectAll(".station")
+                        .attr({
+                            "r": 5 * scale_factor,
+                            "stroke-width": 2 * scale_factor
+                        })
+                        .on('mouseover', function(d, i){
+                            d3.select(this)
+                                .attr({
+                                    "stroke-width": 4 * scale_factor,
+                                    "r": 10 * scale_factor,
+                                    "id": "hovered-station"
+                                });
+                            showTooltip(d);
+                        })
+                        .on('mouseout', function(d, i) {
+                            d3.select(this)
+                                    .attr({
+                                        "stroke-width": 2 * scale_factor,
+                                        "r": 5 * scale_factor,
+                                        "id": null
+                                    });
+                            hideTip();
+                        });
+            }
+
+            ///////////////
+            // LAUNCHERS //
+            ///////////////
+            // These methods launch the main animation.
+            function launchBikesViz() {
+                // TODO: Implement.
+            }
+
+            function launchStationsViz() {
+                // TODO: Implement.
+            }
+
+
             /////////////////
             // MAIN METHOD //
             /////////////////
-            // This is the method runs the whole thing.
-            // No seriously. That's it.
-            // Everything else hooks into this one call.
-            // Ain't JavaScript a beaut?
-            runIntroAnimation();
-
+            // This is the method runs the drawer.
+            // Either run the intro animation...
+            if(is_intro_anim) {
+                runIntroAnimation();
+            }
+            // Or correct the existing elements to match the display. This is necessary because by default, whenever
+            // the map is zoomed D3SvgOverlay keeps the elements on the map at the same scale as the original ones, but
+            // of course that's not what we want.
+            //
+            // So we have to implement station scaling ourselves, manually.
+            else {
+                // Rescale (scale_factor is a global).
+                scale_factor = Math.max(1 / Math.pow(2, map.getZoom() - 13), 0.0625);
+                // Correct the displays.
+                rerenderStations();
+                // Fade out the intro paths, if we haven't already.
+                fadeOutSamplerPaths();
+            }
         });
 
         /////////////
