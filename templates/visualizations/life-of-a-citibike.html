@@ -1,15 +1,13 @@
 <!--
-    TODO: (0) Verify that the outbound trip counter is actually correct (watch the map).
-    TODO: (1) Add outbound trip counting to the tooltip and to the selection display.
-    TODO: (2) Implement station colormap swapping between intro, stations, bikes modes.
-    TODO: (3) Implement muting all non-selected stations a tad bit when the user has selections active.
-    TODO: (4) Implement returning the sampler paths when the view is switched back to intro mode.
-    TODO: (5) Implement box select.
+    TODO: (2) Implement fading out all non-selected stations a tad bit when the user has selections active.
+    TODO: (3) Implement box select.
+    TODO: (4) Double click un-select.
+    TODO: (5) Implement zooming.
+    TODO: (6) Intro box text.
 
     --- LATER ---
     TODO: (5) Plot station polylines on click (possibly with loading pane). HARD!
-    TODO: (6) Possibly add box select? https://github.com/d3/d3-3.x-api-reference/blob/master/Drag-Behavior.md
-    TODO: (7) Description, launch button text that loads on hover.
+    TODO: (6) Continue thinking about color maps.
 -->
 <!DOCTYPE html>
 <html>
@@ -181,7 +179,7 @@
                             .transition()
                             .duration(2500)
                             .attr({
-                                "stroke": "steelblue"
+                                "stroke": "#99bbd7"
                             })
                 }, 25*i);
             }
@@ -214,7 +212,7 @@
                         .transition()
                         .delay(3500)
                         .duration(2000)
-                        .attr("fill-opacity", 0.65);
+                        .attr("fill-opacity", 0)
             }
 
             // Paints the stations on the map.
@@ -223,7 +221,7 @@
                     if (error) throw error;
 
                     // 1431 is the observed maximum bike trip count---Pershing Square North @ Grand Central Station.
-                    var station_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
+//                    var station_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
 
                     setTimeout(function() {
                         sel
@@ -242,10 +240,10 @@
                                     "cursor": "pointer",
                                     "fill": function(d) {
                                         if(d['kind'] == 'active') {
-                                            return station_color_scale(d['all trips']);
+                                            return "#3f75a2";
                                         }
                                         else if(d['kind'] == 'inactive') {
-                                            return "#ddbfa7";
+                                            return "#a7a7a7";
                                         }
                                     }
                                 })
@@ -281,7 +279,7 @@
                 paintBackgroundPanel(); // Animate the background fadeout.
                 paintStations();  // Animate the stations.
                 setTimeout(function() {
-                    paintIntroInfo(); // Append the intro text box. This method is from the Info Box code segment.
+                    paintIntroInfo();  // Append the intro text box. This method is from the Info Box code segment.
                 }, 6000);
             }
 
@@ -324,7 +322,7 @@
                             "text-align": "center"
                         })
                         .transition()
-                        .duration(2000)
+                        .duration(1000)
                         .style({
                             "opacity": 1.0
                         });
@@ -559,14 +557,14 @@
                             // TODO: Implement this. Requires working the API first.
                         }
                         // Change the circle mark to match.
-                        sel_station.attr({"stroke": "black"});
+                        sel_station.attr({"stroke": "black", "class": "station station-selected"});
                     }
                     else {
                         // The element is already in the selection, so remove it (this is a toggle after all).
                         delete selected_stations[d['station id']];
                         // Update the display element.
                         // Change the circle mark to match.
-                        sel_station.attr({"stroke": "white"});
+                        sel_station.attr({"stroke": "white", "class": "station"});
                     }
                     // Update the display elements.
                     updateSelectionDisplay();
@@ -603,16 +601,52 @@
                                 "text-align": "right"
                             })
                             .html(function(d) {
-                                // Deal with pluralization!
+                                // The string is fairly complicated to write, so let's break it up into parts.
+                                // First we put down the part that always displays, the selection size.
+                                // Since the presence or lack thereof of that pesky "s" depends on the pluralization we
+                                // have to deal with that first.
                                 var s = "";
                                 if(selection_size > 1) {
                                     s = "s";
                                 }
-                                // Get total trip counts.
-                                // TODO: Write this logic and add it to the display.
+                                // Now the basic display string.
+                                var display =
+                                        "<div style='font-family:Roboto; line-height:1'>" +
+                                        "<div style='font-weight: bold; font-size: 24px; '>" +
+                                         selection_size + " Station" + s + " Selected</div>";
+                                // Ok, if we are on the introductory screen this is all we need.
+                                if(viz_mode == "intro") {
+                                    return display;
+                                }
+                                // If not then we have to do more work. For starters, get all of the selected elements.
+                                // (when an element is selected it is added to the station-selected class list. This
+                                //  is done explicitly for the purposes of this here function!)
+                                var all_selected_stations_data = d3.selectAll(".station-selected").data();
+                                // We're going to need a trip counter.
+                                var total_trips = 0;
+                                // Now we'll need to iterate through these and add something which is dependent on the
+                                // mode. If we're in stations mode we need "all trips". If we're in bikes mode we need
+                                // "outbound trips" plus "inbound trips".
+                                console.log(all_selected_stations_data);
+                                console.log(all_selected_stations_data.length);
+                                if(viz_mode == "stations") {
+                                    for(var i = 0; i < all_selected_stations_data.length; i++) {
+                                        total_trips += +all_selected_stations_data[i]['all trips'];
+                                    }
+                                }
+                                else if(viz_mode == "bikes") {
+                                    for(var i = 0; i < all_selected_stations_data.length; i++) {
+                                        total_trips += +all_selected_stations_data[i]['outbound trips'];
+                                        total_trips += +all_selected_stations_data[i]['inbound trips'];
+                                    }
+                                }
+                                // Write this data to the string.
+                                display += "<br/>" + total_trips + " trips will be plotted." + "</div>";
+                                return display;
                                 // Write the string.
-                                return "<div style='font-weight: bold; font-size: 24px; font-family:Roboto;'>" +
-                                        selection_size + " Station" + s + " Selected</div>"
+//                                return "<div style='font-weight: bold; font-size: 24px; font-family:Roboto;'>" +
+//                                        selection_size + " Station" + s + " Selected</div><br/>" +
+//                                        trips_to_be_visualized_line
                             });
                 }
 
@@ -660,27 +694,40 @@
                             }
                             else {
                                 if(viz_mode == 'intro') {
+                                    var bikes_out_in = +d['bikes outbound'] + +d['bikes inbound'];
+                                    // Pluralize!
+                                    var bikes_out_s = "s";
+                                    var trips_s = "s";
+                                    if(+d['all trips'] == 1) {
+                                        trips_s = "";
+                                    }
+                                    if(bikes_out_in == 1) {
+                                        bikes_out_s = "";
+                                    }
+
                                     underline = d['all trips'] +
-                                            " Trips To/From, " +
-                                            d['outbound trips'] + " Trips Outbound" +
-                                            "</span></div>";  // TODO: Change this to a dual-display one liner.
-                                    // Format for one-liner: 445 Trips to/from Station; 1020 Outbound Trips
-                                    // Or something like that.
+                                            " trip" + trips_s + " to or from here.<br/>" +
+                                            bikes_out_in + " bike" + bikes_out_s + " began or ended the day here." +
+                                            "</span></div>";
                                 }
                                 else if(viz_mode == 'stations') {
-                                    underline = d['all trips'] +
-                                    " &#128690; Trips ("
-                                    + d['incoming trips']
-                                    + " In, "
-                                    + d['outgoing trips'] + " Out)"
+                                    underline = d['incoming trips'] +
+                                    " trips to this station.<br/>"
+                                    + d['outgoing trips']
+                                    + " trips from this station.<br/>"
+//                                    + d['all trips'] + " trips total."
                                     + "</span></div>";
                                 }
                                 else if(viz_mode == 'bikes') {
+                                    // Pluralize!
+                                    var out_s = "s";
+                                    if(+d['bikes outbound'] == 1) {
+                                        out_s = "";
+                                    }
                                     underline =  d['bikes outbound'] +
-                                    " &#128690; Starts ("
-                                    + d['outbound trips']
-                                    + " Trips Total)"
-                                    + "</span></div>";
+                                    " bike" + out_s + " started the day here.<br/> " +
+                                    d['bikes inbound'] + " ended it here." +
+                                    "</span></div>";
                                 }
                             }
                             return "<div style='text-align:center'>" +
@@ -717,17 +764,90 @@
                 viz_mode = "bikes";
                 fadeOutSamplerPaths();
                 paintBikesInfo();
+                applyBikesModeColorMap();
+                updateSelectionDisplay();
             }
 
             function switchToStationsMode() {
                 viz_mode = "stations";
                 fadeOutSamplerPaths();
                 paintStationsInfo();
+                applyStationsModeColorMap();
+                updateSelectionDisplay();
             }
 
             function switchToIntroMode() {
                 viz_mode = "intro";
                 paintIntroInfo();
+                applyIntroColorMap();
+                updateSelectionDisplay();
+            }
+
+            //////////////////
+            // COLORIZATION //
+            //////////////////
+            // Design:
+            // These functions define the colormap for each of the different viz types.
+            //
+
+            function applyBikesModeColorMap() {
+                d3.selectAll(".station")
+                        .transition()
+                        .duration(500)
+                        .attr({
+                            "fill": function (d) {
+                                if (d['kind'] == 'inactive') {
+                                    return "#a7a7a7";
+                                }
+                                else if (d['delta bikes'] < 0) {
+                                    return "#d8b365";
+                                }
+                                else if(d['delta bikes'] >= 0){
+                                    return "#3f75a2";
+                                }
+//                                else {
+//                                    return "#3f75a2";
+//                                }
+                            }
+                        });
+            }
+
+            function applyStationsModeColorMap() {
+//                var stations_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
+                var all_data = d3.selectAll(".station").data().map(function(d) { return d['all trips']});
+                console.log(all_data);
+                var stations_color_scale = d3.scale.quantile().domain(all_data).range(['lightsteelblue',
+                    'steelblue', '#2b4f6d']);
+
+                d3.selectAll(".station")
+                        .transition()
+                        .duration(500)
+                        .attr({
+                            "fill": function (d) {
+                                if (d['kind'] == 'inactive') {
+                                    return "#a7a7a7";
+                                }
+                                else {
+                                    return stations_color_scale(d['all trips']);
+                                }
+                            }
+                        });
+            }
+
+            function applyIntroColorMap() {
+                d3.selectAll(".station")
+                        .transition()
+                        .duration(500)
+                        .attr({
+                            "fill": function (d) {
+                                if (d['kind'] == 'inactive') {
+                                    return "#a7a7a7";
+                                }
+                                else {
+                                    return "#3f75a2";
+                                }
+                            }
+                        });
             }
 
             /////////////////
