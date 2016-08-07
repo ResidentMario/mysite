@@ -1,13 +1,12 @@
 from datetime import datetime
-
-from flask import (Flask, render_template, abort, request, make_response, jsonify)
-
+from flask import (Flask, render_template, abort, request, make_response)
 from static.post_assets.citibike.datastore import DataStore
+import json
 
 app = Flask(__name__)
 
 # Initialize the MongoDB connection once.
-db = DataStore(credentials_file='static/post_assets/citibike/mlab_instance_api_key.json')
+db = DataStore(uri="mongodb://localhost:27017")
 
 
 post_list = [
@@ -181,10 +180,32 @@ def display_visualization(path):
     return render_template('visualizations/' + path)
 
 
-@app.route('/citibike-api/random-sample')
-def citibike_sample():
-    sample = db.sample()
-    return jsonify(sample)
+@app.route('/citibike-api/<path:path>/id/<int:stationid>')
+def citibike_sample(path, stationid):
+    if path == 'bike-outbounds':
+        collection_name = 'outbound bike trip indices'
+    elif path == 'bike-inbounds':
+        collection_name = 'inbound bike trip indices'
+    elif path == 'outgoing-trips':
+        collection_name = 'outgoing trip indicies'
+    elif path == 'ingoing-trips':
+        collection_name = 'incoming trip indicies'
+    else:
+        abort(404)
+        return
+    db = DataStore(uri="mongodb://localhost:27017")
+    # Note: str(stationid) not stationid!
+    tripset = db.get_station_bikeset(str(stationid), collection_name)
+    # Remove None trips---these correspond with trips that have not been populated in the database yet!
+    tripset = [trip for trip in tripset if trip is not None]
+    # jsonify(tripset) will not work because Flask disallows lists within arrays in top-level JSON, for security
+    # reasons. However the security issue in question seems to have been patched out long ago in all major browsers?
+    # Further reference: https://github.com/pallets/flask/issues/673;
+    # http://flask.pocoo.org/docs/0.11/security/#json-security
+    # return jsonify(tripset)
+    # json.dumps has no such qualms. It also handles the fact that the output is single-quoted strings, while JSON
+    # enforces double-quoted string (so you can't e.g. cast to a straight string using str(tripset)!).
+    return json.dumps(tripset)
 
 
 @app.route('/<path:path>')
