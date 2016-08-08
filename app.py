@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import (Flask, render_template, abort, request, make_response)
+from flask import (Flask, render_template, abort, request, make_response, Response)
 from static.post_assets.citibike.datastore import DataStore
 import json
 
@@ -187,9 +187,9 @@ def citibike_sample(path, stationid):
     elif path == 'bike-inbounds':
         collection_name = 'inbound bike trip indices'
     elif path == 'outgoing-trips':
-        collection_name = 'outgoing trip indicies'
-    elif path == 'ingoing-trips':
-        collection_name = 'incoming trip indicies'
+        collection_name = 'outgoing trip indices'
+    elif path == 'incoming-trips':
+        collection_name = 'incoming trip indices'
     else:
         abort(404)
         return
@@ -205,7 +205,7 @@ def citibike_sample(path, stationid):
     # return jsonify(tripset)
     # json.dumps has no such qualms. It also handles the fact that the output is single-quoted strings, while JSON
     # enforces double-quoted string (so you can't e.g. cast to a straight string using str(tripset)!).
-    return json.dumps(tripset)
+    return Response(json.dumps(tripset), mimetype='application/json')
 
 
 @app.route('/<path:path>')

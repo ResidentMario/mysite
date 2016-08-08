@@ -1,12 +1,12 @@
 <!--
     --- NOW ---
-    TODO: Python API.
+    TODO: Assigning data to the elements of the selection once the viz is launched.
+    TODO: Loading screen in-and-out for how long that process takes.
 
     --- LATER ---
-    TODO: Fix the wonky-ass tooltip positioning.
-    TODO: Box select.
-    TODO: Double-click unselect.
-    TODO: Intro box text.
+    TODO: Animate a line.
+    TODO: Create a clock.
+    TODO: Put those two things together.
 -->
 <!DOCTYPE html>
 <html>
@@ -103,6 +103,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
     <script src="/static/js/d3.v3.js"></script>
     <script src="/static/js/L.D3SvgOverlay.js"></script>
+    <script src="https://d3js.org/d3-queue.v3.js"></script>
     <script>
 
         /////////////////////////
@@ -235,24 +236,6 @@
                 });
             }
 
-            // Fade the background to white after a certain amount of time. This background panel is then used as a
-            // part of the animation transitions later on.
-            // TODO: Decide whether to keep this.
-//            function paintBackgroundPanel() {
-//                sel.append("rect")
-//                        .attr({
-//                            "fill": "#fff",
-//                            "width": "100%",
-//                            "height": "100%",
-//                            "fill-opacity": 0.0,
-//                            "class": "background-panel"
-//                        })
-//                        .transition()
-//                        .delay(3500)
-//                        .duration(2000)
-//                        .attr("fill-opacity", 0)
-//            }
-
             // Paints all of the stations on the map.
             function paintStations() {
                 d3.csv("../../static/post_assets/citibike/june_22_station_metadata.csv", function(error, dataset) {
@@ -313,16 +296,26 @@
             // Enables interactions (meant to be used once the animation is done playing).
             function enableInteractions() {
                 is_intro_anim = false;
+                d3.select("#map-canvas").style("cursor", "pointer");
                 map.dragging.enable();
                 map.keyboard.enable();
                 map.scrollWheelZoom.enable();
             }
 
+            // Disables interactions. Actually not currently used during the intro, used instead during the later
+            // actual visualization.
+            function disableInteractions() {
+                d3.select("#map-canvas").style("cursor", "default");
+                map.dragging.disable();
+                map.keyboard.disable();
+                map.doubleClickZoom.disable();
+            }
+
+
             // This function runs the intro animation.
             function runIntroAnimation() {
                 d3.select("#map-canvas").style("cursor", "default");  // change cursor to the default while animating.
                 paintPathSampler();  // Animate the sample paths.
-//                paintBackgroundPanel(); // Animate the background fadeout.
                 paintStations();  // Animate the stations.
                 setTimeout(function() {
                     paintIntroInfo();  // Append the intro text box. This method is from the Info Box code segment.
@@ -490,12 +483,7 @@
                         })
                         .text("Launch")
                         .on("click", function() {
-                            if(viz_mode == "stations") {
-                                launchStationsViz();
-                            }
-                            else if(viz_mode == "bikes") {
-                                launchBikesViz();
-                            }
+                                initLoadingScreen();
                         });
             }
 
@@ -601,7 +589,9 @@
                 if(d['kind'] == 'active') {
                     if(!(d['station id'] in selected_stations)) {
                         // Station is not currently in the selection, so add it.
-                        selected_stations[d['station id']] = sel_station;
+                        // Notice the semantics: trips are stored as two dict-indexed arrays, one of trips in and one
+                        // of trips out.
+                        selected_stations[d['station id']] = {'to': null, 'from': null};
                         // Change the circle mark to match.
                         sel_station.attr({"stroke": "black", "class": "station station-selected"});
                     }
@@ -673,8 +663,6 @@
                                 // Now we'll need to iterate through these and add something which is dependent on the
                                 // mode. If we're in stations mode we need "all trips". If we're in bikes mode we need
                                 // "outbound trips" plus "inbound trips".
-                                console.log(all_selected_stations_data);
-                                console.log(all_selected_stations_data.length);
                                 var i = 0;
                                 if(viz_mode == "stations") {
                                     for(i = 0; i < all_selected_stations_data.length; i++) {
@@ -870,7 +858,6 @@
             function applyStationsModeColorMap() {
 //                var stations_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
                 var all_data = d3.selectAll(".station").data().map(function(d) { return d['all trips']});
-                console.log(all_data);
                 var stations_color_scale = d3.scale.quantile().domain(all_data).range(['lightsteelblue',
                     'steelblue', '#2b4f6d']);
 
@@ -938,18 +925,154 @@
                         });
             }
 
-            ///////////////
-            // LAUNCHERS //
-            ///////////////
-            // These methods launch the main animation.
-            function launchBikesViz() {
+            ////////////////////
+            // LOADING SCREEN //
+            ////////////////////
+            // Design:
+            // Data is actually bound the selection at the moment when the Launch button is hit.
+            // A loading screen keeps the user busy while they wait.
+            // This section implements that loading screen.
+
+            // Nicely fades out the data elements present in the selection which are not present in the animation.
+            function unpaintNonAnimatedDisplayElements() {
+                d3.select("#description-block").transition().duration(1000).style({"opacity": 0}).remove();
+                d3.select("#selection-display").transition().duration(1000).style({"opacity": 0}).remove();
+            }
+
+            // When the visualization is done, replace the data elements back onto the screen.
+            function repaintNonAnimatedDisplayElements() {
+                return null;
                 // TODO: Implement.
             }
 
-            function launchStationsViz() {
+            // Emits the non-data elements of the loading screen: the background panel, "Loading..." text, and the cute
+            // loading animation.
+            function paintLoadingElements() {
+                // Fade in the background panel.
+                var panel = sel.append("rect")
+                        .attr({
+                            "fill": "black",
+                            "width": "100%",
+                            "height": "100%",
+                            "fill-opacity": 0.0,
+                            "id": "background-panel"
+                        })
+                        .transition()
+                        .duration(1000)
+                        .attr({
+                            "fill-opacity": 0.5
+                        });
+
+                var loader = d3.select("#map-canvas")
+                        .append("g")
+                        .style({
+                            "position": "absolute",
+                            "left": "50%",
+                            "top": "50%",
+                            "transform": "translate(-50%,-50%)",
+                            "display": "inline-block",
+                            "margin": "auto"
+                        })
+                        .attr("id", "loader");
+
+                loader.append("img")
+                        .attr({
+                            "src": "http://127.0.0.1:5000/static/post_assets/citibike/loading-ring.svg"
+                        });
+
+                loader.append("div")
+                        .style({
+                            "margin": "auto",
+                            "font-weight": "bold",
+                            "font-size": "30px",
+                            "color": "white",
+                            "font-family": "Roboto"
+                        })
+                        .text("Loading...");
+            }
+
+            // Kills the loading screen. Called once the API data is properly bound, as a part of exitLoadingScreen.
+            function unpaintLoadingScreen() {
+                d3.select("#loader").transition().duration(1000).style({"opacity": 0}).remove();
+                d3.select("#background-panel").transition().duration(1000).style({"opacity": 0}).remove();
+            }
+
+            // Makes the actual API calls which bind the data to the selected stations' struct.
+            // The data is fed in asynchronously. I have to play around with it to understand what that means for me.
+            // Notice that this function remaps the API tripset identifiers from the ones specific to the ask mode to
+            // simply "to" and "from" keys. This simplifies calling on this data later, as it eliminates having to
+            // check the viz mode and adopt the accessor key to match it, as we have had to do here.
+            //
+            // The "callback" parameter should be filled with the function which will run once the data bind is done---
+            // in our case this is unpaintLoadingScreen!
+            function bindData(call_this_once_done) {
+                var api_paths = null;
+                if (viz_mode == "bikes") {
+                    api_paths = ["bike-inbounds", "bike-outbounds"]
+                }
+                else {
+                    api_paths = ["incoming-trips", "outgoing-trips"]
+                }
+                var q = d3.queue();
+                for (let key in selected_stations) {
+                    if (selected_stations.hasOwnProperty(key)) {
+                        console.log(key);
+                        q.defer(function (callback) {
+                            console.log("http://127.0.0.1:5000/citibike-api/" +
+                                    api_paths[0] +
+                                    "/id/" + key);
+                            d3.json("http://127.0.0.1:5000/citibike-api/" +
+                                    api_paths[0] +
+                                    "/id/" + key, function (data) {
+                                selected_stations[key]['to'] = data;
+                                callback(null, data);
+                            });
+                        });
+                        q.defer(function (callback) {
+                            console.log("http://127.0.0.1:5000/citibike-api/" +
+                                    api_paths[1] +
+                                    "/id/" + key);
+                            d3.json("http://127.0.0.1:5000/citibike-api/" +
+                                    api_paths[1] +
+                                    "/id/" + key, function (data) {
+                                selected_stations[key]['from'] = data;
+                                callback(null, data);
+                            });
+                        })
+                    }
+                }
+                q.awaitAll(function (error) {
+                    if (error) throw error;
+                    console.log("Done!");
+                    console.log(selected_stations);
+                    call_this_once_done();
+                });
+            }
+
+            // Removes non-selected stations from the map.
+            // Later on when we transition out of the visualization we keep the current selection, so the stations
+            // aren't explicitly removed from the DOM, just transparently hidden.
+            function unpaintUnselectedStations() {
                 // TODO: Implement.
             }
 
+            //
+            // Runners for all these things.
+            //
+
+            // Continues the transition by removing the loading screen, dropping non-selected stations, zooming out to
+            // a planar view, and fiddling with interactivity. Then hands things off to the visualization runner!
+            function exitLoadingScreen() {
+                unpaintLoadingScreen();
+            }
+
+            // First part of the transition. exitLoadingScreen finishes the job after data has loaded.
+            function initLoadingScreen() {
+                disableInteractions();
+                unpaintNonAnimatedDisplayElements();
+                paintLoadingElements();
+                bindData(exitLoadingScreen);
+            }
 
             /////////////////
             // MAIN METHOD //
