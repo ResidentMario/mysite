@@ -249,7 +249,7 @@
                                 .enter()
                                 .append("circle")
                                 .attr({
-                                    "class": "station",
+                                    "class": "station station-unselected",
                                     "cx": function (d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).x },
                                     "cy": function (d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).y },
                                     "r": 0,
@@ -263,7 +263,9 @@
                                         else if(d['kind'] == 'inactive') {
                                             return "#a7a7a7";
                                         }
-                                    }
+                                    },
+                                    "fill-opacity": 1,
+                                    "stroke-opacity": 1
                                 })
                                 .on('mouseover', function(d, i){
                                     d3.select(this)
@@ -309,6 +311,7 @@
                 map.dragging.disable();
                 map.keyboard.disable();
                 map.doubleClickZoom.disable();
+                map.scrollWheelZoom.disable();
             }
 
 
@@ -600,7 +603,7 @@
                         delete selected_stations[d['station id']];
                         // Update the display element.
                         // Change the circle mark to match.
-                        sel_station.attr({"stroke": "white", "class": "station"});
+                        sel_station.attr({"stroke": "white", "class": "station station-unselected"});
                     }
                     // Update the display elements.
                     updateSelectionDisplay();
@@ -1016,7 +1019,6 @@
                 var q = d3.queue();
                 for (let key in selected_stations) {
                     if (selected_stations.hasOwnProperty(key)) {
-                        console.log(key);
                         q.defer(function (callback) {
                             console.log("http://127.0.0.1:5000/citibike-api/" +
                                     api_paths[0] +
@@ -1043,17 +1045,30 @@
                 }
                 q.awaitAll(function (error) {
                     if (error) throw error;
-                    console.log("Done!");
                     console.log(selected_stations);
                     call_this_once_done();
                 });
             }
 
             // Removes non-selected stations from the map.
-            // Later on when we transition out of the visualization we keep the current selection, so the stations
-            // aren't explicitly removed from the DOM, just transparently hidden.
             function unpaintUnselectedStations() {
-                // TODO: Implement.
+                d3.selectAll(".station-unselected")
+                        .transition()
+                        .duration(2500)
+                        .attr({
+                            "fill-opacity": 0,
+                            "stroke-opacity": 0
+                        }) ; // .remove();
+                // Disable deselection of selected stations.
+                d3.selectAll(".station").on("click", null);
+                // Disable hover for the now-hidden stations.
+                d3.selectAll(".station-unselected").style("cursor", "default").on("mouseover", null);
+            }
+
+            // Transitions the map view back to the default one.
+            function resetView() {
+                map.fitBounds([[40.6794268,-73.92989109999999], [40.789747, -74.075979]],
+                        options={'animate':true});
             }
 
             //
@@ -1063,15 +1078,39 @@
             // Continues the transition by removing the loading screen, dropping non-selected stations, zooming out to
             // a planar view, and fiddling with interactivity. Then hands things off to the visualization runner!
             function exitLoadingScreen() {
-                unpaintLoadingScreen();
+                var q = d3.queue();
+                function transit(callback) {
+                    unpaintLoadingScreen();
+                    unpaintUnselectedStations();
+                    // Wait a little bit to allow painters to finish and the user to realize that this is happening.
+                    setTimeout(function() {
+                        callback(null);
+                    }, 4000);
+                }
+                q.defer(transit);
+                q.await(function(error) {
+                    launchVisualizationAnimation();
+                });
+//                unpaintLoadingScreen();
+//                unpaintUnselectedStations();
+//                launchVisualizationAnimation();  // Run the show!
             }
 
             // First part of the transition. exitLoadingScreen finishes the job after data has loaded.
             function initLoadingScreen() {
                 disableInteractions();
+                resetView();
                 unpaintNonAnimatedDisplayElements();
                 paintLoadingElements();
                 bindData(exitLoadingScreen);
+            }
+
+            /////////////////////
+            // TRIP ANIMATIONS //
+            /////////////////////
+            function launchVisualizationAnimation() {
+                console.log("Hello World!");
+                // TODO: Implement!
             }
 
             /////////////////
