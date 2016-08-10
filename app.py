@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 # Initialize the MongoDB connection once.
-db = DataStore(uri="mongodb://localhost:27017")
+# db = DataStore(uri="mongodb://localhost:27017")
 
 
 post_list = [
@@ -193,7 +193,6 @@ def citibike_sample(path, stationid):
     else:
         abort(404)
         return
-    db = DataStore(uri="mongodb://localhost:27017")
     # Note: str(stationid) not stationid!
     tripset = db.get_station_bikeset(str(stationid), collection_name)
     # Remove None trips---these correspond with trips that have not been populated in the database yet!
