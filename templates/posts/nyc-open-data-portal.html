@@ -179,11 +179,29 @@
 
 <h3>Running your own analysis</h3>
 
-[...awaiting completion of to-do...]
+<p>
+    The techniques I used to get the data I used for this study are mostly transparent and totally transferable to
+    any Socrata portal of interest.
+</p>
+
+<p>
+    Socrata portals provide metadata about their data in two different formats: the <a
+        href="http://labs.socrata.com/docs/search.html">Socrata Catalog API</a>, which provides rich metadata on
+    every endpoint on a portal, and the <code class="inline_code"><a href="https://data.cityofnewyork.us/data.json">
+    data.json</a></code> endpoint, which provides only endpoints fitting our definition of a "dataset", but has less
+    information on them. Thus to get the most out of portal metadata we have to match the endpoints returned by <code
+        class="inline_code">data.json</code> to the ones returned by the catalog API.
+</p>
+
+<p>
+    I've made the resources I've used for this project&mdash;including the code handling that match&mdash;available on
+    my <code class="inline_code"><a href="https://github.com/ResidentMario/socrata-portal-metadata">socrata-portal-metadata</a></code>
+    repository on GitHub. If you want to replicate this study for your own home portal, that is where you should go!
+</p>
 
 <p class="addendum">
     Want to see more longitudinal data on open data portals nationwide? Then Thomas Levine's <a
-        href="https://thomaslevine.com/!/socrata-summary/">Analyzing all the datasets</a> has got you covered.
+        href="https://thomaslevine.com/!/socrata-summary/">"Analyzing all the datasets"</a> has got you covered.
 </p>
 
 {% endblock %}
