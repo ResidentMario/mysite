@@ -1,0 +1,189 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<!--<img src="/static/post_assets/nyc-open-data-portal/open-data-for-all-hero.jpg" class="inline_image"-->
+     <!--alt="Data."/>-->
+
+<!-- Introduction, still on my work computer, goes here. --->
+
+<h3>Introduction</h3>
+
+<p>
+    [...awaiting transfer...]
+</p>
+
+<h3>Defining "dataset"</h3>
+
+<p>
+    The New York City open data portal software is developed and maintained by <a href="https://socrata.com/">Socrata</a>,
+    a late stage start-up with a dominant share of the (albeit increasingly competitive) US open data portal
+    market. Socrata instances power the open data portal in New York City as well as ones in <a
+        href="https://socrata.com/">Chicago</a>, <a href="https://data.sfgov.org/">San Francisco</a>, <a
+        href="https://data.nola.gov/">New Orleans</a>, <a href="https://data.cityofboston.gov/">Boston</a>, <a
+        href="https://opendata.lasvegasnevada.gov/">Las Vegas</a>, <a href="https://www.dallasopendata.com/">Dallas</a>
+    ...the list goes on.
+</p>
+
+<!--<img src="/static/post_assets/nyc-open-data-portal/socrata-logo.png" class="inline_image"-->
+     <!--alt="Data."/>-->
+
+<p>
+    Resources on a Socrata portal are organized as endpoints, each of which is given a unique URL. <b>As of writing,
+    there are 8145 endpoints on the New York City Open Data Portal.</b>
+</p>
+
+<p>
+    But Socrata endpoints can be all sorts of things: dataset-derived charts get endpoints, for example, as do
+    filtered versions of datasets, multipane data visualizations Socrata refers to as "data stories", private or
+    unpublished data uploaded by individual users, and so on.
+</p>
+
+<p>
+    Thus studying data on an open data portal first requires nailing down a definition for the word "dataset" in the
+    first place. Sadly there is no agreed on terminology for this, and different counts obtained in different ways
+    will given you different results, even within the interface of the portal itself. Constructing a definition
+    turned out to be a very non-trivial task; for the technically inclined, a <a href="https://github.com/ResidentMario/socrata-portal-metadata/blob/master/notebooks/Socrata%20Portal%20Dataset%20Counting%20Scoping.ipynb">Jupyter notebook</a> I wrote on
+    the subject is an excellent primer on the matter.
+</p>
+
+<p>
+    Here is the segmentation of published dataset endpoints I ultimately arrived at (all counts as of early August
+    2016):
+</p>
+<ul>
+    <li>
+        <i>Tables</i> &mdash; This is the familiar spreadsheet-layout data format we all know and love. We have
+        1073 of these.
+    </li>
+    <li>
+        <i>Geospatial Datasets</i> &mdash; These are geographic datasets provided in <code class="inline_code">KML</code>,
+        <code class="inline_code">KMZ</code>, <code class="inline_code">SHP</code>, or <code
+            class="inline_code">GeoJSON</code> formats. There are 192 of these.
+    </li>
+    <li>
+        <i>External Datasets</i> &mdash; These are public datasets provided elsewhere on the Internet and linked to
+        from the portal. There are 174 of these.
+    </li>
+    <li>
+        <i>Files/Blobs</i> &mdash; These are datasets uploaded to the open data portal in a non-geospatial zipped
+        format. There are 92 of these.
+    </li>
+</ul>
+
+<p>
+    Adding these up, we find that <b>there are 1531 datasets on the New York City open data portal</b>&mdash;just
+    like the banner advertises!
+</p>
+
+<h3>Characterizing New York City open data</h3>
+
+<p>
+    Let's start by looking at datasets by category:
+</p>
+
+<img src="/static/post_assets/nyc-open-data-portal/datasets-by-category.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    This selection isn't actually particularly informative: on an open data portal for city government,
+    everything is...city government...so the leading label is pretty meaningless. Still, it's interesting to see that
+    education has a strong presence on the portal.
+</p>
+
+<p>
+    Next up, here's dataset counts by ownership:
+</p>
+
+<img src="/static/post_assets/nyc-open-data-portal/datasets-by-ownership.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Again the DOE's education datasets put it in the lead, at least in terms of raw volume.
+</p>
+
+<p>
+   How frequently are datasets updated?
+</p>
+
+<img src="/static/post_assets/nyc-open-data-portal/datasets-by-update-frequency.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Over a third of datasets are updated "as needed" (which really could mean anything between a few months and
+    almost never); a significant further chunk of them claim annual update frequency. The fastest turnaround time
+    achieved by the open data portal is daily frequency&mdash;the one "dataset" claiming minutely updates is actually
+    the programmatically-generated Socrata master catalog, which is a thing that exists but isn't really what we're
+    interested in.
+</p>
+
+<p>
+    The logical next question is one of automation. While some datasets require manual administrating by the
+    Department of Information Technology and Telecommunications, a slice of them (including, not inconsequentially,
+    most of the more heavily utilized datasets) are updated by automatic tooling. Socrata data includes information
+    on this...
+</p>
+
+<img src="/static/post_assets/nyc-open-data-portal/datasets-by-automation-type.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    ...but unfortunately it is very incomplete. Most likely "NaN" corresponds with "No", which means that, in total,
+    there are approximately 150 automatically updated open datasets. But it's hard to know for sure, at least
+    independently.
+</p>
+
+<p>
+    Next let's look at when these datasets were actually uploaded. What has the history of the growth of the open
+    data portal been like?
+</p>
+
+<img src="/static/post_assets/nyc-open-data-portal/datasets-by-upload-date.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    This plot shows that, in the early days, the New York City open data portal experienced <i>really</i> strong
+    spikes in uploads. For whatever reason, in 2011 and 2013 the task of uploading new datasets was aggregated into
+    sprints peaking out at specific days. The two most active upload dates of all time are 2011-09-29, which saw 65
+    uploads, and 2013-02-21, which saw 53 of them. As the platform matures and evolves, the folks handling these
+    uploads have smoothed them out over the course of the year, making this hail mary a thing of the
+    past&mdash;<i>mostly</i>.
+</p>
+
+<p>
+    I suggest that, when it comes to data timeliness, it's more meaningful to look at update <i>recency</i> than it
+    is at the promises thereof in the datasets' metadata. With that in mind, here is a cumulative plot of the data
+    update recency of all of the datasets on the open data portal, going back two years to August 2014:
+</p>
+
+<img src="/static/post_assets/nyc-open-data-portal/datasets-by-recency-cumulative.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    About 100 datasets have been updated in the last two months (~7% of the ~1500 total), about 400 in the last six
+    months (~25%), about 450 within the last year (~30%), and about 650 within the last two years (~45%).
+    Unfortunately it's not possible to go any further back because a software update at that time seems to have
+    touched the <code class="inline_code">updatedAt</code> parameter of every dataset on the portal.
+</p>
+
+<p>
+    One last parameter I looked at was dataset popularity. Not unexpectedly (per <a
+        href="https://en.wikipedia.org/wiki/Zipf%27s_law">Zipf's law</a>) this turned out to follow a logarithmic
+    distribution. For instance, the top ten datasets on the open data portal had <code class="inline_code">[167921,
+   18697, 13908, 12959, 11463, 5866, 3038, 2897, 2497, 2406]</code> views, necessitating that the following plot
+    squeeze on a logarithmic axis, where each tick represents a tenfold increase in view-count:
+</p>
+
+<img src="/static/post_assets/nyc-open-data-portal/datasets-by-page-views.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    You know what? <a href="https://nycopendata.socrata.com/analytics">Socrata does this one better</a>.
+</p>
+
+<h3>Running your own analysis</h3>
+
+[...awaiting completion of to-do...]
+
+<p class="addendum">
+    Want to see more longitudinal data on open data portals nationwide? Then Thomas Levine's <a
+        href="https://thomaslevine.com/!/socrata-summary/">Analyzing all the datasets</a> has got you covered.
+</p>
+
+{% endblock %}

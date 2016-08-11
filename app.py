@@ -136,6 +136,13 @@ post_list = [
         'date': datetime(2016, 7, 8),
         'template': 'randomly-popular.html',
         'snap': 'randomly-popular.png'
+    },
+    {
+        'title': 'The anatomy of an open data portal',
+        'route': '2016/08/11/nyc-open-data-portal.html',
+        'date': datetime(2016, 8, 11),
+        'template': 'nyc-open-data-portal.html',
+        'snap': 'nycopendata.png'
     }
 ]
 

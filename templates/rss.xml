@@ -114,5 +114,11 @@
             <guid>http://residentmar.io/2016/07/08/randomly-popular.html</guid>
             <pubDate>Fri, 08 Jul 2016 00:00:00 EST</pubDate>
     </item>
+    <item>
+            <title>The anatomy of an open data portal</title>
+            <link>http://residentmar.io/2016/08/11/nyc-open-data-portal.html</link>
+            <guid>http://residentmar.io/2016/08/11/nyc-open-data-portal.html</guid>
+            <pubDate>Thu, 11 Aug 2016 00:00:00 EST</pubDate>
+    </item>
 </channel>
 </rss>
