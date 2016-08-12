@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 # Initialize the MongoDB connection once.
-db = DataStore(uri="mongodb://localhost:27017")
+# db = DataStore(uri="mongodb://localhost:27017")
 
 
 post_list = [
@@ -163,7 +163,7 @@ raws_list = [
     'wealthiest-landowners-geo-visualization.html',
     'longest-streets.html',
     'new-york-city-tree-density-viz.html',
-    'life-of-a-citibike.html'
+    # 'life-of-a-citibike.html'
     ]
 
 post_paths = [post['route'] for post in post_list]
