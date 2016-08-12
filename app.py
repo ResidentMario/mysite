@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 # Initialize the MongoDB connection once.
-# db = DataStore(uri="mongodb://localhost:27017")
+db = DataStore(uri="mongodb://localhost:27017")
 
 
 post_list = [

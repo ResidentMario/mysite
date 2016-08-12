@@ -104,6 +104,7 @@
     <script src="/static/js/d3.v3.js"></script>
     <script src="/static/js/L.D3SvgOverlay.js"></script>
     <script src="https://d3js.org/d3-queue.v3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.js"></script>
     <script>
 
         /////////////////////////
@@ -1082,6 +1083,8 @@
                 function transit(callback) {
                     unpaintLoadingScreen();
                     unpaintUnselectedStations();
+                    // Paint the timer ahead of launch.
+                    paintTimer();
                     // Wait a little bit to allow painters to finish and the user to realize that this is happening.
                     setTimeout(function() {
                         callback(null);
@@ -1089,6 +1092,7 @@
                 }
                 q.defer(transit);
                 q.await(function(error) {
+                    incrementTimer();  // TODO: Remove this once done testing!
                     launchVisualizationAnimation();
                 });
 //                unpaintLoadingScreen();
@@ -1105,12 +1109,106 @@
                 bindData(exitLoadingScreen);
             }
 
+            //////////////////////////////
+            // TRIP ANIMATION --- TIMER //
+            //////////////////////////////
+            // These methods operate the trip animation timer element.
+
+            // The current time is stored here. Note that we initialize to be the visualized date, as of this script's
+            // execution datetime, but that forward part is irrelevant to us.
+            var time = moment.utc(0);
+
+            // Creates the on-screen timer element.
+            function paintTimer() {
+                d3.select("#map-canvas")
+                        .append("g")
+                        .style({
+                            "position": "absolute",
+                            "left": "50%",
+                            "top": "50px",
+                            "transform": "translate(-50%,-50%)",
+                            "display": "inline-block",
+                            "margin": "auto",
+                            "opacity": 0
+                        })
+                        .attr("id", "timer")
+                        .transition()
+                        .duration(1000)
+                        .style({
+                            "opacity": 1
+                        });
+
+                d3.select("#timer").append("div")
+                        .style({
+                            "font-size": "40px",
+                            "font-weight": "bold"
+                        })
+                        .attr("id", "timer-text")
+//                        .text("12:00 PM");
+                        .text(time.format('h:mm A'));
+            }
+
+            // Removes the trip animation timer element.
+            function unpaintTimer() {
+                d3.select("#timer").transition().duration(1000).style({"opacity": 0}).remove();
+            }
+
+            // Moves the timer forward one tick (one minute).
+            function incrementTimer() {
+                console.log("Hi I was used!");
+                console.log(time);
+                time = time.add(1, 'minutes');
+                console.log(time.format('HH:MM A'));
+                console.log(time);
+                console.log(time.format('HH:MM A'));
+                d3.select("#timer-text").text(time.format('h:mm A'));  // Update display.
+                fireLinePainters();
+            }
+
+            // Does the line drawing stuff.
+            function fireLinePainters() {
+                // TODO: Implement!
+            }
+
             /////////////////////
             // TRIP ANIMATIONS //
             /////////////////////
+
             function launchVisualizationAnimation() {
-                console.log("Hello World!");
+
+                // Testing...
+                window.setInterval(incrementTimer, 1000);
+
+                var data = d3.range(11).map(function(){return Math.random()*10});
+
+                var x = d3.scale.linear().domain([0, 10]).range([0, 700]);
+                var y = d3.scale.linear().domain([0, 10]).range([10, 290]);
+
+                var line = d3.svg.line()
+                        .interpolate("cardinal")
+                        .x(function(d,i) {return x(i);})
+                        .y(function(d) {return y(d);});
+
+
+                var path = sel.append("path")
+                      .attr("d", line(data))
+                      .attr("stroke", "steelblue")
+                      .attr("stroke-width", "2")
+                      .attr("fill", "none");
+
+                var totalLength = path.node().getTotalLength();
+
+                path
+                        .attr("stroke-dasharray", totalLength + " " + totalLength)
+                        .attr("stroke-dashoffset", totalLength)
+                        .transition()
+//                        .ease()
+                        .duration(2000)
+                        .attr("stroke-dashoffset", 0);
+
                 // TODO: Implement!
+//                var draw_fps = 60;
+//                var timer = setInterval(incrementLineDraw, 1000 / draw_fps);
             }
 
             /////////////////
