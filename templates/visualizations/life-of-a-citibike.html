@@ -155,18 +155,10 @@
         var scale_factor = Math.max(1 / Math.pow(2, map.getZoom() - 13), 0.0625);
 
         // In order to implement the station toggle selection we need to implement a global struct which stores
-        // stations selected and the paths that have been drawn associated with them. The structure is thus:
-        // {'<first station id>':
-        //      { 'station':<first station selection>,
-        //        'trips': [<first trip selection>, <second trip selection>, ...]
-        //      }
-        //  '<second station id>':
-        //      { ... }
-        //  ...
-        // }
-        // This data structure is unaware of what the provenance of the trips it stores is, it merely stores them.
-        // Accessing trips allows us to do either/or of the two viz modes.
-        // They're stored under stations to allow implementing a highlighter later on.
+        // stations selected and the paths that have been drawn associated with them.
+        // In the first part of the view, before launching any visualization, this data just contains a list of all of
+        // the selected station ids. The actual data is populated once the user hits the Go button; to see how things
+        // are structured at that point see bindData(), way below.
         var selected_stations = {};
 
         // The current visualization mode.
@@ -174,7 +166,7 @@
 
         // D3-SVG-Overlay callback wrapper. Leaflet is used only for the base map, all of the programmatic action occurs
         // in d3 code inside of this callback.
-        var mapOverlay = L.d3SvgOverlay(function(sel,proj){
+        var mapOverlay = L.d3SvgOverlay(function(sel,proj) {
 
             //////////////////////
             // INTRO ANIMATION  //
@@ -202,11 +194,15 @@
 
                 // Define the SVG line reprojection function.
                 var line = d3.svg.line()
-                        .x(function(d) { return proj.latLngToLayerPoint(d).x})
-                        .y(function(d) { return proj.latLngToLayerPoint(d).y});
+                        .x(function (d) {
+                            return proj.latLngToLayerPoint(d).x
+                        })
+                        .y(function (d) {
+                            return proj.latLngToLayerPoint(d).y
+                        });
 
                 // Create a path, bind the line array to its __data__, and call line on it to generate the line-code.
-                setTimeout(function() {
+                setTimeout(function () {
                     sel.append('path').datum(linearray)
                             .attr({
                                 "class": "sample-line",
@@ -221,7 +217,7 @@
                             .attr({
                                 "stroke": "#99bbd7"
                             })
-                }, 25*i);
+                }, 25 * i);
             }
 
             // Paint all of the sampler paths. Wraps paintPath(), above, with consideration removing old paths.
@@ -231,7 +227,7 @@
                 sel.selectAll('path').remove();
 
                 d3.json("../../static/post_assets/citibike/sample_trips.json", function (data) {
-                    for(i=0; i<data.length; i++) {
+                    for (i = 0; i < data.length; i++) {
                         paintPath(data[i], i);
                     }
                 });
@@ -239,10 +235,10 @@
 
             // Paints all of the stations on the map.
             function paintStations() {
-                d3.csv("../../static/post_assets/citibike/june_22_station_metadata.csv", function(error, dataset) {
+                d3.csv("../../static/post_assets/citibike/june_22_station_metadata.csv", function (error, dataset) {
                     if (error) throw error;
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         sel
                                 .append("g")
                                 .selectAll("circle")
@@ -251,33 +247,37 @@
                                 .append("circle")
                                 .attr({
                                     "class": "station station-unselected",
-                                    "cx": function (d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).x },
-                                    "cy": function (d) { return proj.latLngToLayerPoint([d.latitude, d.longitude]).y },
+                                    "cx": function (d) {
+                                        return proj.latLngToLayerPoint([d.latitude, d.longitude]).x
+                                    },
+                                    "cy": function (d) {
+                                        return proj.latLngToLayerPoint([d.latitude, d.longitude]).y
+                                    },
                                     "r": 0,
                                     "stroke": "white",
                                     "stroke-width": 2,
                                     "cursor": "pointer",
-                                    "fill": function(d) {
-                                        if(d['kind'] == 'active') {
+                                    "fill": function (d) {
+                                        if (d['kind'] == 'active') {
                                             return "#3f75a2";
                                         }
-                                        else if(d['kind'] == 'inactive') {
+                                        else if (d['kind'] == 'inactive') {
                                             return "#a7a7a7";
                                         }
                                     },
                                     "fill-opacity": 1,
                                     "stroke-opacity": 1
                                 })
-                                .on('mouseover', function(d, i){
+                                .on('mouseover', function (d, i) {
                                     d3.select(this)
-                                        .attr({
-                                            "stroke-width": 4,
-                                            "r": 10,
-                                            "id": "hovered-station"
-                                        });
+                                            .attr({
+                                                "stroke-width": 4,
+                                                "r": 10,
+                                                "id": "hovered-station"
+                                            });
                                     showTooltip(d);
                                 })
-                                .on('mouseout', function(d, i) {
+                                .on('mouseout', function (d, i) {
                                     d3.select(this)
                                             .attr({
                                                 "stroke-width": 2,
@@ -321,10 +321,10 @@
                 d3.select("#map-canvas").style("cursor", "default");  // change cursor to the default while animating.
                 paintPathSampler();  // Animate the sample paths.
                 paintStations();  // Animate the stations.
-                setTimeout(function() {
+                setTimeout(function () {
                     paintIntroInfo();  // Append the intro text box. This method is from the Info Box code segment.
                 }, 6000);
-                setTimeout(function() {
+                setTimeout(function () {
                     enableInteractions();
                     d3.select("#map-canvas").style("cursor", null);  // then back to a grabby hand after
                 }, 6000);
@@ -415,7 +415,7 @@
                             "width": "50%"
                         })
                         .text("Follow Stations")
-                        .on("click", function() {
+                        .on("click", function () {
                             switchToStationsMode();
                         });
 
@@ -428,7 +428,7 @@
                             "width": "50%"
                         })
                         .text("Follow Bikes")
-                        .on("click", function() {
+                        .on("click", function () {
                             switchToBikesMode();
                         });
 
@@ -460,7 +460,7 @@
                             "width": "33%"
                         })
                         .text("Go Back")
-                        .on("click", function() {
+                        .on("click", function () {
                             switchToIntroMode();
                         });
             }
@@ -472,9 +472,9 @@
                         .attr({
                             "type": "button",
                             "id": "launch-button",
-                            "class": function() {
+                            "class": function () {
                                 var selection_size = Object.keys(selected_stations).length;
-                                if(selection_size == 0) {
+                                if (selection_size == 0) {
                                     return "btn-disabled";
                                 }
                                 else {
@@ -486,8 +486,8 @@
                             "width": "33%"
                         })
                         .text("Launch")
-                        .on("click", function() {
-                                initLoadingScreen();
+                        .on("click", function () {
+                            initLoadingScreen();
                         });
             }
 
@@ -498,8 +498,8 @@
                 button_holder.append("button")
                         .attr({
                             "type": "button",
-                            "class": function() {
-                                if(Object.keys(selected_stations).length == 0) {
+                            "class": function () {
+                                if (Object.keys(selected_stations).length == 0) {
                                     return "btn-disabled";
                                 }
                                 else {
@@ -512,7 +512,7 @@
                             "width": "33%"
                         })
                         .text("Reset")
-                        .on("click", function() {
+                        .on("click", function () {
                             clearSelection();  // in the station selection section.
                             updateSelectionDisplay();  // Necessary in case there are preexisting selections.
                             updateResetAndLaunchButtonStyles();
@@ -590,8 +590,8 @@
             function toggleStation(d) {
                 var sel_station = d3.select(this);
                 // Do nothing if the station is inactive.
-                if(d['kind'] == 'active') {
-                    if(!(d['station id'] in selected_stations)) {
+                if (d['kind'] == 'active') {
+                    if (!(d['station id'] in selected_stations)) {
                         // Station is not currently in the selection, so add it.
                         // Notice the semantics: trips are stored as two dict-indexed arrays, one of trips in and one
                         // of trips out.
@@ -616,7 +616,7 @@
             // It is called by toggleStation() whenever a station is added to the selection or removed from it.
             function updateSelectionDisplay() {
                 var selection_size = Object.keys(selected_stations).length;
-                if(selection_size == 0) {
+                if (selection_size == 0) {
                     // If no stations are selected then we just removed our last selection, so remove the display.
                     d3.select("#selection-display").remove();
                 }
@@ -640,22 +640,22 @@
 //                                    "border": "1px solid black",
                                 "text-align": "right"
                             })
-                            .html(function(d) {
+                            .html(function (d) {
                                 // The string is fairly complicated to write, so let's break it up into parts.
                                 // First we put down the part that always displays, the selection size.
                                 // Since the presence or lack thereof of that pesky "s" depends on the pluralization we
                                 // have to deal with that first.
                                 var s = "";
-                                if(selection_size > 1) {
+                                if (selection_size > 1) {
                                     s = "s";
                                 }
                                 // Now the basic display string.
                                 var display =
                                         "<div style='font-family:Roboto; line-height:1'>" +
                                         "<div style='font-weight: bold; font-size: 24px; '>" +
-                                         selection_size + " Station" + s + " Selected</div>";
+                                        selection_size + " Station" + s + " Selected</div>";
                                 // Ok, if we are on the introductory screen this is all we need.
-                                if(viz_mode == "intro") {
+                                if (viz_mode == "intro") {
                                     return display;
                                 }
                                 // If not then we have to do more work. For starters, get all of the selected elements.
@@ -668,13 +668,13 @@
                                 // mode. If we're in stations mode we need "all trips". If we're in bikes mode we need
                                 // "outbound trips" plus "inbound trips".
                                 var i = 0;
-                                if(viz_mode == "stations") {
-                                    for(i = 0; i < all_selected_stations_data.length; i++) {
+                                if (viz_mode == "stations") {
+                                    for (i = 0; i < all_selected_stations_data.length; i++) {
                                         total_trips += +all_selected_stations_data[i]['all trips'];
                                     }
                                 }
-                                else if(viz_mode == "bikes") {
-                                    for(i = 0; i < all_selected_stations_data.length; i++) {
+                                else if (viz_mode == "bikes") {
+                                    for (i = 0; i < all_selected_stations_data.length; i++) {
                                         total_trips += +all_selected_stations_data[i]['outbound trips'];
                                         total_trips += +all_selected_stations_data[i]['inbound trips'];
                                     }
@@ -695,7 +695,7 @@
             // selection.
             function updateResetAndLaunchButtonStyles() {
                 var selection_size = Object.keys(selected_stations).length;
-                if(selection_size == 0) {
+                if (selection_size == 0) {
                     // If no stations are selected then we just removed our last selection, so remove the display.
                     d3.select("#reset-button").attr({"class": "btn-disabled"});
                     d3.select("#launch-button").attr({"class": "btn-disabled"});
@@ -734,21 +734,21 @@
                             "left": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).x +
                             (20 * scale_factor) + "px"
                         })
-                        .html(function() {
+                        .html(function () {
                             var underline = null;
-                            if(d['kind'] == 'inactive') {
+                            if (d['kind'] == 'inactive') {
                                 underline = "Out of Service" + "</span></div>";
                             }
                             else {
-                                if(viz_mode == 'intro') {
+                                if (viz_mode == 'intro') {
                                     var bikes_out_in = +d['bikes outbound'] + +d['bikes inbound'];
                                     // Pluralize!
                                     var bikes_out_s = "s";
                                     var trips_s = "s";
-                                    if(+d['all trips'] == 1) {
+                                    if (+d['all trips'] == 1) {
                                         trips_s = "";
                                     }
-                                    if(bikes_out_in == 1) {
+                                    if (bikes_out_in == 1) {
                                         bikes_out_s = "";
                                     }
 
@@ -757,30 +757,30 @@
                                             bikes_out_in + " bike" + bikes_out_s + " began or ended the day here." +
                                             "</span></div>";
                                 }
-                                else if(viz_mode == 'stations') {
+                                else if (viz_mode == 'stations') {
                                     underline = d['incoming trips'] +
-                                    " trips to this station.<br/>"
-                                    + d['outgoing trips']
-                                    + " trips from this station.<br/>"
+                                            " trips to this station.<br/>"
+                                            + d['outgoing trips']
+                                            + " trips from this station.<br/>"
 //                                    + d['all trips'] + " trips total."
-                                    + "</span></div>";
+                                            + "</span></div>";
                                 }
-                                else if(viz_mode == 'bikes') {
+                                else if (viz_mode == 'bikes') {
                                     // Pluralize!
                                     var out_s = "s";
-                                    if(+d['bikes outbound'] == 1) {
+                                    if (+d['bikes outbound'] == 1) {
                                         out_s = "";
                                     }
-                                    underline =  d['bikes outbound'] +
-                                    " bike" + out_s + " started the day here.<br/> " +
-                                    d['bikes inbound'] + " ended it here." +
-                                    "</span></div>";
+                                    underline = d['bikes outbound'] +
+                                            " bike" + out_s + " started the day here.<br/> " +
+                                            d['bikes inbound'] + " ended it here." +
+                                            "</span></div>";
                                 }
                             }
                             return "<div style='text-align:center'>" +
-                                "<span style='font-weight:bold; font-size:16px;'>" +
-                                d['station name'] +
-                                "</span><br/><span style='font-size:12px;'>" + underline;
+                                    "<span style='font-weight:bold; font-size:16px;'>" +
+                                    d['station name'] +
+                                    "</span><br/><span style='font-size:12px;'>" + underline;
                         });
             }
 
@@ -849,7 +849,7 @@
                                 else if (d['delta bikes'] < 0) {
                                     return "#d8b365";
                                 }
-                                else if(d['delta bikes'] >= 0){
+                                else if (d['delta bikes'] >= 0) {
                                     return "#3f75a2";
                                 }
 //                                else {
@@ -861,7 +861,9 @@
 
             function applyStationsModeColorMap() {
 //                var stations_color_scale = d3.scale.linear().domain([0, 1500]).range(["#a7c4dd", "#152635"]);
-                var all_data = d3.selectAll(".station").data().map(function(d) { return d['all trips']});
+                var all_data = d3.selectAll(".station").data().map(function (d) {
+                    return d['all trips']
+                });
                 var stations_color_scale = d3.scale.quantile().domain(all_data).range(['lightsteelblue',
                     'steelblue', '#2b4f6d']);
 
@@ -909,16 +911,16 @@
                             "r": 5 * scale_factor,
                             "stroke-width": 2 * scale_factor
                         })
-                        .on('mouseover', function(d, i){
+                        .on('mouseover', function (d, i) {
                             d3.select(this)
-                                .attr({
-                                    "stroke-width": 4 * scale_factor,
-                                    "r": 10 * scale_factor,
-                                    "id": "hovered-station"
-                                });
+                                    .attr({
+                                        "stroke-width": 4 * scale_factor,
+                                        "r": 10 * scale_factor,
+                                        "id": "hovered-station"
+                                    });
                             showTooltip(d);
                         })
-                        .on('mouseout', function(d, i) {
+                        .on('mouseout', function (d, i) {
                             d3.select(this)
                                     .attr({
                                         "stroke-width": 2 * scale_factor,
@@ -1001,15 +1003,35 @@
                 d3.select("#background-panel").transition().duration(1000).style({"opacity": 0}).remove();
             }
 
-            // Makes the actual API calls which bind the data to the selected stations' struct.
-            // The data is fed in asynchronously. I have to play around with it to understand what that means for me.
-            // Notice that this function remaps the API tripset identifiers from the ones specific to the ask mode to
-            // simply "to" and "from" keys. This simplifies calling on this data later, as it eliminates having to
-            // check the viz mode and adopt the accessor key to match it, as we have had to do here.
+            // Makes the actual API calls which bind the data elements needed to run the visualization.
             //
+            // We populate two data elements here. The first element that we populate is selected_stations, a data
+            // struct containing trip information organized thusly:
+            //
+            // {
+            //      <stationid>:
+            //          {
+            //           'from': [{'geometry': <trip geometry array>, 'properties': <trip properties dict>}, {...}, ...]
+            //           'to': [{...}, ...]
+            //          },
+            //      <...>: {...},
+            //      ...
+            // }
+            //
+            // This element contains the information that is used for drawing things. The visualization happens around
+            // "ticks" representing minutes, however, and it would be prohibitively expensive to have to check the
+            // entire struct for trips happening on the current tick. Instead, I create a lookup table that looks like
+            // this:
+            //
+            // [{<first time>: {'stationid': <stationid>, 'type': <from/to>, 'position': <array index>}, {...}]
+            //
+            // This is `trips_timetable`, below.
+            var trips_timetable = [];
             // The "callback" parameter should be filled with the function which will run once the data bind is done---
             // in our case this is unpaintLoadingScreen!
             function bindData(call_this_once_done) {
+                // The calls to the API are handled by an asynchronous d3 queue, which waits for selected_stations to
+                // finish populating before proceeding before continuing. The code below is what executes that.
                 var api_paths = null;
                 if (viz_mode == "bikes") {
                     api_paths = ["bike-inbounds", "bike-outbounds"]
@@ -1018,7 +1040,7 @@
                     api_paths = ["incoming-trips", "outgoing-trips"]
                 }
                 var q = d3.queue();
-                for (let key in selected_stations) {
+                for (let key in selected_stations) {  // let is needed here due to closure stuff I don't quite get
                     if (selected_stations.hasOwnProperty(key)) {
                         q.defer(function (callback) {
                             console.log("http://127.0.0.1:5000/citibike-api/" +
@@ -1044,9 +1066,47 @@
                         })
                     }
                 }
+                // We wait for all of the data populate. Once that's done, we proceed with creating the timetable, which
+                // runs in a single blocking thread, and then with launching the rest of the visualization.
+                // Note: var time, declared below, is a moment.js object storing the current time within the viz.
                 q.awaitAll(function (error) {
                     if (error) throw error;
                     console.log(selected_stations);
+                    // Now we create the timetable.
+                    var key = null;
+                    for(key in selected_stations) {  // let is not necessary here because we are in a blocking thread
+                        if (selected_stations.hasOwnProperty(key)) {
+                            var types = ['from', 'to'];
+                            for(var j = 0; j < types.length; j++) {
+                                var type = types[j];
+                                    for(var k = 0; k < selected_stations[key][type].length; k++) {
+                                        var trip = selected_stations[key][type][k];
+                                        console.log(trip);
+                                        var starttime = String(
+                                                moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss')
+                                                        .format('h:mm A')
+                                        );
+                                        console.log(starttime);
+                                        trips_timetable.push({starttime: {
+                                            'stationid': key,
+                                            'type': type,
+                                            'position': k
+                                        }});
+                                    }
+                            }
+                        }
+                    }
+                    console.log(trips_timetable);
+                    // Now we need to sort the timetable. The following helper function for this was taken from
+                    // http://stackoverflow.com/questions/16648076/sort-array-on-key-value:
+                    function srt(desc) {
+                      return function(a,b){
+                       return desc ? ~~(a < b) : ~~(a > b);
+                      };
+                    }
+                    // TODO: Implement! This sorting thing doesn't seem to be working.
+                    trips_timetable = trips_timetable.sort(srt);
+                    console.log(trips_timetable);
                     call_this_once_done();
                 });
             }
@@ -1088,7 +1148,7 @@
                     // Wait a little bit to allow painters to finish and the user to realize that this is happening.
                     setTimeout(function() {
                         callback(null);
-                    }, 4000);
+                    }, 1000);
                 }
                 q.defer(transit);
                 q.await(function(error) {
@@ -1155,12 +1215,7 @@
 
             // Moves the timer forward one tick (one minute).
             function incrementTimer() {
-                console.log("Hi I was used!");
-                console.log(time);
                 time = time.add(1, 'minutes');
-                console.log(time.format('HH:MM A'));
-                console.log(time);
-                console.log(time.format('HH:MM A'));
                 d3.select("#timer-text").text(time.format('h:mm A'));  // Update display.
                 fireLinePainters();
             }
@@ -1177,7 +1232,7 @@
             function launchVisualizationAnimation() {
 
                 // Testing...
-                window.setInterval(incrementTimer, 1000);
+                window.setInterval(incrementTimer, 250);
 
                 var data = d3.range(11).map(function(){return Math.random()*10});
 

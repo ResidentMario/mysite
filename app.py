@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 # Initialize the MongoDB connection once.
-# db = DataStore(uri="mongodb://localhost:27017")
+db = DataStore(uri="mongodb://localhost:27017")
 
 
 post_list = [
@@ -201,9 +201,9 @@ def citibike_sample(path, stationid):
         abort(404)
         return
     # Note: str(stationid) not stationid!
-    # tripset = db.get_station_bikeset(str(stationid), collection_name)
+    tripset = db.get_station_bikeset(str(stationid), collection_name)
     # Remove None trips---these correspond with trips that have not been populated in the database yet!
-    # tripset = [trip for trip in tripset if trip is not None]
+    tripset = [trip for trip in tripset if trip is not None]
     # jsonify(tripset) will not work because Flask disallows lists within arrays in top-level JSON, for security
     # reasons. However the security issue in question seems to have been patched out long ago in all major browsers?
     # Further reference: https://github.com/pallets/flask/issues/673;
@@ -211,7 +211,7 @@ def citibike_sample(path, stationid):
     # return jsonify(tripset)
     # json.dumps has no such qualms. It also handles the fact that the output is single-quoted strings, while JSON
     # enforces double-quoted string (so you can't e.g. cast to a straight string using str(tripset)!).
-    # return Response(json.dumps(tripset), mimetype='application/json')
+    return Response(json.dumps(tripset), mimetype='application/json')
 
 
 @app.route('/<path:path>')
