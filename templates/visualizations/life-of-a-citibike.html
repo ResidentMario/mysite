@@ -1,12 +1,19 @@
 <!--
     --- NOW ---
-    TODO: Assigning data to the elements of the selection once the viz is launched.
-    TODO: Loading screen in-and-out for how long that process takes.
+    TODO: Move line animation behind the currently selected station(s).
+    TODO: Add color transition to trip viz line animation. (surprisingly hard; cf. https://bl.ocks.org/mbostock/5348789)
+    TODO: Change color of line animations based on line type (in or out, to or from).
 
     --- LATER ---
-    TODO: Animate a line.
-    TODO: Create a clock.
-    TODO: Put those two things together.
+    TODO: Create a trip animations plotting rugplot at the bottom of the screen.
+    TODO: Add a legend for type to the top-left corner.
+    TODO: On hovering over the types in the legend, highlight trips of this type.
+    TODO: On clicking on a type in the legend, toggle displaying only trips of that type.
+    TODO: On hovering over a trip, highlight that trip.
+    TODO: On hovering over a trip, display a tooltip with information about that trip.
+    TODO: On clicking on a trip, highlight that bike's set of trips.
+    TODO: Add a "Next Trip" element to the timer display element.
+    TODO: Paint stations in trip viz line animation.
 -->
 <!DOCTYPE html>
 <html>
@@ -266,7 +273,8 @@
                                         }
                                     },
                                     "fill-opacity": 1,
-                                    "stroke-opacity": 1
+                                    "stroke-opacity": 1,
+                                    "z-index": 10
                                 })
                                 .on('mouseover', function (d, i) {
                                     d3.select(this)
@@ -1023,10 +1031,28 @@
             // entire struct for trips happening on the current tick. Instead, I create a lookup table that looks like
             // this:
             //
-            // [{<first time>: {'stationid': <stationid>, 'type': <from/to>, 'position': <array index>}, {...}]
+            // [{'starttime': <moment>,
+            //   'stationid': <stationid>,
+            //   'type': <from/to>,
+            //   'position': <array index>},
+            //   {...}]
             //
             // This is `trips_timetable`, below.
             var trips_timetable = [];
+            // We'll need to store the current time.
+            // The current time is stored here.
+            var current_time = moment.utc(0);  // moment.js object
+            // It's also useful for us to track what the next time is.
+            var next_time = null;  // moment.js object
+            // What the current index of interest is.
+            var current_index = 0;
+            // The time we end everything on.
+            var end_time = null;  // moment.js object
+            // The interval id assigned to the setInterval instance which runs our timer.
+            var interval_id = null;
+            // How long a tick lasts (in ms).
+            var tick_time = 250;
+
             // The "callback" parameter should be filled with the function which will run once the data bind is done---
             // in our case this is unpaintLoadingScreen!
             function bindData(call_this_once_done) {
@@ -1071,7 +1097,6 @@
                 // Note: var time, declared below, is a moment.js object storing the current time within the viz.
                 q.awaitAll(function (error) {
                     if (error) throw error;
-                    console.log(selected_stations);
                     // Now we create the timetable.
                     var key = null;
                     for(key in selected_stations) {  // let is not necessary here because we are in a blocking thread
@@ -1081,32 +1106,36 @@
                                 var type = types[j];
                                     for(var k = 0; k < selected_stations[key][type].length; k++) {
                                         var trip = selected_stations[key][type][k];
-                                        console.log(trip);
-                                        var starttime = String(
-                                                moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss')
-                                                        .format('h:mm A')
-                                        );
-                                        console.log(starttime);
-                                        trips_timetable.push({starttime: {
+                                        var starttime = moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss');
+//                                                .format('h:mm A');
+//                                        var starttime = String(
+//                                                moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss')
+//                                                        .format('h:mm A')
+//                                        );
+                                        trips_timetable.push({
+                                            'starttime': starttime,
                                             'stationid': key,
                                             'type': type,
                                             'position': k
-                                        }});
+                                        });
                                     }
                             }
                         }
                     }
+                    // Now we need to sort the timetable. This is done using built-in moment object comparison.
+                    trips_timetable = trips_timetable.sort(function(a, b) { return a['starttime'] > b['starttime']; });
+                    // Set the next_time parameter.
+                    next_time = trips_timetable[0]['starttime'];
+                    // Start the viz off at the first trip of the day. (deep copy)
+                    current_time = next_time.clone();
+                    // Where we end the visualization.
+                    var end_ref = trips_timetable[trips_timetable.length - 1];
+                    var end_trip = selected_stations[end_ref['stationid']][end_ref['type']][end_ref['position']];
+                    end_time = moment(end_trip['properties']['stoptime']);
                     console.log(trips_timetable);
-                    // Now we need to sort the timetable. The following helper function for this was taken from
-                    // http://stackoverflow.com/questions/16648076/sort-array-on-key-value:
-                    function srt(desc) {
-                      return function(a,b){
-                       return desc ? ~~(a < b) : ~~(a > b);
-                      };
-                    }
-                    // TODO: Implement! This sorting thing doesn't seem to be working.
-                    trips_timetable = trips_timetable.sort(srt);
-                    console.log(trips_timetable);
+                    // Fire the initial line painter.
+                    fireLinePainters();
+                    // Initialize the loop and continue!
                     call_this_once_done();
                 });
             }
@@ -1152,12 +1181,8 @@
                 }
                 q.defer(transit);
                 q.await(function(error) {
-                    incrementTimer();  // TODO: Remove this once done testing!
                     launchVisualizationAnimation();
                 });
-//                unpaintLoadingScreen();
-//                unpaintUnselectedStations();
-//                launchVisualizationAnimation();  // Run the show!
             }
 
             // First part of the transition. exitLoadingScreen finishes the job after data has loaded.
@@ -1173,10 +1198,6 @@
             // TRIP ANIMATION --- TIMER //
             //////////////////////////////
             // These methods operate the trip animation timer element.
-
-            // The current time is stored here. Note that we initialize to be the visualized date, as of this script's
-            // execution datetime, but that forward part is irrelevant to us.
-            var time = moment.utc(0);
 
             // Creates the on-screen timer element.
             function paintTimer() {
@@ -1205,7 +1226,7 @@
                         })
                         .attr("id", "timer-text")
 //                        .text("12:00 PM");
-                        .text(time.format('h:mm A'));
+                        .text(current_time.format('h:mm A'));
             }
 
             // Removes the trip animation timer element.
@@ -1213,43 +1234,56 @@
                 d3.select("#timer").transition().duration(1000).style({"opacity": 0}).remove();
             }
 
-            // Moves the timer forward one tick (one minute).
+            // Moves the timer forward one tick (one minute) and changes everything that happens as a result.
             function incrementTimer() {
-                time = time.add(1, 'minutes');
-                d3.select("#timer-text").text(time.format('h:mm A'));  // Update display.
-                fireLinePainters();
+                current_time = current_time.add(1, 'minutes');
+                // If we aren't at the end, do stuff.
+                if (current_time.format('h:mm A') != end_time.format('h:mm A')) {
+                    d3.select("#timer-text").text(current_time.format('h:mm A'));  // Update display.
+                    fireLinePainters();
+                }
+                // If we are at the end, finish and clean up.
+                else {
+                    exitVisualizationAnimation();
+                }
             }
 
-            // Does the line drawing stuff.
+            // Handles the line drawing stuff.
             function fireLinePainters() {
-                // TODO: Implement!
+                // We only paint things if next_time indicates that a trip happened this minute.
+                if (current_time.format('h:mm A') == next_time.format('h:mm A')) {
+                    while(trips_timetable[current_index]['starttime'].format('h:mm A') == next_time.format('h:mm A')) {
+                        var curr = trips_timetable[current_index];
+                        var tripdata = selected_stations[curr['stationid']][curr['type']][curr['position']];
+                        fireLinePainter(tripdata);
+                        current_index++;
+                    }
+                    next_time = trips_timetable[current_index]['starttime'];
+                }
             }
 
-            /////////////////////
-            // TRIP ANIMATIONS //
-            /////////////////////
+            // This helper method for `fireLinePainters()`, above, handles actually painting one line.
+            function fireLinePainter(tripdata) {
 
-            function launchVisualizationAnimation() {
-
-                // Testing...
-                window.setInterval(incrementTimer, 250);
-
-                var data = d3.range(11).map(function(){return Math.random()*10});
-
-                var x = d3.scale.linear().domain([0, 10]).range([0, 700]);
-                var y = d3.scale.linear().domain([0, 10]).range([10, 290]);
+                var linedata = tripdata['geometry']['coordinates'];
+                var duration = moment.duration(
+                    moment(tripdata['properties']['stoptime']).diff(moment(tripdata['properties']['starttime']))
+                ).asMinutes() * tick_time;
 
                 var line = d3.svg.line()
                         .interpolate("cardinal")
-                        .x(function(d,i) {return x(i);})
-                        .y(function(d) {return y(d);});
+                        .x(function(d) { return proj.latLngToLayerPoint(d).x; })
+                        .y(function(d) { return proj.latLngToLayerPoint(d).y; });
 
+                console.log(d3.select("#station-selected"));
 
-                var path = sel.append("path")
-                      .attr("d", line(data))
-                      .attr("stroke", "steelblue")
-                      .attr("stroke-width", "2")
-                      .attr("fill", "none");
+                var path = sel.insert("path", "#station-selected")
+                        .attr({
+                            "d": line(linedata),
+                            "stroke-width": "3",
+                            "fill": "none",
+                            "stroke": "steelblue"
+                        });
 
                 var totalLength = path.node().getTotalLength();
 
@@ -1257,13 +1291,29 @@
                         .attr("stroke-dasharray", totalLength + " " + totalLength)
                         .attr("stroke-dashoffset", totalLength)
                         .transition()
-//                        .ease()
-                        .duration(2000)
+                        .duration(duration)
                         .attr("stroke-dashoffset", 0);
 
+//                path
+//                        .attr("stroke", "black")
+//                        .transition()
+//                        .duration(duration * 3)
+//                        .attr("stroke", "steelblue");
+
+            }
+
+            /////////////////////
+            // TRIP ANIMATIONS //
+            /////////////////////
+
+            function launchVisualizationAnimation() {
+                interval_id = window.setInterval(incrementTimer, tick_time);
+            }
+
+            // Cleans up after the visualization is done.
+            function exitVisualizationAnimation() {
+                window.clearInterval(interval_id);
                 // TODO: Implement!
-//                var draw_fps = 60;
-//                var timer = setInterval(incrementLineDraw, 1000 / draw_fps);
             }
 
             /////////////////
