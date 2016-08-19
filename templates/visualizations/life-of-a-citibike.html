@@ -5,6 +5,7 @@
     TODO: Change color of line animations based on line type (in or out, to or from).
 
     --- LATER ---
+    TODO: Figure out zoom!
     TODO: Create a trip animations plotting rugplot at the bottom of the screen.
     TODO: Add a legend for type to the top-left corner.
     TODO: On hovering over the types in the legend, highlight trips of this type.
@@ -14,6 +15,7 @@
     TODO: On clicking on a trip, highlight that bike's set of trips.
     TODO: Add a "Next Trip" element to the timer display element.
     TODO: Paint stations in trip viz line animation.
+    TODO: Add slower/faster controls.
 -->
 <!DOCTYPE html>
 <html>
@@ -248,6 +250,9 @@
                     setTimeout(function () {
                         sel
                                 .append("g")
+                                .attr("id", "display-elements")
+                                .append("g")
+                                .attr("id", "stations")  // groups are for display---cf. launchVisualizationAnimation()
                                 .selectAll("circle")
                                 .data(dataset)
                                 .enter()
@@ -1068,6 +1073,7 @@
                 var q = d3.queue();
                 for (let key in selected_stations) {  // let is needed here due to closure stuff I don't quite get
                     if (selected_stations.hasOwnProperty(key)) {
+                        console.log(key);
                         q.defer(function (callback) {
                             console.log("http://127.0.0.1:5000/citibike-api/" +
                                     api_paths[0] +
@@ -1076,8 +1082,8 @@
                                     api_paths[0] +
                                     "/id/" + key, function (data) {
                                 selected_stations[key]['to'] = data;
-                                callback(null, data);
                             });
+                            callback(null);
                         });
                         q.defer(function (callback) {
                             console.log("http://127.0.0.1:5000/citibike-api/" +
@@ -1087,9 +1093,9 @@
                                     api_paths[1] +
                                     "/id/" + key, function (data) {
                                 selected_stations[key]['from'] = data;
-                                callback(null, data);
                             });
-                        })
+                            callback(null);
+                        });
                     }
                 }
                 // We wait for all of the data populate. Once that's done, we proceed with creating the timetable, which
@@ -1099,26 +1105,28 @@
                     if (error) throw error;
                     // Now we create the timetable.
                     var key = null;
+                    console.log("Selected stations:");
+                    console.log(selected_stations);
                     for(key in selected_stations) {  // let is not necessary here because we are in a blocking thread
                         if (selected_stations.hasOwnProperty(key)) {
                             var types = ['from', 'to'];
                             for(var j = 0; j < types.length; j++) {
                                 var type = types[j];
-                                    for(var k = 0; k < selected_stations[key][type].length; k++) {
-                                        var trip = selected_stations[key][type][k];
-                                        var starttime = moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss');
+                                for(var k = 0; k < selected_stations[key][type].length; k++) {
+                                    var trip = selected_stations[key][type][k];
+                                    var starttime = moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss');
 //                                                .format('h:mm A');
 //                                        var starttime = String(
 //                                                moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss')
 //                                                        .format('h:mm A')
 //                                        );
-                                        trips_timetable.push({
-                                            'starttime': starttime,
-                                            'stationid': key,
-                                            'type': type,
-                                            'position': k
-                                        });
-                                    }
+                                    trips_timetable.push({
+                                        'starttime': starttime,
+                                        'stationid': key,
+                                        'type': type,
+                                        'position': k
+                                    });
+                                }
                             }
                         }
                     }
@@ -1133,8 +1141,6 @@
                     var end_trip = selected_stations[end_ref['stationid']][end_ref['type']][end_ref['position']];
                     end_time = moment(end_trip['properties']['stoptime']);
                     console.log(trips_timetable);
-                    // Fire the initial line painter.
-                    fireLinePainters();
                     // Initialize the loop and continue!
                     call_this_once_done();
                 });
@@ -1255,7 +1261,8 @@
                     while(trips_timetable[current_index]['starttime'].format('h:mm A') == next_time.format('h:mm A')) {
                         var curr = trips_timetable[current_index];
                         var tripdata = selected_stations[curr['stationid']][curr['type']][curr['position']];
-                        fireLinePainter(tripdata);
+                        var trip_type = curr['type'];
+                        fireLinePainter(tripdata, trip_type);
                         current_index++;
                     }
                     next_time = trips_timetable[current_index]['starttime'];
@@ -1263,43 +1270,64 @@
             }
 
             // This helper method for `fireLinePainters()`, above, handles actually painting one line.
-            function fireLinePainter(tripdata) {
+            // The tripdata parameter is the trip's entry in selected_stations---this contains all of the data about
+            // the trip itself. The trip_type parameter is the trip type: to/from.
+            function fireLinePainter(tripdata, trip_type) {
+
+                console.log("Fired line painter!");
 
                 var linedata = tripdata['geometry']['coordinates'];
                 var duration = moment.duration(
                     moment(tripdata['properties']['stoptime']).diff(moment(tripdata['properties']['starttime']))
                 ).asMinutes() * tick_time;
-
+                var c = null;  // the color the trip is initially plotted in.
+                var fc = null;  // the color the trip eventually fades to.
+                if (trip_type == 'to') { c = "steelblue"; fc = "#c3d7e8" } else { c = "#d8b365"; fc = "#f0e1c3"; }
+                console.log(trip_type);
+                console.log(c);
                 var line = d3.svg.line()
                         .interpolate("cardinal")
                         .x(function(d) { return proj.latLngToLayerPoint(d).x; })
                         .y(function(d) { return proj.latLngToLayerPoint(d).y; });
 
-                console.log(d3.select("#station-selected"));
+                console.log(d3.select(".display-elements"));
 
-                var path = sel.insert("path", "#station-selected")
+                // display-elements is the id given to the <g> tag which holds (1) all of the station circle elements
+                // that are initialized when the introductory animation is finished and (2) all of the paths that we
+                // are now appending underneath them.
+                //
+                // In an SVG things are plotted in "painter" mode: the order of the elements is the order in which they
+                // appear in the document body. This is the default behavior when we use "append"; we don't want that.
+                // Hence we use this group, selected by id, and the d3 "insert" method (with the :first-child CSS
+                // selector) to prepend the path instead.
+                //
+                // cf. http://stackoverflow.com/questions/26234636/d3-js-prepend-similar-to-jquery-prepend
+//                var path = d3.select("#display-elements").insert("path", ":first-child");
+                console.log(d3.select("#display-elements"));
+                console.log(d3.select("#display-elements"));
+
+                var path = d3.select("#trips").append("path");
+                path
                         .attr({
                             "d": line(linedata),
                             "stroke-width": "3",
                             "fill": "none",
-                            "stroke": "steelblue"
+                            "stroke": c
                         });
-
                 var totalLength = path.node().getTotalLength();
-
+                // Plot through the trip time.
                 path
                         .attr("stroke-dasharray", totalLength + " " + totalLength)
                         .attr("stroke-dashoffset", totalLength)
                         .transition()
                         .duration(duration)
                         .attr("stroke-dashoffset", 0);
-
-//                path
-//                        .attr("stroke", "black")
-//                        .transition()
-//                        .duration(duration * 3)
-//                        .attr("stroke", "steelblue");
-
+                // Fade color after plotting is done.
+                path
+                        .transition()
+                        .delay(duration)
+                        .duration(30 * tick_time)
+                        .attr("stroke", fc);
             }
 
             /////////////////////
@@ -1307,7 +1335,42 @@
             /////////////////////
 
             function launchVisualizationAnimation() {
+                // Create a new group for the lines.
+                // This group is placed before the stations in the document object model so that the lines appear
+                // *below* the stations.
+                //
+                // display-elements is the id given to the <g> tag which holds (1) all of the station circle elements
+                // that are initialized when the introductory animation is finished and (2) all of the paths that we
+                // are now appending underneath them. These are sorted, respectively, into the "stations" and "trips"
+                // class groups.
+                //
+                // In an SVG things are plotted in "painter" mode: the order of the elements is the order in which they
+                // appear in the document body. This is the default behavior when we use "append"; we don't want that.
+                // Hence we use this group, selected by id, and the d3 "insert" method (with the :first-child CSS
+                // selector) to prepend the path instead.
+                //
+                // Afterwards the lines are added to this group by "append", causing them to appear in order and---
+                // critically---overplot one another.
+                //
+                // cf. http://stackoverflow.com/questions/26234636/d3-js-prepend-similar-to-jquery-prepend
+                //
+                // The plotted trips are placed inside of this element later on.
+                d3.select("#display-elements")
+                                                .insert("g", ":first-child")
+                                                .attr("id", "trips");
+                console.log("display-elements selection: ");
+                console.log(d3.select("#display-elements"));
+                console.log("trips selection: ");
+                console.log(d3.select("#trips"));
+                // The first time the incrementer (below) is fired it shifts to one minute after the current time, and
+                // *then* checks if it needs to draw anything. This will leave out any trips that occur at exactly the
+                // starting minute of the visualization. To include these, we fire the painter event for them manually
+                // first.
+                fireLinePainters();
+                // Set up the timer tick event.
+                // That signals its own end, eventually, calling exitVisualizationAnimation() below.
                 interval_id = window.setInterval(incrementTimer, tick_time);
+
             }
 
             // Cleans up after the visualization is done.
