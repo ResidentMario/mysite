@@ -1,21 +1,20 @@
 <!--
     --- NOW ---
-    TODO: Move line animation behind the currently selected station(s).
-    TODO: Add color transition to trip viz line animation. (surprisingly hard; cf. https://bl.ocks.org/mbostock/5348789)
-    TODO: Change color of line animations based on line type (in or out, to or from).
-
-    --- LATER ---
-    TODO: Figure out zoom!
-    TODO: Create a trip animations plotting rugplot at the bottom of the screen.
+    TODO: Create transition back to the selection screen after the animation is done.
     TODO: Add a legend for type to the top-left corner.
     TODO: On hovering over the types in the legend, highlight trips of this type.
     TODO: On clicking on a type in the legend, toggle displaying only trips of that type.
     TODO: On hovering over a trip, highlight that trip.
     TODO: On hovering over a trip, display a tooltip with information about that trip.
-    TODO: On clicking on a trip, highlight that bike's set of trips.
-    TODO: Add a "Next Trip" element to the timer display element.
-    TODO: Paint stations in trip viz line animation.
-    TODO: Add slower/faster controls.
+
+    --- BUGS ---
+    TODO: Fix the multiple-station data bind issue.
+    TODO: Fix station tooltips appearing over deactivated stations during/after the animation viz.
+
+    --- LATER ---
+    TODO: Paint stations in trip viz line animation (once finished, with some sort of arrival info).
+    TODO: Create a trip animations plotting rugplot at the bottom of the screen (and associate info with it!).
+    TODO: Advanced rugplot ideas: click-to-jump-to-time, drag-to-select-a-time-period, drag-to-left-edge-to-pin.
 -->
 <!DOCTYPE html>
 <html>
@@ -142,7 +141,7 @@
         L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
-            maxZoom: 19
+            maxZoom: 16
         }).addTo(map);
         // Thx.
 
@@ -161,7 +160,7 @@
         // The scale factor global is used while redrawing to keep interactive display elements at a reasonable size at
         // all zoom levels. This is necessary because by default d3SvgOverlay will simply keep the objects at the same
         // size at all zoom levels, which causes massive blobs at high zoom levels and tiny specks at low ones.
-        var scale_factor = Math.max(1 / Math.pow(2, map.getZoom() - 13), 0.0625);
+        var scale_factor = Math.max(1 / Math.pow(2, map.getZoom() - 13), 0.25);
 
         // In order to implement the station toggle selection we need to implement a global struct which stores
         // stations selected and the paths that have been drawn associated with them.
@@ -312,7 +311,7 @@
             // Enables interactions (meant to be used once the animation is done playing).
             function enableInteractions() {
                 is_intro_anim = false;
-                d3.select("#map-canvas").style("cursor", "pointer");
+                d3.select("#map-canvas").style("cursor", null);
                 map.dragging.enable();
                 map.keyboard.enable();
                 map.scrollWheelZoom.enable();
@@ -339,7 +338,6 @@
                 }, 6000);
                 setTimeout(function () {
                     enableInteractions();
-                    d3.select("#map-canvas").style("cursor", null);  // then back to a grabby hand after
                 }, 6000);
             }
 
@@ -1082,8 +1080,8 @@
                                     api_paths[0] +
                                     "/id/" + key, function (data) {
                                 selected_stations[key]['to'] = data;
+                                callback(null, data);
                             });
-                            callback(null);
                         });
                         q.defer(function (callback) {
                             console.log("http://127.0.0.1:5000/citibike-api/" +
@@ -1093,8 +1091,8 @@
                                     api_paths[1] +
                                     "/id/" + key, function (data) {
                                 selected_stations[key]['from'] = data;
+                                callback(null, data);
                             });
-                            callback(null);
                         });
                     }
                 }
@@ -1167,9 +1165,7 @@
                         options={'animate':true});
             }
 
-            //
             // Runners for all these things.
-            //
 
             // Continues the transition by removing the loading screen, dropping non-selected stations, zooming out to
             // a planar view, and fiddling with interactivity. Then hands things off to the visualization runner!
@@ -1272,6 +1268,8 @@
             // This helper method for `fireLinePainters()`, above, handles actually painting one line.
             // The tripdata parameter is the trip's entry in selected_stations---this contains all of the data about
             // the trip itself. The trip_type parameter is the trip type: to/from.
+            //
+            // See also: plopLine(), far below.
             function fireLinePainter(tripdata, trip_type) {
 
                 console.log("Fired line painter!");
@@ -1282,11 +1280,11 @@
                 ).asMinutes() * tick_time;
                 var c = null;  // the color the trip is initially plotted in.
                 var fc = null;  // the color the trip eventually fades to.
-                if (trip_type == 'to') { c = "steelblue"; fc = "#c3d7e8" } else { c = "#d8b365"; fc = "#f0e1c3"; }
+                if (trip_type == 'to') { c = "steelblue"; fc = "#99bbd7" } else { c = "#b47846"; fc = "#d7b599"; }
                 console.log(trip_type);
                 console.log(c);
                 var line = d3.svg.line()
-                        .interpolate("cardinal")
+//                        .interpolate("cardinal")
                         .x(function(d) { return proj.latLngToLayerPoint(d).x; })
                         .y(function(d) { return proj.latLngToLayerPoint(d).y; });
 
@@ -1310,9 +1308,10 @@
                 path
                         .attr({
                             "d": line(linedata),
-                            "stroke-width": "3",
+                            "stroke-width": "2",
                             "fill": "none",
                             "stroke": c
+//                            "vector-effect": "non-scaling-stroke"
                         });
                 var totalLength = path.node().getTotalLength();
                 // Plot through the trip time.
@@ -1335,6 +1334,8 @@
             /////////////////////
 
             function launchVisualizationAnimation() {
+                // Enable interactions again, and set the visualization flag to true.
+                enableInteractions();
                 // Create a new group for the lines.
                 // This group is placed before the stations in the document object model so that the lines appear
                 // *below* the stations.
@@ -1377,13 +1378,45 @@
             function exitVisualizationAnimation() {
                 window.clearInterval(interval_id);
                 // TODO: Implement!
+                repaintNonAnimatedDisplayElements();
             }
+
+            ////////////////////
+            // LINE PLOPPING //
+            ///////////////////
+            // Both the animation zoomer and the rugplot use line plopping functions from this section. These just plop
+            // a line on the page without bothering to animate it.
+
+            // Copy of code from fireLinePainter().
+            function plopLine(tripdata, trip_type) {
+                // TODO: Implement!
+            }
+
+            // Removes a single line, given its data. Used by the rugplot selector!
+            function removeLine(tripdata) {
+                // TODO: Implement!
+            }
+
+            /////////////
+            // RUGPLOT //
+            /////////////
+            // TODO: Implement!
 
             /////////////////
             // MAIN METHOD //
             /////////////////
-            // This is the method runs the drawer.
-            // Either run the intro animation...
+            // Everything else above is scoped within functions; those functions are called by the following external
+            // main method, in the order needed to get things working.
+            //
+            // This routine is called when the page is first loaded. But, critically, it is *also* called whenver the
+            // page needs to be rerendered---which means, when using Leaflet, whenever the page is zoomed. This is done
+            // by D3SvgLeaflet.
+            //
+            // Thus is we want something to work with zoom, we have to implement what would happen when the map is
+            // zoomed *here*.
+            //
+            // To do that we use a few global variables as flags and specific methods written for the purpose for
+            // implementation.
             if(is_intro_anim) {
                 runIntroAnimation();
             }
