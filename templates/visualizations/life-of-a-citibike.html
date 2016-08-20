@@ -1,20 +1,16 @@
 <!--
     --- NOW ---
     TODO: Create transition back to the selection screen after the animation is done.
-    TODO: Add a legend for type to the top-left corner.
-    TODO: On hovering over the types in the legend, highlight trips of this type.
-    TODO: On clicking on a type in the legend, toggle displaying only trips of that type.
-    TODO: On hovering over a trip, highlight that trip.
-    TODO: On hovering over a trip, display a tooltip with information about that trip.
 
     --- BUGS ---
+    TODO: Determine, isolate, degrade, and destroy the source of the data incompleteness problem.
     TODO: Fix the multiple-station data bind issue.
     TODO: Fix station tooltips appearing over deactivated stations during/after the animation viz.
 
     --- LATER ---
-    TODO: Paint stations in trip viz line animation (once finished, with some sort of arrival info).
     TODO: Create a trip animations plotting rugplot at the bottom of the screen (and associate info with it!).
     TODO: Advanced rugplot ideas: click-to-jump-to-time, drag-to-select-a-time-period, drag-to-left-edge-to-pin.
+    TODO: Paint stations in trip viz line animation (once finished, with some sort of arrival info).
 -->
 <!DOCTYPE html>
 <html>
@@ -34,12 +30,15 @@
         /* Station tooltip */
         .station-tip {
             line-height: 1.25;
-            padding: 12px;
-            background: whitesmoke;
+            padding: 20px;
+            background: white;
             color: black;
-            border-radius: 2px;
+            border-radius: 5px;
             font-family: Roboto;
-            border:1px solid #999;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%,0%);
+            /*border:1px solid #999;*/
         }
         /* Pure CSS buttons! From http://cssdeck.com/labs/purely-css. Blue one first. */
         button.btn {
@@ -287,7 +286,7 @@
                                                 "r": 10,
                                                 "id": "hovered-station"
                                             });
-                                    showTooltip(d);
+                                    showCard(d);
                                 })
                                 .on('mouseout', function (d, i) {
                                     d3.select(this)
@@ -296,7 +295,7 @@
                                                 "r": 5,
                                                 "id": null
                                             });
-                                    hideTip();
+                                    hideCard();
                                 })
                                 .on("click", toggleStation)
                                 .transition()
@@ -373,12 +372,12 @@
                             "left": proj.latLngToLayerPoint([40.704556, -74.026222]).x - 400 - 20 + "px",
                             // ^ (point in the Hudson river) - (width of the box) - (bit of additional padding).
                             "background": "#fff",
-                            "border-radius": "25px",
+                            "border-radius": "5px",
                             "opacity": 0.0,
                             "padding": "10px",
                             "font-family": "Roboto",
                             "text-align": "center",
-                            "cursor": "default"
+                            "cursor": "text"
                         })
                         .transition()
                         .duration(1000)
@@ -498,6 +497,7 @@
                         })
                         .text("Launch")
                         .on("click", function () {
+                            d3.select("#launch-button").attr({"class": "btn-disabled"}).on("click", null);
                             initLoadingScreen();
                         });
             }
@@ -708,43 +708,33 @@
                 var selection_size = Object.keys(selected_stations).length;
                 if (selection_size == 0) {
                     // If no stations are selected then we just removed our last selection, so remove the display.
-                    d3.select("#reset-button").attr({"class": "btn-disabled"});
-                    d3.select("#launch-button").attr({"class": "btn-disabled"});
+                    d3.select("#reset-button").attr({"class": "btn-disabled"}).on("click", null);
+                    d3.select("#launch-button").attr({"class": "btn-disabled"}).on("click", null);
                 }
                 else {
-                    d3.select("#reset-button").attr({"class": "btn"});
-                    d3.select("#launch-button").attr({"class": "btn btn-blue"});
+                    d3.select("#reset-button").attr({"class": "btn"}).on("click", function(d) {
+                            clearSelection();  // in the station selection section.
+                            updateSelectionDisplay();  // Necessary in case there are preexisting selections.
+                            updateResetAndLaunchButtonStyles();
+                    });
+                    d3.select("#launch-button").attr({"class": "btn btn-blue"}).on("click", function(d) {
+                            d3.select("#launch-button").attr({"class": "btn-disabled"}).on("click", null);
+                            initLoadingScreen();
+                    });
                 }
             }
 
-            /////////////
-            // TOOLTIP //
-            /////////////
-            // Design:
-            // On hovering over one of the stations a tooltip displays with information on what that station is. Super
-            // useful for navigation purposes.
-            //
-            // Implementation:
-            // I originally hoped I could use d3.tip for this (and implemented it that way) but it turns out that
-            //  d3.tip cannot deal with projections at all, so I have to hard-code my own tooltip design.
-            //
+            ///////////
+            // CARDS //
+            ///////////
+            // Cards are little infoboxes which appear on a station.
 
             // Displays the appropriate tooltip for the selected station.
-            function showTooltip(d) {
+            function showCard(d) {
                 var sel_station = d3.select("#hovered-station");
-                d3.select("#map-canvas")
+                var card = d3.select("#map-canvas")
                         .append("div")
                         .attr({"class": "station-tip"})
-                        .style({
-                            "position": "absolute",
-                            // TODO: Fix this broken-ass positioning...
-//                            "top": +sel_station.attr("cy") - +30 + "px",
-//                            "left": +sel_station.attr("cx") + +20 + "px"
-                            "top": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).y -
-                            (30 * scale_factor) + "px",
-                            "left": proj.latLngToLayerPoint([d['latitude'], d['longitude']]).x +
-                            (20 * scale_factor) + "px"
-                        })
                         .html(function () {
                             var underline = null;
                             if (d['kind'] == 'inactive') {
@@ -768,7 +758,7 @@
                                             bikes_out_in + " bike" + bikes_out_s + " began or ended the day here." +
                                             "</span></div>";
                                 }
-                                else if (viz_mode == 'stations') {
+                                else if ((viz_mode == 'stations') || (viz_mode == 'stations-animation')) {
                                     underline = d['incoming trips'] +
                                             " trips to this station.<br/>"
                                             + d['outgoing trips']
@@ -776,7 +766,7 @@
 //                                    + d['all trips'] + " trips total."
                                             + "</span></div>";
                                 }
-                                else if (viz_mode == 'bikes') {
+                                else if ((viz_mode == 'bikes') || (viz_mode == 'bikes-animation')) {
                                     // Pluralize!
                                     var out_s = "s";
                                     if (+d['bikes outbound'] == 1) {
@@ -789,14 +779,20 @@
                                 }
                             }
                             return "<div style='text-align:center'>" +
-                                    "<span style='font-weight:bold; font-size:16px;'>" +
+                                    "<span style='font-weight:bold; font-size:24px;'>" +
                                     d['station name'] +
-                                    "</span><br/><span style='font-size:12px;'>" + underline;
+                                    "</span><br/><span style='font-size:16px;'>" + underline;
                         });
+                // the position of the tooltip---top or bottom---depends on what mode we are in.
+                if ((viz_mode == "intro") || (viz_mode == "bikes") || (viz_mode == "stations")) {
+                    card.style("bottom", "20px");
+                } else {
+                    card.style("top", "90px");
+                }
             }
 
             // Removes the tooltip.
-            function hideTip() {
+            function hideCard() {
                 d3.select(".station-tip").remove();
             }
 
@@ -929,7 +925,7 @@
                                         "r": 10 * scale_factor,
                                         "id": "hovered-station"
                                     });
-                            showTooltip(d);
+                            showCard(d);
                         })
                         .on('mouseout', function (d, i) {
                             d3.select(this)
@@ -938,7 +934,7 @@
                                         "r": 5 * scale_factor,
                                         "id": null
                                     });
-                            hideTip();
+                            hideCard();
                         });
             }
 
@@ -1058,6 +1054,7 @@
 
             // The "callback" parameter should be filled with the function which will run once the data bind is done---
             // in our case this is unpaintLoadingScreen!
+            // TODO: Fix this so it actually works! For multiple stations.
             function bindData(call_this_once_done) {
                 // The calls to the API are handled by an asynchronous d3 queue, which waits for selected_stations to
                 // finish populating before proceeding before continuing. The code below is what executes that.
@@ -1152,11 +1149,12 @@
                         .attr({
                             "fill-opacity": 0,
                             "stroke-opacity": 0
-                        }) ; // .remove();
+                        }).remove();
                 // Disable deselection of selected stations.
                 d3.selectAll(".station").on("click", null);
                 // Disable hover for the now-hidden stations.
-                d3.selectAll(".station-unselected").style("cursor", "default").on("mouseover", null);
+//                d3.selectAll(".station-unselected").style("cursor", null);
+//                d3.selectAll(".station-unselected").on('mouseover', null);
             }
 
             // Transitions the map view back to the default one.
@@ -1196,10 +1194,11 @@
                 bindData(exitLoadingScreen);
             }
 
-            //////////////////////////////
-            // TRIP ANIMATION --- TIMER //
-            //////////////////////////////
-            // These methods operate the trip animation timer element.
+            /////////////////////
+            // TRIP ANIMATIONS //
+            /////////////////////
+            // These methods handle the core trip animation elements: timekeeping, the timer, and the actual trip-line
+            // plotting.
 
             // Creates the on-screen timer element.
             function paintTimer() {
@@ -1212,9 +1211,11 @@
                             "transform": "translate(-50%,-50%)",
                             "display": "inline-block",
                             "margin": "auto",
-                            "opacity": 0
+                            "opacity": 0,
+                            "cursor": "text"
                         })
                         .attr("id", "timer")
+//                        .on(".drag", null)
                         .transition()
                         .duration(1000)
                         .style({
@@ -1246,6 +1247,7 @@
                 }
                 // If we are at the end, finish and clean up.
                 else {
+                    fireLinePainters();
                     exitVisualizationAnimation();
                 }
             }
@@ -1272,23 +1274,33 @@
             // See also: plopLine(), far below.
             function fireLinePainter(tripdata, trip_type) {
 
-                console.log("Fired line painter!");
-
+                // The coordinates that are to be drawn.
                 var linedata = tripdata['geometry']['coordinates'];
+                // The duration of the line animation, matching the duration of the ride.
                 var duration = moment.duration(
                     moment(tripdata['properties']['stoptime']).diff(moment(tripdata['properties']['starttime']))
                 ).asMinutes() * tick_time;
                 var c = null;  // the color the trip is initially plotted in.
                 var fc = null;  // the color the trip eventually fades to.
-                if (trip_type == 'to') { c = "steelblue"; fc = "#99bbd7" } else { c = "#b47846"; fc = "#d7b599"; }
-                console.log(trip_type);
-                console.log(c);
+
+                // The colors to use for the animation. We pick a bright draw line which then fades to a lighter color
+                // for a period of time after the draw is done, by default. However, this behavior changes if we are in
+                // a highlighting mode. In that case, the unhighlighted draw color gets muted, while the highlighted
+                // draw color doesn't fade.
+                if ((trip_type == 'to') && (!highlight_to) && (!highlight_from)) { c = "steelblue"; fc = "#99bbd7" }
+                else if ((trip_type == 'to') && (!highlight_to) && (highlight_from)) { c = "#99bbd7"; fc = "#99bbd7"; }
+                else if ((trip_type == 'to') && (highlight_to)) { c = "steelblue"; fc = "steelblue"; }
+                else if ((trip_type == 'from') && (!highlight_from) && (!highlight_to)) { c = "#b47846"; fc = "#d7b599" }
+                else if ((trip_type == 'from') && (!highlight_from) && (highlight_to)) { c = "#d7b599"; fc = "#d7b599"; }
+                else if ((trip_type == 'from') && (highlight_from)) { c = "#b47846"; fc = "#b47846"; }
+
+                // The linearization algorithm...
                 var line = d3.svg.line()
 //                        .interpolate("cardinal")
                         .x(function(d) { return proj.latLngToLayerPoint(d).x; })
                         .y(function(d) { return proj.latLngToLayerPoint(d).y; });
-
-                console.log(d3.select(".display-elements"));
+                // And the class of the trip, for use by the highlighting selector.
+                var composite_class = "trip-line trip-line-" + trip_type;
 
                 // display-elements is the id given to the <g> tag which holds (1) all of the station circle elements
                 // that are initialized when the introductory animation is finished and (2) all of the paths that we
@@ -1301,12 +1313,11 @@
                 //
                 // cf. http://stackoverflow.com/questions/26234636/d3-js-prepend-similar-to-jquery-prepend
 //                var path = d3.select("#display-elements").insert("path", ":first-child");
-                console.log(d3.select("#display-elements"));
-                console.log(d3.select("#display-elements"));
 
                 var path = d3.select("#trips").append("path");
                 path
                         .attr({
+                            "class": composite_class,
                             "d": line(linedata),
                             "stroke-width": "2",
                             "fill": "none",
@@ -1321,19 +1332,37 @@
                         .transition()
                         .duration(duration)
                         .attr("stroke-dashoffset", 0);
-                // Fade color after plotting is done.
-                path
-                        .transition()
-                        .delay(duration)
-                        .duration(30 * tick_time)
-                        .attr("stroke", fc);
+                // Bind the trip data to the path, for use later.
+                var data_to_bind = tripdata['properties'];
+                data_to_bind['type'] = trip_type;
+                path.datum(data_to_bind);
+                path.data()['type'] = trip_type;
+                // Populate the highlighter events.
+                if (viz_mode == "stations-animation") {
+                    path.on("mouseover", highlightPath);
+                    path.on("mouseout", unhighlightPath);
+                }
+                else if (viz_mode == "bikes-animation") {
+                    path.on("mouseover", highlightPaths);
+                    path.on("mouseout", unhighlightPaths);
+                }
+                // Change the cursor to highlight interactivity.
+                path.style("cursor", "pointer");
+                // Fade color after plotting is done, *if* not in any highlighting mode.
+                if ((!highlight_to) && (!highlight_from)) {
+                    path
+                            .transition()
+                            .delay(duration)
+                            .duration(30 * tick_time)
+                            .attr("stroke", fc);
+                }
             }
 
-            /////////////////////
-            // TRIP ANIMATIONS //
-            /////////////////////
-
             function launchVisualizationAnimation() {
+                // Set the global viz_mode flag appropriately  (used by e.g. the tooltip display).
+                console.log(viz_mode);
+                viz_mode = viz_mode + "-animation";
+                console.log(viz_mode);
                 // Enable interactions again, and set the visualization flag to true.
                 enableInteractions();
                 // Create a new group for the lines.
@@ -1359,10 +1388,8 @@
                 d3.select("#display-elements")
                                                 .insert("g", ":first-child")
                                                 .attr("id", "trips");
-                console.log("display-elements selection: ");
-                console.log(d3.select("#display-elements"));
-                console.log("trips selection: ");
-                console.log(d3.select("#trips"));
+                // Paint the legend display element.
+                paintLegendDisplay();
                 // The first time the incrementer (below) is fired it shifts to one minute after the current time, and
                 // *then* checks if it needs to draw anything. This will leave out any trips that occur at exactly the
                 // starting minute of the visualization. To include these, we fire the painter event for them manually
@@ -1381,6 +1408,288 @@
                 repaintNonAnimatedDisplayElements();
             }
 
+            ////////////
+            // LEGEND //
+            ////////////
+            // These methods handle the legend display element. The legend (1) tells users what color means what and
+            // (2) allows them to toggle dislaying one category of trips, the other category of trips, or both.
+
+            function paintLegendDisplay() {
+
+                // Before we proceed, we generate the text label we're putting in the box.
+                var to_text = null;
+                var from_text = null;
+                var selection_size = Object.keys(selected_stations).length;
+                if (viz_mode == "stations-animation" && selection_size > 1) {
+                    from_text = "Trips from Selected Stations"; to_text = "Trips to Selected Stations";
+                }
+                else if (viz_mode == "stations-animation" && selection_size == 1) {
+                    from_text = "Trips from Selected Station"; to_text = "Trips to Selected Station"
+                }
+                else if (viz_mode == "bikes-animation" && selection_size > 1) {
+                    from_text = "Bicycles Outbound from Selected Stations";
+                    to_text = "Bicycles Inbound to Selected Stations";
+                }
+                else if (viz_mode == "bikes-animation" && selection_size == 1) {
+                    from_text = "Bicycles Outbound from Selected Station";
+                    to_text = "Bicycles Inbound to Selected Station";
+                }
+
+                // Now paint the element.
+                // Note: the display element is drawn on the HTML map canvas level, not the SVG level. This is
+                // because it's rather difficult to get an SVG box into the top right corner, but trivial to
+                // do so in HTML.
+                d3.select("#map-canvas").append("div")
+                        .attr({
+                            "id": "legend-display"
+                        })
+                        .style({
+                            "position": "absolute",
+                            "top": "20px",
+                            "right": "20px",
+//                            "width": "220px",
+                            "background": "white",
+                            "border-radius": "5px",
+                            "text-align": "right",
+                            "cursor": "pointer",
+                            "padding": "10px",
+                            "opacity": 0
+                        })
+                        .transition()
+                        .duration(1000)
+                        .style("opacity", 1);
+                d3.select("#legend-display").append("div")
+                        .attr("id", "to-legend-display-block")
+                        .style("margin-bottom", "30px")
+                        .on("mouseover", function() {
+                            enableMouseoverHighlightType("to");
+                        })
+                        .on("mouseout", function() {
+                            disableMouseoverHighlightType("to");
+                        })
+                        .on("click", function() {
+                            clickToggleHighlightType("to")
+                        });
+                d3.select("#legend-display").append("div")
+                        .attr("id", "from-legend-display-block")
+                        .style("margin-top", "30px")
+                        .on("mouseover", function() {
+                            enableMouseoverHighlightType("from");
+                        })
+                        .on("mouseout", function() {
+                            disableMouseoverHighlightType("from");
+                        })
+                        .on("click", function() {
+                            clickToggleHighlightType("from")
+                        });
+                d3.select("#to-legend-display-block")
+                        .append("div")
+                        .attr("id", "to-legend-circle")
+                        .style({
+                            "width": "20px",
+                            "height": "20px",
+                            "border-radius": "10px",
+                            "background": "steelblue",
+                            "float": "left",
+                            "margin-right": "20px"
+                        });
+                d3.select("#to-legend-display-block")
+                        .append("div")
+                        .style({
+                            "float": "right",
+                            "font-family": "Roboto",
+                            "font-weight": "bold",
+                            "font-size": "14px"
+                        })
+                        .text(to_text);
+                d3.select("#from-legend-display-block")
+                        .append("div")
+                        .attr("id", "from-legend-circle")
+                        .style({
+                            "width": "20px",
+                            "height": "20px",
+                            "border-radius": "10px",
+                            "background": "#b47846",
+                            "float": "left",
+                            "margin-right": "20px"
+                        });
+                d3.select("#from-legend-display-block")
+                        .append("div")
+                        .style({
+                            "float": "right",
+                            "font-family": "Roboto",
+                            "font-weight": "bold",
+                            "font-size": "14px"
+                        })
+                        .text(from_text);
+            }
+
+            ///////////////////////
+            // TYPE HIGHLIGHTERS //
+            ///////////////////////
+            // These methods handle what happens when you highlight elementy by type using the legend.
+
+            // Global variables for whether or not the viz is in highlighted modes.
+            var highlight_to = false;
+            var highlight_from = false;
+
+            // Helper monkey-patch function for bringing selections to the front. Wrapped by bringTripLinesToFront().
+            // cf. http://bl.ocks.org/eesur/4e0a69d57d3bfc8a82c2
+            d3.selection.prototype.moveToFront = function() {
+                return this.each(function(){
+                    this.parentNode.appendChild(this);
+                });
+            };
+
+            // Helper function which brings trip-lines of the given type to the front of the view.
+            function bringTripLinesToFront(type) {
+                d3.selectAll(".trip-line-" + type).moveToFront();
+            }
+
+            // Creates a highlight, based on the status of the highlight flags above (does *not* set these flags
+            // itself!)
+            function highlightType(type) {
+                if (type == "to") {
+                    d3.selectAll(".trip-line-to").attr("stroke", "steelblue");
+                    if (!highlight_from) {
+                        d3.selectAll(".trip-line-from").attr("stroke", "#d7b599");
+                    }
+                }
+                if (type == "from") {
+                    d3.selectAll(".trip-line-from").attr("stroke", "#b47846");
+                    if (!highlight_to) {
+                        d3.selectAll(".trip-line-to").attr("stroke", "#99bbd7");
+                    }
+                }
+                bringTripLinesToFront(type);
+            }
+
+            // Removes a type highlight.
+            function unhighlightType(type) {
+                if (type == "to") {
+                    d3.selectAll(".trip-line-to").attr("stroke", "#99bbd7");
+                }
+                if (type == "from") {
+                    d3.selectAll(".trip-line-from").attr("stroke", "#d7b599");
+                }
+            }
+
+            function enableMouseoverHighlightType(type) {
+                // first manipulate the display elements.
+                var new_color = null;
+                if (type == "to") { new_color = "steelblue"; } else { new_color = "#b47846" }
+                d3.select("#" + type + "-legend-display-block")
+                        .style("color", new_color);
+                d3.select("#" + type + "-legend-circle")
+                        .style("border", "2px solid black");
+                // Actually enable the highlight.
+                if (type == "to" && !highlight_to) {
+                    highlightType(type);
+                } else if (type == "from" && !highlight_from) {
+                    highlightType(type);
+                }
+            }
+
+            function disableMouseoverHighlightType(type) {
+                if ((type == "to" && !highlight_to) || (type == "from" && !highlight_from)) {
+                    d3.select("#" +type + "-legend-circle")
+                            .style("border", null);
+                    // Actually disable the highlight.
+                    unhighlightType(type);
+                }
+                d3.select("#" +type + "-legend-display-block").style("color", null);
+            }
+
+            function clickToggleHighlightType(type) {
+                if (type == "to") {
+                    highlight_to = !highlight_to;
+                } else {
+                    highlight_from = !highlight_from;
+                }
+                if ((type == "to" && highlight_to) || (type == "from" && highlight_from)) {
+                    highlightType(type);
+                } else if ((type == "to" && !highlight_to) || (type == "from" && !highlight_from)) {
+                    unhighlightType(type);
+                }
+            }
+
+            ///////////////////////
+            // PATH HIGHLIGHTERS //
+            ///////////////////////
+            // These methods handle highlighting an individual trip or trip-set, and their implementation vis-a-vis
+            // path hovering and clicking.
+
+            // Highlights an individual path and also posts that highlighted path's card.
+            // This is used directly when in stations-animation viz_mode, and via highlightPaths() when in
+            // bikes-animation viz_mode.
+            function highlightPath(selected_trip) {
+                // Some sneaky input manipulation to get both single and multi -trip selection to work.
+                if (!selected_trip) {
+                    var selected_path = d3.select(this);
+                } else {
+                    selected_path = selected_trip;
+                }
+//                selected_path.transition();  // cancels the fading transition, if one is present.
+                selected_path.moveToFront();  // move the current element to the front (monkey-patched).
+                if (selected_path.datum()['type'] == "to") {
+                    selected_path.attr("stroke", "#1a3043");
+                } else {
+                    selected_path.attr("stroke", "#432d1a");
+                }
+            }
+
+            // Undoes the above.
+            function unhighlightPath(selected_trip) {
+                if (!selected_trip) {
+                    var selected_path = d3.select(this);
+                } else {
+                    selected_path = selected_trip;
+                }
+                if (selected_path.datum()['type'] == "to") {
+                    if(!highlight_to) {
+                        selected_path.attr("stroke", "#99bbd7");
+                    } else {
+                        selected_path.attr("stroke", "steelblue");
+                    }
+                } else {
+                    if(!highlight_from) {
+                        selected_path.attr("stroke", "#d7b599");
+                    }
+                    else {
+                        selected_path.attr("stroke", "#b47846");
+                    }
+                }
+            }
+
+            // This wraps highlightPath() for multi-highlight in stations mode.
+            function highlightPaths() {
+                var selected_path = d3.select(this);
+                var sel_bikeid = selected_path.datum()['bikeid'];
+                console.log(sel_bikeid);
+                var selected_trips = d3.selectAll(".trip-line").filter(function(d) {
+                    return d['bikeid'] == sel_bikeid;
+                });
+                console.log(selected_trips);
+                selected_trips.each(function(selected_path) {
+                    var selected_trip = d3.select(this);
+                    highlightPath(selected_trip);
+                });
+            }
+
+            // Reverses the above.
+            function unhighlightPaths() {
+                var selected_path = d3.select(this);
+                var sel_bikeid = selected_path.datum()['bikeid'];
+                console.log(sel_bikeid);
+                var selected_trips = d3.selectAll(".trip-line").filter(function(d) {
+                    return d['bikeid'] == sel_bikeid;
+                });
+                console.log(selected_trips);
+                selected_trips.each(function(selected_path) {
+                    var selected_trip = d3.select(this);
+                    unhighlightPath(selected_trip);
+                });
+            }
             ////////////////////
             // LINE PLOPPING //
             ///////////////////
