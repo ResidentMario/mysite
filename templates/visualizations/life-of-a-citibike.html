@@ -1100,7 +1100,6 @@
                     if (error) throw error;
                     // Now we create the timetable.
                     var key = null;
-                    console.log("Selected stations:");
                     console.log(selected_stations);
                     for(key in selected_stations) {  // let is not necessary here because we are in a blocking thread
                         if (selected_stations.hasOwnProperty(key)) {
@@ -1360,9 +1359,7 @@
 
             function launchVisualizationAnimation() {
                 // Set the global viz_mode flag appropriately  (used by e.g. the tooltip display).
-                console.log(viz_mode);
                 viz_mode = viz_mode + "-animation";
-                console.log(viz_mode);
                 // Enable interactions again, and set the visualization flag to true.
                 enableInteractions();
                 // Create a new group for the lines.
@@ -1672,6 +1669,7 @@
                 console.log(selected_trips);
                 selected_trips.each(function(selected_path) {
                     var selected_trip = d3.select(this);
+                    console.log(selected_trip);  // if checking the log all 20 of these are present, then each is OK
                     highlightPath(selected_trip);
                 });
             }
