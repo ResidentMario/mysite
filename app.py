@@ -143,6 +143,13 @@ post_list = [
         'date': datetime(2016, 8, 11),
         'template': 'nyc-open-data-portal.html',
         'snap': 'nycopendata.png'
+    },
+    {
+        'title': 'Day in the Life of CitiBike: The Making Of',
+        'route': '2016/08/27/day-in-the-life-of-citibike.html',
+        'date': datetime(2016, 8, 27),
+        'template': 'day-in-the-life-of-citibike.html',
+        'snap': 'empty.png'
     }
 ]
 

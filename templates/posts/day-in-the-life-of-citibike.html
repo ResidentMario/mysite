@@ -1,0 +1,182 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    If you're reading this, dear reader, that means that I finally finished the big huge giant CitiBike visualization
+    I was working on. Huzzah! This visualization is the largest single-person project I've ever put together&mdash;a
+    thousand lines of Python, two thousand lines of JavaScript, a pile of Jupyter notebooks, and a big 'ol spanking
+    MongoDB database all lassoed together to siphon collectively countless hours out of the lives of myself and others.
+</p>
+
+<p>
+    If you haven't checked it out yet, <a href="{{request.url_root}}visualizations/life-of-a-citibike.html">here's a
+link</a>.
+</p>
+
+<p>
+    ...ready?
+</p>
+
+<p>
+    Ok. Let's talk tech.
+</p>
+
+<h3>Inspiration</h3>
+
+<p>
+    I'm a long-time regular of the r/NYC and r/datavisualization communities on Reddit, and so I took note when, in
+    2014, NYC tech aficionado Chris Whong published <a href="http://nyctaxi.herokuapp.com/">his terrific
+    visualization of taxi cab movement in New York City</a>, appropriately enough titled "NYC Taxis: A Day in the
+    Life". The viz went viral on the web, making Whong a bit of a star in the nascent NYC civic tech community
+    and winning awards and <a
+        href="http://fivethirtyeight.com/datalab/visualizing-a-day-in-the-life-of-a-new-york-city-cab/">fivethirtyeight interviews</a>
+    along the way.
+</p>
+
+<p>
+    This was way before I even knew what "civic tech" was (if you're not sure either, check out some of the examples
+    on the highly recommendable <a href="http://datasmart.ash.harvard.edu/">Data-Smart City</a> blog). But of all of
+    the visualizations I've ever seen on Reddit, I can confidently say that this one that's stuck with me the best.
+    Go figure.
+</p>
+
+<p>
+    CitiBike has been around for a while now, and its data has been too, but it wasn't until literally years later,
+    around February this year, that I discovered that said data <a href="https://www.citibikenyc.com/system-data">is
+    totally publically available</a>. And I got to thinking: if Whong can generate a pile of press by build a big
+    fancy map about taxi cab movements, could I perhaps do the same with CitiBikes?
+</p>
+
+<p>
+    Chris Whong <a href="http://chriswhong.com/data-visualization/taxitechblog1/">put up a series of technical
+    posts</a> explaining his work (which this post is itself inspired by), and I poured through them some. I had a
+    modicum of <code class="inline_code">D3.JS</code> experience at that point, so I even got as far as mocking up a
+    moving blob-thing. But in the end I got lost somewhere in the JavaScript&mdash;a language I <i>still</i> don't have
+    any formal experience with&mdash;and I had to leave the idea aside for another day.
+</p>
+
+<p>
+    A half a year, oodles of code, and half an internship later, I got thinking about the idea again. The catalyst
+    was my discovery of <a href="https://github.com/teralytics/Leaflet.D3SvgOverlay"><code
+        class="inline_code">Leaflet.D3SvgOverlay</code></a>, a niftly little plug-in that purported to handle all of
+    the daunting coordinate-to-pixel binding bits for me. And so off I was to the races!
+</p>
+
+<h3>Design Considerations</h3>
+
+<p>
+    Although I initially wanted to build a direct-to-video "A Day in the Life of A CitiBike"
+    rip-off, I quickly realized that the structural differences between CitiBikes and taxis made this frame of
+    reference altogether inconvenient. The visualization as it stands today is a solution to a set of parallel but
+    not strictly equivalent problems.
+</p>
+
+<p>
+    First of all, in the city that never sleeps taxis truly are 24-hour affairs, and you can rely on one zipping
+    around at all hours of the day (mostly&mdash;if you watch enough taxi viz loops, you'll see that this has
+    occasional foibles). Meanwhile, think back to the last time you saw a bike on a 4 AM streets. I actually
+    have&mdash;heck, I've <i>been</i> on a 4 AM bike, but that's a story for another day&mdash;but I would wager most
+    haven't. Nobody's riding a bicycle in the middle of the night! If I were to copy the taxi viz and model my
+    simulation around a single bike-day, it would be deathly boring at night.
+</p>
+
+<p>
+    Second of all, taxis zip around literally. If they're not driving a passenger, they're just driving, so the
+    vehicle is always in motion, and probably full just about as often as it is empty. CitiBikes, by contrast, spent
+    the vast majority of their day in their docks, doing precisely zero miles per hour. What makes the taxi viz
+    appealing is that its simulacra never stop moving&mdash;a textualist interpretation of the philosophy of the
+    ever-moving city. A lone CitiBike, by contrast, would spend 90, 95 percent of its time stationary.
+</p>
+
+<p>
+    On the other hand, CitiBikes have some advantages to. A taxi can go anywhere its four wheel can take it, and they
+    can take it pretty far&mdash;some <i>particularly</i> well-compensated taxi trips start in midtown Manhattan and end
+    on the tip of Long Island. To deal with this, the taxi cab viz pins the user on top of the cab: you can zoom in
+    and out, but the cab remains in the center of the screen. CitiBikes, which inevitably move to and fro between
+    well-defined stations, have no such problem; I am free to release the user to wander in whatever bit of the city
+    they find interesting.
+</p>
+
+<p>
+    I ultimately realized that CitiBike <i>stations</i> are far more interesting than individual <i>bikes</i>. My end
+    product is called "Day in the Life of CitiBike" <i>the system</i>&mdash;the giant <a
+        href="https://en.wikipedia.org/wiki/Markov_chain">Markov chain</a> of endless transitionally probabilistic
+    commuter possibilities (seriously, <a
+        href="http://www.news.cornell.edu/stories/2015/01/cornell-research-steers-nyc-bikes-needy-stations">mathematicians love this stuff</a>).
+    And the visualization would have two modes, I decided. One would be a direct interpretation of bikes moving to
+    and from stations over the course of a busy day (the fancy word is "<a
+        href="https://en.wikipedia.org/wiki/Stochastic_matrix">transition matrix</a>"). The other would visualize
+    where those bikes <i>do</i> end up going throughout the day, by tracking bikes from one particular station or set
+    of stations to their midnight termini.
+</p>
+
+<h3>Surveying the Data</h3>
+
+<p>
+    Trip-level CitiBike data is distributed as monthly snapshots in an <a
+        href="https://s3.amazonaws.com/tripdata/index.html">Amazon S3 Instance</a>. After fiddling around with these
+    a bit I downloaded the June 2016 one and, finding that June 22 was the busiest day on record for CitiBike (though
+    perhaps August has beat it now?), partitioned out trips from that day as points of interest.
+</p>
+
+<p>
+    Right off the bat, this data required some thinking. First of all, CitiBike is not strictly a
+    Manhattan-and-parts-of-Brooklyn affair&mdash;a significant chunk of stations actually also exist in Jersey City.
+    If you pay attention to my visualization, though, you'll notice that I leave these out. Why? Because the CitiBike
+    data doesn't include these stations at all!
+</p>
+
+<p>
+    This simplified things for me a bit, making my view a little more balanced and easier to center. But I can't help
+    but be kind of miffed. There is no good reason, except for administrivia, for this being the case. Nor was this
+    fact mentioned anywhere&mdash;it was up to my own checks, and verifying things with a few other <a
+        href="https://groups.google.com/forum/#!forum/citibike-hackers">CitiBike data junkies</a>, to spot this.
+</p>
+
+<p>
+    Ok, so we'll do the New Yorker thing and ignore New Jersey. But there's another set of data not in the dataset,
+    too. When you get a bunch of people to ride bikes around from place to place, over time (not even that long)
+    they'll tend to accumulate them in certain places at certain times of day and leave other areas floating high and
+    dry. After all, no one says you have to ride a CitiBike <i>back</i> the way you came, and bye and bye they
+    generally don't.
+</p>
+
+<p>
+    Bikes have to get <b>rebalanced</b> from time to time: moved from popular stations to less popular ones and vice
+    versa, as the time of day requires. Generally this is done by van. It's an expensive operation that has been a
+    big part of why the (unique in the world of commuter biking, unsubsidized) CitiBike system has historically been
+    a loss-making operation.
+</p>
+
+<p>
+    The CitiBike trip dataset includes information on <i>user trips</i>, but it says nothing on <i>rebalancing
+    trips</i>. Because of the granularity of the data, thankfully, we can reconstruct these: just check out cases where
+    a bike trip ends one trip at one station and then seemingly "teleports" to another one at the beginning of its
+    next trip. Unlike with user trips, we don't know when these trips actually happen, but we can make educated guesses
+    about that.
+</p>
+
+<p>
+    Finally, I needed to make allowances for "special" stations. Broadly, there are two kinds. The first are inactive
+    stations: stations which purport to be active, and ought to be, yet have no trips to or from them, evidently
+    because they are out that day for maintenance. In the final visualization these would need to be treated as a
+    special case. The second group are depots: repair stations, essentially. I weighed keeping these in, but a couple
+    of these are way outside of the rest of the system (one has <code class="inline_code">(0, 0)</code>
+    coordinates&mdash;worse than nothing!) and would mess up the view so I decided to drop them.
+</p>
+
+<h3>Encoding the Data</h3>
+
+<p>
+    This was the first project I've tackled that's big enough to require spinning up a database, and, excitedly, also
+    the first one where I've had need for NoSQL.
+</p>
+
+<img src="/static/post_assets/landowners/top-ten-most-enumerate-landowners-raw.png"
+     class="inline_image_full" alt="Data."/>
+
+{% endblock %}
