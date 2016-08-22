@@ -1,10 +1,8 @@
 {% extends "frame.html" %}
-{% block pagetitle %} Blog {% endblock %}
+{% block pagetitle %}Blog{% endblock %}
 {% block contenttitle %}
 <h2>
-{% block posttitle %}
-    {{ title }}
-{% endblock %}
+{% block posttitle %}{{ title }}{% endblock %}
 </h2>
 <!--<span id="postdate">{% block postdate %}{% endblock %}</span>-->
 <span id="postdate">{{ date }}</span>

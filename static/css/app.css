@@ -71,7 +71,7 @@ body {
     color:#252525;
 }
 /* <code class="language-python"> is the Prism code highlighting trigger. This adds on to it. */
-.language-python {
+.language-python, .language-javascript {
     font-size: 12px;
 }
 /* For little bits of code within the body of the page. Avoids the code element CSS selector because of the above. */

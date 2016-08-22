@@ -27,6 +27,8 @@ link</a>.
 
 <h3>Inspiration</h3>
 
+<img src="/static/post_assets/citibike/taxi-crop.png" class="inline_image_full" alt="Data."/>
+
 <p>
     I'm a long-time regular of the r/NYC and r/datavisualization communities on Reddit, and so I took note when, in
     2014, NYC tech aficionado Chris Whong published <a href="http://nyctaxi.herokuapp.com/">his terrific
@@ -53,20 +55,23 @@ link</a>.
 
 <p>
     Chris Whong <a href="http://chriswhong.com/data-visualization/taxitechblog1/">put up a series of technical
-    posts</a> explaining his work (which this post is itself inspired by), and I poured through them some. I had a
-    modicum of <code class="inline_code">D3.JS</code> experience at that point, so I even got as far as mocking up a
-    moving blob-thing. But in the end I got lost somewhere in the JavaScript&mdash;a language I <i>still</i> don't have
-    any formal experience with&mdash;and I had to leave the idea aside for another day.
+    posts</a> explaining his work (which this post is itself inspired by, along with <a
+        href="https://eev.ee/blog/">Eevee's blog</a>), and I poured through them. I had a modicum of <code
+        class="inline_code">D3.JS</code> experience at that point, so I even got as far as mocking up a moving
+    blob-thing. But in the end I got lost somewhere in the JavaScript&mdash;a language I <i>still</i> don't have any
+    formal experience with&mdash;and I had to leave the idea aside for another day.
 </p>
 
 <p>
-    A half a year, oodles of code, and half an internship later, I got thinking about the idea again. The catalyst
+    A half a year, oodles of code, and most of an internship later, I got thinking about the idea again. The catalyst
     was my discovery of <a href="https://github.com/teralytics/Leaflet.D3SvgOverlay"><code
         class="inline_code">Leaflet.D3SvgOverlay</code></a>, a niftly little plug-in that purported to handle all of
     the daunting coordinate-to-pixel binding bits for me. And so off I was to the races!
 </p>
 
 <h3>Design Considerations</h3>
+
+<img src="/static/post_assets/citibike/citibike-shot.jpg" class="inline_image_full" alt="Data."/>
 
 <p>
     Although I initially wanted to build a direct-to-video "A Day in the Life of A CitiBike"
@@ -115,6 +120,8 @@ link</a>.
 </p>
 
 <h3>Surveying the Data</h3>
+
+<img src="/static/post_assets/citibike/citibike-data-storage-example.png" class="inline_image_full" alt="Data."/>
 
 <p>
     Trip-level CitiBike data is distributed as monthly snapshots in an <a
@@ -169,14 +176,622 @@ link</a>.
     coordinates&mdash;worse than nothing!) and would mess up the view so I decided to drop them.
 </p>
 
-<h3>Encoding the Data</h3>
+<h3>Building the Database</h3>
+
+<img src="/static/post_assets/citibike/robomongo-example-screenshot.png" class="inline_image_full" alt="Data."/>
 
 <p>
-    This was the first project I've tackled that's big enough to require spinning up a database, and, excitedly, also
-    the first one where I've had need for NoSQL.
+    The paths displayed by the CitiBike viz are actually all merely convenient lies. The CitiBike dataset, just like
+    the taxicab one, does not provide any geography for its trips. We are only given a starting point and an ending
+    point; it's up to us to determine the in between.
 </p>
 
-<img src="/static/post_assets/landowners/top-ten-most-enumerate-landowners-raw.png"
-     class="inline_image_full" alt="Data."/>
+<p>
+    To do this, I used the <a href="https://developers.google.com/maps/documentation/directions/">Google Maps
+    Directions API</a>. Theoretically speaking, I would take take each trip, feed its starting and ending coordinates
+    through the directions API (in <a
+        href="https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes">bicycle
+    mode</a>), and extract the coordinates. For efficiency, Google doesn't actually return a list of coordinates: it
+    returns a compressed and encoded format known as a <a
+        href="https://developers.google.com/maps/documentation/utilities/polylinealgorithm">polyline</a>, which you
+    can then decode yourself in your favorite programming language (I used the eponymous <a
+        href="https://github.com/hicsail/polyline"><code class="inline_code">polyline</code></a> Python package). I'd
+    then attach these coordinates to the trip properties present in my dataset and store the result somewhere.
+</p>
+
+<p>
+    This required spinning up a database. Though I briefly considered it, a variable-length list of coordinates is
+    precisely the sort of thing that would have been annoying to do with a SQL database, and I quickly switched
+    to using NoSQL <a href="https://www.mongodb.com/">MongoDB</a> instead. Bike trips fit very naturally into a
+    document-and-collection graph abstraction!
+</p>
+
+<p>
+    Now, the Google API rate limits use to 2500 requests per day. Although that's a lot, it's still not the 50000+
+    June 22 CitiBike trips, and so, since I couldn't run everything through the API all at once, I had to track which
+    trips from the master dataset were and weren't already in my data store. To do this I created a <code
+        class="inline_code">citibike-trip-ids</code> collection whose only contents was a list of <code
+        class="inline_code">trip ids</code> in the database. When I ran my processing job I would randomly select
+    new trips to process from the set difference of ids from the master list and ids from the database list. Once no
+    difference remained, there wasn't anything more to process.
+</p>
+
+<p>
+    And storing a unique coordinate list for <i>every</i> trip is terribly inefficient. Stations tend to send bikes
+    to other stations which are reasonably popular destinations reasonably close to them. After all, few people are
+    out there riding a CitiBike from the Upper West Side to Williamsburg! Furthermore, every coordinate list actually
+    encodes two kinds of trips: one from station A to station B, and, if you reverse the list, a backwards trip from
+    station B to station A. If we take advantage of these two facts and recycle pre-existing trip information, we could
+    potentially slim down both the database we're building and the time it takes to actually process everything by
+    almost an order of magnitude.
+</p>
+
+<p>
+    My database does this by decoupling trips and their geometries. Coordinate lists are stored in a <code
+        class="inline_code">trip-geometries</code> collection, which documents both coordinate lists and the start
+    and end stations (by ID) associated with them. When I read new trips into the database, I check whether or not
+    those endpoints (in either order) already exist in my list. If they do, I just insert the trip into my <code
+        class="inline_code">citibike-trips</code> list and keep going. If they don't, <i>then</i> I query the API,
+    retrieve and extract a coordinate list, and store that in <code class="inline_code">trip-geometries</code>,
+    before finally inserting the trip itself into my list.
+</p>
+
+<p>
+    This architecture meant that the further I got into feeding trips into my database, the lower and lower the
+    percentage of trips I would need to create new geometries for. For the last set of ~20000 trips that I ran
+    this worked out to a ~75% "compression ratio". Put another way, I was inserting 10000 trips for the price of 2500
+    queries!
+</p>
+
+<p>
+    Now, there are a couple of caveats to this procedure. First up: rebalancing trips. These aren't bicycle trips at
+    all: they (mostly?) take place in the back of a van. Every time I processed a rebalancing trip, instead of running
+    the associative checks above I would run that trip through the API (in driving mode!) and embed those coordinates
+    directly in <code class="inline_code">citibike-trips</code> itself. In retrospect, I'm not sure this was the
+    right decision: it added significantly to the complexity of my data storage layer and invalidated part of my
+    caching strategy, with the only advantage being that rebalancing trip routes are marginally more accurately
+    represented. But I've stuck with it.
+</p>
+
+<p>
+    The second caveat are trips that Google doesn't understand. The prudent reader might notice that there are more
+    trips to and from the two Governer's Island stations than there are between them. As it turns out these bikes
+    weren't just bike rides, they were bike-and-ferry rides. Google doesn't know that; it thinks you're trying to <a
+        href="https://www.youtube.com/watch?v=6QVpJDvNwJY">ride a bike across the Hudson</a>, a phenomenon which
+    it understandably doesn't know what to do with. I don't try to account for the dozen cases in which this
+    happens&mdash;I just leave these trips out.
+</p>
+
+<h3>Building the API</h3>
+
+<img src="/static/post_assets/citibike/api-example-screenshot.png" class="inline_image" alt="Data."/>
+
+<p>
+    The core database layer I've created is purposefully very generic: it just implements an efficient strategy for
+    storing a bunch of trip data, nothing less and nothing more. Following the <a
+        href="https://en.wikipedia.org/wiki/Unix_philosophy">UNIX philosophy</a>&mdash;do one thing and do it
+    well&mdash;turning that data around into something useful is the job of the API layer.
+</p>
+
+<p>
+    To return a single trip my API logically does what I did to feed trips into the database in the first place,
+    backwards: I request a trip id from the database, grab its start and end station ids, request the associated
+    geometry from the database (reversing it if need be), embed those coordinates in the response, and return that.
+</p>
+
+<p>
+    I'm not interested in solitary trips, however, I'm interested in sets of them. My final visualization uses two
+    station-level sets of abstractions. <code class="inline_code">outgoing-trips</code> and <code class="inline_code">
+    incoming-trips</code> are sets of bike routes which leave from or arrive at, respectively, specific station of
+    interest. <code class="inline_code">bike-outbounds</code> and <code class="inline_code">bike-inbounds</code>, by
+    contrast, a sets of bike routes corresponding with <i>bikes</i> that began the day or ended the day,
+    respectively, at the station in question.
+</p>
+
+<p>
+    To return these packagings efficiently I created a separate collection, <code class="inline_code">station-indices</code>,
+    which contains lists of trip ids for each of these groups, per-station. At runtime the API takes
+    a station id, queries <code class="inline_code">station-indices</code> for it, extracts the list of interest from
+    that result, loops through the individual trips of interest using the single-trip extraction process, packages
+    the result, and returns that.
+</p>
+
+<p>
+    These requests are routed through simple <code clas="inline_code">GET</code> requests against the <code
+        class="inline_code">citibike-api</code> subdomain on my personal website (what you're reading now). I emit
+    the data in <code class="inline_code">JSON</code> format. <a
+        href="{{request.url_root}}citibike-api/bike-inbounds/id/3237">Check out an example result!</a>
+</p>
+
+<p>
+    I should note that while I think that while this overall schema is very space-efficient (60 MB compressed on
+    disc, 120 MB uncompressed) whilst remaining reasonably easy-to-understand, it's not very fast. The database
+    itself it reasonably quick; it's all the processing I have to do along the way that slows things down. As a
+    result, querying for the ~3000 bikes-mode trips served by Penn Station Valet, the busiest station in the system,
+    can incur a loading time of 10 seconds or more. In my defense, this <i>is</i> my first time working with a
+    MongoDB database. I'm hopeful that with a bit more work and some consultation with people who know what they are
+    doing™, I can massage down the load time somewhat.
+</p>
+
+<h3>Generating Metadata</h3>
+
+<img src="/static/post_assets/citibike/station-metadata-screenshot.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    That concludes the backend. I've stuck so far to giving a moderately high-level conceptual overview, without the
+    nitty-gritty details of what the code actually looks like.
+</p>
+
+<p>
+    The entire backend, sans the database itself, is up publically in the <code class="inline_code"><a
+        href="https://github.com/ResidentMario/citibike">citibike</a></code> repository on my GitHub. The first item
+    of interest is the notebooks folder. This contains a series of Jupyter notebooks, ordered by number. Notebooks 1
+    through 5 are scoping-out code and were the first thing I did for this project; they work out some of the finer
+    details of the dataset on a few examples and gave me some idea, at the beginning of this project, what it would
+    look like once complete.
+</p>
+
+<p>
+    The sixth notebook there munges the June 2016 CitiBike dataset and builds the finalized raw dataset used as a raw
+    input by the rest of the visualization. It uses a reusable Python module that I wrote for the backend, called <code
+        class="inline_code">citibike_trips</code>, to do some format conversions and, most importantly, plug
+    rebalancing trips into the dataset. If you know your way around Python <code class="inline_code">pandas</code>
+    functions, this should be quite readable.
+</p>
+
+<p>
+    Notebooks seven, eight, and nine, run in sequence, build metadata about individual <i>stations</i> in the
+    CitiBike system, generating <code class="inline_code">june_22_station_metadata.csv</code>. This file contains
+    metadata about all 475 stations in the CitiBike system that made the final cut; it's used by the front-end to
+    plot and display information about these stations on my map.
+</p>
+
+<p>
+    Notebook ten just contains some checks that make sure everything is neat.
+</p>
+
+<p>
+    Finally, the last notebook, number eleven, contains the code that generates the aforementioned <code
+        class="inline_code">station-indices</code> collection within the database.
+</p>
+
+<p>
+    Most of the heavy lifting throughout is handled by the ~500 line <code
+        class="inline_code"><a href="https://github.com/ResidentMario/citibike/blob/master/src/citibike_trips.py">
+    citibike_trips</a></code> module, and I use a relatively simple <code class="inline_code"><a
+        href="https://github.com/ResidentMario/citibike/blob/master/src/data_chunker.py">data_chunker</a></code>
+    command line utility to incrementally feed the database. Here's a shot of it in action:
+</p>
+
+<img src="/static/post_assets/citibike/geocoding-action-shot.png" class="inline_image_full" alt="Data."
+     style="width:80%"/>
+
+<p>
+    If you're interested in learning more or thinking about doing something like this yourself, I encourage you to
+    <a href="https://github.com/ResidentMario/citibike">leaf through the repository yourself</a>.
+</p>
+
+<h3>Gotchas So Far</h3>
+
+<p>
+    Most of the backend code that I wrote for this project was pretty much standard object-oriented data science
+    stacked Python code (if you're curious about the organizational structure I used, <a
+        href="https://www.youtube.com/watch?v=EKUy0TSLg04">watch this talk</a>&mdash;it will change your life!). But
+    there were still a couple of gotchas (besides me just plain screwing up) that are worth pointing out.
+</p>
+
+<p>
+    There's the matter of <a href="https://api.mongodb.com/python/current/"><code class="inline_code">
+    pymongo</code></a>, the Python driver of choice for MongoDB operations. I guess this is just one of those cases
+    when I have to pull a cultural <a href="https://en.wikipedia.org/wiki/J%27accuse%E2%80%A6!">J'accuse</a> and say
+    it: this module is just not very Pythonic. What makes me level such a serious accusation, you say?
+</p>
+
+<p>
+    For starters, <code class="inline_code">pymongo</code> flat-out refuses to work with <code
+        class="inline_code">numpy</code> datatypes. I dunno, maybe this is just a commentary on how deeply swaddled I
+    am at this point in the Python scientific programming stack, but I found this very disconcerting. This required
+    some really ugly type-patching to work around:
+</p>
+
+<pre><code class="language-javascript">
+    attributes = {
+        "tripduration": int(time_estimate_mins * 60),
+        "start station id": int(start_point['end station id']),
+        "end station id": int(end_point['start station id']),
+        "start station name": start_point['end station name'],
+        "end station name": end_point['start station name'],
+        "bikeid": int(start_point["bikeid"]),
+        "usertype": "Rebalancing",
+        "birth year": 0,
+        "gender": 3,
+        "start station latitude": float(start_lat),
+        "start station longitude": float(start_long),
+        "end station latitude": float(end_lat),
+        "end station longitude": float(end_long),
+        "starttime": rebalancing_start_time.strftime("%m/%d/%Y %H:%M:%S").lstrip('0'),
+        "stoptime": rebalancing_end_time.strftime("%m/%d/%Y %H:%M:%S").lstrip('0'),
+        "tripid": delta.index[0]
+    }
+
+</code></pre>
+
+<p>
+    The other thing is that, contrary to the Python way of doing things, <code class="inline_code">pymongo</code> is <i>
+    really</i> strongly typed. I know, I know, this is a database interface and in databases it's <i>really</i>
+    important to keep track of what the types of things are at all times. But I've gotten used to <code
+        class="inline_code">pandas</code> telling me "don't worry, I'll handle the datatypes, you go frolic"
+    philosophy of life, so much so that I fell flat on my face when after an extended bug hunt I discovered that
+    <code class="inline_code">find_one({'bikeid': 1234})</code> and <code class="inline_code">find_one({'bikeid':
+    '1234'})</code> are totally <i>not</i> that same thing.
+</p>
+
+<p>
+    Of course this distinction matters on the level of the database, but I don't see why my Python driver should
+    enforce it to!
+</p>
+
+<p>
+    I don't know, maybe I'm crazy. At the very least it would have been nice to know these things beforehand.
+</p>
+
+<p>
+    The one other annoyance of note is a quirk in the way that <a
+        href="http://flask.pocoo.org/"><code class="inline_code">flask</code></a>, the webservice module that I use
+    to actually run my website, handles JSON. <code class="inline_code">flask</code> provides a native <code
+        class="inline_code">jsonify</code> method which is hip and cool and easy to use, except that, when I tried to
+    use it, it...didn't work.
+</p>
+
+<p>
+    And hey, you know what's worse than just not working?
+</p>
+
+<pre><code class="language-python">
+    File "C:\...\flask\app.py", line 889, in call
+    return self.wsgi_app(environ, start_response)
+    File "C:\...\app.py", line 879, in wsgi_app
+    response = self.make_response(self.handle_exception(e))
+    File "C:\...\app.py", line 876, in wsgi_app
+    rv = self.dispatch_request()
+    File "C:\...\app.py", line 695, in dispatch_request
+    return self.view_functionsrule.endpoint
+    File "C:\...\web.py", line 50, in autocomplete_search
+    return jsonify([{'label' : klass.name } for klass in query.all()])
+    File "C:\...\helpers.py", line 106, in jsonify
+    return current_app.response_class(json.dumps(dict(args, *kwargs),
+    ValueError: dictionary update sequence element #0 has length 1; 2 is required
+
+</code></pre>
+
+<p>
+    Throwing a cryptic C-style error message while you're at it! Boy, did <i>this</i> give me flashbacks.
+</p>
+
+<p>
+    In (one of several) issues on the subject of this error, <code class="inline_code">flask</code> creater and web
+    programming guru Armin Ronacher <a href="https://github.com/pallets/flask/issues/168">points out</a> that "For
+    security reasons only dictionaries can be returned." Flask docs <a
+        href="http://flask.pocoo.org/docs/0.11/security/#json-security">point to a problem in EMCAScript 4</a> as the
+    problem.
+</p>
+
+<p>
+    Ok great, but no one uses EMCAScript 4 anymore. The latest version is EMCAScript 7, and EMCAScript 5, which fixed
+    this vulnerability, is almost seven years old now.
+</p>
+
+<p>
+    Oh wow, <a href="https://github.com/pallets/flask/issues/248">this got really conscientious</a> (<a
+        href="https://github.com/pallets/flask/issues/673">twice</a>). Let's, uh, step away from there.
+</p>
+
+<p>
+    Getting around this restriction is simple, once you know what the problem is:
+</p>
+
+<pre><code class="language-python">return Response(json.dumps(tripset), mimetype='application/json')</code></pre>
+
+<p>
+    As an aside, the suggested EMCAScript 4 -safe way of getting around this problem is returning a keyed dictionary
+    instead of a list, where the keys are whatever, probably indices. That's how the old-school <a
+        href="https://www.mediawiki.org/wiki/API:Main_page">MediaWiki API</a> does things, and the old-school
+    MediaWiki API does things <i>terribly</i>. In this particular case, at least now I know why!
+</p>
+
+<h3>The Frontend</h3>
+
+<p>
+    Which brings me, finally, to the hard part: building the visualization itself.
+</p>
+
+<p>
+    All of the JavaScript necessary to get this puppy humming is packed into one giant 2000+ line file,
+    which you can see for yourself <a
+        href="https://github.com/ResidentMario/mysite/blob/master/templates/visualizations/life-of-a-citibike.html">
+    here</a>. Although it's certainly verbose as all hell, as <code class="inline_code">D3.JS</code> and pure <code
+        class="inline_code">JavaScript</code> code tends to be, it's honestly mostly pretty prosaic. Fade this menu
+    in. Fade that menu out. Load this data. Colormap these points. Disable this button. On and on.
+</p>
+
+<p>
+    If you're actually interested in these things, instead of ripping into my at this point very complex code I suggest
+    examining some simpler examples, <a href="http://bl.ocks.org/">of which there are plenty</a>.
+</p>
+
+<p>
+    But while I'm not interested in doing a line-by-line breakdown of my code, I <i>am</i> going to say a few (a lot of)
+    words about the technical challenges and gotchas of integrating Leaflet and D3.JS together that I had to overcome
+    in the process of building this visualization.
+</p>
+
+<h3>The Frontend&mdash;Technical Considerations</h3>
+
+<p>
+    The entire visualization takes place over a full-screen webmap. The webmap that I use is that darling of the web
+    mapping community, <a href="http://leafletjs.com/"><code class="inline_code">Leaflet.JS</code></a>.
+</p>
+
+<p>
+    The first crucial difficulty that I faced, which I alluded to at the very beginning of this lengthy post, was
+    that I didn't actually know how to go about binding shapes to the map in such a way that when I zoomed or panned
+    around, the shapes would stick to the same spot on the map. Theoretically speaking, it's possible to do this by
+    using Leaflet's own shape-rendering codes, which were built for exactly this purpose and handle all of that for
+    you. And indeed, it may be possible for someone far more familiar with Leaflet's drawing facilities than I to
+    replicate the work I've done purely using Leaflet functions.
+</p>
+
+<p>
+    But I was wary of using it because I am comfortable writing pure <code class="inline_code"><a
+        href="https://d3js.org/">D3.JS</a></code> visualization code, and I knew that Leaflet shapes are just a fancy
+    wrapper around D3 code. I didn't think that Leaflet's shape-rendering is powerful enough to achieve the effect I
+    wanted.
+</p>
+
+<p>
+    It was my discovery of <a href="https://github.com/teralytics/Leaflet.D3SvgOverlay"><code class="inline_code">
+    Leaflet.D3SvgOverlay</code></a>, really, which made this whole thing possible. I'm no JavaScript expert&mdash;in
+    fact, I still haven't ever actually formally studied the language&mdash;so I have only a very weak idea of how
+    one would go about doing the hard work of binding coordinates to a webmap in a sticky and zoomable way. When I
+    stumbled on a library that did all of that for me, suddenly that difficulty was eradicated!
+</p>
+
+<p>
+    This little library provides with a nifty <code class="inline_code">d3SvgOverlay</code> callback, within which
+    you have access to a simple <code class="inline_code">latLngToLayerPoint()</code> method for fitting coordinates
+    to the map. The entire design pattern for a basic Leaflet+D3 visualization looks like this:
+</p>
+
+<pre><code class="language-javascript">
+    // Create the basic map canvas.
+    var map = L.map("map-canvas", {
+        ['global map settings...']
+    });
+
+    // Fit the map to a certain area.
+    map.fitBounds([[40.6794268,-73.92989109999999], [40.789747, -74.075979]]);
+
+    // Create the tile layer.
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        ['tile layer settings...']
+    }).addTo(map);
+
+    // Enable the D3 callback.
+    var mapOverlay = L.d3SvgOverlay(function(sel,proj) {
+
+        // Functions that do things once they get called by the main method.
+        function doSomething() {
+            ['...']
+        }
+
+        function doSomethingElse() {
+            ['...']
+        }
+
+        ['...']
+
+        // The main method---what gets executed at runtime.
+        mainMethod();
+
+    }
+
+    // Add the D3 callback to the map.
+    mapOverlay.addTo(map);
+</code></pre>
+
+<p>
+    Not bad at all!
+</p>
+
+<p>
+    Now, I did discover that this interface had certain important technical limitations and/or features to keep in mind.
+</p>
+
+<p>
+    First of all, when the Leaflet map is zoomed into or out of <code class="inline_code">Leaflet.D3SvgOverlay</code>
+    will rerun any code that's hanging out in <code class="inline_code">mainMethod()</code>. This means that if you,
+    for instance (as I did) start things off with a <code class="inline_code">runIntroAnimation()</code> method,
+    every time the map zoom level changes you'll run that animation all over again!
+</p>
+
+<p>
+    This is obviously not what we want. You can get around this by using a global flag variable placed <i>outside</i>
+    the scope of the <code class="inline_code">d3SvgOverlay</code> callback. Have your method immediately set that
+    flag when it is executed, and wrap the execution in an <code class="inline_code">if</code> statement to prevent
+    it from re-executing. This will look something like this:
+</p>
+
+<pre><code class="language-javascript">
+    var is_intro_anim = true;
+
+    var mapOverlay = L.d3SvgOverlay(function(sel,proj) {
+        if(is_intro_anim) {
+            is_intro_anim = false;
+            runIntroAnimation();
+        }
+    }
+</code></pre>
+
+<p>
+    I actually went one step further and also disabled zooming entirely (with
+    <code class="inline_code">map.doubleClickZoom.disable(); map.scrollWheelZoom.disable();</code>) while the intro
+    animation is playing, just because it made sense for me in this particular case, but you don't have to go to such
+    extremes.
+</p>
+
+<p>
+    Next, when the Leaflet map is zoomed into or out of <code class="inline_code">Leaflet.D3SvgOverlay</code> will
+    keep any shapes on the map <i>not</i> touched by a rendering algorithm at the same geographic size. This means
+    that you might be looking at a line that's 2 pixels wide to start with, zoom in twice, and discover that your
+    line is now 200 pixels wide! This isn't an overlay thing really, it's just what an SVG canvas will do by
+    default with its shapes when its viewbox is changed.
+</p>
+
+<p>
+    Sometimes this is what you want, most of the time it isn't. If the shape you want to remain constant in size is a
+    path, you can use the <code class="inline_code">"vector-effect": "non-scaling-stroke"</code> CSS trick to very
+    easily keep that line at 2 pixels wide at all resolutions. For all other SVG shapes, though, it's up to you to
+    write whatever code you need to rescale the screen. You can do this by capturing the current zoom level with
+    <code class="inline_code">map.getZoom()</code> and applying that as a multiplier to your shapes. Here, by way of
+    another global variable (<code class="inline_code">scale_factor</code>), is (basically) how I did it:
+</p>
+
+<pre><code class="language-javascript">
+    var is_intro_anim = true;
+    var scale_factor = null;
+
+    var mapOverlay = L.d3SvgOverlay(function(sel,proj) {
+
+        function rerenderStations() {
+            d3.selectAll(".station")
+                    .attr({
+                        "r": 5 * scale_factor,
+                        "stroke-width": 2 * scale_factor
+                    });
+
+        if(is_intro_anim) {
+            is_intro_anim = false;
+            runIntroAnimation();
+        }
+        else {
+            // Rescale.
+            scale_factor = Math.max(1 / Math.pow(2, map.getZoom() - 13), 0.0625);
+            // Correct the displays.
+            rerenderStations();
+        }
+    }
+</code></pre>
+
+<p>
+    Going into the project, what I thought would be the second hardest part of the frontend part would be getting the
+    lines I wanted to draw right. I was helped here by an oldie-but-goodie <a
+        href="http://www.nytimes.com/newsgraphics/2013/10/13/russia/?ref=global-home">New York Times newsgraphic</a>
+    about the poor state of repair of Russia's main St. Petersburg&mdash;Moscow throughway and the various curios you
+    see along the way. Which is a bit ironic, coming as it is from the <i>New York Times</i> of, you know, New York
+    City (<a href="http://www.nytimes.com/interactive/2016/08/18/nyregion/new-york-101-streets-repair-and-maintenance.html?_r=0">read on here</a>),
+    but whatever. Anyway, what's nice about this story collection is that as you read through it you're followed
+    along the way by a nicely animated SVG path telling you where you are, both literally and physically, in the story:
+</p>
+
+<img src="/static/post_assets/citibike/nyt-interactive-line.png" class="inline_image" alt="Data." style="width:25%"/>
+
+<p>
+    <a href="http://cbron.github.io/blog/2013/12/30/draw-svg-path-on-scroll-tutorial/">Other web hackers tore the
+        code out and poked around it</a>. It turns out that you can actually do this pretty easily by abusing the
+    <code class="inline_code">stroke-dasharray</code> and <code class="inline_code">stroke-dashoffset</code>
+    properties of a path. These properties, meant to be used to create dashed lines with filled (dasharray)
+    and empty (dashoffset) areas of certain sizes, can be made to build dashed lines with just two parts: a filled-in
+    part at the beginning and the long gap after it. Animate a transition from all-gap to all-filled and there you have
+    it, an animated line. Clever, really.
+</p>
+
+<p>
+    I ended up <a href="http://bl.ocks.org/duopixel/4063326">tearing this recent block down</a> and using that. I had
+    it working in, like, 20 minutes of work. Kind of anticlimactic really.
+</p>
+
+<p>
+    Ah but wait reader! There's more! Remember the <code class="inline_code">"vector-effect": "non-scaling-stroke"</code>
+    trick I mentioned earlier for getting lines to render with the same width at all resolution? Since I'm by no
+    means an SVG ninja I can't say <i>precisely</i> what the issue is, but when you combine this effect with the
+    stroke trick and actually try zooming in or out, everything becomes a strokepocalyptic gobbly-goop.
+</p>
+
+<p>
+    Which reminds me of something that a physics professor once told me: a trick is only a trick if you don't know
+    how it works. How did I fix this one? Um. Will get back to you once I have an answer to that.
+</p>
+
+<p>
+    One last technical gotcha: the super-sweet <code class="inline_code">latLngToLayerPoint()</code> method is not as
+    super-sweet as I had initially thought, once I started actually zooming into the map. It turns out that this
+    method returns the <i>exact</i> pixel coordinate of the geographic feature at the <i>current</i> zoom
+    level&mdash;resulting in subpixel-wide drawing error. When you zoom in a lot&mdash;and remember, on a Leaflet map
+    you can zoom in by a factor of 10,000 or more&mdash;that error starts to matter. A lot. No seriously, it looks
+    like someone draw on your map with a crayon or something:
+</p>
+
+<img src="/static/post_assets/citibike/zooming-example-zoomed-in.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    But, perversely, if you zoom in right at the beginning of the animation, everything suddenly looks smooth as a
+    baby butt:
+</p>
+
+<img src="/static/post_assets/citibike/zooming-example-zoomed-out.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Argh. How did I fix this one? Not sure yet...
+</p>
+
+<h3>Easy And-Alsos</h3>
+
+<p>
+    Here go the things I want to generate as well at the end: the transitional probability matrix, maybe, and a
+    poster-izable snapshot of station.
+</p>
+
+<h3>Conclusion</h3>
+
+<p>
+    All in all, this project took around 1000 lines of Python code, 2000+ lines of JavaScript, a reasonably-sized
+    MongoDB database, and around 1000 lines of, um, actual words that you are reading right now. I wasn't always very
+    consistent about when I worked on it; I took a break halfway through, for instance, to, um, beat <a
+        href="https://en.wikipedia.org/wiki/Divinity:_Original_Sin">Divinity: Original Sin</a> for the third time.
+</p>
+
+<p>
+    All in all, it took me about a month to turn this project around&mdash;not much time in the grand scale of the
+    universe, maybe, but eons for someone that's only been actively coding since January-ish (and who's usually
+    turned around things in a couple of days at most&mdash;this <i>is</i> "Data Hacks" after all!).
+</p>
+
+<p>
+    As with all of my project, I really hope that this becomes A Thing on the Internet, particularly since Whong's
+    taxi cab viz, which did it first, was totally viral. But you can't predict these things, really. My experience
+    building this visualization has reinforced my conviction that, ultimately, the interestingness of the story that
+    you tell is as much a factor of the visual methodology that you use to do it as it is one of the interestingness
+    of the underlying data that you use; and that it's <i>really</i> hard to tell if an approach you take is going to
+    work out or not when you're just starting out on a new thing. Finding a way of telling a story that's both
+    compelling in its reasoning and beautiful in the telling: that's where the art is, and it's why successful data
+    visualization folks are nothing if not tinkers.
+</p>
+
+<p>
+    In the end, I'm satisfied with the way things turned out overall just as a function of what I think I have learned
+    in the undertaking.
+</p>
+
+<p class="addendum">
+    Interested in learning more about the CitiBike system? This analysis was predicated by a wealth of work done by
+    others. Check out Todd Scheider's <a
+        href="http://toddwschneider.com/posts/a-tale-of-twenty-two-million-citi-bikes-analyzing-the-nyc-bike-share-system/">
+    "A Tale of Twenty-Two Million Citi Bike Rides"</a> for terrifically formulated insights into the nature of the
+    Citi Bike system. See <a href="https://medium.com/@Urbica.co/city-bike-rebalanced-92ac61a867c7#.8v4bclog8">Urbica
+    Design's write-up and visualization</a> for deeper insight into the system's distribution and load balancing.
+    Finally, check out the IQuantNY blog for any number of posts about the system: including one on <a
+        href="http://iquantny.tumblr.com/post/86569579414/citi-bike-17279-where-are-you-profiling-the">the busiest
+    CitiBike of them all</a>.
+</p>
 
 {% endblock %}
