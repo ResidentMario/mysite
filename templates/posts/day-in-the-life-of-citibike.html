@@ -741,7 +741,9 @@ link</a>.
 <img src="/static/post_assets/citibike/zooming-example-zoomed-out.png" class="inline_image_full" alt="Data."/>
 
 <p>
-    Argh. How did I fix this one? Not sure yet...
+    After literally five minutes in the JavaScript code, this turned out to be a one-line fix. On line 117 the code
+    applies a <code class="inline_code">._round()</code> method (actually a wrapper of a Leaflet method) to its <code
+        class="inline_code">projected_point</code>; I commented that out. Bam! Smooth sailing from there.
 </p>
 
 <h3>Easy And-Alsos</h3>
