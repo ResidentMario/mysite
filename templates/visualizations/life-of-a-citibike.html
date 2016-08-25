@@ -1,13 +1,9 @@
 <!--
     --- NOW ---
-    TODO: Fix highlighting so that it works in stations mode as well.
+    TODO: Paint stations in trip viz line animation (once finished, with some sort of arrival info).
     TODO: Allow selecting a random tripset by hitting Space.
     TODO: Allow click-to-hold on the highlighting.
-    TODO: Paint stations in trip viz line animation (once finished, with some sort of arrival info).
     TODO: Create transition back to the selection screen after the animation is done.
-
-    --- BUGS ---
-    TODO: Fix the multiple-station data bind issue.
 
     --- LATER ---
     TODO: Create a trip animations plotting rugplot at the bottom of the screen (and associate info with it!).
@@ -16,7 +12,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>A Day in the Life of CitiBike</title>
+    <title>A Day in the Life of Citi Bike</title>
 
     <style type="text/css">
         html { height: 100% }
@@ -41,7 +37,7 @@
             transform: translate(-50%,0%);
             /*border:1px solid #999;*/
         }
-        /* Pure CSS buttons! From http://cssdeck.com/labs/purely-css. Blue one first. */
+        /* Pure CSS buttons, cf. http://cssdeck.com/labs/purely-css. */
         button.btn {
             display: inline-block;
             color: #666;
@@ -118,13 +114,10 @@
         /////////////////////////
         // MAP INITIALIZATION  //
         /////////////////////////
-        // About:
-        // The map is Leaflet goodness, with all drawings and animations implemented on top using L.d3SvgOverlay.
-        //
+        // The map is via Leaflet, with all drawings and animations implemented on top using L.d3SvgOverlay.
 
-        // Initializes the basemap. Disable animations.
-        var map = L.map("map-canvas", {
-            zoomControl: false,  // Zooming and scrolling disabled to start with, it turns back on later.
+        var map = L.map("map-canvas", {  // Initialize the basemap. Disable animations for the starting anim.
+            zoomControl: false,
             scrollWheelZoom: false,
             minZoom: 11
         });
@@ -135,27 +128,18 @@
         map.dragging.disable();
         map.keyboard.disable();
         map.doubleClickZoom.disable();
-        // I also use a CSS control to change the cursor from a draggy hand to a regular one as well in order to
-        // keep users from thinking it is interactive at the beginning.
-        // Gib tile layer.
+        // Attach the tile layer.
         L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
             maxZoom: 16
         }).addTo(map);
-        // Thx.
 
         //////////////////////
         // GLOBAL VARIABLES //
         //////////////////////
         // Variables declared inside of the draw callback will be reset every time that the map zoom level is changed.
         // Therefore variables which have to exist outside of the draw state live here.
-
-        // While the intro animation is playing we disable map interactions because d3SvgOverlay doesn't handle
-        // having to redraw things that are partially animated. So we store a global for this purpose. Once the
-        // intro animation is done we switch this to false and enable interactions. Future draws refer this variable
-        // when deciding how to repaint.
-        var is_intro_anim = true;
 
         // The scale factor global is used while redrawing to keep interactive display elements at a reasonable size at
         // all zoom levels. This is necessary because by default d3SvgOverlay will simply keep the objects at the same
@@ -165,35 +149,27 @@
         // In order to implement the station toggle selection we need to implement a global struct which stores
         // stations selected and the paths that have been drawn associated with them.
         // In the first part of the view, before launching any visualization, this data just contains a list of all of
-        // the selected station ids. The actual data is populated once the user hits the Go button; to see how things
-        // are structured at that point see bindData(), way below.
+        // the selected station ids. The actual data is populated once the user hits the Go button, by the bindData()
+        // function call. This data is then used by the path generation and timer elements to run the animation.
         var selected_stations = {};
 
-        // The current visualization mode.
-        var viz_mode = "intro";
+        // The current visualization mode. Used almost everywhere. Possible options are:
+        // intro-animation --- the mode the visualization is in at the very beginning, when sampler paths are plotted.
+        // intro --- The mode immediately thereafter, with "Follow Stations" and "Follow Bikes" buttons.
+        // stations --- The mode when you hit "Follow Stations" in intro, basically the stations selection screen.
+        // bikes --- The mode when you hit "Follow Bikes" in intro, basically the stations selection screen.
+        // stations-animation --- When the visualization is animating in stations mode.
+        // bikes-animation --- When the visualization is animating in bikes mode.
+        var viz_mode = "intro-animation";
 
-        // D3-SVG-Overlay callback wrapper. Leaflet is used only for the base map, all of the programmatic action occurs
-        // in d3 code inside of this callback.
+        // D3-SVG-Overlay callback wrapper.
         var mapOverlay = L.d3SvgOverlay(function(sel,proj) {
 
             //////////////////////
             // INTRO ANIMATION  //
             //////////////////////
-            // Design:
             // For the introduction I wanted to dynamically render a random set of paths (200 of them in the final
             // visualization) before painting the rest of the introductory scene.
-            //
-            // Implementation:
-            // runIntroAnimation() -> paintPathSampler() -> paintPath()
-            //                     -> paintBackgroundPanel()
-            //                     -> paintStations()
-            //                     -> drawInfoBox() [function from the "infobox" section, the intro adds a timeout]
-            //                     -> enableInteractions()
-            //
-            // Notes:
-            // * Zooming and panning are disabled while the introduction is playing. They are re-enabled once it's over.
-            // * The sample paths fade out as soon as the user zooms in or selects a visualization mode.
-            // * The `is_intro_anim` global boolean tells the main scene painter (way below) how to behave.
 
             // Paints a single sampler path. Accepts a linearray (an array of points) as input, as well as the position
             // of the line being drawn in placement order. paintPathSampler is the method which actually handles the
@@ -310,7 +286,6 @@
 
             // Enables interactions (meant to be used once the animation is done playing).
             function enableInteractions() {
-                is_intro_anim = false;
                 d3.select("#map-canvas").style("cursor", null);
                 map.dragging.enable();
                 map.keyboard.enable();
@@ -344,13 +319,8 @@
             //////////////
             // INFO BOX //
             //////////////
-            // Design:
             // Handles the information display on the left-hand side. A different one is created every time the viz
             // mode is switched.
-            //
-            // Implementation:
-            // {paintIntroInfo(), paintStationsInfo(), paintBikesInfo()} -> drawInfoBox()
-            //
 
             // Draws the info box. This method is used by the information pane painters (there are three, one for each
             // viz mode: intro, stations, bikes). Since the height and width and whatnot of the display depends on the
@@ -366,9 +336,6 @@
                         .style({
                             "position": "absolute",
                             "width": "400px",
-                            // It's easiest to just let height be whatever height the whole thing ends up at.
-//                                "height": (proj.latLngToLayerPoint([40.70122128,-74.01234218]).y -
-//                                            proj.latLngToLayerPoint([40.784642, -73.970002]).y) + "px",
                             "top": proj.latLngToLayerPoint([40.784642, -73.970002]).y + "px",
                             "left": proj.latLngToLayerPoint([40.704556, -74.026222]).x - 400 - 20 + "px",
                             // ^ (point in the Hudson river) - (width of the box) - (bit of additional padding).
@@ -382,9 +349,7 @@
                         })
                         .transition()
                         .duration(1000)
-                        .style({
-                            "opacity": 1.0
-                        });
+                        .style("opacity", 1.0);
 
                 // Append title.
                 d3.select("#description-block")
@@ -426,9 +391,7 @@
                             "width": "50%"
                         })
                         .text("Follow Stations")
-                        .on("click", function () {
-                            switchToStationsMode();
-                        });
+                        .on("click", switchToStationsMode);
 
                 button_holder.append("button")
                         .attr({
@@ -439,9 +402,7 @@
                             "width": "50%"
                         })
                         .text("Follow Bikes")
-                        .on("click", function () {
-                            switchToBikesMode();
-                        });
+                        .on("click", switchToBikesMode);
 
             }
 
@@ -471,9 +432,7 @@
                             "width": "33%"
                         })
                         .text("Go Back")
-                        .on("click", function () {
-                            switchToIntroMode();
-                        });
+                        .on("click", switchToIntroMode);
             }
 
             // This helper function creates and appends a button that when in station mode or in bike mode and hit
@@ -487,15 +446,12 @@
                                 var selection_size = Object.keys(selected_stations).length;
                                 if (selection_size == 0) {
                                     return "btn-disabled";
-                                }
-                                else {
+                                } else {
                                     return "btn btn-blue";
                                 }
                             }
                         })
-                        .style({
-                            "width": "33%"
-                        })
+                        .style("width", "33%")
                         .text("Launch")
                         .on("click", function () {
                             d3.select("#launch-button").attr({"class": "btn-disabled"}).on("click", null);
@@ -513,16 +469,13 @@
                             "class": function () {
                                 if (Object.keys(selected_stations).length == 0) {
                                     return "btn-disabled";
-                                }
-                                else {
+                                } else {
                                     return "btn"
                                 }
                             },
                             "id": "reset-button"
                         })
-                        .style({
-                            "width": "33%"
-                        })
+                        .style("width", "33%")
                         .text("Reset")
                         .on("click", function () {
                             clearSelection();  // in the station selection section.
@@ -586,9 +539,7 @@
             ///////////////////////
             // STATION SELECTION //
             ///////////////////////
-            // Design:
             // This code handles when a user clicks on a station, uses the box select, or hits clear selection.
-            //
 
             // Now the function itself. As a UX decision I decided to split *generating* a selection from plotting its
             // data. I did this to allow doing selections on the introduction pane, before the user chooses a
@@ -694,10 +645,6 @@
                                 // Write this data to the string.
                                 display += "<br/>" + total_trips + " trips will be plotted." + "</div>";
                                 return display;
-                                // Write the string.
-//                                return "<div style='font-weight: bold; font-size: 24px; font-family:Roboto;'>" +
-//                                        selection_size + " Station" + s + " Selected</div><br/>" +
-//                                        trips_to_be_visualized_line
                             });
                 }
 
@@ -728,74 +675,127 @@
             ///////////
             // CARDS //
             ///////////
-            // Cards are little infoboxes which appear on a station.
+            // Cards are little infoboxes which appear in UI either on the bottom of the page or at the top of the page
+            // (bottom outside a visualization animation, in order to avoid colliding with the side-text; top during a
+            // visualization animation, in order to avoid colliding with the rugplot).
+            //
+            // The HTML contents of the cards are generated by functions which have been decoupled from the driver
+            // function which creates or deletes the card itself from the screen. This is because in general, I
+            // distinguish between three card types:
+            //
+            // 1. The card that displays when the station is being hovered over in a non-animated mode. The content
+            //    displayed in this case is contingent on which of the non-animated modes the reader is in: intro mode
+            //    (viz_mode == "intro"), station selection mode (== stations), or bike selection mode (== bikes). These
+            //    cards display general information about the amount of trips that will be plotted by the animation.
+            // 2. The card that displays when the station is being hovered over in stations animated mode
+            //    (viz_mode == "stations-animated"). This card is only available for stations which were starting or
+            //    ending points for a trip, and they just display the name and the number of trips that have arrived
+            //    there so far for that station.
+            // 3. The card that displays when the station is being hovered over in bikes animated mode
+            //    (viz_mode == "bikes-animated"). This card is only available for stations which were starting or
+            //    ending points for a bike-day, and they just display the name and the number of trips that have ended
+            //    or started there so far for that station.
 
-            // Displays the appropriate tooltip for the selected station.
+            // Helper function which, given a station selection as the variable d, returns a label that is appropriate
+            // for displaying in the card for this station when the visualization is outside of any animation mode.
+            // Implements (1) above.
+            function getNonAnimationLabel(d) {
+                var underline = null;
+                if (d['kind'] == 'inactive') {
+                    underline = "Out of Service" + "</span></div>";
+                }
+                else {
+                    if (viz_mode == 'intro') {
+                        var bikes_out_in = +d['bikes outbound'] + +d['bikes inbound'];
+                        // Pluralize!
+                        var bikes_out_s = "s";
+                        var trips_s = "s";
+                        if (+d['all trips'] == 1) {
+                            trips_s = "";
+                        }
+                        if (bikes_out_in == 1) {
+                            bikes_out_s = "";
+                        }
+
+                        underline = d['all trips'] +
+                                " trip" + trips_s + " to or from here.<br/>" +
+                                bikes_out_in + " bike" + bikes_out_s + " began or ended the day here." +
+                                "</span></div>";
+                    }
+                    else if ((viz_mode == 'stations') || (viz_mode == 'stations-animation')) {
+                        underline = d['incoming trips'] +
+                                " trips to this station.<br/>"
+                                + d['outgoing trips']
+                                + " trips from this station.<br/>"
+//                                    + d['all trips'] + " trips total."
+                                + "</span></div>";
+                    }
+                    else if ((viz_mode == 'bikes') || (viz_mode == 'bikes-animation')) {
+                        // Pluralize!
+                        var out_s = "s";
+                        if (+d['bikes outbound'] == 1) {
+                            out_s = "";
+                        }
+                        underline = d['bikes outbound'] +
+                                " bike" + out_s + " started the day here.<br/> " +
+                                d['bikes inbound'] + " ended it here." +
+                                "</span></div>";
+                    }
+                }
+                return "<div style='text-align:center'>" +
+                        "<span style='font-weight:bold; font-size:24px;'>" +
+                        d['station name'] +
+                        "</span><br/><span style='font-size:16px;'>" + underline;
+            }
+
+            // HTML function which gets the HTML content of the card which is appropriate for the given selection (`d`)
+            // in the case of that station being one of the stations visible in stations mode due to it being a source
+            // or sink of trips.
+            //
+            // Uses the data which is provided for this purpose as the dict variable `station_counters`, defined in the
+            // trip setting section far below this method definition.
+            function getStationsAnimationLabel(d) {
+                return "12";
+            }
+            // TODO: Implement.
+
+            // HTML function which gets the HTML content of the card which is appropriate for the given selection (`d`)
+            // in the case of that station being one of the stations in bikes mode due to it being a source
+            // or sink of trips.
+            //
+            // Uses the data which is provided for this purpose as the dict variable `station_counters`, defined in the
+            // trip setting section far below this method definition.
+            function getBikesAnimationLabel(d) {
+                return "24";
+            }
+            // TODO: Implement.
+
+            // Displays the appropriate tooltip for the selected station. Master method for this set of functions.
+            // The `d` parameter is merely the station selection in question.
             function showCard(d) {
                 var sel_station = d3.select("#hovered-station");
                 var card = d3.select("#map-canvas")
                         .append("div")
                         .attr({"class": "station-tip"})
                         .html(function () {
-                            var underline = null;
-                            if (d['kind'] == 'inactive') {
-                                underline = "Out of Service" + "</span></div>";
+                            if ((viz_mode == "intro") || (viz_mode == "bikes") || (viz_mode == "stations")) {
+                                return getNonAnimationLabel(d);
+                            } else if (viz_mode == "stations-animation") {
+                                return getStationsAnimationLabel(d);  // TODO: Implement.
+                            } else if (viz_mode == "bikes-animation") {
+                                return getBikesAnimationLabel(d);  // TODO: Implement.
                             }
-                            else {
-                                if (viz_mode == 'intro') {
-                                    var bikes_out_in = +d['bikes outbound'] + +d['bikes inbound'];
-                                    // Pluralize!
-                                    var bikes_out_s = "s";
-                                    var trips_s = "s";
-                                    if (+d['all trips'] == 1) {
-                                        trips_s = "";
-                                    }
-                                    if (bikes_out_in == 1) {
-                                        bikes_out_s = "";
-                                    }
-
-                                    underline = d['all trips'] +
-                                            " trip" + trips_s + " to or from here.<br/>" +
-                                            bikes_out_in + " bike" + bikes_out_s + " began or ended the day here." +
-                                            "</span></div>";
-                                }
-                                else if ((viz_mode == 'stations') || (viz_mode == 'stations-animation')) {
-                                    underline = d['incoming trips'] +
-                                            " trips to this station.<br/>"
-                                            + d['outgoing trips']
-                                            + " trips from this station.<br/>"
-//                                    + d['all trips'] + " trips total."
-                                            + "</span></div>";
-                                }
-                                else if ((viz_mode == 'bikes') || (viz_mode == 'bikes-animation')) {
-                                    // Pluralize!
-                                    var out_s = "s";
-                                    if (+d['bikes outbound'] == 1) {
-                                        out_s = "";
-                                    }
-                                    underline = d['bikes outbound'] +
-                                            " bike" + out_s + " started the day here.<br/> " +
-                                            d['bikes inbound'] + " ended it here." +
-                                            "</span></div>";
-                                }
-                            }
-                            return "<div style='text-align:center'>" +
-                                    "<span style='font-weight:bold; font-size:24px;'>" +
-                                    d['station name'] +
-                                    "</span><br/><span style='font-size:16px;'>" + underline;
                         });
                 // the position of the tooltip---top or bottom---depends on what mode we are in.
                 if ((viz_mode == "intro") || (viz_mode == "bikes") || (viz_mode == "stations")) {
-                    card.style("bottom", "20px");
+                    card.style("bottom", "50px");
                 } else {
-                    card.style("top", "90px");
+                    card.style("top", "80px");
                 }
             }
 
             // Removes the tooltip.
-            function hideCard() {
-                d3.select(".station-tip").remove();
-            }
+            function hideCard() { d3.select(".station-tip").remove(); }
 
             ////////////////////
             // MODAL SWITCHES //
@@ -853,16 +853,11 @@
                             "fill": function (d) {
                                 if (d['kind'] == 'inactive') {
                                     return "#a7a7a7";
-                                }
-                                else if (d['delta bikes'] < 0) {
+                                } else if (d['delta bikes'] < 0) {
                                     return "#d8b365";
-                                }
-                                else if (d['delta bikes'] >= 0) {
+                                } else if (d['delta bikes'] >= 0) {
                                     return "#3f75a2";
                                 }
-//                                else {
-//                                    return "#3f75a2";
-//                                }
                             }
                         });
             }
@@ -882,8 +877,7 @@
                             "fill": function (d) {
                                 if (d['kind'] == 'inactive') {
                                     return "#a7a7a7";
-                                }
-                                else {
+                                } else {
                                     return stations_color_scale(d['all trips']);
                                 }
                             }
@@ -898,8 +892,7 @@
                             "fill": function (d) {
                                 if (d['kind'] == 'inactive') {
                                     return "#a7a7a7";
-                                }
-                                else {
+                                } else {
                                     return "#3f75a2";
                                 }
                             }
@@ -973,9 +966,7 @@
                         })
                         .transition()
                         .duration(1000)
-                        .attr({
-                            "fill-opacity": 0.5
-                        });
+                        .attr({"fill-opacity": 0.5});
 
                 var loader = d3.select("#map-canvas")
                         .append("g")
@@ -990,9 +981,7 @@
                         .attr("id", "loader");
 
                 loader.append("img")
-                        .attr({
-                            "src": "http://127.0.0.1:5000/static/post_assets/citibike/loading-ring.svg"
-                        });
+                        .attr({"src": "http://127.0.0.1:5000/static/post_assets/citibike/loading-ring.svg"});
 
                 loader.append("div")
                         .style({
@@ -1011,7 +1000,7 @@
                 d3.select("#background-panel").transition().duration(1000).style({"opacity": 0}).remove();
             }
 
-            // Makes the actual API calls which bind the data elements needed to run the visualization.
+            // The following funcs make the API calls which bind the data elements needed to run the visualization.
             //
             // We populate two data elements here. The first element that we populate is selected_stations, a data
             // struct containing trip information organized thusly:
@@ -1053,53 +1042,49 @@
             // How long a tick lasts (in ms).
             var tick_time = 250;
 
+            // Helper function which assigns data to the selected_stations global variable, with a null callback meant
+            // for implementation, via d3.queue, in a waiting method. This is necessary because d3.json is asynchronous,
+            // but we want to force it into a blocking thread.
+            //
+            // Parameter "station_id" is the station id in question. "api_path" is the path of the API URI that is to be
+            // used. These two parameters together build the string used for the API call.
+            function getStationData(station_id, api_path, callback) {
+                d3.json("http://127.0.0.1:5000/citibike-api/" + api_path + "/id/" + station_id, function (data) {
+                    if ((api_path == "bike-inbounds") || (api_path == "incoming-trips")) {  // yes, a little redundant
+                        selected_stations[station_id]['to'] = data;
+                    } else {
+                        selected_stations[station_id]['from'] = data;
+                    }
+                    callback(null);
+                });
+            }
+
+            // This function binds the data at runtime. It uses getStationData(), defined above.
             // The "callback" parameter should be filled with the function which will run once the data bind is done---
             // in our case this is unpaintLoadingScreen!
-            // TODO: Fix this so it actually works! For multiple stations.
             function bindData(call_this_once_done) {
                 // The calls to the API are handled by an asynchronous d3 queue, which waits for selected_stations to
                 // finish populating before proceeding before continuing. The code below is what executes that.
                 var api_paths = null;
                 if (viz_mode == "bikes") {
                     api_paths = ["bike-inbounds", "bike-outbounds"]
-                }
-                else {
+                } else {
                     api_paths = ["incoming-trips", "outgoing-trips"]
                 }
-                var q = d3.queue();
-                for (let key in selected_stations) {  // let is needed here due to closure stuff I don't quite get
-                    if (selected_stations.hasOwnProperty(key)) {
-                        console.log(key);
-                        q.defer(function (callback) {
-                            console.log("http://127.0.0.1:5000/citibike-api/" +
-                                    api_paths[0] +
-                                    "/id/" + key);
-                            d3.json("http://127.0.0.1:5000/citibike-api/" +
-                                    api_paths[0] +
-                                    "/id/" + key, function (data) {
-                                selected_stations[key]['to'] = data;
-                                callback(null, data);
-                            });
-                        });
-                        q.defer(function (callback) {
-                            console.log("http://127.0.0.1:5000/citibike-api/" +
-                                    api_paths[1] +
-                                    "/id/" + key);
-                            d3.json("http://127.0.0.1:5000/citibike-api/" +
-                                    api_paths[1] +
-                                    "/id/" + key, function (data) {
-                                selected_stations[key]['from'] = data;
-                                callback(null, data);
-                            });
-                        });
+                var station_ids = [];
+                for (let station_id in selected_stations) {  // let is needed here due to closure stuff
+                    if (selected_stations.hasOwnProperty(station_id)) {
+                        station_ids.push(station_id);
                     }
                 }
-                // We wait for all of the data populate. Once that's done, we proceed with creating the timetable, which
-                // runs in a single blocking thread, and then with launching the rest of the visualization.
-                // Note: var time, declared below, is a moment.js object storing the current time within the viz.
-                q.awaitAll(function (error) {
+                var q = d3.queue();
+                for(var i = 0; i < Object(station_ids).length; i++) {
+                    q.defer(getStationData, station_ids[i], api_paths[0]);
+                    q.defer(getStationData, station_ids[i], api_paths[1]);
+                }
+                q.awaitAll(function(error) {
                     if (error) throw error;
-                    // Now we create the timetable.
+                    // We wait for all of the data populate. Once that's done, we proceed with creating the timetable.
                     var key = null;
                     console.log(selected_stations);
                     for(key in selected_stations) {  // let is not necessary here because we are in a blocking thread
@@ -1110,11 +1095,6 @@
                                 for(var k = 0; k < selected_stations[key][type].length; k++) {
                                     var trip = selected_stations[key][type][k];
                                     var starttime = moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss');
-//                                                .format('h:mm A');
-//                                        var starttime = String(
-//                                                moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss')
-//                                                        .format('h:mm A')
-//                                        );
                                     trips_timetable.push({
                                         'starttime': starttime,
                                         'stationid': key,
@@ -1149,12 +1129,14 @@
                         .attr({
                             "fill-opacity": 0,
                             "stroke-opacity": 0
-                        }).remove();
+                        });//.remove();
                 // Disable deselection of selected stations.
                 d3.selectAll(".station").on("click", null);
+                // TODO: Investigate why this doesn't work properly.
+                d3.selectAll(".station-unselected").style("cursor", null);
+                d3.selectAll(".station-unselected").on('mouseover', null);
+                d3.selectAll(".station-unselected").on('mouseout', null);
                 // Disable hover for the now-hidden stations.
-//                d3.selectAll(".station-unselected").style("cursor", null);
-//                d3.selectAll(".station-unselected").on('mouseover', null);
             }
 
             // Transitions the map view back to the default one.
@@ -1180,7 +1162,7 @@
                     }, 1000);
                 }
                 q.defer(transit);
-                q.await(function(error) {
+                q.await(function() {
                     launchVisualizationAnimation();
                 });
             }
@@ -1215,7 +1197,6 @@
                             "cursor": "text"
                         })
                         .attr("id", "timer")
-//                        .on(".drag", null)
                         .transition()
                         .duration(1000)
                         .style({
@@ -1228,7 +1209,6 @@
                             "font-weight": "bold"
                         })
                         .attr("id", "timer-text")
-//                        .text("12:00 PM");
                         .text(current_time.format('h:mm A'));
             }
 
@@ -1270,8 +1250,6 @@
             // This helper method for `fireLinePainters()`, above, handles actually painting one line.
             // The tripdata parameter is the trip's entry in selected_stations---this contains all of the data about
             // the trip itself. The trip_type parameter is the trip type: to/from.
-            //
-            // See also: plopLine(), far below.
             function fireLinePainter(tripdata, trip_type) {
 
                 // The coordinates that are to be drawn.
@@ -1310,9 +1288,7 @@
                 // appear in the document body. This is the default behavior when we use "append"; we don't want that.
                 // Hence we use this group, selected by id, and the d3 "insert" method (with the :first-child CSS
                 // selector) to prepend the path instead.
-                //
                 // cf. http://stackoverflow.com/questions/26234636/d3-js-prepend-similar-to-jquery-prepend
-//                var path = d3.select("#display-elements").insert("path", ":first-child");
 
                 var path = d3.select("#trips").append("path");
                 path
@@ -1331,16 +1307,20 @@
                         .attr("stroke-dashoffset", totalLength)
                         .transition()
                         .duration(duration)
-                        .attr("stroke-dashoffset", 0);
+                        .attr("stroke-dashoffset", 0)
+                        .each("start", pathStartEvent) // fires station trigger code which plots or updates the
+                        .each("end", pathEndEvent);    // plot of a related station, if appropriate.
+                // TODO: Implement trigger.
                 // Bind the trip data to the path, for use later.
                 var data_to_bind = tripdata['properties'];
-                data_to_bind['type'] = trip_type;
+                data_to_bind['type'] = trip_type;  // used by the highlighting colorizers.
+                data_to_bind['fading-anim'] = false;  // used by the highlighter to cancel the fading transition.
                 path.datum(data_to_bind);
-                path.data()['type'] = trip_type;
+//                path.data()['type'] = trip_type;
                 // Populate the highlighter events.
                 if (viz_mode == "stations-animation") {
-                    path.on("mouseover", highlightPath);
-                    path.on("mouseout", unhighlightPath);
+                    path.on("mouseover", highlightSinglePath);
+                    path.on("mouseout", unhighlightSinglePath);
                 }
                 else if (viz_mode == "bikes-animation") {
                     path.on("mouseover", highlightPaths);
@@ -1354,7 +1334,11 @@
                             .transition()
                             .delay(duration)
                             .duration(30 * tick_time)
-                            .attr("stroke", fc);
+                            .attr("stroke", fc)
+                            // The lines below are necessary flags for the highlighter to work as expected. See the
+                            // notes in that section on why they are needed.
+                            .each('start', function(d) { path.datum()['fading-anim'] = true; })
+                            .each('end', function(d) { path.datum()['fading-anim'] = false; })
                 }
             }
 
@@ -1388,6 +1372,8 @@
                                                 .attr("id", "trips");
                 // Paint the legend display element.
                 paintLegendDisplay();
+                // Paint the time controls display element.
+                paintTimeControls();
                 // The first time the incrementer (below) is fired it shifts to one minute after the current time, and
                 // *then* checks if it needs to draw anything. This will leave out any trips that occur at exactly the
                 // starting minute of the visualization. To include these, we fire the painter event for them manually
@@ -1402,8 +1388,8 @@
             // Cleans up after the visualization is done.
             function exitVisualizationAnimation() {
                 window.clearInterval(interval_id);
-                // TODO: Implement!
-                repaintNonAnimatedDisplayElements();
+                plotStations();
+                repaintNonAnimatedDisplayElements();  // TODO: Implement!
             }
 
             ////////////
@@ -1533,9 +1519,21 @@
 
             // Helper monkey-patch function for bringing selections to the front. Wrapped by bringTripLinesToFront().
             // cf. http://bl.ocks.org/eesur/4e0a69d57d3bfc8a82c2
+            // cf. http://stackoverflow.com/questions/14167863/how-can-i-bring-a-circle-to-the-front-with-d3
             d3.selection.prototype.moveToFront = function() {
                 return this.each(function(){
                     this.parentNode.appendChild(this);
+                });
+            };
+
+            // Helper monkey-patch function for bringing selections back.
+            // cf. the same.
+            d3.selection.prototype.moveToBack = function() {
+                return this.each(function() {
+                    var firstChild = this.parentNode.firstChild;
+                    if (firstChild) {
+                        this.parentNode.insertBefore(this, firstChild);
+                    }
                 });
             };
 
@@ -1617,17 +1615,34 @@
             // These methods handle highlighting an individual trip or trip-set, and their implementation vis-a-vis
             // path hovering and clicking.
 
+            // In order for highlighting to function as expected, we need to kill the color-fade transition.
+            // Otherwise when highlighting a path which is fading away, one of two things with happen: either (1)
+            // it will force-fade from the highlighted color to the fade color, or (2) it will ignore highlighting
+            // until the line is done being drawn.
+            //
+            // The trouble is that if we cancel any arbitrary transition at the time that this function is called,
+            // we might be cancelling the initial draw transition, which we DON'T want. We have to be smart, and
+            // only cancel a transition of it is the fade transition.
+            //
+            // In order to do that I embedded a property into the path's datum called `fading-anim`, a boolean
+            // storing whether or not the fade transition is currently active. If it is not, then we do nothing---
+            // highlights will work as expected in that case. If it is, then we cancel the transition before
+            // enabling the highlighter.
+            //
+            // An alternative approach might be to overplot the path with a highlighted version of itself, but that
+            // would have its own problems.
+            function dropFadingTransition(selected_path) {
+                if (selected_path.datum()['fading-anim'] == true) {
+                    selected_path.transition();  // cancels the fading transition, if one is present.
+                    selected_path.datum()['fading-anim'] = false;
+                }
+            }
+
             // Highlights an individual path and also posts that highlighted path's card.
             // This is used directly when in stations-animation viz_mode, and via highlightPaths() when in
             // bikes-animation viz_mode.
-            function highlightPath(selected_trip) {
-                // Some sneaky input manipulation to get both single and multi -trip selection to work.
-                if (!selected_trip) {
-                    var selected_path = d3.select(this);
-                } else {
-                    selected_path = selected_trip;
-                }
-//                selected_path.transition();  // cancels the fading transition, if one is present.
+            function highlightPath(selected_path) {
+                dropFadingTransition(selected_path);
                 selected_path.moveToFront();  // move the current element to the front (monkey-patched).
                 if (selected_path.datum()['type'] == "to") {
                     selected_path.attr("stroke", "#1a3043");
@@ -1637,12 +1652,7 @@
             }
 
             // Undoes the above.
-            function unhighlightPath(selected_trip) {
-                if (!selected_trip) {
-                    var selected_path = d3.select(this);
-                } else {
-                    selected_path = selected_trip;
-                }
+            function unhighlightPath(selected_path) {
                 if (selected_path.datum()['type'] == "to") {
                     if(!highlight_to) {
                         selected_path.attr("stroke", "#99bbd7");
@@ -1659,18 +1669,15 @@
                 }
             }
 
-            // This wraps highlightPath() for multi-highlight in stations mode.
+            // This wraps highlightPath() for multi-highlight in bikes mode.
             function highlightPaths() {
                 var selected_path = d3.select(this);
                 var sel_bikeid = selected_path.datum()['bikeid'];
-                console.log(sel_bikeid);
                 var selected_trips = d3.selectAll(".trip-line").filter(function(d) {
                     return d['bikeid'] == sel_bikeid;
                 });
-                console.log(selected_trips);
                 selected_trips.each(function(selected_path) {
                     var selected_trip = d3.select(this);
-                    console.log(selected_trip);  // if checking the log all 20 of these are present, then each is OK
                     highlightPath(selected_trip);
                 });
             }
@@ -1679,16 +1686,194 @@
             function unhighlightPaths() {
                 var selected_path = d3.select(this);
                 var sel_bikeid = selected_path.datum()['bikeid'];
-                console.log(sel_bikeid);
                 var selected_trips = d3.selectAll(".trip-line").filter(function(d) {
                     return d['bikeid'] == sel_bikeid;
                 });
-                console.log(selected_trips);
                 selected_trips.each(function(selected_path) {
                     var selected_trip = d3.select(this);
                     unhighlightPath(selected_trip);
                 });
             }
+
+            // This wraps highlightPath() for highlighting in stations mode.
+            function highlightSinglePath(selected_trip) {
+                highlightPath(d3.select(this));
+            }
+
+            // This wraps unhighlightPath() for highlighting in stations mode.
+            function unhighlightSinglePath(selected_trip) {
+                unhighlightPath(d3.select(this));
+            }
+
+            ///////////////////
+            // TIME CONTROLS //
+            ///////////////////
+            // Deals with the basic time controls located under the timer.
+
+            // Whether or not the visualization is paused.
+            var paused = false;
+
+            // Paints the time controls on the screen.
+            function paintTimeControls() {
+                d3.select("#map-canvas")
+                        .append("g")
+                        .style({
+                            "position": "absolute",
+                            "left": "50%",
+                            "top": "100px",
+                            "transform": "translate(-50%,-50%)",
+                            "display": "inline-block",
+                            "margin": "auto",
+                            "opacity": 0,
+                            "cursor": "pointer"
+                        })
+                        .attr("id", "time-controls")
+                        .transition()
+                        .duration(1000)
+                        .style({
+                            "opacity": 1
+                        });
+
+                d3.select("#time-controls").append("button")
+                        .style({
+                            "font-size": "14px",
+                            "font-weight": "bold",
+                            "padding": "5px"
+                        })
+                        .attr("id", "btn-time-controls-slower")
+                        .attr("type", "button")
+                        .attr("class", "btn")
+                        .text("«")
+                        .on("click", slowDown);
+
+                d3.select("#time-controls").append("button")
+                        .style({
+                            "font-size": "12px",
+                            "font-weight": "bold",
+                            "padding": "5px"
+                        })
+                        .attr("id", "btn-time-controls-pause")
+                        .attr("type", "button")
+                        .attr("class", "btn")
+                        .text("❚❚")
+                        .on("click", togglePausePlay);
+
+
+                d3.select("#time-controls").append("button")
+                        .style({
+                            "font-size": "14px",
+                            "font-weight": "bold",
+                            "padding": "5px"
+                        })
+                        .attr("id", "btn-time-controls-faster")
+                        .attr("class", "btn")
+                        .text("»")
+                        .on("click", speedUp)
+            }
+
+            // Slows down time.
+            function slowDown() {
+                tick_time += 50;
+                console.log(tick_time);
+                cycleTimer();
+            }
+
+            // Speeds up time.
+            function speedUp() {
+                if (tick_time >= 50) {
+                    tick_time -= 50;
+                    cycleTimer();
+                } else if (tick_time == 50) {
+                    tick_time = 25;
+                    cycleTimer();
+                }
+                // otherwise tick_time == 25, which is already blazingly fast. do nothing.
+                console.log(tick_time);
+            }
+
+            // Cycles timer to use a new tick_time.
+            function cycleTimer() {
+                window.clearInterval(interval_id);
+                if (current_time.format('h:mm A') != end_time.format('h:mm A')) {
+                    interval_id = window.setInterval(incrementTimer, tick_time);
+                }
+            }
+
+            // Toggles between pausing and playing.
+            function togglePausePlay() {
+                // Pause.
+                paused = !paused;
+                if (paused) { window.clearInterval(interval_id); } else { cycleTimer(); }
+                // Change display.
+                var butt = d3.select("#btn-time-controls-pause");
+                if (paused) { butt.text("▶"); } else { butt.text("❚❚"); }
+            }
+
+            //////////////////////
+            // STATIONS TRIGGER //
+            //////////////////////
+
+            // The station_counters object is a data structure which holds on to station-level information about the
+            // number of arrivals to and departures from each of the stations which is visible in the animation as a
+            // source or sink of trips. In bikes mode, this means that these stations were endpoints or startpoints for
+            // bike-days. In stations mode, this means that these stations were endpoints or startpoints for individual
+            // trips.
+            //
+            // The data is stored in the form: {'<station id>': {'to': <n>, 'from': <n>}}
+            var station_counters = {};
+
+            // This method is called at the beginning of a path being drawn on-screen with a kind = start argument, and
+            // at the same time with a kind = end argument once a path is done being drawn. The actual path is passed as
+            // a selection in the `selection` parameter. This method takes this data and logs it into the
+            // station_counters variable.
+            //
+            // I worked out plotting the stations on arrival (at least, in stations mode) but this turned out to have
+            // very poor performance characteristics. So I left it for the end of the visualization.
+            function pathEvent(event_kind, selection) {
+                var station_id = null;
+                console.log(event_kind);
+                console.log(viz_mode);
+                if ((event_kind == "start") && (viz_mode == "stations-animation")) {
+                    // First, attach the data to the `station_counters` tracking variable.
+                    station_id = selection['start station id'];
+                    station_counters[station_id] = {};
+                    station_counters[station_id]['from'] += 1;
+                } else if ((event_kind == "end") && (viz_mode == "stations-animation")) {
+                    station_id = selection['end station id'];
+                    station_counters[station_id] = {};
+                    station_counters[station_id]['to'] += 1;
+                } else if ((event_kind == "start") && (viz_mode == "bikes-animation")) {
+                    station_id = selection['start station id'];
+                    station_counters[station_id] = {};
+                } else if ((event_kind == "end") && (viz_mode == "bikes-animation")) {
+                    station_id = selection['end station id'];
+                    station_counters[station_id] = {};
+                }
+            }
+
+            // TODO: Implement!
+            // Plots the stations visited by paths at the end of a viz.
+            function plotStations() {
+                // If the station is one of our selected stations, no special animations are necessary.
+                var selected_station_keys = Object.keys(selected_stations);
+                var target_station_keys = Object.keys(station_counters);
+                var target_stations = d3.selectAll(".station-unselected").filter(function (d) {
+                    return (d['station id'] in target_station_keys) && !(d['station id'] in selected_station_keys);
+                });
+                console.log(target_stations);
+                target_stations.each(function() {
+                    d3.select(this)
+                            .attr("r", 0)
+                            .attr("fill-opacity", 1)
+                            .transition(5000)
+                            .attr("r", 2.5 * scale_factor);
+                    });
+            }
+
+            // Wrappers to get around http://stackoverflow.com/questions/31524847/d3-js-pass-variable-into-function.
+            function pathStartEvent(selection) { pathEvent('start', selection); }
+            function pathEndEvent(selection) { pathEvent('end', selection); }
+
             ////////////////////
             // LINE PLOPPING //
             ///////////////////
@@ -1725,7 +1910,8 @@
             //
             // To do that we use a few global variables as flags and specific methods written for the purpose for
             // implementation.
-            if(is_intro_anim) {
+            if (viz_mode == 'intro-animation') {
+                viz_mode = 'intro';
                 runIntroAnimation();
             }
             // Or correct the existing elements to match the display. This is necessary because by default, whenever
