@@ -1089,7 +1089,15 @@
             // Parameter "station_id" is the station id in question. "api_path" is the path of the API URI that is to be
             // used. These two parameters together build the string used for the API call.
             function getStationData(station_id, api_path, callback) {
-                d3.json("http://127.0.0.1:5000/citibike-api/" + api_path + "/id/" + station_id, function (data) {
+                var host_path = "http://" + window.location.host + "/citibike-api/";
+                console.log(host_path);
+                // While I am developing my website I use flask to host it locally at the default URI, 127:0:0:1:5000.
+                // When a development piece is done, I load that work into my website, with the URI residentmar.io.
+                // The trouble is recovering, at runtime, which of these two paths I am on. The following StackOverflow
+                // answer points at how to do it:
+                // http://stackoverflow.com/questions/1368264/how-to-extract-the-hostname-portion-of-a-url-in-javascript
+                // `window.location.host` appears to be the JavaScript way to do this.
+                d3.json(host_path + api_path + "/id/" + station_id, function (data) {
                     if ((api_path == "bike-inbounds") || (api_path == "incoming-trips")) {  // yes, a little redundant
                         selected_stations[station_id]['to'] = data;
                     } else {
