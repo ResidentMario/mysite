@@ -5,15 +5,17 @@
 {% endblock %}
 {% block content %}
 
+<img src="/static/post_assets/citibike/citibike-hero.png" class="inline_image_full" alt="Data."/>
+
 <p>
-    If you're reading this, dear reader, that means that I finally finished the big huge giant CitiBike visualization
+    Since you're reading this, I finally finished a first beta version of the enormous CitiBike visualization
     I was working on. Huzzah! This visualization is the largest single-person project I've ever put together&mdash;a
     thousand lines of Python, two thousand lines of JavaScript, a pile of Jupyter notebooks, and a big 'ol spanking
     MongoDB database all lassoed together to siphon collectively countless hours out of the lives of myself and others.
 </p>
 
 <p>
-    If you haven't checked it out yet, <a href="{{request.url_root}}visualizations/life-of-a-citibike.html">here's a
+    If you haven't checked it out yet, <a href="{{request.url_root}}visualizations/life-of-citibike.html">here's a
 link</a>.
 </p>
 
@@ -49,8 +51,7 @@ link</a>.
 <p>
     CitiBike has been around for a while now, and its data has been too, but it wasn't until literally years later,
     around February this year, that I discovered that said data <a href="https://www.citibikenyc.com/system-data">is
-    totally publically available</a>. And I got to thinking: if Whong can generate a pile of press by build a big
-    fancy map about taxi cab movements, could I perhaps do the same with CitiBikes?
+    totally publically available</a>. And I got to thinking: can I do a taxicab thing, but with Citi Bikes?
 </p>
 
 <p>
@@ -308,9 +309,11 @@ link</a>.
     disc, 120 MB uncompressed) whilst remaining reasonably easy-to-understand, it's not very fast. The database
     itself it reasonably quick; it's all the processing I have to do along the way that slows things down. As a
     result, querying for the ~3000 bikes-mode trips served by Penn Station Valet, the busiest station in the system,
-    can incur a loading time of 10 seconds or more. In my defense, this <i>is</i> my first time working with a
-    MongoDB database. I'm hopeful that with a bit more work and some consultation with people who know what they are
-    doing™, I can massage down the load time somewhat.
+    can incur a loading time of 10 seconds or more.
+</p>
+
+<p>
+    Profiling and improving on this time are definitely on my to-do list.
 </p>
 
 <h3>Generating Metadata</h3>
@@ -499,18 +502,33 @@ link</a>.
     MediaWiki API does things <i>terribly</i>. In this particular case, at least now I know why!
 </p>
 
-<h3>The Frontend</h3>
+<p>
+    Once it was time to take this project beta live, I needed to get my database off of my local machine and onto the
+    Internet. For the moment, and in the long term, this is in the form of a freely-hosted <a
+        href="https://mlab.com/">mLab</a> instance. Getting the data onto there was actually pretty annoying, in that
+    usual working-with-databases way. mLab has <a
+        href="http://docs.mlab.com/migrating/#dump-and-restore">pretty good instructions</a> on what to do <i>in
+    theory</i>: run <code class="inline_code">mongodump</code> in the command line, then run <code
+        class="inline_code">mongorestore</code> with a few command-line options that they provide in the DBA tools
+    panel. In practice I learned that whilst <code class="inline_code">mongodump</code> can run anywhere and work
+    (well, so long as your MongoDB database is on the default filepath), <code class="inline_code">mongorestore
+</code> only did what I wanted it to do if run with the <code class="inline_code">path</code> parameter set to <code
+        class="inline_code">.</code> ("here" in shell) while in the <code class="inline_code">dumps</code> folder
+    where MongoDB dropped the archive.
+</p>
+
+<h3>The Frontend&mdash;Technical Considerations</h3>
 
 <p>
     Which brings me, finally, to the hard part: building the visualization itself.
 </p>
 
 <p>
-    All of the JavaScript necessary to get this puppy humming is packed into one giant 2000+ line file,
+    All of the JavaScript necessary to run the visualization is packed into one giant 1800+ line file,
     which you can see for yourself <a
         href="https://github.com/ResidentMario/mysite/blob/master/templates/visualizations/life-of-a-citibike.html">
     here</a>. Although it's certainly verbose as all hell, as <code class="inline_code">D3.JS</code> and pure <code
-        class="inline_code">JavaScript</code> code tends to be, it's honestly mostly pretty prosaic. Fade this menu
+        class="inline_code">JavaScript</code> code tends to be, a lot of it is pretty prosaic. Fade this menu
     in. Fade that menu out. Load this data. Colormap these points. Disable this button. On and on.
 </p>
 
@@ -520,20 +538,18 @@ link</a>.
 </p>
 
 <p>
-    But while I'm not interested in doing a line-by-line breakdown of my code, I <i>am</i> going to say a few (a lot of)
+    But while I'm not interested in doing a line-by-line breakdown of my code, I <i>am</i> going to say a few
     words about the technical challenges and gotchas of integrating Leaflet and D3.JS together that I had to overcome
     in the process of building this visualization.
 </p>
 
-<h3>The Frontend&mdash;Technical Considerations</h3>
-
 <p>
-    The entire visualization takes place over a full-screen webmap. The webmap that I use is that darling of the web
+    The entire visualization takes place over a full-screen webmap. The webmap that I use is that flagship of the web
     mapping community, <a href="http://leafletjs.com/"><code class="inline_code">Leaflet.JS</code></a>.
 </p>
 
 <p>
-    The first crucial difficulty that I faced, which I alluded to at the very beginning of this lengthy post, was
+    The first crucial difficulty that I faced, which I alluded to at the very beginning of this post, was
     that I didn't actually know how to go about binding shapes to the map in such a way that when I zoomed or panned
     around, the shapes would stick to the same spot on the map. Theoretically speaking, it's possible to do this by
     using Leaflet's own shape-rendering codes, which were built for exactly this purpose and handle all of that for
@@ -727,61 +743,49 @@ link</a>.
     super-sweet as I had initially thought, once I started actually zooming into the map. It turns out that this
     method returns the <i>exact</i> pixel coordinate of the geographic feature at the <i>current</i> zoom
     level&mdash;resulting in subpixel-wide drawing error. When you zoom in a lot&mdash;and remember, on a Leaflet map
-    you can zoom in by a factor of 10,000 or more&mdash;that error starts to matter. A lot. No seriously, it looks
-    like someone draw on your map with a crayon or something:
+    you can zoom in by a factor of 10,000 or more&mdash;that error starts to matter:
 </p>
 
 <img src="/static/post_assets/citibike/zooming-example-zoomed-in.png" class="inline_image_full" alt="Data."/>
 
 <p>
-    But, perversely, if you zoom in right at the beginning of the animation, everything suddenly looks smooth as a
-    baby butt:
+    After literally five minutes in the JavaScript code, this turned out to be a one-line fix. On line 117 the code
+    applies a <code class="inline_code">._round()</code> method (actually a wrapper of a Leaflet method) to its <code
+        class="inline_code">projected_point</code>; I commented that out. And it was smooth sailing from there:
 </p>
 
 <img src="/static/post_assets/citibike/zooming-example-zoomed-out.png" class="inline_image_full" alt="Data."/>
 
-<p>
-    After literally five minutes in the JavaScript code, this turned out to be a one-line fix. On line 117 the code
-    applies a <code class="inline_code">._round()</code> method (actually a wrapper of a Leaflet method) to its <code
-        class="inline_code">projected_point</code>; I commented that out. Bam! Smooth sailing from there.
-</p>
-
-<h3>Easy And-Alsos</h3>
-
-<p>
-    Here go the things I want to generate as well at the end: the transitional probability matrix, maybe, and a
-    poster-izable snapshot of station.
-</p>
-
 <h3>Conclusion</h3>
 
 <p>
-    All in all, this project took around 1000 lines of Python code, 2000+ lines of JavaScript, a reasonably-sized
-    MongoDB database, and around 1000 lines of, um, actual words that you are reading right now. I wasn't always very
-    consistent about when I worked on it; I took a break halfway through, for instance, to, um, beat <a
-        href="https://en.wikipedia.org/wiki/Divinity:_Original_Sin">Divinity: Original Sin</a> for the third time.
+    All in all, this project has (so far) taken around 1000 lines of Python code, 1800+ lines of JavaScript, a
+    reasonably-sized MongoDB database, and the around 1000 lines of actual words that you are reading right now. I
+    wasn't always very consistent about when I worked on it; I took a break halfway through, for instance, to, um,
+    beat <a href="https://en.wikipedia.org/wiki/Divinity:_Original_Sin">Divinity: Original Sin</a> for the third
+    time. All in all, it took me about a month to turn this project around&mdash;not much time in the grand scale of the
+    universe, maybe, but eons for someone that's only been actively coding since January-ish.
 </p>
 
 <p>
-    All in all, it took me about a month to turn this project around&mdash;not much time in the grand scale of the
-    universe, maybe, but eons for someone that's only been actively coding since January-ish (and who's usually
-    turned around things in a couple of days at most&mdash;this <i>is</i> "Data Hacks" after all!).
+    On the design side, my experience building this visualization has reinforced my conviction that, ultimately, the
+    interestingness of the story that you tell is as much a factor of the visual methodology that you use to do it as
+    it is one of the interestingness of the underlying data that you use; and that it's <i>really</i> hard to tell if
+    an approach you take is going to work out or not when you're just starting out on a new thing. Despite all the
+    effort, as visually impressive as the end product may be I'm not <i>really</i> sure how effective it is at
+    telling its story. Certainly I think it's too visually complex to appear in a venue like e.g. <a
+        href="http://www.nytimes.com/section/upshot">The Upshot</a>.
 </p>
 
 <p>
-    As with all of my project, I really hope that this becomes A Thing on the Internet, particularly since Whong's
-    taxi cab viz, which did it first, was totally viral. But you can't predict these things, really. My experience
-    building this visualization has reinforced my conviction that, ultimately, the interestingness of the story that
-    you tell is as much a factor of the visual methodology that you use to do it as it is one of the interestingness
-    of the underlying data that you use; and that it's <i>really</i> hard to tell if an approach you take is going to
-    work out or not when you're just starting out on a new thing. Finding a way of telling a story that's both
-    compelling in its reasoning and beautiful in the telling: that's where the art is, and it's why successful data
-    visualization folks are nothing if not tinkers.
+    Nevertheless, data viz folks are nothing if not tinkerers, and I'm satisfied with the way things turned out
+    overall just as a function of what I think I have learned in the undertaking. MongoDB was not something I'd ever
+    worked with before I did this project; it was also my first foray into JavaScript (and I now have a
+    <i>pretty good</i> understanding of why I need to learn jQuery) and my first real "master" project in D3.
 </p>
 
 <p>
-    In the end, I'm satisfied with the way things turned out overall just as a function of what I think I have learned
-    in the undertaking.
+    The project remains in an almost-complete beta version for the moment; feedback welcome!
 </p>
 
 <p class="addendum">

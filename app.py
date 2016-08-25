@@ -1,13 +1,13 @@
 from datetime import datetime
 from flask import (Flask, render_template, abort, request, make_response, Response)
-from static.post_assets.citibike.datastore import DataStore
+from static.post_assets.citibike.citibike_trips import DataStore
 import json
 
 app = Flask(__name__)
 
 # Initialize the MongoDB connection once.
-db = DataStore(uri="mongodb://localhost:27017")
-
+# db = DataStore(uri="mongodb://localhost:27017")  # Database on my Desktop.
+db = DataStore(json.load(open("static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # Database on mLab
 
 post_list = [
     {
@@ -147,9 +147,9 @@ post_list = [
     {
         'title': 'Day in the Life of CitiBike: The Making Of',
         'route': '2016/08/27/day-in-the-life-of-citibike.html',
-        'date': datetime(2016, 8, 27),
+        'date': datetime(2016, 8, 25),
         'template': 'day-in-the-life-of-citibike.html',
-        'snap': 'empty.png'
+        'snap': 'life-of-citibike.png'
     }
 ]
 
