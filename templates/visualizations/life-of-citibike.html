@@ -1090,7 +1090,6 @@
             // used. These two parameters together build the string used for the API call.
             function getStationData(station_id, api_path, callback) {
                 var host_path = "http://" + window.location.host + "/citibike-api/";
-                console.log(host_path);
                 // While I am developing my website I use flask to host it locally at the default URI, 127:0:0:1:5000.
                 // When a development piece is done, I load that work into my website, with the URI residentmar.io.
                 // The trouble is recovering, at runtime, which of these two paths I am on. The following StackOverflow
