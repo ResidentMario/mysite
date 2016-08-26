@@ -1021,7 +1021,7 @@
                         .attr("id", "loader");
 
                 loader.append("img")
-                        .attr({"src": "http://127.0.0.1:5000/static/post_assets/citibike/loading-ring.svg"});
+                        .attr("src", "//" + window.location.host + "/static/post_assets/citibike/loading-ring.svg");
 
                 loader.append("div")
                         .style({
@@ -1096,6 +1096,7 @@
                 // answer points at how to do it:
                 // http://stackoverflow.com/questions/1368264/how-to-extract-the-hostname-portion-of-a-url-in-javascript
                 // `window.location.host` appears to be the JavaScript way to do this.
+                console.log(host_path + api_path + "/id/" + station_id);
                 d3.json(host_path + api_path + "/id/" + station_id, function (data) {
                     if ((api_path == "bike-inbounds") || (api_path == "incoming-trips")) {  // yes, a little redundant
                         selected_stations[station_id]['to'] = data;
@@ -1153,17 +1154,31 @@
                         }
                     }
                     // Now we need to sort the timetable. This is done using built-in moment object comparison.
-                    trips_timetable = trips_timetable.sort(function(a, b) { return a['starttime'] > b['starttime']; });
+                    trips_timetable = trips_timetable.sort(function(a, b) { return a['starttime'] - b['starttime']; });
                     // Set the next_time parameter.
                     next_time = trips_timetable[0]['starttime'];
                     // Start the viz off at the first trip of the day. (deep copy)
-                    current_time = next_time.clone();
+                    current_time = moment('6/22/2016 00:00:00', '6/22/2016 hh:mm:ss');
+                    end_time = moment('6/22/2016 24:00:00', '6/22/2016 hh:mm:ss');
+//                    current_time = next_time.clone();
                     // Where we end the visualization.
                     var end_ref = trips_timetable[trips_timetable.length - 1];
                     var end_trip = selected_stations[end_ref['stationid']][end_ref['type']][end_ref['position']];
-                    end_time = moment(end_trip['properties']['stoptime']);
-//                    console.log(trips_timetable);
+//                    end_time = moment(end_trip['properties']['stoptime'], '6/22/2016 hh:mm:ss');
+                    console.log("start time (initial current_time)");
+                    console.log("end_ref position pointer (trips_timetable.length - 1):");
+                    console.log(trips_timetable.length - 1);
+                    console.log("end_ref:");
+                    console.log(end_ref);
+                    console.log("end_trip:");
+                    console.log(end_trip);
+                    console.log("end_time:");
+                    console.log(end_time);
                     // Initialize the loop and continue!
+                    console.log("selected_stations:");
+                    console.log(selected_stations);
+                    console.log("trips_timetable:");
+                    console.log(trips_timetable);
                     call_this_once_done();
                 });
             }
@@ -1310,7 +1325,8 @@
                 var linedata = tripdata['geometry']['coordinates'];
                 // The duration of the line animation, matching the duration of the ride.
                 var duration = moment.duration(
-                    moment(tripdata['properties']['stoptime']).diff(moment(tripdata['properties']['starttime']))
+                    moment(tripdata['properties']['stoptime'], '6/22/2016 hh:mm:ss')
+                            .diff(moment(tripdata['properties']['starttime'], '6/22/2016 hh:mm:ss'))
                 ).asMinutes() * tick_time;
                 var c = null;  // the color the trip is initially plotted in.
                 var fc = null;  // the color the trip eventually fades to.
