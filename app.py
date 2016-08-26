@@ -148,11 +148,11 @@ post_list = [
         'snap': 'nycopendata.png'
     },
     {
-        'title': 'Day in the Life of CitiBike: The Making Of',
+        'title': 'The making of Life of CitiBike',
         'route': '2016/08/27/day-in-the-life-of-citibike.html',
         'date': datetime(2016, 8, 25),
         'template': 'day-in-the-life-of-citibike.html',
-        'snap': 'life-of-citibike.png'
+        'snap': 'life-of-citibike-alt.png'
     }
 ]
 
