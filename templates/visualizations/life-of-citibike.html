@@ -285,6 +285,9 @@
                 map.dragging.enable();
                 map.keyboard.enable();
                 map.scrollWheelZoom.enable();
+                L.control.zoom({
+                     position:'topleft'
+                }).addTo(map);
             }
 
             // Disables interactions. Actually not currently used during the intro, used instead during the later
@@ -295,6 +298,7 @@
                 map.keyboard.disable();
                 map.doubleClickZoom.disable();
                 map.scrollWheelZoom.disable();
+                d3.select(".leaflet-control-zoom").remove();
             }
 
 
