@@ -304,18 +304,6 @@ link</a>.
         href="{{request.url_root}}citibike-api/bike-inbounds/id/3237">Check out an example result!</a>
 </p>
 
-<p>
-    I should note that while I think that while this overall schema is very space-efficient (60 MB compressed on
-    disc, 120 MB uncompressed) whilst remaining reasonably easy-to-understand, it's not very fast. The database
-    itself it reasonably quick; it's all the processing I have to do along the way that slows things down. As a
-    result, querying for the ~3000 bikes-mode trips served by Penn Station Valet, the busiest station in the system,
-    can incur a loading time of 10 seconds or more.
-</p>
-
-<p>
-    Profiling and improving on this time are definitely on my to-do list.
-</p>
-
 <h3>Generating Metadata</h3>
 
 <img src="/static/post_assets/citibike/station-metadata-screenshot.png" class="inline_image_full" alt="Data."/>

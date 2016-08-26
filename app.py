@@ -187,8 +187,7 @@ def citibike_sample(path, stationid):
     else:
         abort(404)
         return
-    # Note: str(stationid) not stationid!
-    tripset = db.get_station_bikeset(str(stationid), collection_name)
+    tripset = db.get_station_bikeset(stationid, collection_name)
     # Remove None trips---these correspond with trips that have not been populated in the database yet!
     tripset = [trip for trip in tripset if trip is not None]
     # jsonify(tripset) will not work because Flask disallows lists within arrays in top-level JSON, for security
@@ -218,5 +217,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
