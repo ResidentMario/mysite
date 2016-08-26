@@ -1165,20 +1165,7 @@
                     var end_ref = trips_timetable[trips_timetable.length - 1];
                     var end_trip = selected_stations[end_ref['stationid']][end_ref['type']][end_ref['position']];
 //                    end_time = moment(end_trip['properties']['stoptime'], '6/22/2016 hh:mm:ss');
-                    console.log("start time (initial current_time)");
-                    console.log("end_ref position pointer (trips_timetable.length - 1):");
-                    console.log(trips_timetable.length - 1);
-                    console.log("end_ref:");
-                    console.log(end_ref);
-                    console.log("end_trip:");
-                    console.log(end_trip);
-                    console.log("end_time:");
-                    console.log(end_time);
                     // Initialize the loop and continue!
-                    console.log("selected_stations:");
-                    console.log(selected_stations);
-                    console.log("trips_timetable:");
-                    console.log(trips_timetable);
                     call_this_once_done();
                 });
             }
