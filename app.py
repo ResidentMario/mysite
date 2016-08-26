@@ -2,12 +2,15 @@ from datetime import datetime
 from flask import (Flask, render_template, abort, request, make_response, Response)
 from static.post_assets.citibike.citibike_trips import DataStore
 import json
+import os
 
 app = Flask(__name__)
+basepath = os.path.abspath(".")
 
 # Initialize the MongoDB connection once.
 # db = DataStore(uri="mongodb://localhost:27017")  # Database on my Desktop.
-db = DataStore(json.load(open("static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # Database on mLab
+# db = DataStore("mongodb://ResidentMario:Ab199520012007@dbh56.mlab.com:27567/citibike") # Database on mLab
+db = DataStore(json.load(open(basepath + "/static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # Database on mLab
 
 post_list = [
     {
