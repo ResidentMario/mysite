@@ -153,6 +153,13 @@ post_list = [
         'date': datetime(2016, 8, 25),
         'template': 'day-in-the-life-of-citibike.html',
         'snap': 'life-of-citibike-alt.png'
+    },
+    {
+        'title': 'Bringing D3.JS to Jupyter Notebook with Py-D3',
+        'route': '2016/09/12/py-d3.html',
+        'date': datetime(2016, 9, 12),
+        'template': 'py-d3.html',
+        'snap': 'py-d3.png'
     }
 ]
 
