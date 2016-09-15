@@ -162,7 +162,7 @@ post_list = [
         'snap': 'py-d3.png'
     },
     {
-        'title': 'Citi Bike Activity Map',
+        'title': 'Mapping Citi Bike routes',
         'route': '2016/09/14/citibike-map.html',
         'date': datetime(2016, 9, 14),
         'template': 'citibike-map.html',
