@@ -148,7 +148,7 @@ post_list = [
         'snap': 'nycopendata.png'
     },
     {
-        'title': 'The making of Life of CitiBike',
+        'title': 'The making of Life of Citi Bike',
         'route': '2016/08/27/day-in-the-life-of-citibike.html',
         'date': datetime(2016, 8, 25),
         'template': 'day-in-the-life-of-citibike.html',
@@ -160,6 +160,13 @@ post_list = [
         'date': datetime(2016, 9, 12),
         'template': 'py-d3.html',
         'snap': 'py-d3.png'
+    },
+    {
+        'title': 'Citi Bike Activity Map',
+        'route': '2016/09/14/citibike-map.html',
+        'date': datetime(2016, 9, 14),
+        'template': 'citibike-map.html',
+        'snap': 'citibike-map.png'
     }
 ]
 
