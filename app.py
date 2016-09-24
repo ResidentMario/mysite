@@ -167,6 +167,13 @@ post_list = [
         'date': datetime(2016, 9, 14),
         'template': 'citibike-map.html',
         'snap': 'citibike-map.png'
+    },
+    {
+        'title': 'Testifying on open data for City Council',
+        'route': '2016/09/24/city-council-testimony.html',
+        'date': datetime(2016, 9, 24),
+        'template': 'city-council-testimony.html',
+        'snap': 'city-council-testimony.png'
     }
 ]
 
