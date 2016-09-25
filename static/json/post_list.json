@@ -1,186 +1,194 @@
 [
     {
-        "day": 31,
-        "route": "//residentmar.io/2015/10/31/this-website.html",
-        "year": 2015,
-        "snap": "this-website.png",
         "month": 10,
-        "title": "About this website"
+        "year": 2015,
+        "day": 31,
+        "snap": "this-website.png",
+        "title": "About this website",
+        "route": "//residentmar.io/2015/10/31/this-website.html"
     },
     {
-        "day": 6,
-        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html",
-        "year": 2015,
-        "snap": "an-exercise-in-probability.png",
         "month": 11,
-        "title": "An exercise in probability"
-    },
-    {
-        "day": 17,
-        "route": "//residentmar.io/2016/01/17/signpost-views.html",
-        "year": 2016,
-        "snap": "signpost-views.png",
-        "month": 1,
-        "title": "Measuring Wikipedia Signpost popularity"
-    },
-    {
-        "day": 11,
-        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html",
         "year": 2015,
-        "snap": "openness-versus-quality.png",
+        "day": 6,
+        "snap": "an-exercise-in-probability.png",
+        "title": "An exercise in probability",
+        "route": "//residentmar.io/2015/11/06/an-exercise-in-probability.html"
+    },
+    {
+        "month": 1,
+        "year": 2016,
+        "day": 17,
+        "snap": "signpost-views.png",
+        "title": "Measuring Wikipedia Signpost popularity",
+        "route": "//residentmar.io/2016/01/17/signpost-views.html"
+    },
+    {
         "month": 12,
-        "title": "Openness versus quality in the Wikipedia community"
+        "year": 2015,
+        "day": 11,
+        "snap": "openness-versus-quality.png",
+        "title": "Openness versus quality in the Wikipedia community",
+        "route": "//residentmar.io/2015/12/12/openness-versus-quality.html"
     },
     {
+        "month": 2,
+        "year": 2016,
         "day": 7,
-        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html",
-        "year": 2016,
         "snap": "space-shuttle-challenger.png",
-        "month": 2,
-        "title": "The decision to launch the Space Shuttle Challenger"
+        "title": "The decision to launch the Space Shuttle Challenger",
+        "route": "//residentmar.io/2016/02/07/space-shuttle-challenger.html"
     },
     {
+        "month": 2,
+        "year": 2016,
         "day": 9,
-        "route": "//residentmar.io/2016/02/09/average-chain-distance.html",
-        "year": 2016,
         "snap": "average-chain-distance.png",
-        "month": 2,
-        "title": "Is Starbucks really always two blocks away?"
+        "title": "Is Starbucks really always two blocks away?",
+        "route": "//residentmar.io/2016/02/09/average-chain-distance.html"
     },
     {
-        "day": 11,
-        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html",
+        "month": 2,
         "year": 2016,
+        "day": 11,
         "snap": "watsongraph-visualization.png",
-        "month": 2,
-        "title": "Exploring the IBM Watson Concept Insights service using watsongraph"
+        "title": "Exploring the IBM Watson Concept Insights service using watsongraph",
+        "route": "//residentmar.io/2016/02/11/watsongraph-visualization.html"
     },
     {
+        "month": 2,
+        "year": 2016,
         "day": 15,
-        "route": "//residentmar.io/2016/02/15/wikiprojects.html",
-        "year": 2016,
         "snap": "wikiprojects.png",
-        "month": 2,
-        "title": "Analyzing WikiProjects on Wikipedia"
+        "title": "Analyzing WikiProjects on Wikipedia",
+        "route": "//residentmar.io/2016/02/15/wikiprojects.html"
     },
     {
+        "month": 2,
+        "year": 2016,
         "day": 20,
-        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html",
-        "year": 2016,
         "snap": "wikimedia-foundation-turnover.png",
-        "month": 2,
-        "title": "The executive crisis at the Wikimedia Foundation"
+        "title": "The executive crisis at the Wikimedia Foundation",
+        "route": "//residentmar.io/2016/02/20/wikimedia-foundation-turnover.html"
     },
     {
+        "month": 3,
+        "year": 2016,
         "day": 19,
-        "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html",
-        "year": 2016,
         "snap": "nyc-motor-vehicle-collisions.png",
-        "month": 3,
-        "title": "Addressing traffic fatalities in New York City"
+        "title": "Addressing traffic fatalities in New York City",
+        "route": "//residentmar.io/2016/03/19/nyc-motor-vehicle-collisions.html"
     },
     {
+        "month": 3,
+        "year": 2016,
         "day": 23,
-        "route": "//residentmar.io/2016/03/23/worst-places-to-drive.html",
-        "year": 2016,
         "snap": "worst-places-to-drive.png",
-        "month": 3,
-        "title": "The worst places to drive in New York City"
+        "title": "The worst places to drive in New York City",
+        "route": "//residentmar.io/2016/03/23/worst-places-to-drive.html"
     },
     {
+        "month": 3,
+        "year": 2016,
         "day": 28,
-        "route": "//residentmar.io/2016/03/28/missingno.html",
-        "year": 2016,
         "snap": "missingno.png",
-        "month": 3,
-        "title": "Using the missingno package to visualize missing data"
+        "title": "Using the missingno package to visualize missing data",
+        "route": "//residentmar.io/2016/03/28/missingno.html"
     },
     {
-        "day": 27,
-        "route": "//residentmar.io/2016/05/27/biggest-landowners-nyc.html",
-        "year": 2016,
-        "snap": "landowners.png",
         "month": 5,
-        "title": "Who are the biggest landowners in New York City?"
+        "year": 2016,
+        "day": 27,
+        "snap": "landowners.png",
+        "title": "Who are the biggest landowners in New York City?",
+        "route": "//residentmar.io/2016/05/27/biggest-landowners-nyc.html"
     },
     {
+        "month": 6,
+        "year": 2016,
         "day": 1,
-        "route": "//residentmar.io/2016/06/01/nyc-addresses.html",
-        "year": 2016,
         "snap": "nyc-addresses.png",
-        "month": 6,
-        "title": "Addressing in New York City"
+        "title": "Addressing in New York City",
+        "route": "//residentmar.io/2016/06/01/nyc-addresses.html"
     },
     {
+        "month": 6,
+        "year": 2016,
         "day": 3,
-        "route": "//residentmar.io/2016/06/03/residential-property-sales.html",
-        "year": 2016,
         "snap": "residential-property-sales.png",
-        "month": 6,
-        "title": "Residential property sales in New York City"
+        "title": "Residential property sales in New York City",
+        "route": "//residentmar.io/2016/06/03/residential-property-sales.html"
     },
     {
+        "month": 6,
+        "year": 2016,
         "day": 4,
-        "route": "//residentmar.io/2016/06/04/new-york-city-tree-density.html",
-        "year": 2016,
         "snap": "new-york-city-real-estate.png",
-        "month": 6,
-        "title": "NYC Parks Tree Count Data Jam"
+        "title": "NYC Parks Tree Count Data Jam",
+        "route": "//residentmar.io/2016/06/04/new-york-city-tree-density.html"
     },
     {
-        "day": 12,
-        "route": "//residentmar.io/2016/06/12/null-and-missing-data-python.html",
+        "month": 6,
         "year": 2016,
+        "day": 12,
         "snap": "null-and-missing-data-python.png",
-        "month": 6,
-        "title": "Null and missing data in Python"
+        "title": "Null and missing data in Python",
+        "route": "//residentmar.io/2016/06/12/null-and-missing-data-python.html"
     },
     {
-        "day": 8,
-        "route": "//residentmar.io/2016/07/08/randomly-popular.html",
-        "year": 2016,
-        "snap": "randomly-popular.png",
         "month": 7,
-        "title": "What are the most popular random seeds?"
+        "year": 2016,
+        "day": 8,
+        "snap": "randomly-popular.png",
+        "title": "What are the most popular random seeds?",
+        "route": "//residentmar.io/2016/07/08/randomly-popular.html"
     },
     {
+        "month": 8,
+        "year": 2016,
         "day": 11,
-        "route": "//residentmar.io/2016/08/11/nyc-open-data-portal.html",
-        "year": 2016,
         "snap": "nycopendata.png",
-        "month": 8,
-        "title": "The anatomy of an open data portal"
+        "title": "The anatomy of an open data portal",
+        "route": "//residentmar.io/2016/08/11/nyc-open-data-portal.html"
     },
     {
+        "month": 8,
+        "year": 2016,
         "day": 25,
-        "route": "//residentmar.io/2016/08/27/day-in-the-life-of-citibike.html",
-        "year": 2016,
         "snap": "life-of-citibike-alt.png",
-        "month": 8,
-        "title": "The making of Life of Citi Bike"
+        "title": "The making of Life of Citi Bike",
+        "route": "//residentmar.io/2016/08/27/day-in-the-life-of-citibike.html"
     },
     {
+        "month": 9,
+        "year": 2016,
         "day": 12,
-        "route": "//residentmar.io/2016/09/12/py-d3.html",
-        "year": 2016,
         "snap": "py-d3.png",
-        "month": 9,
-        "title": "Bringing D3.JS to Jupyter Notebook with Py-D3"
+        "title": "Bringing D3.JS to Jupyter Notebook with Py-D3",
+        "route": "//residentmar.io/2016/09/12/py-d3.html"
     },
     {
+        "month": 9,
+        "year": 2016,
         "day": 14,
-        "route": "//residentmar.io/2016/09/14/citibike-map.html",
-        "year": 2016,
         "snap": "citibike-map.png",
-        "month": 9,
-        "title": "Mapping Citi Bike routes"
+        "title": "Mapping Citi Bike routes",
+        "route": "//residentmar.io/2016/09/14/citibike-map.html"
     },
     {
-        "day": 24,
-        "route": "//residentmar.io/2016/09/24/city-council-testimony.html",
-        "year": 2016,
-        "snap": "city-council-testimony.png",
         "month": 9,
-        "title": "Testifying on open data for City Council"
+        "year": 2016,
+        "day": 24,
+        "snap": "city-council-testimony.png",
+        "title": "Testifying on open data for City Council",
+        "route": "//residentmar.io/2016/09/24/city-council-testimony.html"
+    },
+    {
+        "month": 9,
+        "year": 2016,
+        "day": 26,
+        "snap": "implementing-good-design.png",
+        "title": "D3.JS NYC: Implementing good design",
+        "route": "//residentmar.io/2016/09/26/implementing-good-design.html"
     }
 ]

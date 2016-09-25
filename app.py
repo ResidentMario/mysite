@@ -174,6 +174,13 @@ post_list = [
         'date': datetime(2016, 9, 24),
         'template': 'city-council-testimony.html',
         'snap': 'city-council-testimony.png'
+    },
+    {
+        'title': 'D3.JS NYC: Implementing good design',
+        'route': '2016/09/26/implementing-good-design.html',
+        'date': datetime(2016, 9, 26),
+        'template': 'implementing-good-design.html',
+        'snap': 'implementing-good-design.png'
     }
 ]
 
