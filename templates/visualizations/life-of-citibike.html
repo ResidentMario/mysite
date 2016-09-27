@@ -1065,6 +1065,7 @@
             // this:
             //
             // [{'starttime': <moment>,
+            //   'stoptime': <moment>,
             //   'stationid': <stationid>,
             //   'type': <from/to>,
             //   'position': <array index>},
@@ -1147,8 +1148,10 @@
                                 for(var k = 0; k < selected_stations[key][type].length; k++) {
                                     var trip = selected_stations[key][type][k];
                                     var starttime = moment(trip['properties']['starttime'], '6/22/2016 hh:mm:ss');
+                                    var stoptime = moment(trip['properties']['stoptime'], '6/22/2016 hh:mm:ss');
                                     trips_timetable.push({
                                         'starttime': starttime,
+                                        'stoptime': stoptime,
                                         'stationid': key,
                                         'type': type,
                                         'position': k
@@ -1432,6 +1435,8 @@
                 paintLegendDisplay();
                 // Paint the time controls display element.
                 paintTimeControls();
+                // Paint the slider display element.
+                paintSlider();
                 // The first time the incrementer (below) is fired it shifts to one minute after the current time, and
                 // *then* checks if it needs to draw anything. This will leave out any trips that occur at exactly the
                 // starting minute of the visualization. To include these, we fire the painter event for them manually
@@ -1893,6 +1898,71 @@
                         })
                         .attr("id", "beta-box")
                         .text("BETA")
+            }
+
+            ////////////
+            // SLIDER //
+            ////////////
+            // This is good UX.
+
+            function paintSlider() {
+                // Paint the frame.
+//                d3.select("#map-canvas")
+//                        .append("div")
+//                        .attr("id", "slider-body")
+//                        .style({
+//                            "position": "absolute",
+//                            "left": "50%",
+//                            "bottom": "25px",
+//                            "display": "inline-block",
+//                            "margin": "auto",
+//                            "cursor": "text",
+//                            "height": "100px",
+//                            "width": "1440px",
+//                            "border-radius": "5px",
+//                            "background": "white",
+//                            "transform": "translate(-50%,-50%)"
+//                        });
+
+                // Paint the trip indicators.
+//                // First, get all minutes with bike trips active.
+//                var times = [];
+//                console.log(trips_timetable);
+//                trips_timetable.forEach(function(trip) {
+//                    var transition_time = trip['starttime'].startOf('minute');
+//                    var stop_time = trip['stoptime'].startOf('minute');
+//                    while(transition_time < stop_time) {
+//                        console.log(transition_time);
+//                        times.push(transition_time);
+//                        transition_time = transition_time.add(1, "minutes");
+//                    }
+//                });
+//                var set = new Set(times);
+//                times = Array.from(set).sort();
+//                console.log(times);
+//                // Next, collate these minutes into durations.
+//                var durations = [];
+//                var block_start_time = times[0];
+//                var latest_time = times[0];
+//                times.forEach(function(time) {
+//                    var difference = time.diff(latest_time, 'minutes');
+//                    if(difference > 1) {
+//                        durations.push({
+//                            'starttime': block_start_time,
+//                            'stoptime': latest_time
+//                        });
+//                        block_start_time = time;
+//                        latest_time = time;
+//                    }
+//                    else {
+//                        latest_time = time;
+//                    }
+//                });
+//                console.log(durations);
+//                // Finally, block these durations out into boxes on-screen.
+//                durations.forEach(function(duration) {
+//                    return;
+//                })
             }
 
             /////////////////

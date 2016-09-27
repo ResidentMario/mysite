@@ -148,7 +148,7 @@ post_list = [
         'snap': 'nycopendata.png'
     },
     {
-        'title': 'The making of Life of CitiBike',
+        'title': 'The making of Life of Citi Bike',
         'route': '2016/08/27/day-in-the-life-of-citibike.html',
         'date': datetime(2016, 8, 25),
         'template': 'day-in-the-life-of-citibike.html',
@@ -160,6 +160,27 @@ post_list = [
         'date': datetime(2016, 9, 12),
         'template': 'py-d3.html',
         'snap': 'py-d3.png'
+    },
+    {
+        'title': 'Mapping Citi Bike routes',
+        'route': '2016/09/14/citibike-map.html',
+        'date': datetime(2016, 9, 14),
+        'template': 'citibike-map.html',
+        'snap': 'citibike-map.png'
+    },
+    {
+        'title': 'Testifying on open data for City Council',
+        'route': '2016/09/24/city-council-testimony.html',
+        'date': datetime(2016, 9, 24),
+        'template': 'city-council-testimony.html',
+        'snap': 'city-council-testimony.png'
+    },
+    {
+        'title': 'D3.JS NYC: Implementing good design',
+        'route': '2016/09/26/implementing-good-design.html',
+        'date': datetime(2016, 9, 26),
+        'template': 'implementing-good-design.html',
+        'snap': 'implementing-good-design.png'
     }
 ]
 

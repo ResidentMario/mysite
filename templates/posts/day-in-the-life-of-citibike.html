@@ -5,26 +5,14 @@
 {% endblock %}
 {% block content %}
 
-<img src="/static/post_assets/citibike/citibike-hero.png" class="inline_image_full" alt="Data."/>
+<img src="/static/post_assets/citibike/citibike-hero.png" class="inline_image_full" style="width:70%" alt="Data."/>
 
 <p>
-    Since you're reading this, I finally finished a first beta version of the enormous CitiBike visualization
-    I was working on. Huzzah! This visualization is the largest single-person project I've ever put together&mdash;a
-    thousand lines of Python, two thousand lines of JavaScript, a pile of Jupyter notebooks, and a big 'ol spanking
-    MongoDB database all lassoed together to siphon collectively countless hours out of the lives of myself and others.
-</p>
-
-<p>
-    If you haven't checked it out yet, <a href="{{request.url_root}}visualizations/life-of-citibike.html">here's a
-link</a>.
-</p>
-
-<p>
-    ...ready?
-</p>
-
-<p>
-    Ok. Let's talk tech.
+    I just released the beta version of the CitiBike visualization I have been working on. <b><a
+        href="{{request.url_root}}visualizations/life-of-citibike.html">You can check it out here</a></b>. Since this
+    is the largest such project I've had the pleasure of building thus far, I decided it'd be interest to write up
+    what I learned for future reference here. If you're interested in data visualization tech and/or design, keep
+    reading!
 </p>
 
 <h3>Inspiration</h3>
@@ -768,8 +756,8 @@ link</a>.
 <p>
     Nevertheless, data viz folks are nothing if not tinkerers, and I'm satisfied with the way things turned out
     overall just as a function of what I think I have learned in the undertaking. MongoDB was not something I'd ever
-    worked with before I did this project; it was also my first foray into JavaScript (and I now have a
-    <i>pretty good</i> understanding of why I need to learn jQuery) and my first real "master" project in D3.
+    worked with before I did this project; it was also my first foray into JavaScript and my first real "master"
+    project in D3.
 </p>
 
 <p>

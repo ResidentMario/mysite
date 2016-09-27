@@ -121,7 +121,7 @@
             <pubDate>Thu, 11 Aug 2016 00:00:00 EST</pubDate>
     </item>
     <item>
-            <title>The making of Life of CitiBike</title>
+            <title>The making of Life of Citi Bike</title>
             <link>http://residentmar.io/2016/08/27/day-in-the-life-of-citibike.html</link>
             <guid>http://residentmar.io/2016/08/27/day-in-the-life-of-citibike.html</guid>
             <pubDate>Thu, 25 Aug 2016 00:00:00 EST</pubDate>
@@ -131,6 +131,24 @@
             <link>http://residentmar.io/2016/09/12/py-d3.html</link>
             <guid>http://residentmar.io/2016/09/12/py-d3.html</guid>
             <pubDate>Mon, 12 Sep 2016 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>Mapping Citi Bike routes</title>
+            <link>http://residentmar.io/2016/09/14/citibike-map.html</link>
+            <guid>http://residentmar.io/2016/09/14/citibike-map.html</guid>
+            <pubDate>Wed, 14 Sep 2016 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>Testifying on open data for City Council</title>
+            <link>http://residentmar.io/2016/09/24/city-council-testimony.html</link>
+            <guid>http://residentmar.io/2016/09/24/city-council-testimony.html</guid>
+            <pubDate>Sat, 24 Sep 2016 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>D3.JS NYC: Implementing good design</title>
+            <link>http://residentmar.io/2016/09/26/implementing-good-design.html</link>
+            <guid>http://residentmar.io/2016/09/26/implementing-good-design.html</guid>
+            <pubDate>Mon, 26 Sep 2016 00:00:00 EST</pubDate>
     </item>
 </channel>
 </rss>
