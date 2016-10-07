@@ -120,7 +120,7 @@ post_list = [
         'snap': 'residential-property-sales.png'
     },
     {
-        'title': 'NYC Parks Tree Count Data Jam',
+        'title': 'Counting New York City street trees',
         'route': '2016/06/04/new-york-city-tree-density.html',
         'date': datetime(2016, 6, 4),
         'template': 'new-york-city-tree-density.html',
