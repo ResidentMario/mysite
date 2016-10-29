@@ -181,6 +181,13 @@ post_list = [
         'date': datetime(2016, 9, 26),
         'template': 'implementing-good-design.html',
         'snap': 'implementing-good-design.png'
+    },
+    {
+        'title': 'Saving progress in pandas',
+        'route': '2016/10/29/saving-progress-pandas.html',
+        'date': datetime(2016, 10, 29),
+        'template': 'saving-progress-pandas.html',
+        'snap': 'saving-progress-pandas.png'
     }
 ]
 

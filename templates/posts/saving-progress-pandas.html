@@ -1,0 +1,292 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/saving-progress-pandas/panda-eating-bamboo.jpg" class="inline_image_full" alt="pandas"/>
+
+<h3>A Parable</h3>
+
+<p>
+    Suppose that we have a list of phone numbers which we believe corresponds to restaurants in New York City (e.g.
+    from the city's <a
+        href="https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j">
+    restaurant inspection data</a>), and we would like to match those with currently opened locations. That should be
+    pretty easy in theory: just download the data into a <code class="inline_code">pandas</code> <code
+        class="inline_code">DataFrame</code>, clean it up a bit, extract the numbers, and push them through the <a
+        href="https://www.yelp.com/developers/documentation/v2/phone_search">Yelp! Phone Search API</a>.
+</p>
+
+<p>
+    Or, put another way: we're throwing 27,000 phone numbers of indeterminate quality at a (slow, networked) external
+    API whose corner cases we don't immediately understand. Huh? Well, suppose that, in our naivety, our first attempt
+    looks like this:
+</p>
+
+<pre><code class="language-python">from yelp.client import Client
+from yelp.oauth1_authenticator import Oauth1Authenticator
+
+auth = Oauth1Authenticator(consumer_key=[...], consumer_secret=[...], token=[...], token_secret=credentials[...])
+client = Client(auth)
+
+def yelp(num):
+    business = client.phone_search(num).businesses[0]
+    return {'Yelp Name': business.name,
+            'Yelp Address': business.location.address,
+            'Yelp Latitude': business.location.coordinate.latitude,
+            'Yelp Longitude': business.location.coordinate.longitude}
+
+yelp_data = phone_numbers.map(lambda num: yelp(num))
+</code></pre>
+
+<p>
+    Except it doesn't work. Just 7 seconds in, it throws an error:
+</p>
+
+<pre><code class="language-python">16 [00:007, 2.91s/it]
+---------------------------------------------------------------------------
+[...]
+IndexError: ('list index out of range', 'occurred at index 40357217')
+</code></pre>
+
+<p>
+    Ok, fair enough, it's possible for <code class="inline_code">client.phone_search(num).businesses</code> to be an
+    empty list, in cases when Yelp! can't find anything for us. We modify our function to account for this:
+</p>
+
+<pre><code class="language-python">def yelp(num):
+    try:
+        business = client.phone_search(num).businesses[0]
+        return {'Yelp Name': business.name,
+                'Yelp Address': business.location.address,
+                'Yelp Latitude': business.location.coordinate.latitude,
+                'Yelp Longitude': business.location.coordinate.longitude}
+    except IndexError:  # Phone search failed!
+        return None
+</code></pre>
+
+<p>
+    And run it again...oops.
+</p>
+
+<pre><code class="language-python">42 [00:35, 3.11s/it]
+---------------------------------------------------------------------------
+[...]
+ValueError: cannot convert float NaN to integer
+</code></pre>
+
+<p>
+   Some of the numbers in the list are nulls, which once again does our algorithm in. Another rewrite:
+</p>
+
+<pre><code class="language-python">def yelp(num):
+    if pd.isnull(num):
+        return None
+    else:
+        try:
+            business = client.phone_search(num).businesses[0]
+            return {'Yelp Name': business.name,
+                    'Yelp Address': business.location.address,
+                    'Yelp Latitude': business.location.coordinate.latitude,
+                    'Yelp Longitude': business.location.coordinate.longitude}
+        except IndexError:  # Phone search failed!
+            return None
+</code></pre>
+
+<p>
+    You run the code again. We wait a minute or two, and nothing seems to break, so you drift off to an
+    interesting-looking <code class="inline_code">pandas</code> question on Stack Overflow. But after you switch back:
+</p>
+
+<pre><code class="language-python">352 [05:41, 3.42s/it]
+---------------------------------------------------------------------------
+[...]
+AttributeError: 'Location' object has no attribute 'coordinate'
+</code></pre>
+
+<p>
+    Turns out that if the Yelp! API can find a place, but can't find its location, the Python driver just sets <code
+        class="inline_code">business.location.coordinate</code> to <code class="inline_code">None</code>. Another
+    rewrite:
+</p>
+
+<pre><code class="language-python">def yelp(num):
+    if pd.isnull(num):
+        return None
+    else:
+        try:
+            business = client.phone_search(num).businesses[0]
+            if business and business.location.coordinate:
+                return {'Yelp Name': business.name,
+                        'Yelp Address': business.location.address,
+                        'Yelp Latitude': business.location.coordinate.latitude,
+                        'Yelp Longitude': business.location.coordinate.longitude}
+            else:  # Partial information, skip.
+                return None
+        except IndexError:  # Phone search failed!
+            return None
+</code></pre>
+
+<p>
+    Is that enough? No.
+</p>
+
+<pre><code class="language-python">1056 [10:21, 3.04s/it]
+---------------------------------------------------------------------------
+[...]
+AttributeError: 'Business' object has no attribute 'location'
+</code></pre>
+
+<p>
+    No coordinates <i>and</i> no address means the entire <code class="inline_code">business.location</code> object
+    is None. There goes ten minutes of your life (and 1000 cycles of your API rate limit). Fix it and try again:
+</p>
+
+<pre><code class="language-python">def yelp(num):
+    if pd.isnull(num):
+        return None
+    else:
+        try:
+            business = client.phone_search(num).businesses[0]
+            if business and business.location and business.location.coordinate:
+                return {'Yelp Name': business.name,
+                        'Yelp Address': business.location.address,
+                        'Yelp Latitude': business.location.coordinate.latitude,
+                        'Yelp Longitude': business.location.coordinate.longitude}
+            else:  # Partial information, skip.
+                return None
+        except IndexError:  # Phone search failed!
+            return None
+</code></pre>
+
+<p>
+    Done yet? LOL no.
+</p>
+
+<pre><code class="language-python">2702 [24:19, 3.94s/it]
+---------------------------------------------------------------------------
+[...]
+InvalidParameter: ('_________', 'occurred at index 2161529')
+</code></pre>
+
+<p>
+    The heck? Nine underscores? Who does that?!?
+</p>
+
+<p>
+    People, that's who!
+</p>
+
+<pre><code class="language-python">def yelp(num):
+    if pd.isnull(num):
+        return None
+    elif not str(num).isdigit():  # Invalid input!
+        return None
+    else:
+        try:
+            business = client.phone_search(num).businesses[0]
+            if business and business.location and business.location.coordinate:
+                return {'Yelp Name': business.name,
+                        'Yelp Address': business.location.address,
+                        'Yelp Latitude': business.location.coordinate.latitude,
+                        'Yelp Longitude': business.location.coordinate.longitude}
+            else:  # Partial information, skip.
+                return None
+        except IndexError:  # Phone search failed!
+            return None
+</code></pre>
+
+<p>
+    At this point, if you're anything like me, you're super frustrated. You've been trying to run this algorithm for
+    over an hour, but have gotten stopped along the way every single time. Your unfunc has morphed from a simple
+    three-liner to a big 'ol amorphous try-catch block.
+</p>
+
+<p>
+    It's the end of the day, so you turn off your computer's power saver settings, hit Run once more, turn off the
+    moniter, and leave.
+</p>
+
+<p>
+    The next morning you come back, and here's what you discover:
+</p>
+
+<pre><code class="language-python">23720 [2:07:41, 4.22s/it]
+---------------------------------------------------------------------------
+[...]
+InvalidParameter: (1646644665.0, 'occurred at index 40125680')
+</code></pre>
+
+<p>
+    23720/27064; your script with 90% done, only to explode and lose everything 'cause someone fat-fingered a "." into
+    their keypad, somehow, resulting in the wrong number of digits.
+</p>
+
+<p>
+    To think that all of this could be avoided, were you to just have come up with the completely map function ahead
+    of time:
+</p>
+
+<pre><code class="language-python">def yelp(num):
+    if not num:
+        return None
+    else:
+        try:
+            business = client.phone_search(num).businesses[0]
+            if business and business.location and business.location.coordinate:
+                return {'Yelp Name': business.name,
+                        'Yelp Address': business.location.address,
+                        'Yelp Latitude': business.location.coordinate.latitude,
+                        'Yelp Longitude': business.location.coordinate.longitude}
+            else:  # Partial information, skip.
+                return None
+        except IndexError:  # Phone search failed!
+            return None  # Phone search failed!
+        except yelp.errors.InvalidParameter:  # Invalid number!
+            return None
+</code></pre>
+
+<p>
+    Uhhhhh. Right.
+</p>
+
+<h3>So fix it!</h3>
+
+<p>
+    This is a moderately embellished version of a true story. It's true that no one would just run a query this big
+    and slow in one go; you'd probably wrap the whole thing in a try-catch block and send it to a list or something.
+    Or do what I did and go one uglier, <a
+        href="http://nbviewer.jupyter.org/github/ResidentMario/nyc-restaurant-trends/blob/master/notebooks/03%E2%80%94Dataset%20Synethesis.ipynb#Hideous">split the job list into batches</a>
+    and run those one at a time. However neither of these ideal, because it inflicts a lot of overhead on the
+    programmer&mdash;and pain and misery on anyone else who has to read the resulting slosh.
+</p>
+
+<p style="font-weight:bold">
+    So I wrote <code class="inline_code"><a href="https://pypi.python.org/pypi/checkpoints/">checkpoints</a></code>,
+    a small module meant to handle that overhead for you.
+</p>
+
+<p>
+    <code class="inline_code">checkpoints</code> imports new <code class="inline_code">DataFrame.safe_apply</code> and
+    <code class="inline_code">Series.safe_map</code> methods, stop-and-start versions of their base operations that
+    cache partial results in between runtimes in case an exception is thrown. That means that the next time these
+    functions are called, the operation will pick up back where it failed,
+    instead of all the way back at the beginning, as we had to do above.
+</p>
+
+<p>
+    It's a a very simple idea (albeit one that's hard to express idiomatically): save your progress as you go
+    along. Try to pick up where you left off after every failure. Never write another
+    <code class="inline_code">for</code> loop in anger again!
+</p>
+
+<img src="/static/post_assets/saving-progress-pandas/demo.gif" class="inline_image" alt="pandas" style="width:80%"/>
+
+<p>
+    Head over to the <a href="https://github.com/ResidentMario/checkpoints">the GitHub repository</a> to learn more.
+</p>
+
+
+{% endblock %}
