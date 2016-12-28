@@ -10,7 +10,7 @@ for post in dat:
     post['year'] = datetime_obj.year
     del post['date']
     del post['template']
-    post['route'] = '//residentmar.io/' + post['route']
+    post['route'] = 'http://www.residentmar.io/' + post['route']
 
 with open('./static/json/post_list.json', 'w') as outfile:
     json.dump(dat, outfile, indent=4)
