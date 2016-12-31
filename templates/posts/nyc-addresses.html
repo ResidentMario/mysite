@@ -196,112 +196,27 @@
 
 <p>
     This is just a cloud of points in no particular order; to get a line out of it we first have to order it somehow.
-    I fitted a linear regression equation against the cloud and ranked each point based on the order in which the
-    origin of its residual appeared on the resultant regression line. This gets us pretty far, but remember how
-    buildings appear on either side of a street, not in its middle?
-</p>
-
-<img src="/static/post_assets/nyc-addresses/broadway-polyline-problem.png" class="inline_image_full"
-     alt="Data."/>
-
-<p>
-    So the next step was calculated a rolling average of centroids for each five-tuple of points. This doesn't help
-    too much with smoothing the curve, but by taking the center of mass of a bunch of points around a street we
-    (mostly) succeed in getting points on it instead. Finally we run the points through the <a
-        href="https://bost.ocks.org/mike/simplify/">Visvalingam line simplification algorithm</a> to get our final
-    result&mdash;one reasonably well-fitted, reasonably simple Broadway street polyline:
+    We can achieve this by fitting a linear regressor to the point cloud, then calculating a rolling average of
+    centroids for each five-tuple of points to shift the center of mass onto the street (instead of on the buildings
+    besides it). Finally we run the points through the <a href="https://bost.ocks.org/mike/simplify/">Visvalingam
+    line simplification algorithm</a> to get our final result&mdash;one reasonably well-fitted, reasonably simple
+    Broadway street polyline:
 </p>
 
 <img src="/static/post_assets/nyc-addresses/broadway-final-polyline.png" class="inline_image"
      alt="Data." style="width:40%"/>
 
 <p>
-    At the risk of making everyone's eyes glaze over, here's the code that solves the problem:
-</p>
-
-<pre><code class="language-python">
-from pyproj import Proj
-import scipy
-import visvalingamwyatt as vw
-import math
-
-projstr = '+proj=lcc +lat_1=40.66666666666666 +lat_2=41.03333333333333 +lat_0=40.16666666666666' +
-    '+lon_0=-74 +x_0=300000 +y_0=0 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs'
-pnyc = Proj(projstr,
-            preserve_units=True)
-
-def generate(df, proj, street_name, n=20):
-    # Extract non-empty coordinates.
-    coords = df[df['Street'].map(lambda a: street_name in str(a))][['XCoord', 'YCoord', 'Borough']]
-    coords = coords.dropna()
-    coords = [proj(x, y, inverse=True) for x, y in zip(coords['XCoord'], coords['YCoord'])]
-    # Apply a linear regression to get general orientation.
-    slope, intercept, r_value, p_value, std_err =
-        scipy.stats.linregress([c[0] for c in coords], [c[1] for c in coords])
-    # Get the coordinate on the line each point is closest to by solving for the residual.
-    r_slope = -1/slope
-    closest_linear_coords = []
-    for x, y in coords:
-        b = y - r_slope*x
-        x_int = (intercept - b)/(r_slope - slope)
-        y_int = slope*x_int + intercept
-        closest_linear_coords.append((x_int, y_int))
-    # Since we now have a line we can pick a major axis and rank points based on their position on that axis.
-    x_extent = max([c[0] for c in closest_linear_coords]) - min([c[0] for c in closest_linear_coords])
-    y_extent = max([c[1] for c in closest_linear_coords]) - min([c[1] for c in closest_linear_coords])
-    if x_extent >= y_extent:
-        array = np.array([c[0] for c in closest_linear_coords])
-    else:
-        array = np.array([c[1] for c in closest_linear_coords])
-    order = array.argsort()
-    ranks = order.argsort()
-    sorted_coords = list(zip([c[0] for c in coords], [c[1] for c in coords], ranks))
-    sorted_coords.sort(key=lambda x: x[2])
-    sorted_coords = [(x, y) for x, y, rank in sorted_coords]
-    # Remove false positive coordinates which are more than a certain distance from their preceding neighbor.
-    # Otherwise random buildings with the same street in their address get included in the plot!
-    i = 1
-    while True:
-        if math.sqrt((sorted_coords[i][0] - sorted_coords[i - 1][0])**2
-                        + (sorted_coords[i][1] - sorted_coords[i - 1][1])**2) > 0.01:
-            del sorted_coords[i]
-        else:
-            i += 1
-        if i > len(sorted_coords) - 1:
-            break
-    centroid_coords = []
-    for i in range(0, len(sorted_coords) - 4):
-        x_c = (sorted_coords[i][0] + sorted_coords[i + 1][0] + sorted_coords[i + 2][0]
-                + sorted_coords[i + 3][0] + sorted_coords[i + 4][0]) / 5
-        y_c = (sorted_coords[i][1] + sorted_coords[i + 1][1] + sorted_coords[i + 2][1]
-                + sorted_coords[i + 3][1] + sorted_coords[i + 4][1]) / 5
-        centroid_coords.append((x_c, y_c))
-    simplifier = vw.Simplifier(centroid_coords)
-    # simplified_coords = simplifier.simplify(ratio=0.05)
-    simplified_coords = simplifier.simplify(number=n)
-    return simplified_coords
-
-</code></pre>
-
-<p>
-    This is a pretty powerful result. Give me the name of any street in New York City and I can give you the polyline
-    encoding it! Aside from manipulating the Google Directions API or defining the coordinates by hand, both of which
-    are limited in scope to case-by-case bases, I don't know if any other way of getting this information.
-</p>
-
-<p>
-    For now I'm just going to use this fancy new tool to look at the longest streets in New York City.
-</p>
-
-<p>
-    If you sort all of the streets in New York City by length you get a neat if slightly exaggerated exponential curve:
+    This is a pretty interesting result. Give me the name of any street in New York City and I can give you the polyline
+    encoding it! Let's use this tool to look at street lengths in New York City. If you sort all of the streets in
+    New York City by length you get a neat if slightly exaggerated exponential curve:
 </p>
 
 <img src="/static/post_assets/nyc-addresses/streets-by-length.png" class="inline_image_full"
      alt="Data."/>
 
 <p>
-    And, finally, we focus in on our winners&mdash;the ten longest streets in New York City (units in miles):
+    And so finally&mdash;the ten longest streets in New York City (units in miles):
 </p>
 
 <iframe src="{{request.url_root}}visualizations/longest-streets.html" marginwidth="0" marginheight="0" scrolling="no"
