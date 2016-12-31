@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import (Flask, render_template, abort, request, make_response, Response)
+from flask import (Flask, render_template, abort, request, make_response, Response, send_from_directory)
 from static.post_assets.citibike.citibike_trips import DataStore
 import json
 import os
@@ -238,6 +238,11 @@ def citibike_sample(path, stationid):
     return Response(json.dumps(tripset), mimetype='application/json')
 
 
+@app.route('/geoplot/<path:path>')
+def serve_geoplot_documentation(path):
+    return send_from_directory('geoplot_docs', path)
+
+
 @app.route('/<path:path>')
 def serve(path):
     if path in post_paths:
@@ -255,5 +260,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
