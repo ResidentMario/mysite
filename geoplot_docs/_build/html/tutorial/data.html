@@ -211,9 +211,9 @@ accessible using the <code class="docutils literal"><span class="pre">geometry</
 <span class="n">Name</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
 </pre></div>
 </div>
-<p>That geometry is stored with reference to some kind of <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_reference_system">**coordinate
+<p>That geometry is stored with reference to some kind of <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_reference_system">coordinate
 reference
-system**</a>, or
+system</a>, or
 CRS. You can extract what CRS your polygons are stored in using the
 <code class="docutils literal"><span class="pre">crs</span></code> attribute:</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">boroughs</span><span class="o">.</span><span class="n">crs</span>
@@ -330,7 +330,7 @@ Island State Plane coordinate reference system:</p>
 </div>
 <p>The file we just read in provided embedded information about its
 coordinate reference system, which <code class="docutils literal"><span class="pre">geopandas</span></code> stores as a
-<code class="docutils literal"><span class="pre">`proj4</span></code> &lt;<a class="reference external" href="https://github.com/OSGeo/proj.4">https://github.com/OSGeo/proj.4</a>&gt;`__ string:</p>
+<a class="reference external" href="https://github.com/OSGeo/proj.4">proj4</a> string:</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">manhattan_buildings</span><span class="o">.</span><span class="n">crs</span>
 </pre></div>
 </div>
@@ -366,8 +366,7 @@ method:</p>
 </pre></div>
 </div>
 <p>You should also know, at a minimum, that all of these geometries are
-always <code class="docutils literal"><span class="pre">`shapely</span></code> &lt;<a class="reference external" href="http://toblerity.org/shapely/manual.html">http://toblerity.org/shapely/manual.html</a>&gt;`__
-objects:</p>
+always <a class="reference external" href="http://toblerity.org/shapely/manual.html">shapely</a> objects:</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">manhattan_buildings</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
