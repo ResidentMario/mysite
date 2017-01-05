@@ -240,7 +240,7 @@ def citibike_sample(path, stationid):
 
 @app.route('/geoplot/<path:path>')
 def serve_geoplot_documentation(path):
-    return send_from_directory('geoplot_docs', path.lower())
+    return send_from_directory('geoplot_docs', path)
 
 
 @app.route('/<path:path>')
