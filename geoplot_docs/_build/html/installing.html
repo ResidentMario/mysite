@@ -152,14 +152,13 @@ change in the future.</p>
 console:</p>
 <div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Add the conda-forge channel.</span>
 <span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
-<span class="c1"># Initialize an environment.</span>
+<span class="c1"># Initialize and enter an environment.</span>
 <span class="n">conda</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">YOUR_ENVIRONMENT_NAME</span> <span class="n">seaborn</span> <span class="n">cartopy</span> <span class="n">geopandas</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.5</span>
+<span class="n">source</span> <span class="n">activate</span> <span class="n">YOUR_ENVIRONMENT_NAME</span>
 <span class="c1"># Install geoplot.</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">geoplot</span>
 <span class="c1"># (Optionally) drop the conda-forge channel</span>
 <span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">remove</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
-<span class="c1"># Enter the environment.</span>
-<span class="n">source</span> <span class="n">activate</span> <span class="n">YOUR_ENVIRONMENT_NAME</span>
 </pre></div>
 </div>
 </div>
@@ -177,8 +176,6 @@ console:</p>
 <span class="c1"># Install geopandas and (finally) geoplot via pip, *not* conda!</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">geopandas</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">geoplot</span>
-<span class="c1"># Enter the environment.</span>
-<span class="n">source</span> <span class="n">activate</span> <span class="n">YOUR_ENVIRONMENT_NAME</span>
 </pre></div>
 </div>
 </div>
