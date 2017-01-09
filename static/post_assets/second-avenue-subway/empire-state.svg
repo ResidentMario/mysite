@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:ns1="http://ns.adobe.com/Flows/1.0/"
+   xmlns:x="http://ns.adobe.com/Extensibility/1.0/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="275.75662"
+   height="449.00003"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="empire-state.svg">
+  <metadata
+     id="metadata84">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>17.10.2015</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Донор</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     id="namedview82"
+     showgrid="false"
+     inkscape:zoom="1"
+     inkscape:cx="316.15095"
+     inkscape:cy="97.606778"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     showguides="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <defs
+     id="defs4">
+    <foreignObject
+       id="foreignObject112"
+       overflow="visible"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       requiredExtensions="http://ns.adobe.com/Flows/1.0/">
+      <ns1:flowDef>
+        <ns1:region>
+          <ns1:path
+             d="M919.063,308.815" />
+        </ns1:region>
+        <ns1:flow
+           font-size="14"
+           font-family="'Tahoma'">
+          <ns1:p>
+            <ns1:span />
+          </ns1:p>
+        </ns1:flow>
+      </ns1:flowDef>
+      <x:targetRef
+         xlink:href="#XMLID_15_" />
+    </foreignObject>
+    <foreignObject
+       id="foreignObject84"
+       overflow="visible"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       requiredExtensions="http://ns.adobe.com/Flows/1.0/">
+      <ns1:flowDef>
+        <ns1:region>
+          <ns1:path
+             d="M898.057,308.815" />
+        </ns1:region>
+        <ns1:flow
+           font-size="14"
+           font-family="'Tahoma'">
+          <ns1:p>
+            <ns1:span />
+          </ns1:p>
+        </ns1:flow>
+      </ns1:flowDef>
+      <x:targetRef
+         xlink:href="#XMLID_11_" />
+    </foreignObject>
+    <foreignObject
+       id="foreignObject42"
+       overflow="visible"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       requiredExtensions="http://ns.adobe.com/Flows/1.0/">
+      <ns1:flowDef>
+        <ns1:region>
+          <ns1:path
+             d="M863.057,308.815" />
+        </ns1:region>
+        <ns1:flow
+           font-size="14"
+           font-family="'Tahoma'">
+          <ns1:p>
+            <ns1:span />
+          </ns1:p>
+        </ns1:flow>
+      </ns1:flowDef>
+      <x:targetRef
+         xlink:href="#XMLID_5_" />
+    </foreignObject>
+  </defs>
+  <text
+     x="-830.26776"
+     y="732.05444"
+     id="text3486"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50.88806534px;line-height:100%;font-family:'DejaVu Sans';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+     sodipodi:linespacing="100%"><tspan
+       x="-830.26776"
+       y="732.05444"
+       id="tspan3488" /></text>
+  <text
+     x="96.654785"
+     y="1481.3513"
+     transform="scale(1.0070489,0.99300044)"
+     id="XMLID_5_"
+     style="font-size:12.09904003px">
+    <tspan
+       x="96.654785"
+       y="1481.3513"
+       id="tspan45"
+       style="font-size:14.11554623px;font-family:Tahoma" />
+  </text>
+  <text
+     x="131.94365"
+     y="1481.3513"
+     transform="scale(1.0070489,0.99300044)"
+     id="XMLID_11_"
+     style="font-size:12.09904003px">
+    <tspan
+       x="131.94365"
+       y="1481.3513"
+       id="tspan87"
+       style="font-size:14.11554623px;font-family:Tahoma" />
+  </text>
+  <text
+     x="153.12392"
+     y="1481.3513"
+     transform="scale(1.0070489,0.99300044)"
+     id="XMLID_15_"
+     style="font-size:12.09904003px">
+    <tspan
+       x="153.12392"
+       y="1481.3513"
+       id="tspan115"
+       style="font-size:14.11554623px;font-family:Tahoma" />
+  </text>
+  <path
+     d="m 139.475,0 0,67.87269 c 0,0 -0.057,0 -0.751,0 -0.6936,0 -1.7434,0.90901 -1.7434,1.74608 0,0.83705 0,23.4916 0,24.43864 0,0.94713 -1.0463,0.75667 -1.0463,1.77226 0,1.0157 0,21.31146 0,22.05873 0,0.74738 -0.8317,0.91663 -0.8317,1.69273 0,0.87511 0,7.96092 0,7.96092 l -6.089,16.50401 c 0,0 -2.5381,0 -3.3801,0 -0.8421,0 -1.7433,0.86919 -1.7433,1.69273 0,0.82346 0,4.25803 0,4.25803 0,0 -1.6806,0 -2.5483,0 -0.868,0 -1.7433,0.84807 -1.7433,1.69273 0,0.84467 0,23.69812 0,23.69812 0,0 -1.6601,0 -2.522,0 -0.8616,0 -1.7432,0.8057 -1.7432,1.69273 0,0.88694 0,27.53549 0,28.75001 0,1.2145 -2.5748,1.75191 -2.5748,2.5653 0,0.81329 0,137.95677 0,137.95677 0,0 -3.3862,0 -4.2652,0 -0.879,0 -1.7433,0.83621 -1.7433,1.69273 0,0.85482 0,30.46903 0,30.46903 0,0 -8.531,0 -9.4151,0 -0.8842,0 -1.7432,0.85311 -1.7432,1.71893 0,0.8658 0,45.67725 0,45.67725 0,0 -12.0134,0 -12.8751,0 -0.8618,0 -1.7167,0.8361 -1.7167,1.6927 0,0.855 0,20.8417 0,20.8417 l 60.11,0.5552 0.5366,0 60.11,-0.5552 c 0,0 0,-19.9867 0,-20.8417 0,-0.8566 -0.855,-1.6927 -1.7167,-1.6927 -0.8616,0 -12.8749,0 -12.8749,0 0,0 0,-44.8106 0,-45.67725 0,-0.86667 -0.8601,-1.71893 -1.7434,-1.71893 -0.8831,0 -9.4152,0 -9.4152,0 0,0 0,-29.61421 0,-30.46903 0,-0.85652 -0.8651,-1.69273 -1.7431,-1.69273 -0.8781,0 -4.265,0 -4.265,0 0,0 0,-137.14348 0,-137.95677 0,-0.81339 -2.6018,-1.35164 -2.6018,-2.5653 0,-1.21536 0,-27.86307 0,-28.75001 0,-0.88703 -0.8548,-1.69273 -1.7165,-1.69273 -0.8627,0 -2.5218,0 -2.5218,0 0,0 0,-22.85345 0,-23.69812 0,-0.84466 -0.8765,-1.69273 -1.7433,-1.69273 -0.867,0 -2.5751,0 -2.5751,0 0,0 0,-3.43457 0,-4.25803 0,-0.82354 -0.8756,-1.69273 -1.7165,-1.69273 -0.8413,0 -3.4068,0 -3.4068,0 l -6.089,-16.50401 c 0,0 0,-7.00195 0,-7.96092 0,-0.7761 -0.8052,-0.9462 -0.8052,-1.69273 0,-0.74645 0,-21.04303 0,-22.05873 0,-1.01559 -1.0463,-0.82513 -1.0463,-1.77226 0,-0.94704 0,-23.60243 0,-24.43864 0,-0.83622 -1.0506,-1.74608 -1.7433,-1.74608 -0.6926,0 -0.751,0 -0.751,0 l 0,-67.87269 -1.636,0 -0.5364,0 -1.6343,0 z"
+     id="path4385"
+     style="fill:#1a1a1a"
+     inkscape:connector-curvature="0" />
+  <style
+     type="text/css"
+     id="style4" />
+  <style
+     type="text/css"
+     id="style4-0" />
+</svg>

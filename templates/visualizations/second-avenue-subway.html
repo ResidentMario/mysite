@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Headers. -->
+<style>
+    /* Remove default tick marks and line. */
+    .tick line{
+        visibility:hidden;
+    }
+    .domain {
+        visibility:hidden;
+    }
+    .tick {
+        font-size: 14px;
+    }
+</style>
+
+<script src="/static/js/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale.v1.js"></script>
+<script src="https://d3js.org/d3-axis.v1.js"></script>
+
+
+<!-- Content tag. -->
+<g></g>
+
+<!-- D3 code. -->
+<script>
+
+    /* Variable declarations */
+    var width = 800;                // total frame width
+    var height = 400;               // total frame height
+    var label_ratio = 0.26;        // ratio of frame reserved for text labels
+    var tick_ratio = 0.05;         // ratio of the frame reserved for the ticks
+
+    // dataset
+    // variable order: label, cost (billion USD), image, image display height, image display width.
+    var data = [
+['Empire State Building', .645,
+    '../static/post_assets/second-avenue-subway/empire-state.svg', 50, 60],
+['Triborough Bridge', 1, '../static/post_assets/second-avenue-subway/triborough.svg', 65, 35],
+['Grand Central Terminal', 2, '../static/post_assets/second-avenue-subway/grand-central-alt.svg', 50, 35],
+['34th Street—Hudson Yards', 2.5, '../static/post_assets/second-avenue-subway/hudson-yards.svg', 60, 30],
+['Holland Tunnel', 3.3, '../static/post_assets/second-avenue-subway/holland-tunnel.svg', 60, 32],
+//['1 World Trade Center', 3.8, 'https://qubeshub.org/app/site/groups/1210/uploads/uk-0406-349751-front.jpg', 50, 50],
+['World Trade Center—Oculus', 4, '../static/post_assets/second-avenue-subway/oculus.svg', 56, 35],
+['2nd Avenue Subway, Phase 1', 4.5,
+    '../static/post_assets/second-avenue-subway/subway.svg', 65, 26],
+['2nd Avenue Subway, Phase 2', 6,
+    '../static/post_assets/second-avenue-subway/subway.svg', 65, 26],
+['MTA 2015-2019 Capital Plan', 10.8,
+    '../static/post_assets/second-avenue-subway/mta.svg', 35, 35]
+    ];
+
+    var n = data.length;            // number of data points
+
+    var unit_var = 6;               // unit cost (SAS2)
+    var unit_max = 10.8;            // unit maximum
+    var unit_min = 0;               // unit minimum
+    var min_scaled_value = 0;       // scale coordinate minimum
+    var max_scaled_value = width;   // scale coordinate maximum
+    var min_display_value = 0;
+    var max_display_value = 9.5;
+
+    /* Plot creation. */
+    // Frame, label container, tick container, bar container, defs.
+    var frame = d3.select("g").append("svg").attr("width", width).attr("height", height);
+    var label_container = frame.append("g")
+            .attr("width", label_ratio * width)
+            .attr("height", height - tick_ratio * height)
+            .attr("y", tick_ratio * height);
+    var tick_container = frame.append("g")
+            .attr("width", (1 - label_ratio) * width).attr("height", tick_ratio * height)
+            .attr("x", label_ratio * width);
+    var bar_container = frame.append("g")
+            .attr("width", (1 - label_ratio) * width).attr("height", (1 - tick_ratio) * height)
+            .attr("x", label_ratio * width).attr("y", tick_ratio * height);
+    var defs = frame.append("defs");
+
+    // Ticks.
+    var tick_scale = d3.scaleLinear()
+            .domain([min_display_value, max_display_value])
+            .range([label_ratio * width, width]);
+    var ticks = d3.axisTop(tick_scale);
+    tick_container.append("g").attr("transform", "translate(0," + tick_ratio * height + ")").call(ticks);
+
+    // Tick lines.
+    // We want to first line to pop out, but SVG doesn't support z indexing. So we will draw that one later.
+    var first_line = null;
+    for(i = 1; i <= Math.round(max_display_value); i++) {
+        var line = bar_container.append("line").attr("stroke-width", 1)
+                .attr("stroke", "lightgray")
+                .attr("x1", tick_scale(i)).attr("x2", tick_scale(i))
+                .attr("y1", tick_ratio * height).attr("y2", height).attr("shape-rendering", "crispEdges ");
+    }
+
+    // Bar variables.
+    // max height of individual bars
+    var bar_padding = 0.3;          // ratio of maximum (touching) bar width reserved for padding (half on either side)
+    var bar_height = height * (1 - tick_ratio) * (1 - bar_padding) / n;
+    var interbar_space = bar_padding * bar_height; // space between bars
+
+    var cost_scale = function(cost) { return (6 / cost).toPrecision(3); };
+    var bar_scale = d3.scaleLinear()
+            .domain([min_display_value, max_display_value]).range([0, (1 - label_ratio) * width]);
+    var y_bar_scale = d3.scaleLinear()
+            .domain([0, n - 1])
+            .range([interbar_space + tick_ratio * height, height - interbar_space - bar_height]);
+
+    // Bars.
+    data.forEach(function(arr, i) {
+        var cost = arr[1];
+        bar_container.append("rect")
+                .attr("x", label_ratio * width).attr("y", y_bar_scale(i))
+                .attr("width", bar_scale(cost_scale(cost))).attr("height", bar_height)
+                .attr("fill", "#eee")
+    });
+
+    // Label variables.
+    var y_label_scale = function(i) { return y_bar_scale(i) + bar_height / 2; };
+    data.forEach(function(arr, i) {
+        var label = arr[0];
+        label_container.append("text")
+                .attr("x", 5).attr("y", y_label_scale(i))
+                .attr("alignment-baseline", "central")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "14px")
+                .text(label);
+
+        // Special bolding for the Second Avenue Subway
+    });
+
+    // Image overlays.
+    var y_image_scale = y_bar_scale;
+    var image_scale = function(d) { return bar_scale(d + 0.5); };
+    var mask_counter = 0;
+    data.forEach(function(arr, n_i) {
+        var cost = arr[1];
+        var image_path = arr[2];
+        var image_width = arr[3];
+        var image_height = arr[4];
+        var num_copies = cost_scale(cost);
+
+        for(i = 0; i < Math.ceil(num_copies); i++) {
+            // Get the img_clip, which is how much of the image to display.
+            if((num_copies - i) < 1) { var img_clip = num_copies - i; } else { img_clip = 1; }
+            if(img_clip == 0) { break; }
+
+            var g = bar_container
+                    .append("g")
+                    .attr("width", "25px").attr("overflow", "hidden");
+            var img = g.append("image").attr("xlink:href", image_path)
+                    .attr("width", image_width).attr("height", image_height)
+                    .attr("x", label_ratio * width + image_scale(i) - image_width / 2)
+                    .attr("y", y_image_scale(n_i) + (-image_height + bar_height));
+
+            if(img_clip < 1) {
+                // Clip the image.
+//                var img_element = img['_groups'][0][0];
+//                var bbox = img_element.getBoundingClientRect();
+//                console.log(bbox);
+//                console.log(bbox);
+                console.log(img.attr("width"));
+                defs.append("clipPath").attr("id", "mask_" + mask_counter).append("rect")
+                        .attr("x", img.attr("x")).attr("y", img.attr("y"))
+                        .attr("width", img.attr("width") * img_clip).attr("height", 100);
+                img.attr("clip-path", "url(#" + "mask_" + mask_counter + ")");
+                mask_counter += 1;
+            }
+        }
+    });
+
+    // Add in first bar line.
+    bar_container.append("line").attr("stroke-width", 2)
+                .attr("stroke", "gray")
+                .attr("x1", tick_scale(0)).attr("x2", tick_scale(0))
+                .attr("y1", tick_ratio * height).attr("y2", height);
+
+</script>
