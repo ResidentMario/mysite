@@ -7,10 +7,9 @@ import os
 app = Flask(__name__)
 basepath = os.path.abspath(".")
 
-# Initialize the MongoDB connection once.
-# db = DataStore(uri="mongodb://localhost:27017")  # Database on my Desktop.
-# db = DataStore("mongodb://ResidentMario:Ab199520012007@dbh56.mlab.com:27567/citibike") # Database on mLab
-db = DataStore(json.load(open(basepath + "/static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # Database on mLab
+# Initialize the MongoDB connection (for CitiBike).
+# db = DataStore(uri="mongodb://localhost:27017")  # Desktop.
+db = DataStore(json.load(open(basepath + "/static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # mLab
 
 post_list = [
     {
@@ -228,13 +227,6 @@ def citibike_sample(path, stationid):
     tripset = db.get_station_bikeset(stationid, collection_name)
     # Remove None trips---these correspond with trips that have not been populated in the database yet!
     tripset = [trip for trip in tripset if trip is not None]
-    # jsonify(tripset) will not work because Flask disallows lists within arrays in top-level JSON, for security
-    # reasons. However the security issue in question seems to have been patched out long ago in all major browsers?
-    # Further reference: https://github.com/pallets/flask/issues/673;
-    # http://flask.pocoo.org/docs/0.11/security/#json-security
-    # return jsonify(tripset)
-    # json.dumps has no such qualms. It also handles the fact that the output is single-quoted strings, while JSON
-    # enforces double-quoted string (so you can't e.g. cast to a straight string using str(tripset)!).
     return Response(json.dumps(tripset), mimetype='application/json')
 
 
@@ -260,5 +252,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
