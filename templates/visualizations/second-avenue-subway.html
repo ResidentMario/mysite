@@ -41,7 +41,6 @@
 ['Grand Central Terminal', 2, '../static/post_assets/second-avenue-subway/grand-central-alt.svg', 50, 35],
 ['34th Street—Hudson Yards', 2.5, '../static/post_assets/second-avenue-subway/hudson-yards.svg', 60, 30],
 ['Holland Tunnel', 3.3, '../static/post_assets/second-avenue-subway/holland-tunnel.svg', 60, 32],
-//['1 World Trade Center', 3.8, 'https://qubeshub.org/app/site/groups/1210/uploads/uk-0406-349751-front.jpg', 50, 50],
 ['World Trade Center—Oculus', 4, '../static/post_assets/second-avenue-subway/oculus.svg', 56, 35],
 ['2nd Avenue Subway, Phase 1', 4.5,
     '../static/post_assets/second-avenue-subway/subway.svg', 65, 26],
@@ -155,10 +154,6 @@
 
             if(img_clip < 1) {
                 // Clip the image.
-//                var img_element = img['_groups'][0][0];
-//                var bbox = img_element.getBoundingClientRect();
-//                console.log(bbox);
-//                console.log(bbox);
                 console.log(img.attr("width"));
                 defs.append("clipPath").attr("id", "mask_" + mask_counter).append("rect")
                         .attr("x", img.attr("x")).attr("y", img.attr("y"))
