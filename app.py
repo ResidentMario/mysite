@@ -187,6 +187,13 @@ post_list = [
         'date': datetime(2016, 10, 29),
         'template': 'saving-progress-pandas.html',
         'snap': 'saving-progress-pandas.png'
+    },
+    {
+        'title': 'In context: phase 2 of the Second Avenue Subway',
+        'route': '2017/01/12/second-avenue-subway.html',
+        'date': datetime(2017, 1, 12),
+        'template': 'second-avenue-subway.html',
+        'snap': 'second-avenue-subway.png'
     }
 ]
 
@@ -252,5 +259,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)

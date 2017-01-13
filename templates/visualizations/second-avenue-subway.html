@@ -20,8 +20,9 @@
 <script src="https://d3js.org/d3-axis.v1.js"></script>
 
 
-<!-- Content tag. -->
-<g></g>
+<!-- Content tags. -->
+<div id="svg-holder"></div>
+<div id="text-holder" style="margin-top:25px; font-family:sans-serif;"></div>
 
 <!-- D3 code. -->
 <script>
@@ -62,7 +63,7 @@
 
     /* Plot creation. */
     // Frame, label container, tick container, bar container, defs.
-    var frame = d3.select("g").append("svg").attr("width", width).attr("height", height);
+    var frame = d3.select("#svg-holder").append("svg").attr("width", width).attr("height", height);
     var label_container = frame.append("g")
             .attr("width", label_ratio * width)
             .attr("height", height - tick_ratio * height)
@@ -74,6 +75,9 @@
             .attr("width", (1 - label_ratio) * width).attr("height", (1 - tick_ratio) * height)
             .attr("x", label_ratio * width).attr("y", tick_ratio * height);
     var defs = frame.append("defs");
+
+    // Attach the same width to the text holder.
+    d3.select("#text-holder").style("width", width + "px");
 
     // Ticks.
     var tick_scale = d3.scaleLinear()
@@ -109,9 +113,11 @@
     data.forEach(function(arr, i) {
         var cost = arr[1];
         bar_container.append("rect")
-                .attr("x", label_ratio * width).attr("y", y_bar_scale(i))
-                .attr("width", bar_scale(cost_scale(cost))).attr("height", bar_height)
-                .attr("fill", "#eee")
+            .attr("x", label_ratio * width).attr("y", y_bar_scale(i))
+            .attr("width", bar_scale(cost_scale(cost))).attr("height", bar_height)
+            .attr("fill", "#eee")
+            .attr("class", "bar")
+            .attr("id", "bar-" + i)
     });
 
     // Label variables.
@@ -123,6 +129,8 @@
                 .attr("alignment-baseline", "central")
                 .attr("font-family", "sans-serif")
                 .attr("font-size", "14px")
+                .attr("class", "label")
+                .attr("id", "label-" + i)
                 .text(label);
 
         // Special bolding for the Second Avenue Subway
@@ -169,5 +177,35 @@
                 .attr("stroke", "gray")
                 .attr("x1", tick_scale(0)).attr("x2", tick_scale(0))
                 .attr("y1", tick_ratio * height).attr("y2", height);
+
+    // Load the text content.
+    var text_content = [];
+    d3.json("../static/post_assets/second-avenue-subway/text.json", function(data) {
+        data.forEach(function(d) { text_content.push(d); });
+    });
+
+    // Transparent overlay for hover-selection.
+    data.forEach(function(arr, i) {
+        var hover_rect = bar_container.append("rect")
+            .attr("x", 0).attr("y", y_bar_scale(i) - interbar_space)
+            .attr("width", width).attr("height", bar_height + interbar_space)
+            .attr("fill", "transparent")
+            .attr("cursor", "pointer");
+
+        // Transitions for bars and texts.
+        var bar = d3.select("#bar-" + i);
+        var label = d3.select("#label-" + i);
+        var text = d3.select("#text-holder");
+        hover_rect.on('mouseover', function(d) {
+            label.attr("font-weight", "bold").attr("fill", "#1e9dbf");
+            bar.transition().duration(250).attr("fill", "white").attr("stroke", "#1e9dbf").attr("stroke-width", "2px");
+            text.node().innerHTML = text_content[i];
+        });
+        hover_rect.on('mouseout', function(d) {
+            label.attr("font-weight", "normal").attr("fill", "");
+            bar.transition().attr("fill", "#eee").attr("stroke-width", "0px");
+            text.text("");
+        });
+    });
 
 </script>
