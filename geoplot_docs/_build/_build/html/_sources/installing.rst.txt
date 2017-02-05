@@ -1,6 +1,0 @@
-.. _installing:
-
-Installation
-============
-
-TODO
