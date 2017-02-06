@@ -144,44 +144,23 @@
   <div class="section" id="installation">
 <span id="installing"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="http://conda.pydata.org/docs/">conda</a> is a hard requirement for installing <code class="docutils literal"><span class="pre">geoplot</span></code>
-on all platforms - <code class="docutils literal"><span class="pre">pip</span></code> alone can&#8217;t do it. Installation is currently more difficult than it could be; this should
-change in the future.</p>
+on all platforms - <code class="docutils literal"><span class="pre">pip</span></code> alone can&#8217;t do it.</p>
 <div class="section" id="linux">
 <h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
-<p>If you haven&#8217;t already, <a class="reference external" href="http://conda.pydata.org/docs/">install conda</a>. Then run the following block of code in the
-console:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Add the conda-forge channel.</span>
-<span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
-<span class="c1"># Initialize and enter an environment.</span>
-<span class="n">conda</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">YOUR_ENVIRONMENT_NAME</span> <span class="n">seaborn</span> <span class="n">cartopy</span> <span class="n">geopandas</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.5</span>
-<span class="n">source</span> <span class="n">activate</span> <span class="n">YOUR_ENVIRONMENT_NAME</span>
-<span class="c1"># Install geoplot.</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">geoplot</span>
-<span class="c1"># (Optionally) drop the conda-forge channel</span>
-<span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">remove</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
-</pre></div>
-</div>
+<p>If you haven&#8217;t already, <a class="reference external" href="http://conda.pydata.org/docs/">install conda</a>.  You&#8217;ll also need to have the
+<code class="docutils literal"><span class="pre">conda-forge</span></code> channel enabled: if you don&#8217;t already, you can do so with <code class="docutils literal"><span class="pre">conda</span> <span class="pre">config</span> <span class="pre">--add</span> <span class="pre">channels</span> <span class="pre">conda-forge</span></code>.</p>
+<p>Then run <code class="docutils literal"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">geoplot</span></code> and you&#8217;re done.</p>
 </div>
 <div class="section" id="mac-osx">
 <h2>Mac OSX<a class="headerlink" href="#mac-osx" title="Permalink to this headline">¶</a></h2>
-<p>If you haven&#8217;t already, <a class="reference external" href="http://conda.pydata.org/docs/">install conda</a>. Then run the following block of code in the
-console:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Initialize and enter an environment.</span>
-<span class="n">conda</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">YOUR_ENVIRONMENT_NAME</span> <span class="n">seaborn</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.5</span>
-<span class="n">source</span> <span class="n">activate</span> <span class="n">YOUR_ENVIRONMENT_NAME</span>
-<span class="c1"># Add the conda-forge channel, install cartopy, (optionally) drop the channel.</span>
-<span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="n">cartopy</span>
-<span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">remove</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
-<span class="c1"># Install geopandas and (finally) geoplot via pip, *not* conda!</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">geopandas</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">geoplot</span>
-</pre></div>
-</div>
+<p>If you haven&#8217;t already, <a class="reference external" href="http://conda.pydata.org/docs/">install conda</a>.  You&#8217;ll also need to have the
+<code class="docutils literal"><span class="pre">conda-forge</span></code> channel enabled: if you don&#8217;t already, you can do so with <code class="docutils literal"><span class="pre">conda</span> <span class="pre">config</span> <span class="pre">--add</span> <span class="pre">channels</span> <span class="pre">conda-forge</span></code>.</p>
+<p>Then run <code class="docutils literal"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">geoplot</span></code> and you&#8217;re done.</p>
 </div>
 <div class="section" id="windows">
 <h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
-<p>I have not yet succeeded in finding a way of installing <code class="docutils literal"><span class="pre">geoplot</span></code> on Windows at all. Sorry.</p>
+<p>Unforunately <code class="docutils literal"><span class="pre">geoplot</span></code> is not available on Windows yet due to <cite>a irresolvable dependency issue &lt;https://github.com/SciTools/cartopy/issues/805&gt;</cite>.
+Sorry.</p>
 </div>
 </div>
 
