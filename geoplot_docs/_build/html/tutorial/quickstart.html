@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Quickstart &#8212; geoplot 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          geoplot</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Quickstart</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/tutorial/quickstart.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<p>In this section we&#8217;ll do a circuit through what <code class="docutils literal"><span class="pre">geoplot</span></code> can do.</p>
+<p>Suppose that we have data on localities in the United States. We&#8217;ll like
+to do a bit of exploratory analysis to determine what interesting things
+we can find in it.</p>
+<p>Our raw data is in the form of a <code class="docutils literal"><span class="pre">shapefile</span></code>, and we start off by
+loading that data into a <code class="docutils literal"><span class="pre">geopandas</span></code> <code class="docutils literal"><span class="pre">GeoDataFrame</span></code> (if this all
+sounds unfamiliar, be sure to read the section on <a class="reference external" href="../Data.ipynb">working with
+data</a> to learn more).</p>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ANSICODE</th>
+      <th>COUNTY</th>
+      <th>COUNTYFIPS</th>
+      <th>...</th>
+      <th>STATE</th>
+      <th>STATE_FIPS</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>177</th>
+      <td>1036030</td>
+      <td>Cass</td>
+      <td>017</td>
+      <td>...</td>
+      <td>ND</td>
+      <td>38</td>
+      <td>POINT (-96.78980339999998 46.87718630000012)</td>
+    </tr>
+    <tr>
+      <th>373</th>
+      <td>979426</td>
+      <td>Monroe</td>
+      <td>055</td>
+      <td>...</td>
+      <td>NY</td>
+      <td>36</td>
+      <td>POINT (-77.61555679999998 43.15478450000012)</td>
+    </tr>
+    <tr>
+      <th>378</th>
+      <td>979539</td>
+      <td>Onondaga</td>
+      <td>067</td>
+      <td>...</td>
+      <td>NY</td>
+      <td>36</td>
+      <td>POINT (-76.14742439999998 43.04812210000017)</td>
+    </tr>
+    <tr>
+      <th>386</th>
+      <td>978764</td>
+      <td>Erie</td>
+      <td>029</td>
+      <td>...</td>
+      <td>NY</td>
+      <td>36</td>
+      <td>POINT (-78.87836889999994 42.8864468000001)</td>
+    </tr>
+    <tr>
+      <th>426</th>
+      <td>618227</td>
+      <td>Middlesex</td>
+      <td>017</td>
+      <td>...</td>
+      <td>MA</td>
+      <td>25</td>
+      <td>POINT (-71.31617179999989 42.63342470000003)</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 17 columns</p>
+</div><p>Let&#8217;s use <code class="docutils literal"><span class="pre">pointplot</span></code> (<a class="reference external" href="../pointplot.html">docs</a>) to see where our
+cities are.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f061b102860</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_6_1.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_6_1.png" />
+<p>Hmm. This data isn&#8217;t easily interpretable because it lacks geospatial
+context: it&#8217;s impossible to tell where these points actually are,
+exactly. Let&#8217;s use a <code class="docutils literal"><span class="pre">polyplot</span></code> (<a class="reference external" href="../polyplot.html">docs</a>) to add
+the US states to the map.</p>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_8_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_8_0.png" />
+<p>This is better, but if you&#8217;re familiar with typical depictions of the
+United States, you&#8217;ll notice that this map seems a bit distorted.</p>
+<p>You may recall from geography that the Earth, being a sphere, is
+impossible to accurately potray on a two-dimensional map; the best we
+can do is pick a method of &#8220;unpeeling&#8221; it, a projection, which is
+well-suited for the purpose we have in mind.</p>
+<p>In this case we haven&#8217;t used any projection at all: we&#8217;re plotting using
+raw coordinates.</p>
+<p>So we can &#8220;fix&#8221; the distortion by using an appropriate projection. The
+Albers equal area projection is most common in the United States.</p>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_10_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_10_0.png" />
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Index</span><span class="p">([</span><span class="s1">&#39;ANSICODE&#39;</span><span class="p">,</span> <span class="s1">&#39;COUNTY&#39;</span><span class="p">,</span> <span class="s1">&#39;COUNTYFIPS&#39;</span><span class="p">,</span> <span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="s1">&#39;ELEV_IN_M&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;FEATURE&#39;</span><span class="p">,</span> <span class="s1">&#39;FEATURE2&#39;</span><span class="p">,</span> <span class="s1">&#39;GNIS_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;LATITUDE&#39;</span><span class="p">,</span> <span class="s1">&#39;LONGITUDE&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="s1">&#39;PopPlLat&#39;</span><span class="p">,</span> <span class="s1">&#39;PopPlLong&#39;</span><span class="p">,</span> <span class="s1">&#39;STATE&#39;</span><span class="p">,</span> <span class="s1">&#39;STATE_FIPS&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To learn more about this, and to see what options you have available, be
+sure to read the section of the tutorial on
+<a class="reference external" href="../Projections.ipynb">projections</a>.</p>
+<p>Ok great. Let&#8217;s adjust this plot to make it a bit more informative. Our
+data contains information on the population of our cities; let&#8217;s encode
+this using the <code class="docutils literal"><span class="pre">scale</span></code> of our points.</p>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_13_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_13_0.png" />
+<p>Let&#8217;s add some visual configuration to prettify the map and keep the
+points for dissappearing inside of one another...</p>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_15_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_15_0.png" />
+<p>Great! But to make the scale more obvious, let&#8217;s add a legend.</p>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_17_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_17_0.png" />
+<p>Great! We can emphasize even further by also scaling the <code class="docutils literal"><span class="pre">hue</span></code>, and
+giving the whole thing a title.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">Text</span> <span class="n">at</span> <span class="mh">0x7f061a34b3c8</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_19_1.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_19_1.png" />
+<p>And there you go!</p>
+<p>This plot—which you can see as a <a class="reference external" href="../examples/largest-cities-usa.html">standalone
+example</a> in the
+Gallery—demonstrates many of the options you have available for
+configuring things to look the way you want them.</p>
+<p>So far we&#8217;ve loaded some data, put it on a map, loaded some shapes,
+projected the two, and explored what we can do with them using a
+<code class="docutils literal"><span class="pre">pointplot</span></code>—one of the six map types available in <code class="docutils literal"><span class="pre">geoplot</span></code>.</p>
+<p>The API for the remaining five plot types is very similar to what we
+just saw, and so for the remainder of this quick walkthrough let&#8217;s look
+at some simple examples from other parts of <code class="docutils literal"><span class="pre">geoplot</span></code>.</p>
+<p>Let&#8217;s start with traffic collisions in New York City. As you might
+expect, these tend to happen in certain places more often than others;
+but can we figure out where? This is a bit difficult to do with just
+points on a map: there are too many accidents, resulting in too much
+overplotting. Instead, let&#8217;s use <code class="docutils literal"><span class="pre">kdeplot</span></code>
+(<a class="reference external" href="../polyplot.html">docs</a>) to tell this story.</p>
+<p>First we load the data...</p>
+<p>And then we plot it!</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f0615cfc588</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_23_1.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_23_1.png" />
+<p>Looks like traffic accidents are centered on Midtown.</p>
+<p>The two plot types so far are concerned with points. Something we&#8217;re
+interested not in points but in the movement between them. In these
+cases we can use a <code class="docutils literal"><span class="pre">sankey</span></code> diagram (<a class="reference external" href="../sankey.html">docs</a>), like
+this one of road traffic volumes in Washington DC:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f06150884e0</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_25_1.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_25_1.png" />
+<p>At other times our data comes attached polygons instead of points. For
+these we can create a <code class="docutils literal"><span class="pre">choropleth</span></code> (<a class="reference external" href="../choropleth">docs</a>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f060e2eecc0</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_27_1.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_27_1.png" />
+<p>Or a <code class="docutils literal"><span class="pre">cartogram</span></code> (<a class="reference external" href="../cartogram.html">docs</a>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">alex</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">geoplot</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">ipykernel</span><span class="o">/</span><span class="n">__main__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span> <span class="n">SettingWithCopyWarning</span><span class="p">:</span>
+<span class="n">A</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">on</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">a</span> <span class="nb">slice</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">DataFrame</span><span class="o">.</span>
+<span class="n">Try</span> <span class="n">using</span> <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row_indexer</span><span class="p">,</span><span class="n">col_indexer</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> <span class="n">instead</span>
+
+<span class="n">See</span> <span class="n">the</span> <span class="n">caveats</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">pandas</span><span class="o">.</span><span class="n">pydata</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">pandas</span><span class="o">-</span><span class="n">docs</span><span class="o">/</span><span class="n">stable</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">html</span><span class="c1">#indexing-view-versus-copy</span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">alex</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">geoplot</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">ipykernel</span><span class="o">/</span><span class="n">__main__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span> <span class="n">SettingWithCopyWarning</span><span class="p">:</span>
+<span class="n">A</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">on</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">a</span> <span class="nb">slice</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">DataFrame</span><span class="o">.</span>
+<span class="n">Try</span> <span class="n">using</span> <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row_indexer</span><span class="p">,</span><span class="n">col_indexer</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> <span class="n">instead</span>
+
+<span class="n">See</span> <span class="n">the</span> <span class="n">caveats</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">pandas</span><span class="o">.</span><span class="n">pydata</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">pandas</span><span class="o">-</span><span class="n">docs</span><span class="o">/</span><span class="n">stable</span><span class="o">/</span><span class="n">indexing</span><span class="o">.</span><span class="n">html</span><span class="c1">#indexing-view-versus-copy</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">1597757.3894385984</span><span class="p">,</span> <span class="mf">1457718.4893930717</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_29_2.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_29_2.png" />
+<p>There&#8217;s one more plot type, <code class="docutils literal"><span class="pre">aggplot</span></code>, which looks a lot like a
+choropleth but is a bit more complex because it attempts to handle
+aggregating points into polygons for you. To see what that&#8217;s about,
+<a class="reference external" href="../aggplot.html">read its documentation</a>.</p>
+<p>That concludes our quick introduction to <code class="docutils literal"><span class="pre">geoplot</span></code>. If you&#8217;re a novice
+with geospatial data in Python, I suggest leafing through the rest of
+the tutorial materials. To see more examples refer to the
+<a class="reference external" href="../Gallery.html">Gallery</a>. To get started using <code class="docutils literal"><span class="pre">geoplot</span></code> in your
+own projects, refer to <a class="reference external" href="../Installation.html">Installation</a> and the
+<a class="reference external" href="../api.html">API Reference</a>.</p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Aleksey Bilogur.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

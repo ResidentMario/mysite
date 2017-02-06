@@ -132,18 +132,6 @@
 <code class="docutils literal"><span class="pre">geoplot</span></code>&#8216;s killer feature. Our explaination is by example. Throughout
 this segment of the tutorial we&#8217;ll use the <code class="docutils literal"><span class="pre">polyplot</span></code> plot type, which
 faithfully displays whatever geometry put into it.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;../../&#39;</span><span class="p">)</span>  <span class="c1"># ignore this</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
-<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-
-<span class="n">usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/united_states/usa.geojson&quot;</span><span class="p">)</span>
-<span class="n">usa</span> <span class="o">=</span> <span class="n">usa</span><span class="p">[</span><span class="o">~</span><span class="n">usa</span><span class="p">[</span><span class="s1">&#39;adm1_code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;USA-3517&#39;</span><span class="p">,</span> <span class="s1">&#39;USA-3563&#39;</span><span class="p">])]</span>
-
-
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">usa</span><span class="p">)</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <img alt="../_images/projections_1_0.png" src="../_images/projections_1_0.png" />
 <p>This map is an example of an unprojected plot: it reproduces our
 coordinates as if they were on a flat Cartesian plane. But remember, the
@@ -154,11 +142,6 @@ criteria</a>
 most projections are evaluated on: <em>shape</em> and <em>area</em>.</p>
 <p>For sufficiently small areas, the amount of distortion is very small.
 This map of New York City, for example, is reasonably accurate:</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/nyc_boroughs/boroughs.geojson&quot;</span><span class="p">)</span>
-
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">)</span>
-</pre></div>
-</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x114482eb8</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -175,24 +158,12 @@ projection</a>. This
 projection works by wrapping the Earth around a cone, one that&#8217;s
 particularly well optimized for locations near the middle of the
 Northern Hemisphere (and particularly poorly for locations at the
-poles). Here&#8217;s what the world looks like in this projection:</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Image</span>
-<span class="n">Image</span><span class="p">(</span><span class="s2">&quot;./figures/albers-equal-area-world.jpg&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/projections_5_0.jpg" src="../_images/projections_5_0.jpg" />
+poles).</p>
 <p>To place our plot in a projection, we need to pass the projection of
 interest to the <code class="docutils literal"><span class="pre">projection</span></code> keyword parameter. <code class="docutils literal"><span class="pre">geoplot</span></code> functions
 expect input to come from the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module, imported as
 <code class="docutils literal"><span class="pre">gcrs</span></code> by convention.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
-
-<span class="c1"># ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea()).set_ylim((-1597757.3894385984, 1457718.4893930717))</span>
-<span class="c1"># pass</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
-</pre></div>
-</div>
-<img alt="../_images/projections_7_0.png" src="../_images/projections_7_0.png" />
+<img alt="../_images/projections_6_0.png" src="../_images/projections_6_0.png" />
 <p><code class="docutils literal"><span class="pre">geoplot</span></code> projections are actually a very thin wrapper on
 <code class="docutils literal"><span class="pre">cartopy.crs</span></code> projections, and every <code class="docutils literal"><span class="pre">cartopy</span></code> projection is
 implemented in <code class="docutils literal"><span class="pre">geoplot.crs</span></code>. Refer to <a class="reference external" href="http://scitools.org.uk/cartopy/docs/latest/crs/projections.html">this
@@ -212,13 +183,7 @@ States</a>
 is 39°50′N 98°35′W. If we provide approximately these coordinates as
 <code class="docutils literal"><span class="pre">central_latitude</span></code> and <code class="docutils literal"><span class="pre">central_longitude</span></code> coordinates to our
 projection, our skew is fixed!</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5))\</span>
-<span class="c1">#         .set_ylim((-1597757.3894385984, 1457718.4893930717))</span>
-<span class="c1"># pass</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">))</span>
-</pre></div>
-</div>
-<img alt="../_images/projections_9_0.png" src="../_images/projections_9_0.png" />
+<img alt="../_images/projections_8_0.png" src="../_images/projections_8_0.png" />
 <p>This is the version of the map of the United States that you&#8217;re probably
 most familiar with.</p>
 <p>Of course, why stop there? I encourage you to experiment with some of
@@ -226,16 +191,10 @@ the crazier projections (like <code class="docutils literal"><span class="pre">G
 Of particular value are global projections, which provide a way of
 visualizing your data on top of an actual for-real sphere—neat! A
 demonstrative exame is provided below.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Orthographic</span><span class="p">())</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">stock_img</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">AxesImage</span> <span class="n">at</span> <span class="mh">0x11405ce10</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/projections_11_1.png" src="../_images/projections_11_1.png" />
+<img alt="../_images/projections_10_1.png" src="../_images/projections_10_1.png" />
 <p>The gallery has an <a class="reference external" href="../../examples/los-angeles-flights.html">example</a>
 that further demonstrates these globes and the things you can do with
 them.</p>
@@ -251,16 +210,7 @@ integrated with other &#8220;stuff&#8221; in the wider <code class="docutils lit
 <p>The biggest reason to ask for <code class="docutils literal"><span class="pre">matplotlib</span></code> output is <code class="docutils literal"><span class="pre">mplleaflet</span></code>, a
 small library which allows you to place <code class="docutils literal"><span class="pre">matplotlib</span></code> plots on an
 interactive <a class="reference external" href="http://leafletjs.com/">Leaflet</a> webmap:</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Code:</span>
-<span class="c1"># import mplleaflet</span>
-<span class="c1"># gplt.polyplot(boroughs)</span>
-<span class="c1"># mplleaflet.display()</span>
-
-<span class="c1"># Result:</span>
-<span class="n">Image</span><span class="p">(</span><span class="s2">&quot;./figures/leaflet-webmap-example.png&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/projections_13_0.png" src="../_images/projections_13_0.png" />
+<img alt="../_images/projections_12_0.png" src="../_images/projections_12_0.png" />
 <p>For an interactive version, see <a class="reference external" href="../examples/boston-airbnb-kde.html">this
 example</a> or <a class="reference external" href="../examples/minard-napoleon-russia.html">this
 one</a> from the gallery.</p>

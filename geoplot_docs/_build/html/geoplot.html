@@ -1136,7 +1136,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
 
 <dl class="function">
 <dt id="geoplot.geoplot.polyplot">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">polyplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>facecolor='None'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.polyplot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">polyplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>edgecolor='black'</em>, <em>facecolor='None'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.polyplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trivially plots whatever geometries are passed to it. Mostly meant to be used in concert with other,
 more interesting plot types.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1149,12 +1149,7 @@ more interesting plot types.</p>
 e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
 <code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</p>
 </li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
-outliers&#8212;that input will be used instead.</li>
-<li><strong>facecolor</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The color that will be used for the fill &#8220;inside&#8221; of the polygon. This parameter defaults to the string
-<code class="docutils literal"><span class="pre">'None'</span></code>, which creates transparent polygons.</li>
-<li><strong>extent</strong> &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
 that input will be used instead.</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
