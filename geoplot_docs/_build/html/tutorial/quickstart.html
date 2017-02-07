@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Quickstart &#8212; geoplot 0.0.1 documentation</title>
+    <title>Quickstart &#8212; geoplot 0.0.3 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.0.1',
+        VERSION:     '0.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -53,7 +53,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           geoplot</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -129,6 +129,12 @@
   <div class="section" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
 <p>In this section we&#8217;ll do a circuit through what <code class="docutils literal"><span class="pre">geoplot</span></code> can do.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;../../&#39;</span><span class="p">)</span>  <span class="c1"># ignore this</span>
+<span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
 <p>Suppose that we have data on localities in the United States. We&#8217;ll like
 to do a bit of exploratory analysis to determine what interesting things
 we can find in it.</p>
@@ -136,6 +142,19 @@ we can find in it.</p>
 loading that data into a <code class="docutils literal"><span class="pre">geopandas</span></code> <code class="docutils literal"><span class="pre">GeoDataFrame</span></code> (if this all
 sounds unfamiliar, be sure to read the section on <a class="reference external" href="../Data.ipynb">working with
 data</a> to learn more).</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
+<span class="n">cities</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/cities/citiesx010g.shp&quot;</span><span class="p">)</span>
+<span class="n">continental_cities</span> <span class="o">=</span> <span class="n">cities</span><span class="p">[</span><span class="n">cities</span><span class="p">[</span><span class="s1">&#39;STATE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;PR&#39;</span><span class="p">,</span> <span class="s1">&#39;AK&#39;</span><span class="p">,</span> <span class="s1">&#39;HI&#39;</span><span class="p">,</span> <span class="s1">&#39;VI&#39;</span><span class="p">])]</span>
+<span class="n">continental_cities</span> <span class="o">=</span> <span class="n">continental_cities</span><span class="p">[</span><span class="n">continental_cities</span><span class="p">[</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">100000</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;max_columns&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># Unclutter display.</span>
+
+<span class="n">continental_cities</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
 <div>
 <table border="1" class="dataframe">
   <thead>
@@ -206,6 +225,9 @@ data</a> to learn more).</p>
 <p>5 rows × 17 columns</p>
 </div><p>Let&#8217;s use <code class="docutils literal"><span class="pre">pointplot</span></code> (<a class="reference external" href="../pointplot.html">docs</a>) to see where our
 cities are.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_cities</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f061b102860</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -214,6 +236,14 @@ cities are.</p>
 context: it&#8217;s impossible to tell where these points actually are,
 exactly. Let&#8217;s use a <code class="docutils literal"><span class="pre">polyplot</span></code> (<a class="reference external" href="../polyplot.html">docs</a>) to add
 the US states to the map.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/united_states/usa.geojson&quot;</span><span class="p">)</span>
+<span class="n">continental_usa</span> <span class="o">=</span> <span class="n">usa</span><span class="p">[</span><span class="o">~</span><span class="n">usa</span><span class="p">[</span><span class="s1">&#39;adm1_code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;USA-3517&#39;</span><span class="p">,</span> <span class="s1">&#39;USA-3563&#39;</span><span class="p">])]</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">continental_usa</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_8_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_8_0.png" />
 <p>This is better, but if you&#8217;re familiar with typical depictions of the
 United States, you&#8217;ll notice that this map seems a bit distorted.</p>
@@ -225,7 +255,20 @@ well-suited for the purpose we have in mind.</p>
 raw coordinates.</p>
 <p>So we can &#8220;fix&#8221; the distortion by using an appropriate projection. The
 Albers equal area projection is most common in the United States.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+
+<span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">()</span><span class="c1"># central_longitude=-98, central_latitude=39.5)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">continental_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+
+<span class="c1"># ax.set_ylim((-1597757, 1457718)); pass</span>
+</pre></div>
+</div>
 <img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_10_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_10_0.png" />
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">continental_cities</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Index</span><span class="p">([</span><span class="s1">&#39;ANSICODE&#39;</span><span class="p">,</span> <span class="s1">&#39;COUNTY&#39;</span><span class="p">,</span> <span class="s1">&#39;COUNTYFIPS&#39;</span><span class="p">,</span> <span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="s1">&#39;ELEV_IN_M&#39;</span><span class="p">,</span>
        <span class="s1">&#39;FEATURE&#39;</span><span class="p">,</span> <span class="s1">&#39;FEATURE2&#39;</span><span class="p">,</span> <span class="s1">&#39;GNIS_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;LATITUDE&#39;</span><span class="p">,</span> <span class="s1">&#39;LONGITUDE&#39;</span><span class="p">,</span> <span class="s1">&#39;NAME&#39;</span><span class="p">,</span>
        <span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="s1">&#39;PopPlLat&#39;</span><span class="p">,</span> <span class="s1">&#39;PopPlLong&#39;</span><span class="p">,</span> <span class="s1">&#39;STATE&#39;</span><span class="p">,</span> <span class="s1">&#39;STATE_FIPS&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
@@ -238,14 +281,93 @@ sure to read the section of the tutorial on
 <p>Ok great. Let&#8217;s adjust this plot to make it a bit more informative. Our
 data contains information on the population of our cities; let&#8217;s encode
 this using the <code class="docutils literal"><span class="pre">scale</span></code> of our points.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">continental_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_cities</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span>
+               <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>  <span class="c1"># Make our largest city 80x our smallest.</span>
+               <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">1597757</span><span class="p">,</span> <span class="mi">1457718</span><span class="p">));</span> <span class="k">pass</span>
+</pre></div>
+</div>
 <img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_13_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_13_0.png" />
 <p>Let&#8217;s add some visual configuration to prettify the map and keep the
 points for dissappearing inside of one another...</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">continental_usa</span><span class="p">,</span>
+                   <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+                   <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Put the polyplot below the pointplot.</span>
+                   <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>  <span class="c1"># Make state borders thinner.</span>
+                   <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>  <span class="c1"># Increase the size of the figure.</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_cities</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span>
+               <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+               <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>  <span class="c1"># Give the points a border...</span>
+               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>  <span class="c1"># ...and color it black.</span>
+               <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">1597757</span><span class="p">,</span> <span class="mi">1457718</span><span class="p">));</span> <span class="k">pass</span>
+</pre></div>
+</div>
 <img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_15_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_15_0.png" />
 <p>Great! But to make the scale more obvious, let&#8217;s add a legend.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">continental_usa</span><span class="p">,</span>
+                   <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+                   <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                   <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_cities</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span>
+               <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+               <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Add a legend.</span>
+               <span class="n">legend_values</span><span class="o">=</span><span class="p">[</span><span class="mi">8000000</span><span class="p">,</span> <span class="mi">6000000</span><span class="p">,</span> <span class="mi">4000000</span><span class="p">,</span> <span class="mi">2000000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">],</span>
+               <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;8 million&#39;</span><span class="p">,</span> <span class="s1">&#39;6 million&#39;</span><span class="p">,</span> <span class="s1">&#39;4 million&#39;</span><span class="p">,</span> <span class="s1">&#39;2 million&#39;</span><span class="p">,</span> <span class="s1">&#39;100 thousand&#39;</span><span class="p">],</span>
+               <span class="c1"># Change the legend display to better fit our values.</span>
+               <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower right&#39;</span><span class="p">},</span>
+               <span class="c1"># Turn off the legend frame and pin it to the bottom right.</span>
+               <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">1597757</span><span class="p">,</span> <span class="mi">1457718</span><span class="p">));</span> <span class="k">pass</span>
+</pre></div>
+</div>
 <img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_17_0.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_17_0.png" />
 <p>Great! We can emphasize even further by also scaling the <code class="docutils literal"><span class="pre">hue</span></code>, and
 giving the whole thing a title.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">continental_usa</span><span class="p">,</span>
+                   <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+                   <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                   <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_cities</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span>
+               <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span>  <span class="c1"># Add a hue variable.</span>
+               <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>  <span class="c1"># cf. matplotlib.org/examples/color/colormaps_reference.html</span>
+               <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span>  <span class="c1"># Keep the legend based on scale, not on hue.</span>
+               <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">legend_values</span><span class="o">=</span><span class="p">[</span><span class="mi">8000000</span><span class="p">,</span> <span class="mi">6000000</span><span class="p">,</span> <span class="mi">4000000</span><span class="p">,</span> <span class="mi">2000000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">],</span>
+               <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;8 million&#39;</span><span class="p">,</span> <span class="s1">&#39;6 million&#39;</span><span class="p">,</span> <span class="s1">&#39;4 million&#39;</span><span class="p">,</span> <span class="s1">&#39;2 million&#39;</span><span class="p">,</span> <span class="s1">&#39;100 thousand&#39;</span><span class="p">],</span>
+               <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower right&#39;</span><span class="p">},</span>
+               <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">1597757</span><span class="p">,</span> <span class="mi">1457718</span><span class="p">));</span> <span class="k">pass</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Cities in the contiguous United States, 2010&quot;</span><span class="p">)</span>  <span class="c1"># Add a title!</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">Text</span> <span class="n">at</span> <span class="mh">0x7f061a34b3c8</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -268,7 +390,28 @@ points on a map: there are too many accidents, resulting in too much
 overplotting. Instead, let&#8217;s use <code class="docutils literal"><span class="pre">kdeplot</span></code>
 (<a class="reference external" href="../polyplot.html">docs</a>) to tell this story.</p>
 <p>First we load the data...</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">shapely</span>
+
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/nyc_collisions/NYPD_Motor_Vehicle_Collisions_2016.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;LOCATION&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>
+<span class="n">collision_points</span> <span class="o">=</span> <span class="n">collisions</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">srs</span><span class="p">:</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LONGITUDE&#39;</span><span class="p">],</span> <span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LATITUDE&#39;</span><span class="p">]),</span>
+                                    <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">collision_points</span><span class="p">)</span>
+
+<span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/nyc_boroughs/boroughs.geojson&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>And then we plot it!</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5000</span><span class="p">),</span>
+                  <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+                  <span class="n">shade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Shade the areas or draw relief lines?</span>
+                  <span class="n">shade_lowest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Don&#39;t shade near-zeros.</span>
+                  <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>  <span class="c1"># Constrain the heatmap to this area.</span>
+                  <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f0615cfc588</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -278,17 +421,73 @@ overplotting. Instead, let&#8217;s use <code class="docutils literal"><span clas
 interested not in points but in the movement between them. In these
 cases we can use a <code class="docutils literal"><span class="pre">sankey</span></code> diagram (<a class="reference external" href="../sankey.html">docs</a>), like
 this one of road traffic volumes in Washington DC:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">dc</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/us_roads/District_Sections.shp&quot;</span><span class="p">)</span>
+
+
+<span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span>
+            <span class="n">path</span><span class="o">=</span><span class="n">dc</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>  <span class="c1"># The paths are roadway segments.</span>
+            <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+            <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;aadt&#39;</span><span class="p">,</span>  <span class="c1"># The variable we&#39;ll use to scale the result.</span>
+            <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>  <span class="c1"># The limits in terms of width.</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f06150884e0</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_25_1.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_25_1.png" />
 <p>At other times our data comes attached polygons instead of points. For
 these we can create a <code class="docutils literal"><span class="pre">choropleth</span></code> (<a class="reference external" href="../choropleth">docs</a>):</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Load the data.</span>
+<span class="n">census_tracts</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/ny_census_2010/cty036.shp&quot;</span><span class="p">)</span>
+<span class="n">percent_white</span> <span class="o">=</span> <span class="n">census_tracts</span><span class="p">[</span><span class="s1">&#39;WHITE&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">census_tracts</span><span class="p">[</span><span class="s1">&#39;POP2000&#39;</span><span class="p">]</span>
+
+
+<span class="c1"># Plot the data.</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span>
+                <span class="n">hue</span><span class="o">=</span><span class="n">percent_white</span><span class="p">,</span>  <span class="c1"># Display data, passed as a Series</span>
+                <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+                <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Do not bin our counties.</span>
+                <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x7f060e2eecc0</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_27_1.png" src="tutorial/../../docs/tutorial/quickstart_files/../../docs/tutorial/quickstart_27_1.png" />
 <p>Or a <code class="docutils literal"><span class="pre">cartogram</span></code> (<a class="reference external" href="../cartogram.html">docs</a>):</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">obesity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/obesity/obesity_by_state.tsv&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/united_states/usa.geojson&quot;</span><span class="p">)</span>
+<span class="n">continental_usa</span> <span class="o">=</span> <span class="n">usa</span><span class="p">[</span><span class="o">~</span><span class="n">usa</span><span class="p">[</span><span class="s1">&#39;adm1_code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;USA-3517&#39;</span><span class="p">,</span> <span class="s1">&#39;USA-3563&#39;</span><span class="p">])]</span>
+<span class="n">continental_usa</span><span class="p">[</span><span class="s1">&#39;State&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Minnesota&#39;</span><span class="p">,</span> <span class="s1">&#39;Montana&#39;</span><span class="p">,</span> <span class="s1">&#39;North Dakota&#39;</span><span class="p">,</span> <span class="s1">&#39;Idaho&#39;</span><span class="p">,</span> <span class="s1">&#39;Washington&#39;</span><span class="p">,</span> <span class="s1">&#39;Arizona&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;California&#39;</span><span class="p">,</span> <span class="s1">&#39;Colorado&#39;</span><span class="p">,</span> <span class="s1">&#39;Nevada&#39;</span><span class="p">,</span> <span class="s1">&#39;New Mexico&#39;</span><span class="p">,</span> <span class="s1">&#39;Oregon&#39;</span><span class="p">,</span> <span class="s1">&#39;Utah&#39;</span><span class="p">,</span> <span class="s1">&#39;Wyoming&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Arkansas&#39;</span><span class="p">,</span> <span class="s1">&#39;Iowa&#39;</span><span class="p">,</span> <span class="s1">&#39;Kansas&#39;</span><span class="p">,</span> <span class="s1">&#39;Missouri&#39;</span><span class="p">,</span> <span class="s1">&#39;Nebraska&#39;</span><span class="p">,</span> <span class="s1">&#39;Oklahoma&#39;</span><span class="p">,</span> <span class="s1">&#39;South Dakota&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Louisiana&#39;</span><span class="p">,</span> <span class="s1">&#39;Texas&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">,</span> <span class="s1">&#39;Massachusetts&#39;</span><span class="p">,</span> <span class="s1">&#39;New Hampshire&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Rhode Island&#39;</span><span class="p">,</span> <span class="s1">&#39;Vermont&#39;</span><span class="p">,</span> <span class="s1">&#39;Alabama&#39;</span><span class="p">,</span> <span class="s1">&#39;Florida&#39;</span><span class="p">,</span> <span class="s1">&#39;Georgia&#39;</span><span class="p">,</span> <span class="s1">&#39;Mississippi&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;South Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Illinois&#39;</span><span class="p">,</span> <span class="s1">&#39;Indiana&#39;</span><span class="p">,</span> <span class="s1">&#39;Kentucky&#39;</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Ohio&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Tennessee&#39;</span><span class="p">,</span> <span class="s1">&#39;Virginia&#39;</span><span class="p">,</span> <span class="s1">&#39;Wisconsin&#39;</span><span class="p">,</span> <span class="s1">&#39;West Virginia&#39;</span><span class="p">,</span> <span class="s1">&#39;Delaware&#39;</span><span class="p">,</span> <span class="s1">&#39;District of Columbia&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Maryland&#39;</span><span class="p">,</span> <span class="s1">&#39;New Jersey&#39;</span><span class="p">,</span> <span class="s1">&#39;New York&#39;</span><span class="p">,</span> <span class="s1">&#39;Pennsylvania&#39;</span><span class="p">,</span> <span class="s1">&#39;Maine&#39;</span><span class="p">,</span> <span class="s1">&#39;Michigan&#39;</span>
+<span class="p">]</span>
+<span class="n">continental_usa</span><span class="p">[</span><span class="s1">&#39;Obesity Rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">continental_usa</span><span class="p">[</span><span class="s1">&#39;State&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="n">obesity</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;State == @state&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;Percent&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Plot the data.</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">continental_usa</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Obesity Rate&#39;</span><span class="p">,</span>
+                    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">),</span>
+                    <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;steelblue&#39;</span><span class="p">,</span>
+                    <span class="n">trace_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+                    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mf">1597757.3894385984</span><span class="p">,</span> <span class="mf">1457718.4893930717</span><span class="p">))</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">alex</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">geoplot</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">ipykernel</span><span class="o">/</span><span class="n">__main__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span> <span class="n">SettingWithCopyWarning</span><span class="p">:</span>
 <span class="n">A</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">on</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">a</span> <span class="nb">slice</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">DataFrame</span><span class="o">.</span>
 <span class="n">Try</span> <span class="n">using</span> <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row_indexer</span><span class="p">,</span><span class="n">col_indexer</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> <span class="n">instead</span>
