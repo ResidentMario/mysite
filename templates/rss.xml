@@ -162,5 +162,11 @@
             <guid>http:http://www.residentmar.io/2017/01/12/second-avenue-subway.html</guid>
             <pubDate>Thu, 12 Jan 2017 00:00:00 EST</pubDate>
     </item>
+    <item>
+            <title>Geospatial visualization made easy with geoplot</title>
+            <link>http:http://www.residentmar.io/2017/02/07/geoplot.html</link>
+            <guid>http:http://www.residentmar.io/2017/02/07/geoplot.html</guid>
+            <pubDate>Tue, 07 Feb 2017 00:00:00 EST</pubDate>
+    </item>
 </channel>
 </rss>

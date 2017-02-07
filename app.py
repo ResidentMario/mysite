@@ -194,6 +194,13 @@ post_list = [
         'date': datetime(2017, 1, 12),
         'template': 'second-avenue-subway.html',
         'snap': 'second-avenue-subway.png'
+    },
+    {
+        'title': 'Geospatial visualization made easy with geoplot',
+        'route': '2017/02/07/geoplot.html',
+        'date': datetime(2017, 2, 7),
+        'template': 'geoplot.html',
+        'snap': 'geoplot.png'
     }
 ]
 
@@ -268,5 +275,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
