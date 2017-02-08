@@ -157,8 +157,8 @@
 <div class="section" id="without-conda">
 <h3>Without Conda<a class="headerlink" href="#without-conda" title="Permalink to this headline">¶</a></h3>
 <p>Things are much trickier if you don&#8217;t have access to <code class="docutils literal"><span class="pre">conda</span></code>, for whatever reason. You will need
-<code class="docutils literal"><span class="pre">matplotlib</span></code>, <code class="docutils literal"><span class="pre">seaborn</span></code>, the <code class="docutils literal"><span class="pre">proj4</span></code> (<a class="reference external" href="http://proj4.org/">docs</a>) and <code class="docutils literal"><span class="pre">GEOS</span></code> (<a class="reference external" href="https://trac.osgeo.org/geos/">docs</a>) external libraries, and <code class="docutils literal"><span class="pre">cartopy</span></code> (which relies on <code class="docutils literal"><span class="pre">proj4</span></code> and <code class="docutils literal"><span class="pre">GEOS</span></code>). Here&#8217;s an approximate
-code path:</p>
+<code class="docutils literal"><span class="pre">matplotlib</span></code>, <code class="docutils literal"><span class="pre">seaborn</span></code>, <code class="docutils literal"><span class="pre">geopandas</span></code>, the <code class="docutils literal"><span class="pre">proj4</span></code> (<a class="reference external" href="http://proj4.org/">docs</a>) and <code class="docutils literal"><span class="pre">GEOS</span></code> (<a class="reference external" href="https://trac.osgeo.org/geos/">docs</a>) external libraries, and <code class="docutils literal"><span class="pre">cartopy</span></code> (which relies on <code class="docutils literal"><span class="pre">proj4</span></code> and <code class="docutils literal"><span class="pre">GEOS</span></code>).
+Here&#8217;s an approximate code path:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># Use of a virtualenv is strongly encouraged.</span>
 mkdir my_project
 <span class="nb">cd</span> my_project
@@ -169,9 +169,9 @@ pip install matplotlib seaborn
 <span class="c1"># Install shapely with the no-binary option.</span>
 <span class="c1"># See https://github.com/Toblerity/Shapely/issues/435</span>
 pip install --no-binary shapely
-<span class="c1"># Install cartopy.</span>
+<span class="c1"># Install the rest.</span>
+pip install geopandas
 pip install cartopy
-<span class="c1"># Install geoplot.</span>
 pip install geoplot
 </pre></div>
 </div>
