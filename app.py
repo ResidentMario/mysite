@@ -34,14 +34,6 @@ post_list = [
         'snap': 'signpost-views.png'
     },
     {
-        'title': 'Openness versus quality in the Wikipedia community',
-        'route': '2015/12/12/openness-versus-quality.html',
-        'date': datetime(2015, 12, 11),
-        'template': 'openness-versus-quality.html',
-        # 'snap': 'empty.png'
-        'snap': 'openness-versus-quality.png'
-    },
-    {
         'title': 'The decision to launch the Space Shuttle Challenger',
         'route': '2016/02/07/space-shuttle-challenger.html',
         'date': datetime(2016, 2, 7),
@@ -201,6 +193,13 @@ post_list = [
         'date': datetime(2017, 2, 7),
         'template': 'geoplot.html',
         'snap': 'geoplot.png'
+    },
+    {
+        'title': 'Two million calls to 311',
+        'route': '2017/2/13/311.html',
+        'date': datetime(2017, 2, 13),
+        'template': '311.html',
+        'snap': '311.png'
     }
 ]
 

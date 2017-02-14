@@ -1,0 +1,103 @@
+{% extends "blog_frame.html" %}
+{% block content %}
+
+<p>
+    New Yorkers called (or <a href="https://twitter.com/nyc311">tweeted</a>, <a
+        href="http://www1.nyc.gov/home/contact-us.page">wrote to</a>, or <a
+        href="http://www1.nyc.gov/nyc-resources/service/983/nyc311-text">texted</a>) 311, the city's non-emergency
+    service hotline, over 2 million times in 2016. Thanks to NYC Open Data, the metadata of each and every single one
+    of those calls is <a href="https://data.cityofnewyork.us/d/erm2-nwe9">publicly available</a>.
+</p>
+
+<p>
+    I put together a visual explainer of what they wanted. Click on any of the cells below to drill deeper, or on
+    the title to go back up a level. Caller categories too small to be displayed are included in the footnotes.
+</p>
+
+<iframe src="{{request.url_root}}visualizations/311.html" marginwidth="0"
+        marginheight="0" scrolling="no" class="inline_iframe" style="height:440px; transform:none"></iframe>
+
+<p>
+    We can see right away that 311 is dominated by calls falling in one of six categories:
+</p>
+
+<ul>
+    <li>
+        <b>Noise</b> &mdash; Noise is the most common complaint fielded by 311. <b>Two in ten calls is a noise
+        complaint</b>: almost 400,000 calls in total, split approximately evenly between residential and
+        non-residential (or unspecified) origins. Calling to complain about noise is a
+        <a href="http://ny.curbed.com/2013/5/28/10239332/the-ultimate-guide-to-dealing-with-your-nyc-neighbors">famously
+            pointless use of your time</a>, and mostly originate from the same serial complainers every time.
+    </li>
+    <li>
+        <b>Heat or Water</b> &mdash; 15% of 311 calls are about one of two utilities, <a
+            href="http://www1.nyc.gov/site/hpd/owners/heat-hot-water.page">heat or hot water</a>. Over half of these
+        complaints are entered into the system without more specific information as to their cause, which makes
+        sense: most of the time residents don't know what's causing the problem, their landlords do (and if they own,
+        they wouldn't be calling 311).
+    </li>
+    <li>
+        <b>Illegal Parking</b> &mdash; About 12.5% of calls are about illegally parked vehicles. There are over
+        100,000 blocked driveways and 50,000 derelict vehicle reports every year&mdash;a call volume I find
+        astonishing.
+    </li>
+    <li>
+        <b>Street Conditions</b> &mdash; About 12% of calls concern street problems. Damaged street lights are by far
+        the most common issue, with over 80,000 calls last year.
+    </li>
+    <li>
+        <b>Sanitation</b> &mdash; Just over one in ten calls reports a sanitation problem. Again, most conditions are
+        entered as being unspecified.
+    </li>
+    <li>
+        <b>Building Maintenance</b> &mdash; One in ten calls reports a building problem. Paint or plaster, door or
+        window, and electrical problems, in that order, are most common.
+    </li>
+</ul>
+
+<p>
+    311 calls are organized according to a fairly well thought-out system, but like any real-world ontology it's one
+    with a lot of quirks and operational carve-outs. For that reason it's a bit difficult to read more deeply in the
+    data: we learn that there are 200 complaints a year specifically about sanitation truck noise, for example, but
+    the data says nothing about complaints about train service, say, or about police reports.
+</p>
+
+<p>
+    Indeed, a friend of mine who worked as a 311 operator remarked once that not the most common calls, but certainly
+    the longest-lasting, were simply old folks needing someone to talk to. Where do you classify that? It's not as
+    easy as you might think, and even what you see here required a lot of clean up by your author. Nevertheless, we
+    can still make some interesting smaller observations:
+</p>
+
+<ul>
+    <li>
+        <b>Lead beats asbestos</b> &mdash; There were approximately 11,000 lead calls last year, and only 2,000
+        asbestos ones. Either or would net you a building inspection, and quickly.
+    </li>
+    <li>
+        <b>Helicopter noise</b> &mdash; 2016 saw approximately 1,000 helicopter noise complaints. NIMBYA "intervention"
+        recently got the city's heliport traffic allowance <a
+            href="http://gothamist.com/2016/01/31/get_outta_the_chopper.php">cut in half</a>.
+    </li>
+    <li>
+        <b>Public toilets</b> &mdash; ...<a
+            href="http://nymag.com/daily/intelligencer/2016/02/why-you-cant-find-a-public-toilet-in-nyc.html">
+        almost don't exist in the city</a>. Case in point: they drew just <i>fourty</i> calls in 2016.
+    </li>
+    <li>
+        <b>Taxis really do suck</b> &mdash; There were 18,000 taxi calls last year, but just 6,000 ones on for hire
+        vehicle (read Uber), even as FHVs overtake yellow cabs in passenger volume in the city. Ask anyone who
+        swears by ride-hailing apps and they're sure to tell you that quality of service is a big part of why they
+        switched.
+    </li>
+    <li>
+        <b>Crime reports</b> &mdash; Graffiti netted over 12,000 311 calls last year. Open-container alcohol
+        consumption drew around 1,500 calls, while public urination (!) got 464.
+    </li>
+</ul>
+
+<p>
+    Find something interesting yourself? Leave a note in the comments if you do.
+</p>
+
+{% endblock %}

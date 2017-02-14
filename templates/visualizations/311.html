@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<div style="width:800px; height:440px">
+    <svg width=800 height=400></svg>
+    <div id="and-also" style="width:800px; display:inline-block; font-family:sans-serif; font-size:14px"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.js"></script>
+<script>
+requirejs.config({
+    paths: {
+        tree: "https://unpkg.com/threshold-tree@1.0.5/umd/threshold-tree",
+        d3: "/static/js/d3.v4"
+    }
+});
+
+requirejs(['tree', 'd3'], function (tree, d3) {
+    d3.csv("../../static/post_assets/311/complaint-types.csv", function(complaints) {
+
+        ///////////////////////
+        // INITIAL DATA LOAD //
+        ///////////////////////
+
+        // Build the threshold tree and convert it to a simple JSON format.
+        var tr = new tree.ThresholdTree(complaints, 0.0225, 3);
+
+        // tr.root = tr.root.children[0];  // sub-example
+        // tr.root = tr.root.children[0].children[6];  // sub-sub-example
+
+        // Convert that to a hierarchy.
+        var hr = tr.as_hierarchy();
+        var root = d3.stratify().id(function (d) {
+            return d.name;
+        }).parentId(function (d) {
+            return d.parent;
+        })(hr);
+
+        hr = new tree.ThresholdTree(complaints, 0.0225, 0).as_hierarchy();
+
+        // console.log(hr);
+        // console.log(root);
+        // hr.forEach(n => (n.name ? ===)
+
+        //////////////////////
+        // LAYOUT FUNCTIONS //
+        //////////////////////
+
+        // A filter function for the summer, accounting for three things:
+        // 1. It should not include the n of the root node, as this will double to display space.
+        // 2. It should not include sub-sub-children, as D3 recurses naively and doesn't care about
+        //    how deep our objects are.
+        // 3. It returns false if the node has no children.
+        function object_is_direct_child(root, obj) {
+            return root.children.filter(function (child) {
+                return child.data.name === obj.name;
+            }).length > 0;
+        }
+
+        // Calculates a layout for a root.
+        function compute_layout(root) {
+            var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 800;
+            var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 370;
+            var x0 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+            var y0 = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+
+            // Make a copy (to maintain idempotence).
+            var new_root = root.copy();
+
+            // Create the layout function.
+            var treemap = d3.treemap().tile(d3.treemapSquarify).size([width, height]).round(true).padding(1).paddingInner(1);
+
+            // Create the summer.
+            function summer(node) {
+                return object_is_direct_child(new_root, node) ? node.n : 0;
+            }
+
+            // Apply the summer and the treemap.
+            new_root = treemap(new_root.sum(summer)).sort(function (a, b) {
+                return b.height - a.height || b.value - a.value;
+            });
+
+            // Adjust the starting point.
+            new_root.eachBefore(function (node) {
+                node.x0 += x0;node.x1 += x0;
+                node.y0 += y0;node.y1 += y0;
+            });
+
+            return new_root;
+        }
+
+        ////////////////////////
+        // PAINTING FUNCTIONS //
+        ////////////////////////
+
+        // A reusable function for drawing individual treemap layouts.
+        function draw_treemap(root, color_scale) {
+            // Select the SVG.
+            var svg = d3.select("svg");
+
+            // A fix.
+            root.data.n = root.value;
+
+            // Append the treemap.
+            var treemap = svg.append("g").attr("class", "treemap").attr("id", root.data.name + "-treemap").attr("transform", "translate(0, 30)");
+
+            // Create treemap element block groups (for arranging z-order).
+            var rect_block = treemap.append("g").attr("class", "rect-block");
+            var text_block = treemap.append("g").attr("class", "text-block").attr("clip-path", "url(#" + root.data.name.split(" ").join("_") + "-clippath)");
+            var highlight_block = treemap.append("g").attr("class", "highlight-block");
+            var hover_block = treemap.append("g").attr("class", "hover-block");
+
+            // Append the rect elements to the blocks.
+            var rects = rect_block.selectAll(".rect")
+            // .filter(function() { !this.getAttribute("class"); })
+            .data(root.children).enter().append("rect").attr("class", "cell").attr("transform", function (d) {
+                return "translate(" + d.x0 + ", " + d.y0 + ")";
+            }).attr("width", function (d) {
+                return d.x1 - d.x0;
+            }).attr("height", function (d) {
+                return d.y1 - d.y0;
+            }).attr("fill", function (d) {
+                return color_scale(d.value);
+            });
+
+            // Create the text clip path.
+            defs.append("clipPath").attr("id", (root.data.name + "-clippath").split(' ').join('_')).append("rect").attr("transform", "translate(" + (root.x0 + 1) + ", " + root.y0 + ")").attr("width", root.x1 - root.x0 - 2).attr("height", root.y1 - root.y0).attr("stroke-width", 0);
+
+            // Append a text label to the treemap.
+            text_block.append("text").attr("font-family", "sans-serif").attr("class", "block-name").attr("id", root.data.name + "-text").attr("transform", "translate(" + (root.x0 + (root.x1 - root.x0) / 2) + ", " + (root.y0 + (root.y1 - root.y0) / 2 - 8) + ")").attr("text-anchor", "middle").attr("alignment-baseline", "middle").style("font-size", "14px").text(root.data.name.includes("Other") ? "Other" : root.data.name);
+
+            // Append a count to the treemap.
+            text_block.append("text").attr("font-family", "sans-serif").attr("class", "block-name").attr("id", (root.data.name + "-count").split(' ').join('_')).attr("transform", "translate(" + (root.x0 + (root.x1 - root.x0) / 2) + ", " + (root.y0 + (root.y1 - root.y0) / 2 + 10) + ")").attr("text-anchor", "middle").attr("alignment-baseline", "middle").attr("font-size", "12px").text("(" + d3.format(",")(root.value) + ")");
+
+            // Append the hover overlay.
+            var hover_rects = hover_block.selectAll(".rect")
+            // .filter(function() { !this.getAttribute("class"); })
+            .data(root.children).enter().append("rect").attr("class", "treemap-hover").attr("id", function (d) {
+                return root.data.name.split(' ').join('_') + "-hover";
+            }).attr("width", function (d) {
+                return d.x1 - d.x0;
+            }).attr("height", function (d) {
+                return d.y1 - d.y0;
+            }).attr("transform", function (d) {
+                return "translate(" + d.x0 + ", " + d.y0 + ")";
+            }).attr("fill", "transparent").attr("stroke", null);
+
+            // Append a rectange to the treemap, we will use this for highlighting.
+            var highlight = highlight_block.append("rect").attr("width", root.x1 - root.x0).attr("height", root.y1 - root.y0).attr("transform", "translate(" + root.x0 + ", " + root.y0 + ")").attr("fill", "transparent").attr("stoke", null).attr("id", root.data.name + "-highlight");
+
+            //
+            // Mouseover interactions...
+            //
+
+            // Give the hover overlay a mouseover.
+            var hover_mouseover = function hover_mouseover(d) {
+                // Check that this is not a terminal cell.
+                if (!(d3.selectAll(".treemap").size() === 1)) {
+                    d3.select(this).attr("fill", "white").attr("opacity", "0.2").attr("cursor", "pointer");
+                }
+
+                highlight.attr("stroke", "black").attr("stroke-width", 2);
+            };
+
+            var hover_mouseout = function hover_mouseout(d) {
+                d3.select(this).attr("fill", "transparent").attr("opacity", null).attr("cursor", null);
+
+                highlight.attr("stroke", null);
+            };
+
+            hover_rects.on("mouseover", hover_mouseover);
+            hover_rects.on("mouseout", hover_mouseout);
+
+            // Give the highlight a mouseover.
+            var highlight_mouseover = function highlight_mouseover(d) {
+                highlight.attr("stroke", "black").attr("stroke-width", 2);
+            };
+
+            var highlight_mouseout = function highlight_mouseout(d) {
+                highlight.attr("stroke", null);
+            };
+
+            highlight.on("mouseover", highlight_mouseover);
+            highlight.on("mouseout", highlight_mouseout);
+
+            //
+            // Click interactions.
+            //
+            hover_rects.on("click", click);
+        }
+
+        // A reusable function for clicking on a cell.
+        function click(d) {
+
+            // Clicking is only enabled if the element is not the only one on the screen.
+            // If it is, do nothing.
+            if (d3.selectAll(".treemap").size() === 1) {
+                return;
+            }
+
+            // Create a selection with our treemap of interest (what we''re zooming to).
+            var selected_treemap = d3.selectAll(".treemap").filter(function () {
+                return this.getAttribute("id") === d.parent.data.name + "-treemap";
+            });
+
+            // // Push the node to history.
+            // console.log(d.parent.data.name);
+            // history.push(d.parent.copy());
+
+            // We need the size attributes of the treemap so that we may feed them to
+            // the viewBox transform we''ll use to implement the zoom itself.
+            var _ref = [d.parent.x0, d.parent.x1, d.parent.y0, d.parent.y1],
+                x0 = _ref[0],
+                x1 = _ref[1],
+                y0 = _ref[2],
+                y1 = _ref[3];
+            var width = x1 - x0,
+                height = y1 - y0;
+
+            // Now the viewBox transition itself.
+
+            svg.transition().duration(500)
+            // The 30 is necessary because of the padding added by the breadcrumb,
+            // will probably need to remove that though.
+            .attr("viewBox", x0 + "," + (y0 + 30) + "," + width + "," + height);
+            // .attr("viewBox", "468,208,332,192")
+
+            // Fade out the text elements.
+            d3.selectAll(".block-name").attr("opacity", 1).transition().duration(250).attr("opacity", 0).remove();
+
+            // "Wipe" the screen with a fader element.
+            var fader = svg.append("rect").attr("id", "transition-block").attr("fill", "lightsteelblue").attr("width", 800).attr("height", 400).attr("opacity", 0).transition().duration(500).attr("opacity", 1).delay(250).transition().duration(500).attr("opacity", 0).remove();
+
+            // We have implemented interaction such that when you click, you click on
+            // a subelement of the root node of interest (what we want to display next).
+            // So what we really need is our root node's parent.
+            var parent = d.parent;
+
+            // Now we create the new layout to create post-transition.
+            // We reset to the new layout inside of a timeout.
+            // The actual painting is hidden by our wiper element.
+            setTimeout(function () {
+
+                // Reset the viewBox.
+                svg.attr("viewBox", "0,0,800,400");
+
+                // Remove the old treemap.
+                d3.selectAll(".treemap").remove();
+
+                // Remove the old clip paths.
+                d3.selectAll("clipPath").remove();
+
+                // Recreate the color scale.
+                var color_scale = d3.scaleLinear().domain([200000, 1000]).range(["steelblue", "#b0c4de"]);
+
+                // Compute the new macro layout.
+                var new_root = compute_layout(parent);
+
+                // Grab the root name, we''ll need to restore this as we go along due to itempotence
+                // issues caused by the hack we''ll use shortly.
+                var new_root_name = new_root.data.name;
+
+                // Compute and draw the sublayouts.
+                new_root.children.forEach(function (node) {
+
+                    // console.log(new_root.data.name);
+
+                    if (!(typeof node.children === "undefined") && node.children.length > 0) {
+
+                        // If the node has children, lay them out as a sub-treemap.
+                        var layout = compute_layout(node, width = node.x1 - node.x0, height = node.y1 - node.y0, x0 = node.x0, y0 = node.y0);
+                        draw_treemap(layout, color_scale);
+                    } else {
+
+                        // If the node has no children, we still want to display it as though it is a treemap
+                        // (to reuse those drawing routines), but a treemap with just one child. We''ll set the
+                        // name of the parent to be the name of the node, so that the "summary name" that gets
+                        // displayed is actually the name of the subnode.
+                        var singular_parent = node.parent.copy();
+                        singular_parent.children = [node];
+
+                        // We have to recast the names because D3 wants them to be unique.
+                        singular_parent.data.name = node.data.name;
+                        node.data.name = "";
+
+                        // We have to set n to 0...weirdly setting n to d.data.n works most of the time, but not
+                        // always.
+                        var parent_n = singular_parent.data.n;
+                        singular_parent.data.n = 0;
+
+                        // Lay out and draw.
+                        var _layout = compute_layout(singular_parent, width = node.x1 - node.x0, height = node.y1 - node.y0, x0 = node.x0, y0 = node.y0);
+                        draw_treemap(_layout, color_scale);
+
+                        // Fix the names.
+                        node.data.name = singular_parent.data.name;
+                        new_root.data.name = new_root_name;
+
+                        // Fix the count.
+                        singular_parent.data.n = parent_n;
+                        // The string interpolater does e.g. "Derelict Vehicle" => "Derelict_Vehicle-count".
+                        d3.select("#" + (node.data.name + "-count").split(" ").join("_")).text("(" + d3.format(",")(node.data.n) + ")");
+                    }
+                });
+
+                // Push the node to history.
+                history.push(new_root);
+
+                // Create the new breadcrumb.
+                draw_breadcrumb();
+
+                // Create the new and-also.
+                draw_and_also();
+            }, 750);
+
+            draw_and_also();
+        }
+
+        ////////////////////////////
+        // POPULATING THE TREEMAP //
+        ////////////////////////////
+
+        var svg = d3.select("svg");
+
+        // Create the initial viewBox. For further reading on viewBox and why it works:
+        // cf. https://sarasoueidan.com/blog/svg-coordinate-systems/
+        svg.attr("viewBox", "0,0,800,400").attr("preserveAspectRatio", "none");
+
+        // Compute the initial layout.
+        root = compute_layout(root);
+
+        // We need to create a history array for storing a history that we can go back on later.
+        var history = [root];
+
+        // Create the colormap.
+        var color_scale = d3.scaleLog().domain([200000, 1000]).range(["steelblue", "#b0c4de"]);
+
+        // Create the defs.
+        var defs = svg.append("defs");
+
+        function draw_original_treemap() {
+            // We need to create a history array for storing a history that we can go back on later.
+            var history = [root];
+
+            root.children.forEach(function (node) {
+                // Create the treemap layout.
+                var layout = compute_layout(node, width = node.x1 - node.x0, height = node.y1 - node.y0, x0 = node.x0, y0 = node.y0);
+                // Draw it.
+                var block = draw_treemap(layout, color_scale);
+            });
+        }
+
+        draw_original_treemap();
+
+        /////////////////////////////
+        // POPULATING THE AND-ALSO //
+        /////////////////////////////
+
+        function draw_and_also() {
+            // Get currently displayed nodal root.
+            var displayed_root = history[history.length - 1];
+
+            // Recursively get a list of nodes which are included in the tree.
+            function search(node, nodelist) {
+                if (node.data.name === "root") {
+                    return displayed_root.children.map(function (c) {
+                        return c.data.name;
+                    });
+                }
+                if (!node.children) {
+                    nodelist.push(node.data.name);
+                    return nodelist;
+                } else {
+                    node.children.forEach(function (c) {
+                        return search(c, nodelist);
+                    });
+                    nodelist.push(node.data.name);
+                    return nodelist;
+                }
+            }
+            var displayed_node_names = new Set(search(displayed_root, []).slice(0, -1));
+
+            // Get a list of all nodes which inherit from this root node using the hierarchy.
+            // Why use the hierarchy? Because they literally don't exist in what gets written to
+            // the viz.
+            var all_node_names = hr.filter(function (c) {
+                return c.parent === displayed_root.data.name;
+            }).map(function (c) {
+                return c.name;
+            });
+
+            var excluded_node_names = new Set(all_node_names.filter(function (c) {
+                return !displayed_node_names.has(c);
+            }));
+
+            // Select the excluded nodes.
+            var excluded_nodes = hr.filter(function (c) {
+                return excluded_node_names.has(c.name);
+            }).sort(function (a, b) {
+                return b.n - a.n;
+            });
+
+            // Append, under the right conditions.
+            if (displayed_root.data.name === "root") {
+                return;
+            } else if (displayed_root.data.name.includes("Other")) {
+                return;
+            } else if (excluded_nodes.length === 0) {
+                return;
+            } else if (displayed_root.children.length === 1) {
+                d3.select("#and-also").text("");
+            } else {
+                // TODO: Detect subchildren that will display but are not top-level children.
+                // TODO: Return elements in sorted order.
+                var text_elements = excluded_nodes.map(function (c) {
+                    return c.name + " (" + d3.format(",")(c.n) + " calls)";
+                });
+                var text = "Not pictured: " + text_elements.join("; ");
+                d3.select("#and-also").text(text);
+            }
+        }
+
+        draw_and_also();
+
+        ////////////////////////////////
+        // POPULATING THE BREADCRUMB //
+        ///////////////////////////////
+
+        // The breadcrumb interacts with the history variable that we created at initialization and
+        // maintain throughout the process. This value is an array containing the node as they were
+        // at each previous level as well as at the present one.
+
+        function draw_breadcrumb() {
+            // Create the container element.
+            var breadcrumb = svg.append("g").attr("id", "breadcrumb");
+
+            // Create the display rect.
+            breadcrumb_rect = breadcrumb.append("rect").attr("width", 796).attr("height", 28).attr("transform", "translate(2, 0)").attr("fill", "#dae3ef");
+
+            // Calculate the text content. Note that we have to account for two different kinds of trees
+            // here: ones created to handle endpoints, which have just one child whose name is what we
+            // actually want, and normal (multi-child) ones whose root name we want.
+            // Note the munging to collapse Other nodes, FYI.
+            var text = history.map(function (node) {
+                var name = node.children.length > 1 ? node.data.name : node.children[0].data.name;
+                if (name.includes("Other")) {
+                    name = "Other";
+                }
+                name += " (" + d3.format(",")(node.value) + ")";
+                return name;
+            }).join(" > ").replace("root", "All 311 Calls");
+
+            // Other-munging.
+            var text_components = text.split(">");
+            var new_text_components = [];
+            var other_index = -1;
+            text_components.forEach(function (c, i) {
+                if (c.includes("Other") && other_index === -1) {
+                    other_index = i;
+                    new_text_components.push(c);
+                } else if (c.includes("Other") && !(other_index === -1)) {
+                    new_text_components.pop();
+                    new_text_components.push(c);
+                    other_index = i;
+                } else if (!c.includes("Other") && !(other_index === -1)) {
+                    new_text_components.push(c);
+                    // new_text_components.push(text_components[other_index]);
+                    other_index = -1;
+                } else {
+                    new_text_components.push(c);
+                }
+            });
+            text = new_text_components.join(">");
+
+            // Create the text.
+            breadcrumb.append("text").attr("font-family", "sans-serif").attr("transform", "translate(12, 15)").attr("alignment-baseline", "middle").attr("font-size", "14px").text(text);
+
+            // Add a Back text if we can go back.
+            if (new_text_components.length > 1) {
+                breadcrumb.append("text").attr("font-family", "sans-serif").attr("transform", "translate(750, 15)").attr("alignment-baseline", "middle").attr("font-size", "12px").text("(Back)");
+            }
+
+            // Mouseovers.
+            var breadcrumb_mouseover = function breadcrumb_mouseover() {
+                d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
+
+                if (new_text_components.length > 1) {
+                    d3.select(this).attr("cursor", "pointer");
+                }
+            };
+            var breadcrumb_mouseout = function breadcrumb_mouseout() {
+                d3.select(this).attr("stroke", null).attr("cursor", null);
+            };
+
+            // Create the hover rect.
+            breadcrumb_hover_rect = breadcrumb.append("rect").attr("width", 796).attr("height", 28).attr("transform", "translate(2, 0)").attr("fill", "transparent").attr("stroke", null);
+
+            // Add the hover triggers.
+            breadcrumb_hover_rect.on("mouseover", breadcrumb_mouseover);
+            breadcrumb_hover_rect.on("mouseout", breadcrumb_mouseout);
+
+            // Add the click.
+            // THE FOLLOWING CODE IS A VERY SLIGHTLY MODIFIED VERSION OF THE ROUTINE USED IN CLICK().
+            // It doesn't actually work. In the end in the interest of time I just made the back button
+            // a reset button (post-commit).
+            function zoom_out() {
+                // Do nothing if we already at the top level.
+                if (new_text_components.length === 1) {
+                    return;
+                }
+
+                // Otherwise, start by calculating the space we''ll need.
+                // How this works: during zoom-in we pan to the space. But during the transition
+                // we reset back to a 0-800 viewBox because shit looks wack otherwise. So to do
+                // a transition the other way around, we have to calculate the dimensions of the
+                // new viewBox with respect to the space our 0-800 viewBox would take up in it.
+
+                // let cname = history[history.length - 1].data.name;
+                // let prev = history[history.length - 2].children.filter(c => c.data.name === cname)[0];
+                // let [x0, x1, y0, y1, width, height] = [prev.x0, prev.x1, prev.y0, prev.y1,
+                //                                        prev.y1 - prev.y0, prev.x1 - prev.x0];
+                // let left = (800 / width) * x0;
+                // let right = (800 / width) * (800 - x1);
+                // let top = (800 / height) * y0;
+                // let bottom = (800 / height) * (800 - y1);
+                // Didn''t get this right. Still needs work.
+
+                // Easier: just fade in and out.
+
+                // "Wipe" the screen with a fader element.
+                var fader = svg.append("rect").attr("id", "transition-block").attr("fill", "lightsteelblue").attr("width", 800).attr("height", 400).attr("opacity", 0).transition().duration(500).attr("opacity", 1).delay(250).transition().duration(500).attr("opacity", 0).remove();
+
+                setTimeout(function () {
+
+                    // Reset the viewBox.
+                    svg.attr("viewBox", "0,0,800,400");
+
+                    // Remove the old treemap.
+                    d3.selectAll(".treemap").remove();
+
+                    // Remove the old clip paths.
+                    d3.selectAll("clipPath").remove();
+
+                    // Recreate the color scale.
+                    var color_scale = d3.scaleLinear().domain([200000, 1000]).range(["steelblue", "#b0c4de"]);
+
+                    // Compute the new macro layout.
+                    var new_root = history[history.length - 2];
+
+                    // Grab the root name, we''ll need to restore this as we go along due to itempotence
+                    // issues caused by the hack we''ll use shortly.
+                    var new_root_name = new_root.data.name;
+
+                    // Compute and draw the sublayouts.
+                    new_root.children.forEach(function (node) {
+
+                        // console.log(new_root.data.name);
+
+                        if (!(typeof node.children === "undefined") && node.children.length > 0) {
+
+                            // If the node has children, lay them out as a sub-treemap.
+                            var layout = compute_layout(node, width = node.x1 - node.x0, height = node.y1 - node.y0, x0 = node.x0, y0 = node.y0);
+                            draw_treemap(layout, color_scale);
+                        } else {
+
+                            // If the node has no children, we still want to display it as though it is a treemap
+                            // (to reuse those drawing routines), but a treemap with just one child. We''ll set the
+                            // name of the parent to be the name of the node, so that the "summary name" that gets
+                            // displayed is actually the name of the subnode.
+                            var singular_parent = node.parent.copy();
+                            singular_parent.children = [node];
+
+                            // We have to recast the names because D3 wants them to be unique.
+                            singular_parent.data.name = node.data.name;
+                            node.data.name = "";
+
+                            // We have to set n to 0...weirdly setting n to d.data.n works most of the time, but not
+                            // always.
+                            singular_parent.data.n = node.data.n;
+
+                            // Lay out and draw.
+                            var _layout2 = compute_layout(singular_parent, width = node.x1 - node.x0, height = node.y1 - node.y0, x0 = node.x0, y0 = node.y0);
+                            draw_treemap(_layout2, color_scale);
+
+                            // Fix the names.
+                            node.data.name = singular_parent.data.name;
+                            new_root.data.name = new_root_name;
+
+                            // Fix the count.
+                            // The string interpolater does e.g. "Derelict Vehicle" => "Derelict_Vehicle-count".
+                            d3.select("#" + (node.data.name + "-count").split(" ").join("_")).text("(" + d3.format(",")(node.data.n) + ")");
+                        }
+                    });
+
+                    // Fix the count of things which gets left behind (why?).
+                    // This is a band-aid over a code issue.
+                    // console.log(d3.selectAll(".block-name"));
+
+                    // let nodes_needing_fixing = d3.selectAll(".block-name")['_groups'][0]
+                    //    .filter(function(sel) { console.log(sel); sel.attr("id").includes("-count"); })
+                    //    .filter(sel => sel.text() === "(0)");
+
+                    // Remove the node from history.
+                    history.pop();
+
+                    // Create the new breadcrumb.
+                    draw_breadcrumb();
+
+                    // Create the new and-also.
+                    d3.select("#and-also").text("");
+                    draw_and_also();
+                }, 750);
+            }
+
+            breadcrumb_hover_rect.on("click", zoom_out);
+        }
+
+        draw_breadcrumb();
+    });
+});
+
+</script>

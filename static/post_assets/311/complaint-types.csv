@@ -1,0 +1,146 @@
+Type,Subtype,Count
+Air Quality,Indoor Air Quality,4137
+Air Quality,Smoking,1541
+Air Quality,Unspecified Air Quality Issue,8349
+Animal Issues,Animal Abuse,9410
+Animal Issues,Animal Facility Issue,112
+Animal Issues,Animal in a Park,1791
+Animal Issues,Harboring Bees or Wasps,176
+Animal Issues,Illegal Animal,328
+Animal Issues,Unleashed Dog,587
+Animal Issues,Unsanitary Animal,2119
+Building Maintenance,Asbestos,1999
+Building Maintenance,Door or Window,35069
+Building Maintenance,Electrical,29436
+Building Maintenance,Elevator,12759
+Building Maintenance,Flooring or Stairs,23384
+Building Maintenance,General Construction,28794
+Building Maintenance,Illegal Conversion,26144
+Building Maintenance,Lead,11185
+Building Maintenance,Paint or Plaster,56833
+Building Maintenance,School Maintenance,1661
+Building Maintenance,Sewer or Sidewalk,7790
+Building Maintenance,Unspecified Maintenance Issue,14184
+Construction,Site Safety,1083
+Consumer Complaint,Beach or Pool or Sauna,167
+Consumer Complaint,Cable Complaint,961
+Consumer Complaint,Food Establishment Complaint,9922
+Consumer Complaint,Food Poisoning,3209
+Consumer Complaint,For Hire Vehicle,6011
+Consumer Complaint,Home Care Provider Complaint,27
+Consumer Complaint,Home Delivered Meal Complaint,188
+Consumer Complaint,Paid Professional Complaint,420
+Consumer Complaint,Parking Facility Complaint,66
+Consumer Complaint,Senior Center Complaint,367
+Consumer Complaint,Street Vendor Complaint,4544
+Consumer Complaint,Taxi Complaint,18018
+Consumer Complaint,Unspecified Consumer Complaint,40681
+Crime,Alcohol,1509
+Crime,Disorderly Youth,227
+Crime,Drug Activity,246
+Crime,Elder Abuse,453
+Crime,Graffiti,12165
+Crime,Illegal Fireworks,209
+Crime,Non-Emergency Police Matter,8837
+Crime,Posting Advertisements,1078
+Crime,Unspecified Crime,8126
+Crime,Urinating in Public,464
+Fire Safety,Fire Alarm,503
+Fire Safety,Fire Safety Director On-Site Exam Scheduling,4792
+Fire Safety,Food Preparation Fire Safety,53
+Fire Safety,Inspection,821
+General,Agency Issue,3493
+General,Alzheimer Care,217
+General,Complaint,187
+General,Compliment,90
+General,Daycare Inquiry,514
+General,Found Property,275
+General,Miscellaneous Issue,21501
+General,Research Inquiry,27
+General,Special Building Inspection,3407
+General,Special Enforcement,3608
+Greenery,Damaged Tree,23493
+Greenery,Dead Tree,10055
+Greenery,Dead or Dying Tree,347
+Greenery,Illegal Tree Damage,2869
+Greenery,New Tree Request,17581
+Greenery,Overgrowth,12431
+Greenery,Parks Violation,4099
+Greenery,Poison Ivy,131
+Greenery,Unspecified Greenery Issue,218
+Heat or Water,Boilers,1583
+Heat or Water,Non-Residential Heat,923
+Heat or Water,Plumbing,52604
+Heat or Water,Unspecified Heat or Water Issue,195258
+Heat or Water,Water Conservation,4024
+Heat or Water,Water Leak,29988
+Heat or Water,Water Quality,1534
+Heat or Water,Water System,70451
+Homelessness,Homeless Encampment,5040
+Homelessness,Homelessness Assistance,43909
+Homelessness,Panhandling,464
+Illegal Parking,Blocked Driveway,111245
+Illegal Parking,City Vehicle Placard Complaint,331
+Illegal Parking,Derelict Vehicle,54292
+Illegal Parking,Unspecified Parking Violation,115522
+Noise,Commerical Noise,46433
+Noise,Helicopter Noise,983
+Noise,Park Noise,3856
+Noise,Place of Worship Noise,876
+Noise,Public Assembly,115
+Noise,Public Assembly Noise,343
+Noise,Residential Noise,209823
+Noise,Sanitation Truck Noise,191
+Noise,Street or Sidewalk,59729
+Noise,Unspecified Noise,56179
+Noise,Vehicle Noise,23053
+Paperwork,Benefit Card Replacement,23772
+Paperwork,DCA or DOH License,1754
+Paperwork,Literature Request,34540
+Paperwork,Miscellaneous Paperwork,280
+Paperwork,Parking Status Request,6120
+Property and Housing,Document Request,5575
+Property and Housing,Payment Issue,3877
+Property and Housing,Property Account Update,6259
+Property and Housing,Property Reduction,9415
+Property and Housing,Property Statement Issue,237
+Property and Housing,Rent Increase Exemption,6839
+Property and Housing,Senior Citizen Housing,5701
+Property and Housing,Unspecified Issue,3291
+Public Transit,Bus Stop Shelter Placement,195
+Public Transit,Ferry Inquiry or Complaint,851
+Sanitation,Electronic Waste Disposal,2777
+Sanitation,Hazardous Materials,3033
+Sanitation,Industrial Waste,1344
+Sanitation,Litter Basket Request,2711
+Sanitation,Missed Collections,28145
+Sanitation,Mold,298
+Sanitation,Mosquitoes,965
+Sanitation,Overflowing Garbage Can,1127
+Sanitation,Overflowing Litter Basket,31
+Sanitation,Pigeons,620
+Sanitation,Public Toilet,38
+Sanitation,Recycling Enforcement,620
+Sanitation,Rodents,30184
+Sanitation,Sewage,1168
+Sanitation,Sewer,31641
+Sanitation,Standing Water,5478
+Sanitation,Sweeping,957
+Sanitation,Unspecified Sanitation Issue,142469
+Sanitation,Vacant Lot Condition,2106
+Street Condition,Bike Rack,106
+Street Condition,Bridge or Tunnel,340
+Street Condition,Broken Meter,23487
+Street Condition,Broken Parking Meter,883
+Street Condition,Curb Condition,2697
+Street Condition,Damaged Sign,8827
+Street Condition,Damaged Street Light,84642
+Street Condition,Damaged Traffic Signal,35184
+Street Condition,Derelict Bicycle,1738
+Street Condition,Highway Problem,3659
+Street Condition,Missing Sign,4513
+Street Condition,Payphone or LinkNYC,341
+Street Condition,Sidewalk Condition,6005
+Street Condition,Snow,5323
+Street Condition,Traffic,5393
+Street Condition,Unspecified Street Condition,86869
