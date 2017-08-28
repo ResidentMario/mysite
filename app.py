@@ -200,6 +200,13 @@ post_list = [
         'date': datetime(2017, 2, 13),
         'template': '311.html',
         'snap': '311.png'
+    },
+    {
+        'title': 'Becoming a civic technologist out of college',
+        'route': '2017/08/28/becoming-a-civic-technologist.html',
+        'date': datetime(2017, 8, 28),
+        'template': 'becoming-a-civic-technologist.html',
+        'snap': 'becoming-a-civic-technologist.png'
     }
 ]
 
@@ -274,5 +281,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
