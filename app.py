@@ -196,7 +196,7 @@ post_list = [
     },
     {
         'title': 'Two million calls to 311',
-        'route': '2017/2/13/311.html',
+        'route': '2017/02/13/311.html',
         'date': datetime(2017, 2, 13),
         'template': '311.html',
         'snap': '311.png'
@@ -274,5 +274,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
