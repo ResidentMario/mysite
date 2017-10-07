@@ -1,0 +1,60 @@
+{% extends "blog_frame.html" %}
+{% block content %}
+
+<p>
+    The MTA (Metropolitan Transit Authority), the local subway service in New York City, has been getting battered in
+    the press for the last news cycle or twenty for constant delays and slow service on the city's train lines (see
+    e.g. <a href="https://www.villagevoice.com/2017/08/02/subway-summer-of-hell-really-started-years-ago-data-shows/">
+    this piece</a> in the Village Voice). While journalistic publications have indited a variety of factors, I like
+    this Voice piece in particular because it draws a good point on this subject: that all of the various blame
+    games have occurred "absent objective data".
+</p>
+
+<p>
+    The MTA publishes such objective data, actually, in the form of a <a
+        href="https://developers.google.com/transit/gtfs-realtime/">GTFS-Realtime feed</a>!
+</p>
+
+<p>
+    This is a real-time data format that was invented over at Google for the purposes of providing reliable rapid
+    transit updates. It's the one that powers transit information in applications like Google Maps, the various
+    subway tracking applications on the various app stores, and the trackside arrival time displays.
+</p>
+
+<p>
+    However, GTFS-Realtime data is a format that, albeit good for telling you when your next train will arrive, makes
+    reconstructing a history <i>of</i> that train very difficult.
+</p>
+
+<p>
+    Since I was interested in injecting some of the sought-after "objective data" into the story being told about the
+    MTA, I decided to tackle the challenge of transforming GTFS-Realtime feeds into reconstructed trip data (in what I
+    call "trip logs"). It was a mountain of a challenge. It's done now.
+</p>
+
+<p>
+    <code class="inline_code">gtfs-tripify</code> is the result: a Python package for creating trip logs out of
+    GTFS-Realtime messages. Check out the <a href="https://github.com/ResidentMario/gtfs-tripify">GitHub repository</a>
+    now if you're interested!
+</p>
+
+<p>
+    However, I have not, as of yet, actually <i>used</i> this package for anything. Surprise, the MTA system is really
+    complicated. I succeeded in isolating stop sequences in time, but have not yet done any work on route sequences.
+    This is necessary in part because trains can get rerouted onto different lines, and in part because individual
+    lines can run any of a number of different routes depending on the weekday, time of day, holiday schedule,
+    and alignment of the moons of Saturn.
+</p>
+
+<p>
+    Isolating that stuff, too, would require a whole second order of logic, and I just don't have the project
+    bandwidth right now to do it.
+</p>
+
+<p>
+    This post is a call to action. <b>If you're a motivated individual interested in the New York City transit system
+    and/or Python or JavaScript programming, please reach out to me</b>! I am looking for a collaborator on this
+    project who can help bring it to completion! Let's build cool **** together!
+</p>
+
+{% endblock %}

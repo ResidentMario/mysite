@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import (Flask, render_template, abort, request, make_response, Response, send_from_directory)
+from flask import (Flask, render_template, abort, request, make_response, Response, send_from_directory, redirect)
 from static.post_assets.citibike.citibike_trips import DataStore
 import json
 import os
@@ -201,12 +201,19 @@ post_list = [
         'template': '311.html',
         'snap': '311.png'
     },
+    # {
+    #     'title': 'Becoming a civic technologist out of college',
+    #     'route': '2017/08/28/becoming-a-civic-technologist.html',
+    #     'date': datetime(2017, 8, 28),
+    #     'template': 'becoming-a-civic-technologist.html',
+    #     'snap': 'becoming-a-civic-technologist.png'
+    # },
     {
-        'title': 'Becoming a civic technologist out of college',
-        'route': '2017/08/28/becoming-a-civic-technologist.html',
-        'date': datetime(2017, 8, 28),
-        'template': 'becoming-a-civic-technologist.html',
-        'snap': 'becoming-a-civic-technologist.png'
+        'title': 'Parsing train rides: a call to action',
+        'route': '2017/10/07/gtfs-tripify.html',
+        'date': datetime(2017, 10, 7),
+        'template': 'gtfs-tripify.html',
+        'snap': 'gtfs-tripify.png'
     }
 ]
 
@@ -215,7 +222,17 @@ post_paths = [post['route'] for post in post_list]
 
 @app.route('/')
 def main_page():
-    return render_template('about.html', most_recent=request.url_root + post_list[len(post_list) - 1]['route'])
+    return render_template('about.html', most_recent='/latest.html')
+
+
+@app.route('/et-cetera.html')
+def et_cetera():
+    return render_template('et-cetera.html', most_recent='/latest.html')
+
+
+@app.route('/latest.html')
+def latest_post():
+    return redirect(request.url_root + post_list[len(post_list) - 1]['route'], code=302)
 
 
 @app.route('/feed')

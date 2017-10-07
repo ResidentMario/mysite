@@ -169,10 +169,10 @@
             <pubDate>Mon, 13 Feb 2017 00:00:00 EST</pubDate>
     </item>
     <item>
-            <title>Becoming a civic technologist out of college</title>
-            <link>http:http://www.residentmar.io/2017/08/28/becoming-a-civic-technologist.html</link>
-            <guid>http:http://www.residentmar.io/2017/08/28/becoming-a-civic-technologist.html</guid>
-            <pubDate>Mon, 28 Aug 2017 00:00:00 EST</pubDate>
+            <title>Parsing train rides: a call to action</title>
+            <link>http:http://www.residentmar.io/2017/10/07/gtfs-tripify.html</link>
+            <guid>http:http://www.residentmar.io/2017/10/07/gtfs-tripify.html</guid>
+            <pubDate>Sat, 07 Oct 2017 00:00:00 EST</pubDate>
     </item>
 </channel>
 </rss>
