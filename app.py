@@ -269,16 +269,7 @@ def citibike_sample(path, stationid):
 
 @app.route('/geoplot/<path:path>')
 def serve_geoplot_documentation(path):
-    # Exported tutorial images are placed in the docs/tutorial subdirectory. All other assets are placed in the
-    # _build/html subdirectory. We serve each separately.
-
-    # Regular assets.
-    if 'docs/docs/' not in path:
-        return send_from_directory('geoplot_docs', '_build/html/' + path)
-    # Tutorial images.
-    else:
-        print(path.replace("docs/docs/", "geoplot_docs/docs/"))
-        return send_from_directory('geoplot_docs', path.replace("docs/docs/", "docs/"))
+    return redirect("https://residentmario.github.io/geoplot/index.html")
 
 
 @app.route('/<path:path>')
