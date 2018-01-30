@@ -216,11 +216,11 @@
         "year": 2017
     },
     {
-        "title": "Parsing train rides: a call to action",
-        "route": "http://www.residentmar.io/2017/10/07/gtfs-tripify.html",
+        "title": "Parsing train rides with gtfs-tripify",
+        "route": "http://www.residentmar.io/2018/01/29/gtfs-tripify.html",
         "snap": "gtfs-tripify.png",
-        "month": 10,
-        "day": 7,
-        "year": 2017
+        "month": 1,
+        "day": 29,
+        "year": 2018
     }
 ]

@@ -1,60 +1,504 @@
 {% extends "blog_frame.html" %}
 {% block content %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+
+<h3>Background</h3>
 
 <p>
-    The MTA (Metropolitan Transit Authority), the local subway service in New York City, has been getting battered in
-    the press for the last news cycle or twenty for constant delays and slow service on the city's train lines (see
-    e.g. <a href="https://www.villagevoice.com/2017/08/02/subway-summer-of-hell-really-started-years-ago-data-shows/">
-    this piece</a> in the Village Voice). While journalistic publications have indited a variety of factors, I like
-    this Voice piece in particular because it draws a good point on this subject: that all of the various blame
-    games have occurred "absent objective data".
+    A few years ago there was a massive push, spearheaded by Google, to unify the systems that various public transit
+    systems used for external reporting. For many years (decades?) public mass transit operators in the United States
+    had been reporting data on the trains and buses they operated, but every system had its own configuration, leading
+    to a painful morass of incompatibility. Google studied the problem and invented a specification eventually known as
+    the "General Transit Feed", or GTFS, as a solution. Years of robust technical evangelism by both Googlers and a
+    loose consortium of civic activists eventually toppled bureaucracy, and today GTFS is a global standard. The spec
+    is a rare victory for standardization in government data.
 </p>
 
 <p>
-    The MTA publishes such objective data, actually, in the form of a <a
-        href="https://developers.google.com/transit/gtfs-realtime/">GTFS-Realtime feed</a>!
+    New York City's transit authority, the MTA, publishes GTFS data. It also publishes what are called GTFS-Realtime
+    feeds. GTFS-Realtime is the future of mass transit. GTFS-Realtime provides a snapshot of where every train (or bus)
+    in the system is located and where it's planning to go next. Hence GTFS-Realtime is a big step up from GTFS because
+    it provides ground truth about how the system is operating.
 </p>
 
 <p>
-    This is a real-time data format that was invented over at Google for the purposes of providing reliable rapid
-    transit updates. It's the one that powers transit information in applications like Google Maps, the various
-    subway tracking applications on the various app stores, and the trackside arrival time displays.
+    If you live in New York City and take the train to work you probably have some sort of train and/or bus application
+    on your phone. You're also probably familiar with the widely popular countdown clocks that are now installed in
+    almost every station. GTFS-Realtime exposes this same data to consumer applications!
 </p>
 
 <p>
-    However, GTFS-Realtime data is a format that, albeit good for telling you when your next train will arrive, makes
-    reconstructing a history <i>of</i> that train very difficult.
+    The New York City Transit System is enormous, so the GTFS-Realtime rollout has been incremental. The first lines to
+    receive feeds were the 1 through the 6 and the S. Further progress was slow until early 2017, when the
+    MTA mass-installed WiFi in every underground station in New York City. This paved the way for a clever hack:
+    <a href="http://www.thetransitwire.com/2016/08/05/mta-tests-upgraded-customer-information-for-subway-and-bus/">
+        wireless transmitters were installed in most trains</a>, which, whenever the train pulled into a stop, would
+    ping control towers to indicate where the train was. By bootstrapping these transmitters across the entire fleet,
+    between December 2016 and today the city was able to launch GTFS-Realtime coverage for <i>every</i> line in the
+    entire subway system. Huzzah!
 </p>
 
 <p>
-    Since I was interested in injecting some of the sought-after "objective data" into the story being told about the
-    MTA, I decided to tackle the challenge of transforming GTFS-Realtime feeds into reconstructed trip data (in what I
-    call "trip logs"). It was a mountain of a challenge. It's done now.
+    In this post I will first describe the salient points of the GTFS-Realtime standard and how it is
+    utilized by the MTA. Then, I'll discuss the challenges of parsing real-world GTFS-Realtime snapshot data into a
+    format that's less useful for commercial applications, but more useful for research and metrics purposes:
+    historical train arrival tables. Finally, I'll present a brand-new Python package,
+    <code class="inline_code">gtfs_tripify</code>, for constructing such data.
+</p>
+
+<h3>Working with GTFS-Realtime</h3>
+
+<p>
+    The GTFS-Realtime specification defines a set of fields of expected values using a format known as
+    <a href="https://en.wikipedia.org/wiki/Protocol_Buffers">Protobuf</a>. Protobuf is a Google-developed
+    <a href="https://stackoverflow.com/questions/670630/what-is-idl">interface description language</a> for data
+    serialization. You start by creating a specification, known as a Proto file. You then feed this specification to
+    Protobuf, which turns around and churns out an API working with such data.
 </p>
 
 <p>
-    <code class="inline_code">gtfs-tripify</code> is the result: a Python package for creating trip logs out of
-    GTFS-Realtime messages. Check out the <a href="https://github.com/ResidentMario/gtfs-tripify">GitHub repository</a>
-    now if you're interested!
+    GTFS-Realtime feed is defined in this way by a publicly available
+    <a href="https://developers.google.com/transit/gtfs-realtime/gtfs-realtime.proto">gtfs-realtime.proto</a> file. You
+    could use this file to generate your own GTFS-Realtime API. But Google publicly distributes ready-made APIs in a
+    variety of programming languages, so it's easiest to just grab one of those
+    <a href="https://github.com/google/gtfs-realtime-bindings">from their GitHub</a>.
 </p>
 
 <p>
-    However, I have not, as of yet, actually <i>used</i> this package for anything. Surprise, the MTA system is really
-    complicated. I succeeded in isolating stop sequences in time, but have not yet done any work on route sequences.
-    This is necessary in part because trains can get rerouted onto different lines, and in part because individual
-    lines can run any of a number of different routes depending on the weekday, time of day, holiday schedule,
-    and alignment of the moons of Saturn.
+    There's an interesting caveat here. The MTA doesn't use the official GTFS-Realtime proto file. They use a version
+    of the specification that they've extended with a few additional data fields. You can get their version
+    <a href="http://datamine.mta.info/sites/all/files/pdfs/nyct-subway.proto.txt">here</a>. I will keep going with the
+    "vanilla" GTFS-Realtime API, which can still be used to read MTA data but will "miss out" on these bonus fields,
+    because the additional information was relatively unimportant and added unnecessary complexity.
 </p>
 
 <p>
-    Isolating that stuff, too, would require a whole second order of logic, and I just don't have the project
-    bandwidth right now to do it.
+    Pouring data into a Python object using the Protobuf API is easy, albeit rather funky. Here's a code bit for
+    reading a single timestamped feed into memory:
+</p>
+
+<pre>
+<code class="language-python"># Request some archived GTFS-Realtime feeds.
+import requests
+response = requests.get('https://datamine-history.s3.amazonaws.com/gtfs-2014-09-17-09-31')
+
+# Load the data into an object using the default API.
+from google.transit import gtfs_realtime_pb2
+feed = gtfs_realtime_pb2.FeedMessage()
+feed.ParseFromString(response.content)</code>
+</pre>
+
+<p>
+    The resulting <code class="inline_code">feed</code> contains a header with identifying information (most
+    importantly, the timestamp), and a payload list of "messages". Each "message" represents a chunk of data about the
+    state of the system. In the MTA feeds, there are three kinds of messages. The first type is the vehicle update,
+    which provides information about where a vehicle currently is on the track:
+</p>
+
+<pre><code class="language-python">{
+  trip {
+    trip_id: "006550_1..N02X003",
+    start_date: "20170621",
+    route_id: "1"
+  }
+  current_stop_sequence: 4,
+  current_status: "INCOMING_AT",
+  timestamp: 1498022005,
+  stop_id: "137N"
+
+}
+</code></pre>
+
+<p>
+    There are three possible <code class="inline_code">current_status</code> codes. A train which is
+    <code class="inline_code">"INCOMING_AT"</code> is almost at a station (and should be fully stopped at it within
+    the next minute), while a train that is <code class="inline_code">"EN_ROUTE_TO"</code> is going somewhere, but
+    still between stops. The last possible value, <code class="inline_code">"STOPPED_AT"</code>, is pretty
+    self-explanatory. The <code class="inline_code">timestamp</code> is the UNIX timestamp at which the feed was valid.
 </p>
 
 <p>
-    This post is a call to action. <b>If you're a motivated individual interested in the New York City transit system
-    and/or Python or JavaScript programming, please reach out to me</b>! I am looking for a collaborator on this
-    project who can help bring it to completion! Let's build cool **** together!
+    Notice that the <code class="inline_code">stop_id</code> is not the official name of the station, but an
+    identifying ID. The official names and locations of the stops can be read out of
+    <code class="inline_code">stops.txt</code> in the corresponding GTFS feed. The interesting thing about
+    <code class="inline_code">stop_id</code> is that it includes the heading of the train in the station name: "N" for
+    northbound, "S" for southbound. While most trains in New York City are dominantly north-south, a few run mainly
+    east-west. In those cases the MTA does the logical thing and...converts west to north, and east to south. Oh right,
+    that's actually terrible.
 </p>
+
+<p>
+    The second type of message is the trip update:
+</p>
+
+<pre><code class="language-python">{
+    "trip": {
+        trip_id: "006550_1..N02X003",
+        start_date: "20170621",
+        route_id: "1"
+    },
+    "stop_time_update": {
+        "arrival": {
+          "time": 1498021800
+        },
+        "departure": {
+          "time": 1498021800
+        },
+        "stop_id": "137N"
+        }
+        "stop_time_update" {
+        "arrival" {
+          "time": 1498023750
+        },
+        "departure" {
+          "time": 1498023750
+        },
+        "stop_id": "224N"
+        }
+        "stop_time_update" {
+        "arrival" {
+          "time": 1498023990
+    },
+    "stop_id": "301N"
+}</code></pre>
+
+<p>
+    A pretty easy read. The <code class="inline_code">trip</code> bit is basically a foreign key that lets you link
+    this update up with the co-requisite vehicle update. The first stop in the sequence will contain only an
+    <code class="inline_code">departure</code> estimate if the train is currently
+    <code class="inline_code">STOPPED_AT</code> there, while the last stop in the sequence will contain only an
+    <code class="inline_code">arrival</code>.
+</p>
+
+<p>
+    The third and last type is an alert. An alert message provides (textual) information about a delay for some
+    selection of affected trips. The text itself is usually of dubious usefulness.
+</p>
+
+<pre><code class="language-python">{
+    "alert": [
+        {"informed_entity":
+            "trip" {
+                "trip_id": "006550_1..N02X003",
+                "route_id": "1"
+            }
+        }
+    ],
+    "header_text" {
+        "translation" {
+            "text": "Train delayed"
+        }
+    }
+}</code></pre>
+
+<p>
+    Alerts are important for consumer applications, but since I'm interested in historical data I didn't spend much
+    time worrying about them.
+</p>
+
+<p>
+    Trip updates and vehicle updates make up the core "state" in the feed. Vehicle updates usually follow their
+    associated trip updates in tight one-two order: so you expect to see Trip A Trip Update, Trip A Vehicle update,
+    Trip B Trip Update, Trip B Vehicle Update, and so on. Alerts would go at the very end of the feed, after all trips
+    and vehicles have been exhausted.
+</p>
+
+<p>
+    Trips that are scheduled but which have not yet started are the exception. The MTA prepends the GTFS-Realtime feed
+    with trip updates for trips that have not yet started, but which are scheduled to occur. This is done because if
+    you are located at a station at or very near the beginning of a line, the next train to arrive at your station has
+    very likely not even started moving yet.
+</p>
+
+<p>
+    Trips that have ended, meanwhile, simply disappear from the feed.
+</p>
+
+<!--
+<p>
+    I should note that, a city's GTFS feed provides, amongst other things, data on scheduled train service.
+    The messages in the GTFS-Realtime feeds are in turn meant to be linked to these scheduled trips by way of the X
+    field. The MTA...eschews this field. The MTA's official documentation states that due to the complex and dynamical
+    nature of the NYC subway system, perfect joins between the trips that are scheduled and those that actually happen
+    are impossible, and so the field is left blank. There's technically a way of recovering partial matches, but
+    really, New York City transit timetables are bunk, so why even bother?
+</p>
+-->
+
+<p>What are the challenges of this data format? Lots.</p>
+
+<p>
+    Each vehicle run in the system is assigned a <code class="inline_code">trip_id</code>, so in theory we should be
+    able to assemble a list of relevant messages by parsing contiguous endpoint result. However, this proves to be
+    more challenging than you would expect. The GTFS-Realtime format provides guarantees about the uniqueness of the
+    <code class="inline_code">trip_id</code> <i>at</i> the time of the snapshot (the information would be pretty useless
+    indeed if two different trains shared the same identifier!), but it provides no such guarantee <i>across</i> time.
+</p>
+
+<p>
+    From a narrative perspective, this has some pretty nasty consequences. What we think of as train trips (and what I
+    purposefully call a train <i>run</i> here) may drop old IDs and acquire new ones at any time in their journey.
+    Nor are the IDs fully unique. After a trip ends, that trip's ID is released back into a common pool, immediately
+    available for assignment to any newly scheduled trips.
+</p>
+
+<p>
+    Feeds are occasionally returned in a corrupted state. This will happen
+    anywhere on the Internet, but seems to be especially common with the MTA feed. The speculation online is that it's
+    because there's a file on a server somewhere that get read from (when a request comes in) and written to (when an
+    update comes in) simultaneously.
+</p>
+
+<p>
+    Sometimes the MTA serves an incomplete feed that, albeit not corrupted, also doesn't actually include every trip
+    being made. This occurs due to failures further down the wire. Unsurprisingly, it happens more often to the newer
+    feeds. Sometimes the amount of trains that drop out is huge. In one twelve-hour period, for example, I saw fewer
+    than a hundred stops on the J and Z, compared to thousands on all the other feeds. Garbage in, garbage out.
+</p>
+
+<p>
+    Sometimes the endpoint stops working completely. This has two flavors. In the first flavor, connections to the
+    endpoint fail or time out. In the second flavor, the endpoint appears to continue to returns feeds...but the feed
+    it returns is the same as the last good feed! It can take the MTA hours to days to detect and fix this when it
+    happens.
+</p>
+
+<p>
+    There are data integrity issues with the messages themselves. I've found that the MTA occasionally returns
+    vehicle updates without an associated trip update. I've also seen cases where the MTA returns trip updates or
+    vehicle updates with an empty string (<code class="inline_code">""</code>) for the
+    <code class="inline_code">trip_id</code>. Throw these record out!
+</p>
+
+<p>
+    Recall that in the trip update message, every stop besides the first and last will have an arrival time and a
+    departure time if that stop is to be stopped at, and solely a departure time if that stop is to be skipped. The
+    last stop will only have an arrival time. The first stop may have both, or only a departure time, depending on the
+    state of the vehicle at write time. Sometimes though a message will come through with intermediate stops missing
+    arrival or departure fields, or an end-stop with a departure time (to Hogwarts maybe), or a first stop with
+    only an arrival time.
+</p>
+
+<p>
+    It would have been very helpful to have this all written down ahead of time. Well, now it is.
+</p>
+
+<h3>Buiding a tripifier</h3>
+
+<p>
+    The complexity of the realtime feed, the rather overwhelming list of things that could go wrong, and lack of prior
+    knowledge on my part precluded refactoring the data into a historical record (what I call a "logbook") right away.
+    The module I wrote, called <code class="inline_code">gtfs-tripifiy</code>, instead approaches the problem in three
+    steps. In the first, it transforms the data from its rather inconsistent native state into a Python
+    <code class="inline_code">dict</code>. In the second, these feeds are transformed into what I call action logs:
+    packets of tables recording the essential facts about each bit of information in the raw feed. Only in the last
+    step does the data get clobbered into something historical.
+</p>
+
+<p>
+    To understand what the challenge is, imagine your favorite GTFS-Realtime stream as a matrix. On the x axis
+    is time; on the y, the list of unique trip ids. Each entry is the information on that trip contained in the
+    corresponding snapshot.
+</p>
+
+<p>
+    Because the MTA reuses the <code class="inline_code">trip_id</code> there might be another 2 going along with the
+    same ID from 2:06 PM to 2:31 PM, and another from 5:45 PM to 6:37 PM, and so on. In other words, there are three
+    contiguous "strides" of entries with the given ID. These are obviously three separate trips, so our first task is
+    to divide them apart (and name them by computing a <code class="inline_code">unique_trip_id</code>). OK done.
+</p>
+
+<p>
+    Once we have snapshots collated, the information contained in the snapshots are easily comprehensible as simple
+    word problems. For example:
+</p>
+
+<div class="inline_quote">
+    <p>
+        Suppose that at time T there is an uptown 2 train stopped at station A. The train is next planning to go to
+        stations B, C, and D.
+    </p>
+    <p>
+        At time T+1, that train is now stopped at station C. The train is next planning to go to station D.
+    </p>
+    <p>
+        What do we know about the route the train took?
+    </p>
+</div>
+
+<p>
+    Ready? Here's the solution.
+</p>
+
+<div class="inline_quote">
+    <p>
+        At some time between the end of the Big Bang and time T the uptown 2 train stopped at station A. At some time
+        between times T and T+1, the train either stopped at or skipped station B. It then stopped at station C.
+    </p>
+</div>
+
+<p>
+    Turning a stream of GTFS-Realtime snapshots into a train arrival history boils down to solving word problems like
+    this one over and over and over again (but with a computer processor).
+</p>
+
+<p>
+    Notice that we don't know for sure whether or not the train actually stopped at station B. We can infer from
+    the fact that it was scheduled to do so that it did, but that's it. This is a major limitation of building
+    history on the back of snapshot data: it's often impossible to know whether or not a stop actually occurred.
+</p>
+
+<p>
+    Here's a harder word problem:
+</p>
+
+<div class="inline_quote">
+    <p>
+        Suppose that at time T there is an uptown 2 train en route to station A. The train is planning to go to
+        stations B, C, and D next.
+    </p>
+
+    <p>
+        At time T+1, the train is now stopped at station A. It is planning to go to stations E, F, G, B, C, D next.
+    </p>
+
+    <p>
+        At time T+2 the train is now stopped at station B. It is planning to go to stations C and D next.
+    </p>
+</div>
+
+<p>
+    And the solution:
+</p>
+
+<div class="inline_quote">
+    <p>
+        Sometime between times T and T+1 the train stopped at station A. Sometime between times T+1 and T+2 the train
+        stopped or skipped stations E, F, and G, and then stopped at station B.
+    </p>
+</div>
+
+<p>
+    Because the train moved, we can't naively determine whether or not the intervening stops at E, F, or G actually
+    occurred. Those stops could have disappeared because they were dropped from the trip, or they could have
+    disappeared because the train already made those stops. In the end we must contend with a limitation in the data:
+    these are two very different outcomes, but they look the same to us.
+</p>
+
+<p>
+    Finally, recall from our earlier discussion on the data format that in the GTFS-Realtime feed, trips does not
+    correspond one-to-one with end-to-end train runs. A single end-to-end service run may be "broken up" over time into
+    several trips, each containing information about one leg of the overall run. I found that, in practice, the MTA
+    only reports around half of train service run as end-to-end trips&mdash;the rest are reported in two (or more!)
+    pieces.
+</p>
+
+<p>
+    Once we have handled reading, aligning, and "solving" the streams, there are only a few less interesting problems
+    to solve. I had to "cap off" stops for trips that have ended, provision
+    <code class="inline_code">EN_ROUTE_TO</code> codes for trips that were still en route at the time the feed ended
+    (while the MTA is a 24/7 system, our data is not boundless). And I had to write a couple of utility functions for
+    cleaning out incomplete records (the data on trips that appear in the first or last feed we read into a logbook are
+    unlikely to be complete).
+</p>
+
+<h3>Conclusion</h3>
+
+<p>
+    I did all this work so that you don't have to. And because I was really stubborn. OK maybe more of the latter.
+</p>
+
+<p>
+    The end result is the
+    <a href="https://github.com/ResidentMario/gtfs-tripify"><code class="inline_code">gtfs-tripify</code>
+    </a> Python module. <code class="inline_code">gtfs-tripify</code> can be used to turn a list of GTFS-Realtime
+    messages into a history of train arrivals and departures. Here's a minimal example of it in action:
+</p>
+
+<pre><code class="language-python"># Load GTFS-Realtime feeds. I use archived MTA data and the requests library
+import requests
+response1 = requests.get('https://datamine-history.s3.amazonaws.com/gtfs-2014-09-17-09-31')
+response2 = requests.get('https://datamine-history.s3.amazonaws.com/gtfs-2014-09-17-09-36')
+response3 = requests.get('https://datamine-history.s3.amazonaws.com/gtfs-2014-09-17-09-41')
+
+# Load a GTFS-Realtime parser. I use the default, pip-installable Google API.
+from google.transit import gtfs_realtime_pb2
+feed1 = gtfs_realtime_pb2.FeedMessage()
+feed1.ParseFromString(response1.content)
+feed2 = gtfs_realtime_pb2.FeedMessage()
+feed2.ParseFromString(response3.content)
+feed3 = gtfs_realtime_pb2.FeedMessage()
+feed3.ParseFromString(response3.content)
+
+# Now the magic...
+import gtfs_tripify as gt
+feeds = [gt.dictify(feed) for feed in [feed1, feed2, feed3]]
+logbook = gt.logify(feeds)
+# Done!
+</code></pre>
+
+<p>
+    The output is a dictionary of tables. The dictionary, what I call a "logbook", is keyed by a unique trip ID. The
+    whole assemblage looks something like this:
+</p>
+
+<pre><code class="language-python">{
+    '047850_2..S05R_0': pandas.DataFrame,
+    '051350_2..N01R_0': pandas.DataFrame,
+    [...]
+}</code></pre>
+
+<p>
+    Entries are tables describing individual trips. I call them "logs". An example:
+</p>
+
+<pre><code class="language-python">
+          trip_id route_id              action minimum_time maximum_time  \
+0  047850_2..S05R        2  STOPPED_OR_SKIPPED   1410960621   1410961221
+1  047850_2..S05R        2  STOPPED_OR_SKIPPED   1410960621   1410961221
+2  047850_2..S05R        2          STOPPED_AT   1410960621          nan
+
+  stop_id latest_information_time
+0    238S              1410961221
+1    239S              1410961221
+2    241S              1410961221
+</code></pre>
+
+<p>
+    To get started using the module, read the
+    <a href="https://github.com/ResidentMario/gtfs-tripify#quickstart">Quickstart</a> section of the documentation.
+</p>
+
+<p>
+    I'm currently working on a consumer web-app, which I'm calling the Subway Explorer, to surface this data in an
+    end-user friendly manner. I'll have more to say on this subject soon!
+</p>
+
+<!--
+<p>
+    The MTA federates its GTFS-Realtime data across several endpoints, with each endpoint accounting for a single
+    "chunk" of the system. There are eight endpoints total. The feeds are updated every 30 seconds. The list of feeds is
+    hosted at <a href="http://datamine.mta.info/list-of-feeds">datamine.mta.info</a>.
+    Each one requires an API key to use, and the same API key can get you access to every feed. To get a key, register
+    an account on the website. Once you have it, you can start querying the endpoints by including your key in the URI
+    making the request.
+</p>
+
+<p>
+    Back in May of 2017 Mark Chiusano, an amNY journalist, asked me an interesting question: did I know if I could do
+    anything interesting with New York City's subway data? Mark wasn't an accidental contact; he wrote a
+    <a href="https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032">short piece</a>,
+    about some of the work I'd been doing, and we'd been bouncing ideas around ever since. So I went sleuthing.
+</p>
+
+<p>
+    The feeds update every 30 seconds. In times past capturing all of the data would have meant setting up a cron job
+    on your desktop and then...never turning your computer off. Today cloud computing services like Amazon AWS make this
+    a lot easier.
+</p>
+-->
 
 {% endblock %}

@@ -202,16 +202,16 @@ post_list = [
         'snap': '311.png'
     },
     # {
-    #     'title': 'Becoming a civic technologist out of college',
-    #     'route': '2017/08/28/becoming-a-civic-technologist.html',
-    #     'date': datetime(2017, 8, 28),
-    #     'template': 'becoming-a-civic-technologist.html',
-    #     'snap': 'becoming-a-civic-technologist.png'
+    #     'title': 'Parsing train rides: a call to action',
+    #     'route': '2017/10/07/gtfs-tripify.html',
+    #     'date': datetime(2017, 10, 7),
+    #     'template': 'gtfs-tripify.html',
+    #     'snap': 'gtfs-tripify.png'
     # },
     {
-        'title': 'Parsing train rides: a call to action',
-        'route': '2017/10/07/gtfs-tripify.html',
-        'date': datetime(2017, 10, 7),
+        'title': 'Parsing subway rides with gtfs-tripify',
+        'route': '2018/01/29/gtfs-tripify.html',
+        'date': datetime(2018, 1, 29),
         'template': 'gtfs-tripify.html',
         'snap': 'gtfs-tripify.png'
     }
