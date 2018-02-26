@@ -210,7 +210,7 @@ post_list = [
     },
     {
         'title': 'Kaggle kernels are Turing complete',
-        'route': '2017/10/07/kaggle-kernels-are-turing-complete.html',
+        'route': '2018/02/25/kaggle-kernels-are-turing-complete.html',
         'date': datetime(2018, 2, 25),
         'template': 'kaggle-kernels-are-turing-complete.html',
         'snap': 'empty.png'

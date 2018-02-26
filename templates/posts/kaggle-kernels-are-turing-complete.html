@@ -4,13 +4,9 @@
 {% block content %}
 
 <p>
-One joke that's in fashion amongst computer programming circles is proving that systems that aren't meant to be a
-certain thing called "Turing complete" actually are. In this blog post, I show that
-    <a href="https://www.kaggle.com/kernels">Kaggle Kernels</a> are yet another example of accidental Turing
-completeness!
+    One joke that's in fashion amongst computer programming circles is proving that systems that aren't meant to be a
+    certain thing called "Turing complete" actually are.
 </p>
-
-<h3>What is Turing completeness?</h3>
 
 <p>
     An instruction set, programming language, or other set of data-manipulation rules is considered to be <a
@@ -22,11 +18,8 @@ completeness!
 
 <p>
     Some things are obviously Turing complete. The instruction set on the central processing unit of the computer
-    you're reading this webpage on, for example, or any serious programming language you can think of.
-</p>
-
-<p>
-    However, the trick is that the minimum requirements for Turing completeness are actually very weak.
+    you're reading this webpage on, for example, or any serious programming language you can think of. However, the
+    trick is that the minimum requirements for Turing completeness are actually very weak.
     "<a href="http://beza1e1.tuxen.de/articles/accidentally_turing_complete.html">Accidentally Turing Complete</a>"
     is the best accounting I'm aware of of weird things that are, well, Turing complete. Highlights include the Magic:
     The Gathering trading card game, the web-page styling language CSS, the database query language SQL, the
@@ -39,66 +32,11 @@ completeness!
 </center>
 
 <p>
-    By demonstrating a Turing machine in Microsoft PowerPoint, Tom Wildenhain showed that, theoretically, <i>any</i>
-    software can be implemented in Microsoft PowerPoint. Even crazy things, like self-driving cars and moon landings,
-    are possible with Microsoft PowerPoint (unreasonably hard, yes, but possible).
-</p>
-
-<h3>What are Kaggle kernels?</h3>
-
-<p>
-    Kaggle is a data science and machine learning platform and community. One of its features is
-    <a href="https://www.kaggle.com/kernels">Kaggle Kernels</a>, a managed environment for running code on the cloud.
-    Data scientists can code up and execute individual kernels inside this sandbox, creating immediately sharable
-    and reproducible analyses. The platform serves a variety of use cases, but the majority case (at the time of
-    writing) is users who are beginners to intermediate in machine learning, and for whom the platform is a
-    convenient place to share and to learn.
-    <a href="https://towardsdatascience.com/introduction-to-kaggle-kernels-2ad754ebf77">A great blog post</a> by
-    Yufeng G, a developer advocate at Google, gets a bit more into it.
-</p>
-
-<h3>Are kernels turing complete?</h3>
-
-<p>
-    OK, now the fun part. That Kaggle kernels can be <i>used</i> to implement a Turing machine is trivially true.
-    Kernels are written in either the R or Python programming language, both of which are Turing complete. I
-    recently realized something a lot more interesting: that kernels <i>themselves</i> are Turing complete.
-</p>
-
-<p>
-    A Kaggle kernel may be run infinitely many times, with each kernel run resulting in a new kernel version.
-    In order to do anything interesting, kernels need to have data to operate on; that data is provided by datasets
-    uploaded to the platform, any number of which may then be attached to the kernel.
-</p>
-
-<p>
-    A slightly less well-known feature but still pretty reputable is the fact that kernels can not only read data, they
-    can also write data (up to 1 GB, at time of writing) to disc.
-</p>
-
-<p>
-    The original use case for this feature was submitting your result to a Kaggle competition. Late last year Kaggle
-    implemented a feature letting kernels use <i>other</i> kernels as a data source. You could now write kernels
-    based on data outputted from other kernels. This has a pretty strong use-case: it's used in Kaggle competitions to
-    <a href="https://en.wikipedia.org/wiki/Ensemble_learning">ensemble</a> machine learning models, producing
-    combination models that perform better than any of their sub-elements by averaging their results.
-</p>
-
-<p>
-    A neat aspect of this feature (something that I suspect very few Kagglers realize) is that it's also possible to
-    use your <i>own</i> kernel as a data source. This is intentional, and again it does have some utility. My
-    favorite application of this feature is TODO, an iterative modeling kernel which improves its model output
-    every time it is run.
-</p>
-
-<p>
-    This feature also happens to make Kaggle kernels Turing complete!
-</p>
-
-<p>
-    We can proving by demonstrating equivalence to any known Turing machine. For this exercise, I chose a Turing
-    machine known as the <a href="https://en.wikipedia.org/wiki/Wang_B-machine">Wang B-machine</a>. This machine
-    imagines that you have an infinitely long tape, on which you may operate using just the following four instructions:
+    Tom Wildenhain's proof hinges on the (already proven) fact that only a Turing machine can implement the "palindrome
+    recognizer" algorithm he demonstrates. Another, similar way of proving an instruction set is Turing complete is by
+    using it to implement another instruction set already known to be Turing complete. The most convenient of these is
+    the <a href="https://en.wikipedia.org/wiki/Wang_B-machine">Wang B-machine</a>. The B-machine imagines that you have
+    an infinitely long tape, on which you may operate using just the following four instructions:
 </p>
 
 <ul>
@@ -110,15 +48,74 @@ completeness!
 </ul>
 
 <p>
-    TODO: fix the implementation. The jump instruction jumps to a certain instruction, not to a certain tape position .
-    Critical reading comprehension failure.
+    Amazingly, these four instructions are all it takes to build a computer. That means that, theoretically, <i>any</i>
+    software can be implemented in Microsoft PowerPoint. Even incredibly difficult programs, like the ones in
+    self-driving cars and lunar landing modules, are possible using nothing but Microsoft PowerPoint. This surprising
+    insight shows just how broad the universe of "computable things" is.
 </p>
 
-
-<h3>Why does this matter?</h3>
+<!--
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/FloMHMOU5Bs" frameborder="0"
+            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</center>
+-->
 
 <p>
-    TODO
+    Kaggle is a data science and machine learning platform and community which features, amongst other fetes,
+    <a href="https://www.kaggle.com/kernels">Kaggle Kernels</a>, a managed environment for running code on the cloud.
+    <a href="https://towardsdatascience.com/introduction-to-kaggle-kernels-2ad754ebf77">A great blog post</a> by
+    Yufeng G, a developer advocate at Google, gets a bit more into it. If you're familiar with Jupyter notebooks,
+    kernels are like that, but in the cloud.
+</p>
+
+<p>
+    Due to some interesting feature choices by Kaggle, kernels on the platform are, technically, Turing complete.
+    In other words it's possible to build a Turing machine (in this case, a Wang B-Machine) using the kernels
+    themselves (not the code running inside of them) as instructions.
+</p>
+
+<p>
+    A Kaggle kernel may be run infinitely many times, with each kernel run resulting in a new kernel version.
+    In order to do anything interesting, kernels need to have data to operate on; that data is provided by datasets
+    uploaded to the platform, or other kernels, or even the kernel you are currently working on! The original use case
+    for this feature is <a href="https://en.wikipedia.org/wiki/Ensemble_learning">model ensembling</a>: combined
+    machine learning models which average the results of several models together to produce a "best-of" overall result.
+    For one particular problem, one user even implemented a kernel that created a model that produced a statistically
+    better result every time it was run!
+<p>
+
+<p>
+    This "self-reading" kernel feature "opens the door" to Turing completeness. The
+    "<a href="https://www.kaggle.com/residentmario/kaggle-kernels-are-turing-complete">Kaggle Kernels are Turing
+    Complete</a>" kernel demonstrates. This kernel defines a tape, one of each of Wang's four fundamental methods, and
+    a small sample program (in Python) using them. Each time the kernel is run, the program reads its local data
+    storage to retrieve the current program state: the tape (and marks thereof), the tape position, and the program
+    position. Then it performs the B-machine instruction at the given position in the program. Finally it saves the
+    world state (the tape, the tape position, and the program position) back to disc before exiting. All of this is
+    done inside of this little code snippet:
+</p>
+
+<script src="https://gist.github.com/ResidentMario/a4228698cc67453acd57cc1d4c6bfb10.js"></script>
+
+<p>
+    If you have a Kaggle account, you can try it yourself.
+    <a href="https://www.kaggle.com/residentmario/kernels/notebooks/new?forkParentScriptVersionId=2644550">Fork the
+        kernel</a>, then change the settings on
+    the Data tab so that your kernel uses its own (forked) copy of the kernel as a data source. Edit the kernel,
+    Commit & Run it, and watch as this beautifully terrible idea tears through another instruction in the included
+    example program. Wow!
+</p>
+
+<p>
+    Was this useful? Well, maybe knowing that kernels are Turing complete doesn't make the world a better place. But
+    it does allow me to use the following meme around the workplace un-ironically:
+</p>
+
+<div class="inline_image"><img src="https://i.imgur.com/DHJHGZU.png"/></div>
+
+<p>
+    And that's a big enough win for me.
 </p>
 
 {% endblock %}
