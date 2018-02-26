@@ -1,0 +1,124 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+{% endblock %}
+{% block content %}
+
+<p>
+One joke that's in fashion amongst computer programming circles is proving that systems that aren't meant to be a
+certain thing called "Turing complete" actually are. In this blog post, I show that
+    <a href="https://www.kaggle.com/kernels">Kaggle Kernels</a> are yet another example of accidental Turing
+completeness!
+</p>
+
+<h3>What is Turing completeness?</h3>
+
+<p>
+    An instruction set, programming language, or other set of data-manipulation rules is considered to be <a
+    href="https://en.wikipedia.org/wiki/Turing_completeness">Turing complete</a> (named for <a
+    href="https://en.wikipedia.org/wiki/Alan_Turing">Alan Turing</a>, a brilliant World War II era computer scientist)
+    if it provides everything you need to implement a computer. Furthermore, he showed that any computer which is Turing
+    complete may be simulated by any <i>other</i> computer which is Turing complete.
+</p>
+
+<p>
+    Some things are obviously Turing complete. The instruction set on the central processing unit of the computer
+    you're reading this webpage on, for example, or any serious programming language you can think of.
+</p>
+
+<p>
+    However, the trick is that the minimum requirements for Turing completeness are actually very weak.
+    "<a href="http://beza1e1.tuxen.de/articles/accidentally_turing_complete.html">Accidentally Turing Complete</a>"
+    is the best accounting I'm aware of of weird things that are, well, Turing complete. Highlights include the Magic:
+    The Gathering trading card game, the web-page styling language CSS, the database query language SQL, the
+    scenario editor in the video game Age of Empires II, and my personal favorite, Microsoft Powerpoint:
+</p>
+
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/uNjxe8ShM-8" frameborder="0" allow="autoplay;
+    encrypted-media" allowfullscreen style="margin:auto"></iframe>
+</center>
+
+<p>
+    By demonstrating a Turing machine in Microsoft PowerPoint, Tom Wildenhain showed that, theoretically, <i>any</i>
+    software can be implemented in Microsoft PowerPoint. Even crazy things, like self-driving cars and moon landings,
+    are possible with Microsoft PowerPoint (unreasonably hard, yes, but possible).
+</p>
+
+<h3>What are Kaggle kernels?</h3>
+
+<p>
+    Kaggle is a data science and machine learning platform and community. One of its features is
+    <a href="https://www.kaggle.com/kernels">Kaggle Kernels</a>, a managed environment for running code on the cloud.
+    Data scientists can code up and execute individual kernels inside this sandbox, creating immediately sharable
+    and reproducible analyses. The platform serves a variety of use cases, but the majority case (at the time of
+    writing) is users who are beginners to intermediate in machine learning, and for whom the platform is a
+    convenient place to share and to learn.
+    <a href="https://towardsdatascience.com/introduction-to-kaggle-kernels-2ad754ebf77">A great blog post</a> by
+    Yufeng G, a developer advocate at Google, gets a bit more into it.
+</p>
+
+<h3>Are kernels turing complete?</h3>
+
+<p>
+    OK, now the fun part. That Kaggle kernels can be <i>used</i> to implement a Turing machine is trivially true.
+    Kernels are written in either the R or Python programming language, both of which are Turing complete. I
+    recently realized something a lot more interesting: that kernels <i>themselves</i> are Turing complete.
+</p>
+
+<p>
+    A Kaggle kernel may be run infinitely many times, with each kernel run resulting in a new kernel version.
+    In order to do anything interesting, kernels need to have data to operate on; that data is provided by datasets
+    uploaded to the platform, any number of which may then be attached to the kernel.
+</p>
+
+<p>
+    A slightly less well-known feature but still pretty reputable is the fact that kernels can not only read data, they
+    can also write data (up to 1 GB, at time of writing) to disc.
+</p>
+
+<p>
+    The original use case for this feature was submitting your result to a Kaggle competition. Late last year Kaggle
+    implemented a feature letting kernels use <i>other</i> kernels as a data source. You could now write kernels
+    based on data outputted from other kernels. This has a pretty strong use-case: it's used in Kaggle competitions to
+    <a href="https://en.wikipedia.org/wiki/Ensemble_learning">ensemble</a> machine learning models, producing
+    combination models that perform better than any of their sub-elements by averaging their results.
+</p>
+
+<p>
+    A neat aspect of this feature (something that I suspect very few Kagglers realize) is that it's also possible to
+    use your <i>own</i> kernel as a data source. This is intentional, and again it does have some utility. My
+    favorite application of this feature is TODO, an iterative modeling kernel which improves its model output
+    every time it is run.
+</p>
+
+<p>
+    This feature also happens to make Kaggle kernels Turing complete!
+</p>
+
+<p>
+    We can proving by demonstrating equivalence to any known Turing machine. For this exercise, I chose a Turing
+    machine known as the <a href="https://en.wikipedia.org/wiki/Wang_B-machine">Wang B-machine</a>. This machine
+    imagines that you have an infinitely long tape, on which you may operate using just the following four instructions:
+</p>
+
+<ul>
+    <li>Move the tape right one.</li>
+    <li>Move the tape left one.</li>
+    <li>Print a <code class="inline_code">*</code> at the current tape position. Then move right one.</li>
+    <li>If the current tape position is marked with an <code class="inline_code">*</code>, skip to instruction n.
+        Otherwise, continue to the next instruction.</li>
+</ul>
+
+<p>
+    TODO: fix the implementation. The jump instruction jumps to a certain instruction, not to a certain tape position .
+    Critical reading comprehension failure.
+</p>
+
+
+<h3>Why does this matter?</h3>
+
+<p>
+    TODO
+</p>
+
+{% endblock %}

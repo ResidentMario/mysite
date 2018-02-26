@@ -201,19 +201,19 @@ post_list = [
         'template': '311.html',
         'snap': '311.png'
     },
-    # {
-    #     'title': 'Parsing train rides: a call to action',
-    #     'route': '2017/10/07/gtfs-tripify.html',
-    #     'date': datetime(2017, 10, 7),
-    #     'template': 'gtfs-tripify.html',
-    #     'snap': 'gtfs-tripify.png'
-    # },
     {
         'title': 'Parsing subway rides with gtfs-tripify',
         'route': '2018/01/29/gtfs-tripify.html',
         'date': datetime(2018, 1, 29),
         'template': 'gtfs-tripify.html',
         'snap': 'gtfs-tripify.png'
+    },
+    {
+        'title': 'Kaggle kernels are Turing complete',
+        'route': '2017/10/07/kaggle-kernels-are-turing-complete.html',
+        'date': datetime(2018, 2, 25),
+        'template': 'kaggle-kernels-are-turing-complete.html',
+        'snap': 'empty.png'
     }
 ]
 
@@ -289,5 +289,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
