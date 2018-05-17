@@ -1,0 +1,248 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    In <a href="http://www.residentmar.io/2018/01/29/gtfs-tripify.html">a previous post</a> on this blog I discussed <code class="inline_code">gtfs-tripify</code>, a Python module I wrote for parsing packets of GTFS-Realtime feeds into historical arrival data. To summarize, GTFS-Realtime is a standardized format for publishing publicly consumable train arrival predictions. The MTA recently began publishing GTFS-RT data at 30-second resolution for every train line in New York City, concluding several years of work slowly rolling this system out to the masses. Though this data is designed to be used in a one-shot manner, by carefully composing a packet of updates over time (with <code class="inline_code">gtfs_tripify</code>) we may reconstruct a history of train arrivals in the city.
+</p>
+
+<p>
+    As I alluded to in that post, the next step was to implement this technique into a consumer-facing webapp, the Subway Explorer. This is a project that hasn't launched yet (more on why later), so I'm hedging my bets a bit by writing about it here, but I think it'll make for interesting reading.
+</p>
+
+<h3>Design</h3>
+
+<p>
+    There are a lot of potential stakeholders that could use from this sort of technology. One interesting beneficiary might be the MTA itself. The MTA recently launched its own <a href="http://dashboard.mta.info/">Subway Performance Metrics Dashboard</a>. The numbers they report are usually derived from internal data streams, however, making them opaque and hard to interpret&mdash;<a href="https://www.villagevoice.com/2017/09/28/what-the-mtas-new-subway-dashboard-can-and-cant-tell-you-about-your-awful-commute/">a point the media has doggedly reported on</a>. Dogfooding some metrics using publicly available transit updates would help make the numbers both more transparent and give the MTA more experience using (and hence, maintaining) its own data streams.
+</p>
+
+<p>
+    However I think the most interesting target audience is commuters, who rely on arrival data to plan our lives. Seeing how long my commute would have taken in the recent past would give me some understanding of how long things take and what the worst case scenario is. And the result is finer-grained than the simple average estimates you get from, say, Google Maps. This is what informed the Subway Explorer design.
+</p>
+
+<p>
+    I decided that I wanted to allow my users to drop pins where their commute starts and ends, select the train route that they take to work, and then recieve and digest summary information visualizing case analyses of real trips from the last 30 days weekdays.
+</p>
+
+<p>
+    That's the front-end. I worked backwards from there to define the backend.
+</p>
+
+<p>
+    To provide users with point-to-point transit directions, I needed a routing engine. Since there is no publicly available GTFS-Realtime archival service (a lamentable state of affairs), I needed to roll my own archiving service. I also needed a service for <code class="inline_code">gtfs-tripify</code> processing these raw feeds and dumping the outputs into a database. Finally, I would need an API layer that would "own" this database and allow me to request the specific information I needed in the web tier.
+</p>
+
+<h3>Building the database</h3>
+
+<p>
+    The first thing I wrote is the GTFS-Realtime archival service. I needed to download and store updated data from <a href="http://datamine.mta.info/list-of-feeds">each of the transit feeds</a> at a regular cadence. The classical way of doing this would be a <a href="https://en.wikipedia.org/wiki/Cron">cron job</a>, but this would require setting up a server and is very inefficient. The compressed feeds are quite small in size, and downloading the full set only takes a few seconds; the compute would be idle the rest of the time.
+</p>
+
+<p>
+    This is an ideal use-case for <a href="https://medium.com/@BoweiHan/an-introduction-to-serverless-and-faas-functions-as-a-service-fb5cec0417b2">serverless functions</a>. Even I was shocked at how cheap and easy it was:
+</p>
+
+<center>
+    <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Me: I need
+        380 GB of
+        storage, split
+        across 5,256,000 PUT and 5,256,000 GET requests.<br><br>Amazon S3: That&#39;ll be $14.86 please.<br><br>Me: THE CLOUD.</p>&mdash; Aleksey Bilogur (@ResidentMario) <a href="https://twitter.com/ResidentMario/status/881670479257456646?ref_src=twsrc%5Etfw">July 3, 2017</a></blockquote>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</centeR>
+
+<p>
+    I ended up writing a simple Python script running on <a href="https://aws.amazon.com/lambda/">AWS Lambda</a> that makes an HTTP request to the feed URLs and stashes the response into an <a href="https://aws.amazon.com/s3/">AWS S3</a> bucket, configured to fire once a minute via <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html">AWS CloudWatch</a> (the MTA technically updates the feed twice a minute, but CloudWatch is based on cron, and cron doesn't allow you to define intervals smaller than a minute). I backed a copy of it up to <a href="https://github.com/ResidentMario/subway-explorer-api/blob/master/scripts/aws-lambda-archiver.py">here</a>.
+</p>
+
+<p>
+    Next I needed to push that data into a database. The problem here is that processing multi-hour, multi-line chunks of the data is actually pretty resource intensive; 12 hours of data ties up most of the memory and 30 minutes of (unparalleled) processing time on my 16 GB, i5-3570k desktop. This is probably enough compute that it starts to cost something, so while I'm still prototyping the application I haven't wired up any AWS Lambda functions to do it. I've been running these processes on my local machine instead.
+</p>
+
+<p>
+    I split this process into steps, handled by two different Python scripts. <a href="https://github.com/ResidentMario/subway-explorer-api/blob/master/scripts/localize-gtfs-r-records.py">The first</a> localizes the raw data; it's little more than a thin wrapper on an <a href="https://aws.amazon.com/cli/">AWS CLI</a> command (and wouldn't be
+    necessary if I ran on the cloud, but whatever).
+</p>
+
+<p>
+    The more challenging part is serializing the data and dumping it into the database. The various IDs published in the MTA's GTFS-Realtime feed have weak consistency guarantees: the same ID will not be used twice in the same feed, but it may (in fact, will almost certainly) be recycled for future trips. <code class="inline_code">gtfs-tripify</code> included logic for handling this within a single parse run, but not between runs; so if a trip with ID <code class="inline_code">036800_2..N01R</code> showed up in one run, and then again in another, they would both write to the database as <code class="inline_code">036800_2..N01R_1</code>. That's no good. I ultimately implemented a a new <code class="inline_code">gt.io.to_sql</code> function that handles this de-duplication for you.
+</p>
+
+<p>
+    Our goal in assembling the database is to make sure we have contiguous coverage&mdash;every single trip is
+    included in the database, and is included in its complete form. In each parse run we need to strip out trips
+    that were already ongoing at the beginning of the parse run or still ongoing at the end, but do so in a way that
+    ensures that they are included in the previous run or the next one.
+</p>
+
+<p>
+    I handled this by "tacking on" a three-hour buffer period to the parse runs. If you specify that you want to
+    process data between <code class="inline_code">00:00</code> and <code class="inline_code">9:00</code>, for
+    example, my script will extend the window to <code class="inline_code">12:00</code>, parse <i>that</i>, and then
+    remove any trips that started in the 9-to-12 window. This unfortunately adds a lot of extra weight to running the
+    script, but the tradeoff is that any trips that started before 9:00 and ended sometime after it will be included
+    in the result, so long as they took less than three hours (a <a href="https://en.wikipedia.org/wiki/Magic_number_(programming)">magic number</a> that seemed like a reasonable cutoff) to complete.
+</p>
+
+<p>That script lives <a href="https://github.com/ResidentMario/subway-explorer-api/blob/master/scripts/compile
+-logbooks-to-db.py">here</a>.</p>
+
+<h3>Building the routing engine</h3>
+
+<p>
+    With the data definition layer out of the way, I could start working on the API layer.
+</p>
+
+<p>
+    Recall that I needed a routing engine to perform in-browser transit routing. After flirting with <a href="https://mapzen.com/blog/valhalla-intro/">MapZen Valhalla</a> (because open source, but <a href="https://mapzen.com/blog/shutdown/">MapZen is no more</a> and I really didn't want to stand up my own server), I settled on the venerable <a href="https://developers.google.com/maps/documentation/directions/intro">Google Maps Directions API</a>.
+</p>
+
+<p>
+    The Google Maps services do not define CORS (<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">Cross-Origin Resource Sharing</a>) HTTP headers, meaning that by default browsers would refuse to service requests to the API from my application front-end, since my service is not running directly on the Google Maps server. The solution alluded to in at least one
+    place their documentation is to stand up your own <a href="https://en.wikipedia.org/wiki/Proxy_server">proxy
+    service</a>. The webapp can make a browser-request to this service because the two services live on the same IP address, and the proxy can make a server-side request to fetch the actual resource that never touches (and hence never gets blocked by) the browser. Hence I wrote <a href="https://github.com/ResidentMario/subway-explorer-gmaps-proxy"><code class="inline_code">subway-explorer-gmaps-proxy</code></a>, a simple Node.JS Google Directions API proxy-as-a-service.
+</p>
+
+<p>
+    There's a hitch, however. Google Maps returns transit station names (<code class="inline_code">DeKalb
+    Avenue</code>), but not their unique IDs (<code class="inline_code">L16</code> or <code class="inline_code">R30</code>, depending on the line). When we get around to actually looking up the routes our users choose we could in theory ask the database for records matching the name of the stations along their route and go from there. But this is non-hermetic: official station names can change, and Google Maps station name selection is an implementation detail.
+</p>
+
+<p>
+    Thus the first thing I implemented in the database API layer was an implementation detail: a routine that looks up stations IDs using the route name and station coordinates returned by the Google Directions API.
+</p>
+
+<p>
+    I added a <code class="inline_code">Stops</code> table to the database, which is populated with the records from the <code class="inline_code">stops.txt</code> file in the latest <a href="https://developers.google.com/transit/gtfs/">GTFS record</a> (for the unfamiliar, GTFS and GTFS-Realtime are two different data streams; the latter provides schedule data and metadata, whilst the former provides real-time data). This is poured using, what else, <a href="https://github.com/ResidentMario/subway-explorer-api/blob/master/scripts/compile-gtfs-feed-to-db.py">another Python script</a>.
+</p>
+
+<p>
+    The trouble is that the stations in GTFS-Realtime are not what we conventionally think of as stations. A stop in GTFS-Realtime is uniquely identifiable by line (e.g. <code class="inline_code">Q</code>) and coordinates (e.g. <code class="inline_code">[75.0152, -45.1761]</code>) and not by coordinates alone. In other words, insofar as GTFS-Realtime is concerned, two trains which stop at the same station on different sides of the platform technically stop at different stations! So I can't naively ask for
+    the station closest to some Google Directions API -derived coordinate, because I might get <code class="inline_code">L16</code> when what I really want is <code class="inline_code">R30</code>.
+</p>
+
+<p>
+    These station-route pairs are <i>not</i> included in the GTFS data. The proper way to de-aggregate these records is
+    to use domain knowledge and write down each valid station-line pair in some (hopefully tool-assisted) way.
+</p>
+
+<p>
+    But why do things properly when a quick hack works just as well:
+</p>
+
+<pre><code class="language-python">regular_stops = c.execute(
+"""
+  SELECT route_id, stop_id
+    FROM (SELECT route_id, COUNT(route_id) AS n_stops, stop_id
+          FROM Logbooks
+          GROUP BY stop_id, route_id) AS stop_routes
+    WHERE stop_routes.n_stops >= 100;
+""").fetchall()
+</code></pre>
+
+<p>
+    The little bit of SQL is what I use instead. Given a table populated with stop records (which I haven't gotten to yet), it returns the unique route-station pairs that occur at least 100 times in the database. 100 is yet another magic number, but a reasonable confidence bound (when working with a full day or more of data) on a stop being "legit" and not just a one-off thing (trains are occasionally rerouted onto other lines).
+</p>
+
+<p>
+    When at runtime a user requests information on the commute they've picked, the station coordinates and line names included in the co-requisite Google Directions API request parameterize an HTTP request to the <code class="inline_code">/locate-stations/</code> path in the <a href="https://github.com/ResidentMario/subway-explorer-api"><code class="inline_code">subway-explorer-api</code></a> service. This finds and returns the closest matchable station ID in the stop list, which the front-end uses to (finally) request what it actually wanted all along: historical stop sequences.
+</p>
+
+<h3>Building the API</h3>
+
+<p>
+    So at this point we have a database full of trip stop sequences, and a user request (on the <code class="inline_code">/poll-travel-times/</code> API path) asking for relevant stop information. What do we do now?
+</p>
+
+<p>
+    As I discussed in <a href="http://www.residentmar.io/2018/01/29/gtfs-tripify.html">my previous post on <code class="inline_code">gtfs-tripify</code></a>, the identifiable trips in the GTFS-Realtime data stream are <i>contiguous
+    subsets</i> of the end-to-end train runs, and not the full runs themselves. Even if our user never leaves the
+    train they got on, there is still a high chance their commute will be fragmented across several trips!
+</p>
+
+<p>
+    If your train goes out of service midway to your destination, you get off and wait for another train.
+    That's the simplest possible solution to this problem&mdash;timed retrying&mdash;and that's what I implemented.
+    When a request comes in, the API finds the first trip on that line with the right heading (tangent: determining
+    heading in the MTA is ganky) that services that stop and runs with it. If the trip ends without you reaching your
+    target destination, the API finds the first rightly parameterized trip to hit <i>that</i> station, and follows
+    that trip along its route. Do this as many times as possible to get to the destination, and return the result.
+</p>
+
+<p>
+    This algorithm is simple and easy to understand, but there are trade-offs. If a train is rerouted&mdash;say, if a
+    B train is running on the D line&mdash;we will follow the train down the reroute and turn up empty handed. An
+    algorithm using thresholded <a href="https://en.wikipedia.org/wiki/Markov_chain">Markov chain</a> transition
+    probabilities would help address this problem; so would embedding domain knowledge on true stop sequences into the
+    database. For an MVP this is overkill, however; when this happens we just respond with a
+    <code class="inline_code">POSSIBLE_SERVICE_VARIATION</code> status message and let the front-end handle the failure.
+</p>
+
+<p>
+    A related problem is determining when to give up. Surely if we are marooned at a stop for an extended period of
+    time, something is wrong! I chose one hour as the arbitrary inter-trip wait time cut-off. If the algorithm finds
+    that the next trip arrives more than an hour after we got off the previous one, it will again fail with <code class="inline_code">POSSIBLE_SERVICE_VARIATION</code> status message. This is a rather generous boundary, but it was
+    chosen to account for gaps in super late-night service, when the gap between train arrivals can be 30 minutes or
+    more.
+</p>
+
+<h3>Building the webapp</h3>
+
+<p>
+    Let's update our user journey. Our user goes to our application and drops pins where their commute begins and ends. The webapp sends requests to the Google Directions API proxy service, displaying to the user the route options it receives back. The user selects the route they commute on. The webapp requests and receives station IDs from the Subway Explorer API layer. Then it requests historical stop sequences from the Subway Explorer API, and receives them.
+</p>
+
+<p>
+    Notice that the design of the Subway Explorer API accounts only for a single line! So if the chosen commute routes along just one line, we are done requesting data and can proceed to rendering. But what do we do if the chosen commute includes transfers?
+</p>
+
+<p>
+    In that case we have to request the first leg of the journey and wait for a response. Then we request the next leg of the journey, parameterizing this request with the final station arrival times from the previous request; and so on. In theory this work could be handled in the API layer; in practice, I though that was out of scope for now. Instead I implemented an <a href="https://en.wikipedia.org/wiki/Dependency_graph">asynchronous dependency chain</a> in my web tier; a fun but challenging little problem
+    that did get solved, albeit messily.
+</p>
+
+<p>
+    Finally it was time to implement the application front-end! My first-ever project on this scale was my <a href="http://www.residentmar.io/2016/08/27/day-in-the-life-of-citibike.html">Life of Citibike visualization</a>, which was written in pure JavaScript. I learned a lot of things from this project, one of them being that building complex applications without a framework is a honking bad idea. I had fiddled with <a href="https://reactjs.org/">React</a> and <a href="https://redux.js.org/">Redux</a> in the past, but had never built anything serious with these technologies; this seemed like the perfect opportunity to learn how to use them properly. I would use <a href="https://leafletjs.com/">Leaflet</a> (via <a href="https://react-leaflet.js.org/">React-Leaflet</a>) as my webmap, and <a href="https://d3js.org/">D3.JS</a> for
+    the visualizations.
+</p>
+
+<p>
+    The web application is basically done, except for the visualizations, which are still a work and progress and
+    something I am leaving for last. More words here in the future!
+</p>
+
+<h3>Deployment</h3>
+
+<p>
+    If you have been paying attention so far, you'll notice that I've described my application as consisting of three separable services: a database API, a Google Directions API proxy, and a web app. This was purposeful decision, as in truth, the core of the application is the Subway Explorer API&mdash;the web app is just something to show off with, and, in the grand scheme of things you could do <i>with</i> the API, is fairly minimal.
+</p>
+
+<p>
+    You can launch any one of these services yourself locally by cloning their GitHub repositories and following their
+    README instructions. I've also bundled container images with the repositories, so you can also launch them using <a href="https://www.docker.com/">Docker</a> as well. The Subway Explorer API and Google Directions Proxy services are standalone,
+    pending a bit of dot-env configuration to load your database filepaths and private API keys, respectively. To run
+    the web application you will need to export some environment variables in the shell just before runtime.
+</p>
+
+<p>
+    I deployed Life of Citibike directly onto my website. This was simple and easy to do, but it added a lot of
+    complexity to this blog's otherwise simple codebase. In the future, I may deploy it to a separate endpoint as a
+    hobby project. For this project I decided that I wanted to Deploy Like The Cool Kids™ and push my service out there
+    via <a href="https://kubernetes.io/">Kubernetes</a> on Google Cloud.
+</p>
+
+<p>
+    For a small personal project this is a soundly awful idea (just use an Infastructure-as-a-Service platform like Heroku), but this was a good way to get some face-time with a hot new technology. Kubernetes is <i>not</i> simple, and it took a long time and a lot of troubleshooting to finally compose a working deployment, but it was definitely a worthwhile learning experience. The full deployment files and a walkthrough on using them is up at the <code class="inline_code"><a href="https://github.com/ResidentMario/subway-explorer-deploy">subway-explorer-deploy</a></code> repository.
+</p>
+
+<p>
+    And with that, my application was (somewhat briefly) deployed!
+</p>
+
+<h3>Conclusion</h3>
+
+<p>This section will be written in the future.</p>
+
+{% endblock %}

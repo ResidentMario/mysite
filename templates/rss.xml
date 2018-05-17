@@ -7,12 +7,6 @@
 <description>Data hacks and other musings by Aleksey Bilogur</description>
 
     <item>
-            <title>About this website</title>
-            <link>http:http://www.residentmar.io/2015/10/31/this-website.html</link>
-            <guid>http:http://www.residentmar.io/2015/10/31/this-website.html</guid>
-            <pubDate>Sat, 31 Oct 2015 00:00:00 EST</pubDate>
-    </item>
-    <item>
             <title>An exercise in probability</title>
             <link>http:http://www.residentmar.io/2015/11/06/an-exercise-in-probability.html</link>
             <guid>http:http://www.residentmar.io/2015/11/06/an-exercise-in-probability.html</guid>
@@ -139,12 +133,6 @@
             <pubDate>Sat, 24 Sep 2016 00:00:00 EST</pubDate>
     </item>
     <item>
-            <title>D3.JS NYC: Implementing good design</title>
-            <link>http:http://www.residentmar.io/2016/09/26/implementing-good-design.html</link>
-            <guid>http:http://www.residentmar.io/2016/09/26/implementing-good-design.html</guid>
-            <pubDate>Mon, 26 Sep 2016 00:00:00 EST</pubDate>
-    </item>
-    <item>
             <title>Saving progress in pandas</title>
             <link>http:http://www.residentmar.io/2016/10/29/saving-progress-pandas.html</link>
             <guid>http:http://www.residentmar.io/2016/10/29/saving-progress-pandas.html</guid>
@@ -179,6 +167,12 @@
             <link>http:http://www.residentmar.io/2018/02/25/kaggle-kernels-are-turing-complete.html</link>
             <guid>http:http://www.residentmar.io/2018/02/25/kaggle-kernels-are-turing-complete.html</guid>
             <pubDate>Sun, 25 Feb 2018 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>Building an MTA historical train arrival application</title>
+            <link>http:http://www.residentmar.io/2018/05/16/subway-explorer.html</link>
+            <guid>http:http://www.residentmar.io/2018/05/16/subway-explorer.html</guid>
+            <pubDate>Wed, 16 May 2018 00:00:00 EST</pubDate>
     </item>
 </channel>
 </rss>

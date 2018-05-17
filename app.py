@@ -13,13 +13,6 @@ db = DataStore(json.load(open(basepath + "/static/post_assets/citibike/mlab_inst
 
 post_list = [
     {
-        'title': 'About this website',
-        'route': '2015/10/31/this-website.html',
-        'date': datetime(2015, 10, 31),
-        'template': 'this-website.html',
-        'snap': 'this-website.png'
-    },
-    {
         'title': 'An exercise in probability',
         'route': '2015/11/06/an-exercise-in-probability.html',
         'date': datetime(2015, 11, 6),
@@ -167,13 +160,6 @@ post_list = [
         'snap': 'city-council-testimony.png'
     },
     {
-        'title': 'D3.JS NYC: Implementing good design',
-        'route': '2016/09/26/implementing-good-design.html',
-        'date': datetime(2016, 9, 26),
-        'template': 'implementing-good-design.html',
-        'snap': 'implementing-good-design.png'
-    },
-    {
         'title': 'Saving progress in pandas',
         'route': '2016/10/29/saving-progress-pandas.html',
         'date': datetime(2016, 10, 29),
@@ -214,6 +200,13 @@ post_list = [
         'date': datetime(2018, 2, 25),
         'template': 'kaggle-kernels-are-turing-complete.html',
         'snap': 'kaggle-kernels-are-turing-complete.png'
+    },
+    {
+        'title': 'Building an MTA historical train arrival application',
+        'route': '2018/05/16/subway-explorer.html',
+        'date': datetime(2018, 5, 16),
+        'template': 'subway-explorer.html',
+        'snap': 'empty.png'
     }
 ]
 
@@ -289,5 +282,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
