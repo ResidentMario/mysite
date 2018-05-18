@@ -71,19 +71,11 @@
 </p>
 
 <p>
-    Our goal in assembling the database is to make sure we have contiguous coverage&mdash;every single trip is
-    included in the database, and is included in its complete form. In each parse run we need to strip out trips
-    that were already ongoing at the beginning of the parse run or still ongoing at the end, but do so in a way that
-    ensures that they are included in the previous run or the next one.
+    Our goal in assembling the database is to make sure we have contiguous coverage&mdash;every single trip is included in the database, and is included in its complete form. In each parse run we need to strip out trips that were already ongoing at the beginning of the parse run or still ongoing at the end, but do so in a way that ensures that they are included in the previous run or the next one.
 </p>
 
 <p>
-    I handled this by "tacking on" a three-hour buffer period to the parse runs. If you specify that you want to
-    process data between <code class="inline_code">00:00</code> and <code class="inline_code">9:00</code>, for
-    example, my script will extend the window to <code class="inline_code">12:00</code>, parse <i>that</i>, and then
-    remove any trips that started in the 9-to-12 window. This unfortunately adds a lot of extra weight to running the
-    script, but the tradeoff is that any trips that started before 9:00 and ended sometime after it will be included
-    in the result, so long as they took less than three hours (a <a href="https://en.wikipedia.org/wiki/Magic_number_(programming)">magic number</a> that seemed like a reasonable cutoff) to complete.
+    I handled this by "tacking on" a three-hour buffer period to the parse runs. If you specify that you want to process data between <code class="inline_code">00:00</code> and <code class="inline_code">9:00</code>, for example, my script will extend the window to <code class="inline_code">12:00</code>, parse <i>that</i>, and then remove any trips that started in the 9-to-12 window. This unfortunately adds a lot of extra weight to running the script, but the tradeoff is that any trips that started before 9:00 and ended sometime after it will be included in the result, so long as they took less than three hours (a <a href="https://en.wikipedia.org/wiki/Magic_number_(programming)">magic number</a> that seemed like a reasonable cutoff) to complete.
 </p>
 
 <p>That script lives <a href="https://github.com/ResidentMario/subway-explorer-api/blob/master/scripts/compile
@@ -124,8 +116,7 @@
 </p>
 
 <p>
-    These station-route pairs are <i>not</i> included in the GTFS data. The proper way to de-aggregate these records is
-    to use domain knowledge and write down each valid station-line pair in some (hopefully tool-assisted) way.
+    These station-route pairs are <i>not</i> included in the GTFS data. The proper way to de-aggregate these records is to use domain knowledge and write down each valid station-line pair in some (hopefully tool-assisted) way.
 </p>
 
 <p>
@@ -163,29 +154,15 @@
 </p>
 
 <p>
-    If your train goes out of service midway to your destination, you get off and wait for another train.
-    That's the simplest possible solution to this problem&mdash;timed retrying&mdash;and that's what I implemented.
-    When a request comes in, the API finds the first trip on that line with the right heading (tangent: determining
-    heading in the MTA is ganky) that services that stop and runs with it. If the trip ends without you reaching your
-    target destination, the API finds the first rightly parameterized trip to hit <i>that</i> station, and follows
-    that trip along its route. Do this as many times as possible to get to the destination, and return the result.
+    If your train goes out of service midway to your destination, you get off and wait for another train. That's the simplest possible solution to this problem&mdash;timed retrying&mdash;and that's what I implemented. When a request comes in, the API finds the first trip on that line with the right heading (tangent: determining heading in the MTA is ganky) that services that stop and runs with it. If the trip ends without you reaching your target destination, the API finds the first rightly parameterized trip to hit <i>that</i> station, and follows that trip along its route. Do this as many times as possible to get to the destination, and return the result.
 </p>
 
 <p>
-    This algorithm is simple and easy to understand, but there are trade-offs. If a train is rerouted&mdash;say, if a
-    B train is running on the D line&mdash;we will follow the train down the reroute and turn up empty handed. An
-    algorithm using thresholded <a href="https://en.wikipedia.org/wiki/Markov_chain">Markov chain</a> transition
-    probabilities would help address this problem; so would embedding domain knowledge on true stop sequences into the
-    database. For an MVP this is overkill, however; when this happens we just respond with a
-    <code class="inline_code">POSSIBLE_SERVICE_VARIATION</code> status message and let the front-end handle the failure.
+    This algorithm is simple and easy to understand, but there are trade-offs. If a train is rerouted&mdash;say, if a B train is running on the D line&mdash;we will follow the train down the reroute and turn up empty handed. An algorithm using thresholded <a href="https://en.wikipedia.org/wiki/Markov_chain">Markov chain</a> transition probabilities would help address this problem; so would embedding domain knowledge on true stop sequences into the database. For an MVP this is overkill, however; when this happens we just respond with a<code class="inline_code">POSSIBLE_SERVICE_VARIATION</code> status message and let the front-end handle the failure.
 </p>
 
 <p>
-    A related problem is determining when to give up. Surely if we are marooned at a stop for an extended period of
-    time, something is wrong! I chose one hour as the arbitrary inter-trip wait time cut-off. If the algorithm finds
-    that the next trip arrives more than an hour after we got off the previous one, it will again fail with <code class="inline_code">POSSIBLE_SERVICE_VARIATION</code> status message. This is a rather generous boundary, but it was
-    chosen to account for gaps in super late-night service, when the gap between train arrivals can be 30 minutes or
-    more.
+    A related problem is determining when to give up. Surely if we are marooned at a stop for an extended period of time, something is wrong! I chose one hour as the arbitrary inter-trip wait time cut-off. If the algorithm finds that the next trip arrives more than an hour after we got off the previous one, it will again fail with <code class="inline_code">POSSIBLE_SERVICE_VARIATION</code> status message. This is a rather generous boundary, but it was chosen to account for gaps in super late-night service, when the gap between train arrivals can be 30 minutes or more.
 </p>
 
 <h3>Building the webapp</h3>
@@ -213,7 +190,7 @@
     something I am leaving for last. More words here in the future!
 </p>
 
-<h3>Deploying the application</h3>
+<h3>Deploying the appli</h3>
 
 <p>
     If you have been paying attention so far, you'll notice that I've described my application as consisting of three separable services: a database API, a Google Directions API proxy, and a web app. This was purposeful decision, as in truth, the core of the application is the Subway Explorer API&mdash;the web app is just something to show off with, and, in the grand scheme of things you could do <i>with</i> the API, is fairly minimal. Thus the need for a microservices-based deployment architecture. I've bundled <a href="https://www.docker.com/">Docker</a> container images with the repositories, making them easily launch-able, pending some light dot-env and environment variable configuration.
@@ -232,7 +209,7 @@
 </p>
 
 <p>
-    My database is no-frills SQLite and for this MVP I didn't want to deal with setting up (and getting billed for) yet another cloud service. So I deployed a hack. Kubernetes allows you to label nodes, and, if you <i>really</i> want to, to specify that certain serives can only be assigned to certain services. So I mandated that the API deployment must attach to the compute node labeled <code class="inline_code">datastore_node</code>. I asked GCP for some HDD resources and attached them to that node by hand. Then I SSHed into that node and used <code class="inline_code">scp</code> to copy my local copy of the database onto the disk. Add a pointer to the volume mount to the service configuration and we're in business!
+    My database is no-frills SQLite and for this MVP I didn't want to deal with setting up (and getting billed for) yet another cloud service. So I deployed a hack. Kubernetes allows you to label nodes, and, if you <i>really</i> want to, to specify that certain services can only be assigned to certain compute nodes. So I mandated that the API deployment must attach to the node labeled <code class="inline_code">datastore_node</code>. I asked GCP for some HDD resources and attached them to that node by hand. Then I SSHed into that node and used <code class="inline_code">scp</code> to copy my local copy of the database onto the disk. Add a pointer to the volume mount to the service configuration and we're in business!
 </p>
 
 <p>
