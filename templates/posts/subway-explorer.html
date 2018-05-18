@@ -213,32 +213,38 @@
     something I am leaving for last. More words here in the future!
 </p>
 
-<h3>Deployment</h3>
+<h3>Deploying the application</h3>
 
 <p>
-    If you have been paying attention so far, you'll notice that I've described my application as consisting of three separable services: a database API, a Google Directions API proxy, and a web app. This was purposeful decision, as in truth, the core of the application is the Subway Explorer API&mdash;the web app is just something to show off with, and, in the grand scheme of things you could do <i>with</i> the API, is fairly minimal.
+    If you have been paying attention so far, you'll notice that I've described my application as consisting of three separable services: a database API, a Google Directions API proxy, and a web app. This was purposeful decision, as in truth, the core of the application is the Subway Explorer API&mdash;the web app is just something to show off with, and, in the grand scheme of things you could do <i>with</i> the API, is fairly minimal. Thus the need for a microservices-based deployment architecture. I've bundled <a href="https://www.docker.com/">Docker</a> container images with the repositories, making them easily launch-able, pending some light dot-env and environment variable configuration.
 </p>
 
 <p>
-    You can launch any one of these services yourself locally by cloning their GitHub repositories and following their
-    README instructions. I've also bundled container images with the repositories, so you can also launch them using <a href="https://www.docker.com/">Docker</a> as well. The Subway Explorer API and Google Directions Proxy services are standalone,
-    pending a bit of dot-env configuration to load your database filepaths and private API keys, respectively. To run
-    the web application you will need to export some environment variables in the shell just before runtime.
+    I deployed Life of Citibike directly onto my website. This was simple and easy to do, but it added a lot of complexity to this blog's otherwise simple codebase. This time around I decided that I wanted to Deploy Like The Cool Kids™ and push my service out there via <a href="https://kubernetes.io/">Kubernetes</a> on Google Cloud. For a personal project this is a soundly awful idea (just use an Infastructure-as-a-Service platform like Heroku), but this was a good way to get some face-time with a hot new technology.
 </p>
 
 <p>
-    I deployed Life of Citibike directly onto my website. This was simple and easy to do, but it added a lot of
-    complexity to this blog's otherwise simple codebase. In the future, I may deploy it to a separate endpoint as a
-    hobby project. For this project I decided that I wanted to Deploy Like The Cool Kids™ and push my service out there
-    via <a href="https://kubernetes.io/">Kubernetes</a> on Google Cloud.
+    There are many interesting subtleties to cluster orchestration. I won't go into all of them here, but I will point out a couple of the most interesting problems I ran into.
 </p>
 
 <p>
-    For a small personal project this is a soundly awful idea (just use an Infastructure-as-a-Service platform like Heroku), but this was a good way to get some face-time with a hot new technology. Kubernetes is <i>not</i> simple, and it took a long time and a lot of troubleshooting to finally compose a working deployment, but it was definitely a worthwhile learning experience. The full deployment files and a walkthrough on using them is up at the <code class="inline_code"><a href="https://github.com/ResidentMario/subway-explorer-deploy">subway-explorer-deploy</a></code> repository.
+    I had difficulties mounting a persistent volume with my database in it ad hoc. Kubernetes recommends managing IO resources using what it calls persistent volume claims, but as far as I know these can only be used to give your processes access to fresh (empty) memory. For databases and other long term storage needs, Kubernetes really wants you to be use a managed service like <a href="https://cloud.google.com/spanner/">Google Cloud Spanner</a> or a look-alike. This is because Kubernetes really wants you to treat your individual compute resources (nodes) as highly liquid, and a static asset too big to fit practically in a container image (like, say, a database) breaks this abstraction.
 </p>
 
 <p>
-    And with that, my application was (somewhat briefly) deployed!
+    My database is no-frills SQLite and for this MVP I didn't want to deal with setting up (and getting billed for) yet another cloud service. So I deployed a hack. Kubernetes allows you to label nodes, and, if you <i>really</i> want to, to specify that certain serives can only be assigned to certain services. So I mandated that the API deployment must attach to the compute node labeled <code class="inline_code">datastore_node</code>. I asked GCP for some HDD resources and attached them to that node by hand. Then I SSHed into that node and used <code class="inline_code">scp</code> to copy my local copy of the database onto the disk. Add a pointer to the volume mount to the service configuration and we're in business!
+</p>
+
+<p>
+    Another interesting problem was environment variable management in the web tier. Web applications are sandboxed in the browser, meaning they don't have access to resources, like environment variables, not included directly in the codebase. This was a problem, since my web application needed to know what addresses the directions engine and proxy service lived at, and I did not want to bake these values directly into the codebase.
+</p>
+
+<p>
+    I was already using <a href="http://browserify.org/">Browserify</a> to compile and mimify my front-end code, so the solution was a small preprocessor add-on called <a href="https://github.com/hughsk/envify">envify</a>. <code class="inline_code">envify</code> replaces environment variables in the codebase prefixed with <code class="inline_code">process.env</code> with hardcoded values, allowing me to specify the paths just before the build process and transparently pass configuration values defined just beforehand through to the final application.
+</p>
+
+<p>
+The full deployment files and a walkthrough on using them is up at the <code class="inline_code"><a href="https://github.com/ResidentMario/subway-explorer-deploy">subway-explorer-deploy</a></code> repository.
 </p>
 
 <h3>Conclusion</h3>
