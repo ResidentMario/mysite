@@ -43,20 +43,20 @@
     An example of a highly data analysis specific task would be optimizing a machine learning model. In this setting it is very important to have a deep understanding of every aspect of the dataset, as this understanding is fundamental to the approach you take and the performance you ultimately get from the result. An ML practitioner invariably builds heaps of short-lived, messy-looking charts, none of which survive long enough to be seen by anyone else. An example:
 </p>
 
-<img src="http://www.scikit-yb.org/en/latest/_images/spam_discrimination_threshold.png" class="inline_image_full">
+<img src="/static/post_assets/dataviz-apis/yellowbrick-example.png" class="inline_image_full">
 
 <p>
     Interpreting this graph takes heaps of domain knowledge, experience with this plot type, and knowledge about the dataset being visualized; all things highly specific to the person creating the chart. But actually creating it is easy. You just feed two lists of data to a template and get a result.
 </p>
 
 <p>
-    An example of a highly data presentation specific task, by contrast, is data journalism. In data journalism you are attempting to communicate some story of viewpoint to a public audience. The public audience is visually uninformed, and has a very low threshold for interpretive complexity, so good data journalists must be skilled in using sophisticated tools to build highly custom "data experiences". An extreme example is this New York Times visualization of collaborations amongst Oscar winners:
+    An example of a highly data presentation specific task, by contrast, is data journalism. In data journalism you are attempting to communicate some story of viewpoint to a public audience. The public audience is visually uninformed, and has a very low threshold for interpretive complexity, so good data journalists must be skilled in using sophisticated tools to build highly custom "data experiences". An extreme example is (a screenshot from) <a href="https://archive.nytimes.com/www.nytimes.com/interactive/2013/02/20/movies/among-the-oscar-contenders-a-host-of-connections.html?_r=0">this New York Times visualization of collaborations amongst Oscar winners</a>:
 </p>
 
 <img src="https://static01.nyt.com/images/2013/02/21/movies/awardsseason/21oscar-network-sf-image/21oscar-network-sf-image-superJumbo.png" class="inline_image_full"/>
 
 <p>
-    This visualization is algorithmically complex; it apparently required its own layout engine, discussed briefly <a href="https://bost.ocks.org/mike/example/">here</a> to work at all. But the result is beautifully easy to interpret.
+    This visualization is algorithmically complex, even requiring <a href="https://bost.ocks.org/mike/example/">its own custom-built layout engine</a>. But the result is beautifully easy to interpret.
 </p>
 
 <p>
@@ -305,6 +305,47 @@ axarr[2].plot(cars.query("Origin == 'Japan'").Horsepower, 'o', color='orange')</
 
 <img src="/static/post_assets/dataviz-apis/matplotlib-faceting.png" class="inline_image" style="width:66%;"/>
 
+<p>
+    In <code class="inline_code">altair</code> we add single call to <code class="inline_code">facet</code>. It's that easy!
+</p>
+
+<pre><code class="language-python">(alt.Chart(cars)
+     .mark_point()
+     .encode(x='Horsepower', y='Miles_per_Gallon', color='Origin')
+     .facet('Origin'))
+</code></pre>
+
+
+<img src="/static/post_assets/dataviz-apis/altair-faceting.png" class="inline_image"/>
+
+<p>
+    To be fair, <code class="inline_code">matplotlib</code> is particularly bad at this. The <code class="inline_code">seaborn</code> library provides a <code class="inline_code">FacetGrid</code> object that makes this easier. But that still requires creating and reasoning about a new object. Charts as an abstraction are just not flexible enough at composition, making them awkward to facet with as a rule. A grammar-based library doesn't have this problem.
+</p>
+
+<p>
+    The other benefit of grammars of graphics is more theoretical. Well-designed grammars directly enable deconstructing familiar templates, like bar charts, into core ideas; and then mixing those ideas with others to create novel data visualizations.
+</p>
+
+<p>
+    Grammars of graphics have not exactly taken over the world yet. If you are not particularly invested in the data product you are building, the visualization templates provided by the chart abstraction is still the simplest, easiest way to get work done. Nevertheless, even if you will not use these libraries in your day to day work, I strongly encourage you to try out <code class="inline_code">altair</code> (or a similar grammar-based library, like <code class="inline_code">plotnine</code>). This is a great API idea that really frames what makes data visualization tick.
+</p>
+
 
 <h3>Conclusion</h3>
+
+<p>
+    In this post we discussed the two major data visualization user tasks and how they differ from one another, then took a closer look at four data visualization design patterns that are influential in library design today. This is obviously far from comprehensive, and there are tons more ideas out there, like:
+</p>
+
+<ul>
+    <li>Literate programming and widget interactivity, courtesy of <code class="inline_code">bqplot</code> and <code class="inline_code">holoviews</code>.</li>
+    <li>Intrinsic interactivity, featured in <code class="inline_code">mpld3</code>, <code class="inline_code">bokeh</code>, <code class="inline_code">altair</code>, <code class="inline_code">plotly</code>, and others.</li>
+    <li>User-chosen abstraction layers, as in <code class="inline_code">holoviews</code>.</li>
+    <li>Online sync, as in <code class="inline_code">plotly</code>.</li>
+</ul>
+
+<p>
+    There's certainly enough out there to write another blog post or three. In the meantime, to learn some practical data visualization techniques, I recommend checking out the <a href="https://www.kaggle.com/learn/data-visualisation">Kaggle Data Visualization Tutorial</a>.
+</p>
+
 {% endblock %}
