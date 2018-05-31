@@ -202,12 +202,19 @@ post_list = [
         'snap': 'kaggle-kernels-are-turing-complete.png'
     },
     {
-        'title': 'Building an MTA historical train arrival application',
-        'route': '2018/05/16/subway-explorer.html',
-        'date': datetime(2018, 5, 16),
-        'template': 'subway-explorer.html',
+        'title': 'Designing data visualization APIs',
+        'route': '2018/05/30/dataviz-apis.html',
+        'date': datetime(2018, 5, 30),
+        'template': 'dataviz-apis.html',
         'snap': 'empty.png'
     }
+    # {
+    #     'title': 'Building an MTA historical train arrival application',
+    #     'route': '2018/05/16/subway-explorer.html',
+    #     'date': datetime(2018, 5, 16),
+    #     'template': 'subway-explorer.html',
+    #     'snap': 'empty.png'
+    # }
 ]
 
 post_paths = [post['route'] for post in post_list]

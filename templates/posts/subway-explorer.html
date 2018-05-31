@@ -186,11 +186,14 @@
 </p>
 
 <p>
-    The web application is basically done, except for the visualizations, which are still a work and progress and
-    something I am leaving for last. More words here in the future!
+    Before the application can serve the visualization, however, there is still more data processing work that needs to be done. The API output the webapp recieves is purposefully designed to be as generic as possible. Given a commute starting at one stop and ending at another, the only thing that the API guarantees is that first and last stop; it has no opinion on the intervening stops. I did not want to expose end users to this subtly.
 </p>
 
-<h3>Deploying the appli</h3>
+<p>
+    I implemented a small data processing shim which chains the stations that are the most likely to occur in sequence. So if the next station after station A is station C four quarters of the time, and station B the remaining time, I will 
+</p>
+
+<h3>Deploying the app</h3>
 
 <p>
     If you have been paying attention so far, you'll notice that I've described my application as consisting of three separable services: a database API, a Google Directions API proxy, and a web app. This was purposeful decision, as in truth, the core of the application is the Subway Explorer API&mdash;the web app is just something to show off with, and, in the grand scheme of things you could do <i>with</i> the API, is fairly minimal. Thus the need for a microservices-based deployment architecture. I've bundled <a href="https://www.docker.com/">Docker</a> container images with the repositories, making them easily launch-able, pending some light dot-env and environment variable configuration.

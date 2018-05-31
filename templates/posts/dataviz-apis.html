@@ -1,0 +1,310 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    I've been building or tinkering with data visualization ideas in Python for a while now, both in my free time and in my (still nascent) professional work. The Python data visualization ecosystem is incredibly diverse&mdash;Jake VanderPlas dedicated an entire PyCon 2017 talk, <a href="https://www.youtube.com/watch?v=FytuB8nFHPQ">"The Python Data Visualization Ecosystem"</a>, to counting out a representative subset of 36 libraries.
+</p>
+
+<p>
+    In this post I'll share some thoughs on influential ideas I have seen in data visualization API design. The API is the set of tools that a programmer uses to build programs with a software module or product. A good API makes a module easy and fun. A poor one can make even the most technically innovative product a drag. We'll look at some major interface design ideas that these libraries have implemented, and what they can and can't achieve for the user.
+</p>
+
+<h3 id="User-and-audience-comprehension">User and audience comprehension</h3>
+
+<p>
+    To start things off, let's discuss some general data visualization philosophy.
+</p>
+
+<p>
+    The objective of a data visualization library is some combination of just two things: user comprehension, and audience comprehension.
+</p>
+
+<p>
+    User comprehension is the ability of the individual building the visualization to understand some interesting feature of the dataset. What constitutes interesting obviously varies, but the broad theme is: tell me something about this dataset that I couldn't learn by with a table alone. User comprehension is performed by a data analyst.
+</p>
+
+<p>
+    Audience comprehension, by contrast, is the ability of users besides the individual doing the visualization to understand interesting features. In this case, the objective to maximize is how well the visualization communicates the desired information to a target audience. Audience comprehension is performed by a data presenter.
+</p>
+
+<p>
+    Data analysts are generally spending valuable time resources to visualize. They are willing to spend more time interpreting a more complicated visualization result, so long as the visualizations they build are relatively easy-to-make. This leads to a strong preference for expedient solutions and reusable templates.
+</p>
+
+<p>
+    Data presenters by contrast are generally presenting their work to an external audience, one less experienced that the analyst building the graphic at visual interpretation. Good data presenters are more willing to accept harder-to-build visualizations, if that means more easily interpretable results.
+</p>
+
+<p>
+    An example of a highly data analysis specific task would be optimizing a machine learning model. In this setting it is very important to have a deep understanding of every aspect of the dataset, as this understanding is fundamental to the approach you take and the performance you ultimately get from the result. An ML practitioner invariably builds heaps of short-lived, messy-looking charts, none of which survive long enough to be seen by anyone else. An example:
+</p>
+
+<img src="http://www.scikit-yb.org/en/latest/_images/spam_discrimination_threshold.png" class="inline_image_full">
+
+<p>
+    Interpreting this graph takes heaps of domain knowledge, experience with this plot type, and knowledge about the dataset being visualized; all things highly specific to the person creating the chart. But actually creating it is easy. You just feed two lists of data to a template and get a result.
+</p>
+
+<p>
+    An example of a highly data presentation specific task, by contrast, is data journalism. In data journalism you are attempting to communicate some story of viewpoint to a public audience. The public audience is visually uninformed, and has a very low threshold for interpretive complexity, so good data journalists must be skilled in using sophisticated tools to build highly custom "data experiences". An extreme example is this New York Times visualization of collaborations amongst Oscar winners:
+</p>
+
+<img src="https://static01.nyt.com/images/2013/02/21/movies/awardsseason/21oscar-network-sf-image/21oscar-network-sf-image-superJumbo.png" class="inline_image_full"/>
+
+<p>
+    This visualization is algorithmically complex; it apparently required its own layout engine, discussed briefly <a href="https://bost.ocks.org/mike/example/">here</a> to work at all. But the result is beautifully easy to interpret.
+</p>
+
+<p>
+    All data visualization tasks lie on the a spectrum between these two extremes. Tools that are great for data presentation tend to be very complicated and low-level, but also as a consequence very feature-rich and customizable; tools that are great for data analysis are easy-to-use but offer limited tweaking. For a data visualization module designer, the trick is to strike an appealing balance: between easy-to-use and easy-to-customize, between simple and complex, between limiting and expressive.
+</p>
+
+<p>
+    In the next few sections we'll look at four major API features data visualization library authors have implemented for striking this balance.
+</p>
+
+<h3>Abstraction stacks</h3>
+
+<p>In computer science an abstraction is a self-contained system that hides complexity from its user. The Python <code class="inline_code">requests</code> library, reputed for having a particularly beautiful API, is an abstraction that builds on <code class="inline_code">httplib</code> and friends to make network requests intuitive. CPython is an abstraction that keeps you from having to write machine code. And so on.</p>
+
+<p>
+    But sometimes we need to leave the current abstraction and dig deeper. This occurs when there is something we need that the current abstraction level does not support. It's impossible to come up with an API that covers every possible usecase, and well-designed data visualization libraries don't even try. Instead, to handle this need, mature Python data visualization tools provide easy access to their abstraction stack.
+</p>
+
+<p>
+    I will use <code class="inline_code">matplotlib</code> to demonstrate what I mean. <code class="inline_code">matplotlib</code> is the oldest and most heavily utilized Python data visualization library, featuring an initial release date way back in 2003. It provides, at the highest abstraction level, charts. It's important to realize that charts, e.g. things like bar charts and scatter plots and the like, are abstractions: data comes in, a well-defined image template processes the input, and a bunch of pixels arranged in a familiar (or unfamiliar) shape comes out.
+</p>
+
+<p>
+    For example, here is one the simplest chart types in action&mdash;the bar chart:
+</p>
+
+<pre><code class="language-python">import matplotlib.pyplot as plt
+plt.bar([1, 2, 3], [4, 5, 6])
+</code></pre>
+
+<img src="/static/post_assets/dataviz-apis/a-chart.png" class="inline_image"/>
+
+<p>
+    Charts are a great abstraction because they're simple, yet powerful. To get output all you need to do is provide a couple of lists of data, and the output intrinsically "makes sense". And if our bar chart doesn't make sense, then we have a good sense of what we need to do to debug it.
+</p>
+
+<p>
+    If we needed to tweak this plot in some non-trivial way, and all <code class="inline_code">matplotlib</code> provided us with was <code class="inline_code">plt.bar</code>, we'd be stuck; but luckily it also allows us to go lower-level.
+</p>
+
+<p>
+    Every element of a chart is just a geometry of some kind. A scatter plot consists of many points, a line chart of line segments, and a bar chart of rectangles. Using this lower level of abstraction, geometry, we can replicate this plot by drawing rectangles on the screen.
+</p>
+
+<pre><code class="language-python">from matplotlib.patches import Rectangle
+
+ax = plt.gca()
+ax.add_patch(Rectangle((0.6, 0), 0.8, 4))
+ax.add_patch(Rectangle((1.6, 0), 0.8, 5))
+ax.add_patch(Rectangle((2.6, 0), 0.8, 6))
+ax.set_xlim([0.5, 3.5])
+ax.set_ylim([0, 6.5])</code></pre>
+
+<img src="/static/post_assets/dataviz-apis/a-chart-in-geometry.png" class="inline_image"/>
+
+<p>
+    This way of plotting is more powerful and expressive, but also obviously significantly more complex. The naive bar chart required practically no knowledge about how <code class="inline_code">matplotlib</code> works. Plotting using geometries requires knowing what an axis is, that you can get the current axis objects using <code class="inline_code">plt.gca()</code>, and that there is a <code class="inline_code">Rectangle</code> element that can be appended using <code class="inline_code">ax.add_patch</code>.
+</p>
+
+<p>
+    Most data visualization libraries are, on some level, organized around charts. Charts are easy to understand, easy to work with, and easy to remember. They're a great abstraction!
+</p>
+
+<p>
+    A plurality of data visualization libraries in Python are built on top of <code class="inline_code">matplotlib</code>. Those libraries that do so have a standardized "abstraction escape hatch": when you create a plot, you are automatically returned a reference to the underlying axis object. Here's a demo, using the <code class="inline_code">seaborn</code> library:
+</p>
+
+<pre><code class="language-python"># Create a plot and catch the axis.
+import seaborn as sns
+iris = sns.load_dataset("iris")
+ax = sns.lmplot(x="sepal_length", y="sepal_width", hue="species", truncate=True, size=5, data=iris)
+
+# Modify the axis.
+ax.set_axis_labels("Sepal length (mm)", "Sepal width (mm)")</code></pre>
+
+<img src="/static/post_assets/dataviz-apis/seaborn-axis-modification.png" class="inline_image"/>
+
+<p>
+    An abstraction stack is just about a hard requirement&mdash;every major data visualization library in Python has one. That's because it enables the best of both worlds: simple chart-based APIs for the 90% use-case, and a fallback for those remaining 10% of plots that you really want looking spiffy.
+</p>
+
+<h3>State machines</h3>
+
+<p>
+    Most data visualization library APIs are object-oriented. In object-oriented programming inputs and outputs are modeled as objects, and the resulting programs operate by hanging functions off of these objects.
+</p>
+
+<p>
+    Object-oriented data visualization can be thought of as a two-step process. First, use an object instantiation method to generate a chart or scene. Then, call functions hanging off the object to "paint" on desired features:
+</p>
+
+<pre><code class="language-python">chart = Chart()
+chart.do_something()
+chart.do_something_else()
+chart.display()
+</code></pre>
+
+
+<p>
+    An object-oriented API is a safe, well-understood choice, and data visualization library authors are not usually interested in novel interface design. OO API designs are ubiquitous because OO itself is ubiquitous.
+</p>
+
+<p>
+    Here is a <code class="inline_code">matplotlib</code> demonstration of OO in action:
+</p>
+
+<pre><code class="language-python">ax = plt.subplot(111)
+ax.scatter([1,2,3],[4,5,6])
+ax.scatter([1.5,2,4],[6,4,7])
+</code></pre>
+
+<img src="/static/post_assets/dataviz-apis/matplotlib-oo.png" class="inline_image"/>
+
+<p>
+    We begin by initializing an <code class="inline_code">Axis</code> object, assigning that object to the <code class="inline_code">ax</code> variable. Then we call <code class="inline_code">Axis.scatter</code> object methods to paint our chart in two steps.
+</p>
+
+<p>
+    However, <code class="inline_code">matplotlib</code> inherited its API design and overall style from the plotting facilities in the venerable MATLAB programming language. One of the features that got carried over is schizophrenia&mdash;<code>matplotlib</code> comes equipped with both an object-oriented API and a state machine one. A state machine is a software design pattern that differs from pure OO in that it "remembers" the current state of the visualization. We do not have to reference the underlying object to make changes to it, but we do have to remember where we are in the scene. Here's a demonstration using the <code class="inline_code">matplotlib</code> state machine:
+</p>
+
+<pre><code class="language-python">ax = plt.gca()
+plt.scatter([1,2,3],[4,5,6])
+plt.scatter([1.5,2,4],[6,4,7])</code></pre>
+
+<img src="/static/post_assets/dataviz-apis/matplotlib-oo.png" class="inline_image"/>
+
+<p>
+    We started the plot off by asking for the current axis instance with <code class="inline_code">plt.gca</code> ("get current axis"). This causes the <code  class="inline_code">matplotlib</code> state machine to get the most "recent" plot axis. In fact, since none exist yet, it goes ahead and creates one for you! We then plot two different datasets onto the axis using <code  class="inline_code">plt.scatter</code>. These are global methods from the top level of the module; we don't explicitly tell them where to put these scatter plots. <code  class="inline_code">matplotlib</code> just "remembers" what the current axis is, and pushes the pixels there.
+</p>
+
+<p>
+    The "bonus state machine" was included to increase the appeal of <code class="inline_code">matplotlib</code> to MATLAB users. However, it provides little benefit otherwise. The state machine just doesn't go far enough&mdash;it is barely different from the more familiar object-oriented style in practice, meaning that there is little reason, aside from personal preference, to use it at all.
+</p>
+
+<h3>Method chaining</h3>
+
+<p>
+    Among the general-purpose data visualization libraries, <code class="inline_code">altair</code>, which only had its initial release a year or so ago at time of writing, is the new kid of the block. The <code>altair</code> designers had the opportunity to learn from the choices made by the older libraries.
+</p>
+
+<p>
+    Altair's most distinctive feature is its method-chaining API style.
+</p>
+
+<p>
+    Pure object-oriented methods do not return anything when you call them; if you need some property of the chart you are expected to call a getter on the chart object, or to access the instance attributes directly:
+</p>
+
+<pre><code class="language-python">chart = Chart()
+chart.do_something()
+chart.do_something_else()</code></pre>
+
+<p>
+    Altair changes things up by returning the underlying chart object with every method. This unlocks the ability to call your functions in one contiguous sequence&mdash;hence "method chaining":
+</p>
+
+<pre><code class="language-python">chart = Chart().do_something().do_something_else()
+</code></pre>
+
+<p>
+    Here is this in action:
+</p>
+
+<pre><code class="language-python"># Boilerplate.
+import altair as alt
+alt.renderers.enable('notebook')
+from vega_datasets import data
+cars = data.cars()
+
+# Render the chart.
+(alt.Chart(cars)
+     .mark_point()
+     .encode(x='Horsepower', y='Miles_per_Gallon', color='Origin')
+)</code></pre>
+
+<img src="/static/post_assets/dataviz-apis/altair-method-chaining.png" class="inline_image" style="width:66%;"/>
+
+<p>
+    The first method call, <code class="inline_code">alt.Chart(cars)</code>, instantiates a new <code class="inline_code">Chart</code> object. Each of the functions that follows mutates the chart and returns it, allowing the function that comes afterwards to have a go at it too. The end product is the sum of all mutations that were made in the sequence.
+</p>
+
+<p>
+    Method chaining is somewhat similar to state machines in what it achieves, but is a technically superior pattern. It's easy to implement, doesn't require implementing new methods, and is helpful for pruning object initialization parameters (it's more "obvious" that things like titles can be set after the initial Chart object has been created). For users, it cuts down on the need for tempoarary variables, makes debugging easier (just hide one of the methods and see what changes), and generally just <em>feels</em> elegant.
+</p>
+
+<h3>Grammars of graphics</h3>
+
+<p>
+    Method chaining isn't a design feature that's novel to <code class="inline_code">altair</code>. The <code class="inline_code">plotnine</code> library implemented it first, and <code class="inline_code">ggplot</code> before that. Both of these libraries are re-implementations of <code class="inline_code">ggplot2</code> from the R programming language, a library which introduced the (broader) world to another important concept: grammars of graphics.
+</p>
+
+<p>
+    To understand the grammar of graphics we need to understand the difference between imperative and declarative programming. In an imperative design, you program by specifying <em>how</em>: a sequence of commands for a program to execute. In a declarative design you instead describe <em>what</em> your end result should be, and it's up to program itself to determine how to get there.
+</p>
+
+<p>
+    Most programming APIs are imperative as a matter of course. Imperative APIs minimize indirection; it's easy (well, easier) for a user to tell what a program is doing. Declarative APIs, meanwhile, hide some of the details from the user. A famous example of a declarative API is SQL, the pretty-much-universial database query language. Here's an example SQL statement:
+</p>
+
+<pre><code class="language-python">SELECT First_Name, Nickname FROM Friends WHERE Nickname LIKE '%brain%';</code></pre>
+
+<p>
+    Notice how this statement <em>almost</em> looks like an English sentence. It describes what you would like to do, without specifying how you ought to do it.
+</p>
+
+<p>
+    Declarative APIs can be used to build a layer of abstraction into a system. SQL's declarative style is designed to abstract away database access. A grammar of graphics, meanwhile, is a declarative API meant to abstract away the particularities of plotting.
+</p>
+
+<p>
+    As its second major innovation, Altair goes and implements a declarative API, utilizing a grammar of graphics. Take a look again at the example chart, paying attention to what the functions that we are actually calling here are doing:
+</p>
+
+<pre><code class="language-python">(alt.Chart(cars)
+     .mark_point()
+     .encode(x='Horsepower', y='Miles_per_Gallon', color='Origin')
+)</code></pre>
+
+<img src="/static/post_assets/dataviz-apis/altair-method-chaining.png" class="inline_image" style="width:66%;"/>
+
+<p>
+    After initializing the <code class="inline_code">Chart</code> object, this code sample approaches plotting in two steps. First, we specify (<code class="inline_code">mark_point</code>) that we want to use a point <a href="https://en.wikipedia.org/wiki/Glyph">glyph</a>. Then, we bind (<code class="inline_code">encode</code>) the data to the plot.
+</p>
+
+<p>
+    In the first section of this post we talked about abstraction stacks, and how most libraries have a "chart" abstraction layer that sits on top of a "geometry" layer. A grammar of graphics is an abstraction layer that essentially replaces the "chart" layer. We still have raw shapes underneath, but now instead of pushing data into a chart directly, we think about the marks and data encoding that we will use.
+</p>
+
+<p>
+    In the ubiqituous chart-based libraries, charts are first-class citizen. In a grammar of graphics based library, data replaces the chart a as the first class citizen; our workflow instead revolves around things we "do" with the data.
+</p>
+
+<p>
+    The "grammar" is grammar of graphics is literal: it invokes new concepts, like glyphs and visual encodings, to understand and master. Many of these concepts are the invention of academia, which has always considered data visualization less as an objective-directed task and more as a set of encoded relationships betweens different aspects of data pushed onto a page or a screen. These ideas take more work to grasp and use effectively than charts.
+</p>
+
+<p>
+    There are a couple of reasons why this overhead may be worth it. The more practical benefit is that what you lose in simplicity, you gain in flexibility. Probably the most powerful demonstration of this benefit is faceting. Faceting is when we create multiple plots, each one focusing on a specific sub-group of the data. To facet in <code class="inline_code">matplotlib</code> we have to frame the scene and subselect the data ourselves:
+</p>
+
+<pre><code class="language-python">fig, axarr = plt.subplots(3)
+axarr[0].plot(cars.query("Origin == 'USA'").Horsepower, 'o', color='red')
+axarr[1].plot(cars.query("Origin == 'Europe'").Horsepower, 'o', color='steelblue')
+axarr[2].plot(cars.query("Origin == 'Japan'").Horsepower, 'o', color='orange')</code></pre>
+
+<img src="/static/post_assets/dataviz-apis/matplotlib-faceting.png" class="inline_image" style="width:66%;"/>
+
+
+<h3>Conclusion</h3>
+{% endblock %}
