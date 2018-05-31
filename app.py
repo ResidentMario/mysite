@@ -206,7 +206,7 @@ post_list = [
         'route': '2018/05/30/dataviz-apis.html',
         'date': datetime(2018, 5, 30),
         'template': 'dataviz-apis.html',
-        'snap': 'empty.png'
+        'snap': 'dataviz-apis.png'
     }
     # {
     #     'title': 'Building an MTA historical train arrival application',

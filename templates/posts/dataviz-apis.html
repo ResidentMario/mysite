@@ -6,11 +6,11 @@
 {% block content %}
 
 <p>
-    I've been building or tinkering with data visualization ideas in Python for a while now, both in my free time and in my (still nascent) professional work. The Python data visualization ecosystem is incredibly diverse&mdash;Jake VanderPlas dedicated an entire PyCon 2017 talk, <a href="https://www.youtube.com/watch?v=FytuB8nFHPQ">"The Python Data Visualization Ecosystem"</a>, to counting out a representative subset of 36 libraries.
+    I've been building or tinkering with data visualization ideas in Python for a while now, both in my free time and in my (still nascent) professional work. The Python data visualization ecosystem is incredibly diverse&mdash;Jake VanderPlas dedicated an entire PyCon 2017 talk, <a href="https://www.youtube.com/watch?v=FytuB8nFHPQ">"The Python Data Visualization Ecosystem"</a>, to counting out a representative subset of 36 libraries. These libraries all have different APIs, or set of tools for building your programs. APIs are important: a good one will make work easy and fun whilst a poor one can make even the most technically innovative product a drag to work with.
 </p>
 
 <p>
-    In this post I'll share some thoughs on influential ideas I have seen in data visualization API design. The API is the set of tools that a programmer uses to build programs with a software module or product. A good API makes a module easy and fun. A poor one can make even the most technically innovative product a drag. We'll look at some major interface design ideas that these libraries have implemented, and what they can and can't achieve for the user.
+    In this post we'll examine some data visualization API design ideas. We'll look at some major interface design ideas that these libraries have implemented, and what they can and can't achieve for the user. If you are interested in building your own data visualization library, or in better understanding why these libraries make some of the decisions that they make, keep reading!
 </p>
 
 <h3 id="User-and-audience-comprehension">User and audience comprehension</h3>
@@ -287,15 +287,15 @@ cars = data.cars()
 </p>
 
 <p>
-    In the ubiqituous chart-based libraries, charts are first-class citizen. In a grammar of graphics based library, data replaces the chart a as the first class citizen; our workflow instead revolves around things we "do" with the data.
+    In the ubiquitous chart-based libraries, charts are first-class citizen. In a grammar of graphics based library, data replaces the chart a as the first class citizen; our workflow instead revolves around things we "do" with the data.
 </p>
 
 <p>
-    The "grammar" is grammar of graphics is literal: it invokes new concepts, like glyphs and visual encodings, to understand and master. Many of these concepts are the invention of academia, which has always considered data visualization less as an objective-directed task and more as a set of encoded relationships betweens different aspects of data pushed onto a page or a screen. These ideas take more work to grasp and use effectively than charts.
+    The "grammar" is grammar of graphics is literal: it invokes new concepts, like glyphs and visual encodings, to understand and master. Many of these concepts are the invention of academia, which has always considered data visualization less as an objective-directed task and more as a set of encoded relationships between different aspects of data pushed onto a page or a screen. These ideas take more work to grasp and use effectively than charts.
 </p>
 
 <p>
-    There are a couple of reasons why this overhead may be worth it. The more practical benefit is that what you lose in simplicity, you gain in flexibility. Probably the most powerful demonstration of this benefit is faceting. Faceting is when we create multiple plots, each one focusing on a specific sub-group of the data. To facet in <code class="inline_code">matplotlib</code> we have to frame the scene and subselect the data ourselves:
+    There are a couple of reasons why this overhead may be worth it. The more practical benefit is that what you lose in simplicity, you gain in flexibility. Probably the most powerful demonstration of this benefit is faceting. Faceting is when we create multiple plots, each one focusing on a specific sub-group of the data. To facet in <code class="inline_code">matplotlib</code> we have to frame the scene and sub-select the data ourselves:
 </p>
 
 <pre><code class="language-python">fig, axarr = plt.subplots(3)
