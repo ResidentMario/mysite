@@ -207,6 +207,13 @@ post_list = [
         'date': datetime(2018, 5, 30),
         'template': 'dataviz-apis.html',
         'snap': 'dataviz-apis.png'
+    },
+    {
+        'title': 'Tennis\'s wooden spoons',
+        'route': '2018/06/10/tennis-wooden-spoons.html',
+        'date': datetime(2018, 6, 10),
+        'template': '/tennis-wooden-spoons.html',
+        'snap': 'tennis-wooden-spoons.png'
     }
     # {
     #     'title': 'Building an MTA historical train arrival application',

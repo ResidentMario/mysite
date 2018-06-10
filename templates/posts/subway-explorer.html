@@ -51,7 +51,7 @@
         storage, split
         across 5,256,000 PUT and 5,256,000 GET requests.<br><br>Amazon S3: That&#39;ll be $14.86 please.<br><br>Me: THE CLOUD.</p>&mdash; Aleksey Bilogur (@ResidentMario) <a href="https://twitter.com/ResidentMario/status/881670479257456646?ref_src=twsrc%5Etfw">July 3, 2017</a></blockquote>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-</centeR>
+</center>
 
 <p>
     I ended up writing a simple Python script running on <a href="https://aws.amazon.com/lambda/">AWS Lambda</a> that makes an HTTP request to the feed URLs and stashes the response into an <a href="https://aws.amazon.com/s3/">AWS S3</a> bucket, configured to fire once a minute via <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html">AWS CloudWatch</a> (the MTA technically updates the feed twice a minute, but CloudWatch is based on cron, and cron doesn't allow you to define intervals smaller than a minute). I backed a copy of it up to <a href="https://github.com/ResidentMario/subway-explorer-api/blob/master/scripts/aws-lambda-archiver.py">here</a>.

@@ -1,0 +1,851 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/tennis-wooden-spoon/ostapenko.jpg" class="inline_image_full"/>
+
+<p>
+    The women's tennis world recently got a particularly interesting trivia night entry this month. The highest tier of tennis tournaments are the Grand Slams, four of which are held every year. <a href="https://en.wikipedia.org/wiki/Je%C4%BCena_Ostapenko">Jeļena Ostapenko</a>, a young and hard-hitting Latvian player, shook things up in 2017 by winning one of them, the French Open, securing the first French Cup win by an unseeded (low-ranked) player since 1933.
+</p>
+
+<p>
+    Well, the French Open came and went again, and this year we saw defending champion Ostapenko win...a wooden spoon.
+</p>
+
+<p>
+    The <b>wooden spoon</b> is a booby prize of sorts for any player in a single-elimination tournament who is defeated by another player in the first round, who is then defeated by another player in the second, who is then defeated by someone else in the third, and so on, all the way up to the second-place finisher (who loses to the tournament champion in the final).
+</p>
+
+<center>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Ironically, defending champion Jelena Ostapenko wins the wooden spoon.<br><br>She l. to Kozlova, who. l. to Siniakova, who l. to Strycova, who l. to Putintseva, who l. to Keys, who l. to Stephens, who l. to Halep. <a href="https://twitter.com/hashtag/RG18?src=hash&amp;ref_src=twsrc%5Etfw">#RG18</a></p>&mdash; Victoria Chiesa (@vrcsports) <a href="https://twitter.com/vrcsports/status/1005472347422363649?ref_src=twsrc%5Etfw">June 9, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</center>
+
+<br/>
+<p>
+    Whereas the champion sits atop the longest possible list of wins, the holder of the wooden spoon sits beneath the longest possible list of losses. Therefore if the champion of the tournament is supposedly the best player there, then logically the holder of the wooden spoon is the worst.
+</p>
+
+<p>
+    However, this is only really true if matches are deterministic, and the winner of each match is always the better of the two players. In reality, there is a lot of randomness involved (just enough to make the sport exiting). In almost every sport even top-ranked players are statistically likely to eat a shock first-round exit from time to time.
+</p>
+
+<p>
+    This got me thinking. Every tournament has a wooden spoon holder (just as every tournament has a champion). Who are the wooden spoon holders? How often do top-ranking players earn them? Is Ostapenko's un-slam really all that rare?
+</p>
+
+<p>
+    <a href="http://www.mikero.com/misc/anti-slam/">The best list I could find</a> is years out of date, and only
+    covers the ATP. <a href="https://github.com/JeffSackmann">The data</a> is out there, so I did some quick number
+    crunching.
+</p>
+
+<h3>Men's tour</h3>
+
+<p>
+    Here is the list for the men's tour (the ATP). The numbers next to the players' names are their seeds, for those players that were ranked highly enough to receive seeded entry into the tournament.
+</p>
+
+<center>
+<table class="dataframe" style="font-size:14px; text-align:right; border:2px solid steelblue; padding:8px;
+border-radius:8px;">
+  <thead>
+    <tr>
+    </tr>
+    <tr>
+      <th></th>
+      <th>Australian Open</th>
+      <th>French Open</th>
+      <th>US Open</th>
+      <th>Wimbledon</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1968</th>
+      <td>Unknown</td>
+      <td>Joseph Mateo</td>
+      <td>Billy Knight</td>
+      <td>Lance Lumsden</td>
+    </tr>
+    <tr>
+      <th>1969</th>
+      <td>Bob Giltinan</td>
+      <td>Ivan Molina</td>
+      <td>David Lloyd</td>
+      <td>Bob Giltinan</td>
+    </tr>
+    <tr>
+      <th>1970</th>
+      <td>Anthony Hammond</td>
+      <td>Jean Francois Caujolle</td>
+      <td>Onny Parun</td>
+      <td>Szabolcz Baranyi</td>
+    </tr>
+    <tr>
+      <th>1971</th>
+      <td>Alvin Gardiner</td>
+      <td>Bob Giltinan</td>
+      <td>D Richard Russell</td>
+      <td>Pat Cramer</td>
+    </tr>
+    <tr>
+      <th>1972</th>
+      <td>Jun Kuki</td>
+      <td>Ion Tiriac</td>
+      <td>Pat Dupre</td>
+      <td>Jim Osborne</td>
+    </tr>
+    <tr>
+      <th>1973</th>
+      <td>Robert Casey C100</td>
+      <td>Piero Toci</td>
+      <td>Rayno Seegers</td>
+      <td>Neale Fraser</td>
+    </tr>
+    <tr>
+      <th>1974</th>
+      <td>John James</td>
+      <td>Michele Leclercq</td>
+      <td>Jun Kamiwazumi</td>
+      <td>Peter Szoke</td>
+    </tr>
+    <tr>
+      <th>1975</th>
+      <td>Joao Soares</td>
+      <td>Patricio Cornejo</td>
+      <td>Howard Schoenfield</td>
+      <td>John Andrews</td>
+    </tr>
+    <tr>
+      <th>1976</th>
+      <td>Unknown</td>
+      <td>Chris Kachel</td>
+      <td>Ove Nils Bengtson</td>
+      <td>Jay Royappa</td>
+    </tr>
+    <tr>
+      <th>1977</th>
+      <td>Allan Stone</td>
+      <td>Chris Kachel</td>
+      <td>Ricardo Cano</td>
+      <td>Mike Machette</td>
+    </tr>
+    <tr>
+      <th>1978</th>
+      <td>Richard Lewis</td>
+      <td>Jiri Granat</td>
+      <td>George Amaya</td>
+      <td>John Mcenroe [11]</td>
+    </tr>
+    <tr>
+      <th>1979</th>
+      <td>George Hardie</td>
+      <td>Bernard Fritz</td>
+      <td>Adriano Panatta [15]</td>
+      <td>John Yuill</td>
+    </tr>
+    <tr>
+      <th>1980</th>
+      <td>Jay Lapidus</td>
+      <td>Bernard Boileau</td>
+      <td>George Hardie</td>
+      <td>Byron Bertram</td>
+    </tr>
+    <tr>
+      <th>1981</th>
+      <td>Chris Johnstone</td>
+      <td>Mark Edmondson</td>
+      <td>Bill Cowan</td>
+      <td>Phil Dent</td>
+    </tr>
+    <tr>
+      <th>1982</th>
+      <td>Jonathan Smith</td>
+      <td>Tim Mayotte</td>
+      <td>Eddie Edwards</td>
+      <td>Rick Fagel</td>
+    </tr>
+    <tr>
+      <th>1983</th>
+      <td>Henrik Sundstrom [9]</td>
+      <td>Jose Luis Damiani</td>
+      <td>Chip Hooper</td>
+      <td>Tom Cain</td>
+    </tr>
+    <tr>
+      <th>1984</th>
+      <td>Russell Simpson</td>
+      <td>Matt Doyle</td>
+      <td>Thierry Tulasne</td>
+      <td>Tom Cain</td>
+    </tr>
+    <tr>
+      <th>1985</th>
+      <td>Mark Wooldridge</td>
+      <td>Shlomo Glickstein</td>
+      <td>Robert Seguso</td>
+      <td>Jimmy Arias</td>
+    </tr>
+    <tr>
+      <th>1986</th>
+      <td>Unknown</td>
+      <td>Victor Pecci</td>
+      <td>Ulf Stenlund</td>
+      <td>Jeremy Bates</td>
+    </tr>
+    <tr>
+      <th>1987</th>
+      <td>John Fitzgerald</td>
+      <td>Peter Lundgren</td>
+      <td>Bruno Oresar</td>
+      <td>Gary Donnelly</td>
+    </tr>
+    <tr>
+      <th>1988</th>
+      <td>Larry Scott</td>
+      <td>Sergio Casal</td>
+      <td>Jean Philippe Fleurian</td>
+      <td>Mark Petchey</td>
+    </tr>
+    <tr>
+      <th>1989</th>
+      <td>Michael Kures</td>
+      <td>Tore Meinecke</td>
+      <td>Paul Chamberlin</td>
+      <td>Patrick Baur</td>
+    </tr>
+    <tr>
+      <th>1990</th>
+      <td>Kelly Evernden</td>
+      <td>Guillaume Raoux</td>
+      <td>Paul Chamberlin</td>
+      <td>Danny Sapsford</td>
+    </tr>
+    <tr>
+      <th>1991</th>
+      <td>Peter Doohan</td>
+      <td>Jeff Tarango</td>
+      <td>Francisco Montana</td>
+      <td>Jordi Arrese</td>
+    </tr>
+    <tr>
+      <th>1992</th>
+      <td>Karsten Braasch</td>
+      <td>Javier Sanchez</td>
+      <td>Felipe Rivera</td>
+      <td>Richard Fromberg</td>
+    </tr>
+    <tr>
+      <th>1993</th>
+      <td>Grant Doyle</td>
+      <td>Nicolas Escude</td>
+      <td>Henri Leconte</td>
+      <td>Brian Devening</td>
+    </tr>
+    <tr>
+      <th>1994</th>
+      <td>John Sullivan</td>
+      <td>Grant Stafford</td>
+      <td>Greg Rusedski</td>
+      <td>Richard Krajicek</td>
+    </tr>
+    <tr>
+      <th>1995</th>
+      <td>Goran Ivanisevic [4]</td>
+      <td>Hernan Gumy</td>
+      <td>Greg Rusedski</td>
+      <td>Vincent Spadea</td>
+    </tr>
+    <tr>
+      <th>1996</th>
+      <td>Jonathan Stark</td>
+      <td>Nicolas Lapentti</td>
+      <td>Marcelo Filippini</td>
+      <td>Michael Joyce</td>
+    </tr>
+    <tr>
+      <th>1997</th>
+      <td>Juan Albert Viloca Puig</td>
+      <td>Emilio Benfele Alvarez</td>
+      <td>Patrick Mcenroe</td>
+      <td>Nicolas Lapentti</td>
+    </tr>
+    <tr>
+      <th>1998</th>
+      <td>Marcelo Filippini</td>
+      <td>Javier Sanchez</td>
+      <td>John Van Lottum</td>
+      <td>Andrei Pavel</td>
+    </tr>
+    <tr>
+      <th>1999</th>
+      <td>Joseph Sirianni</td>
+      <td>Karol Kucera [11]</td>
+      <td>Andrew Ilie</td>
+      <td>Cecil Mamiit</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>Cedric Pioline [13]</td>
+      <td>Galo Blanco</td>
+      <td>Bob Bryan</td>
+      <td>Michael Russell</td>
+    </tr>
+    <tr>
+      <th>2001</th>
+      <td>David Sanchez</td>
+      <td>Martin Damm</td>
+      <td>Nikolay Davydenko</td>
+      <td>Franco Squillari [28]</td>
+    </tr>
+    <tr>
+      <th>2002</th>
+      <td>Flavio Saretta</td>
+      <td>Max Mirnyi [26]</td>
+      <td>Agustin Calleri</td>
+      <td>Juan Ignacio Chela [19]</td>
+    </tr>
+    <tr>
+      <th>2003</th>
+      <td>Hicham Arazi</td>
+      <td>Justin Gimelstob</td>
+      <td>Joachim Johansson</td>
+      <td>Dick Norman</td>
+    </tr>
+    <tr>
+      <th>2004</th>
+      <td>Rainer Schuettler [6]</td>
+      <td>Joachim Johansson</td>
+      <td>Marat Safin [13]</td>
+      <td>John Van Lottum</td>
+    </tr>
+    <tr>
+      <th>2005</th>
+      <td>Felix Mantilla</td>
+      <td>Fabrice Santoro</td>
+      <td>Noam Okun</td>
+      <td>Vincent Spadea</td>
+    </tr>
+    <tr>
+      <th>2006</th>
+      <td>Fernando Vicente</td>
+      <td>Oliver Marach</td>
+      <td>Jeff Morrison</td>
+      <td>Greg Rusedski</td>
+    </tr>
+    <tr>
+      <th>2007</th>
+      <td>Luis Horna</td>
+      <td>Fernando Gonzalez [5]</td>
+      <td>Fernando Gonzalez [7]</td>
+      <td>Juan Monaco [32]</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>Donald Young</td>
+      <td>Viktor Troicki</td>
+      <td>Brendan Evans</td>
+      <td>Igor Kunitsyn</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>Kristof Vliegen</td>
+      <td>Yen Hsun Lu</td>
+      <td>Dmitry Tursunov</td>
+      <td>Nicolas Lapentti</td>
+    </tr>
+    <tr>
+      <th>2010</th>
+      <td>Robin Haase</td>
+      <td>Rainer Schuettler</td>
+      <td>Illya Marchenko</td>
+      <td>Ramon Delgado</td>
+    </tr>
+    <tr>
+      <th>2011</th>
+      <td>Denis Gremelmayr</td>
+      <td>Daniel Brands</td>
+      <td>Karol Beck</td>
+      <td>Lukas Lacko</td>
+    </tr>
+    <tr>
+      <th>2012</th>
+      <td>Gilles Muller</td>
+      <td>Eric Prodon</td>
+      <td>Mikhail Kukushkin</td>
+      <td>Alex Bogomolov Jr</td>
+    </tr>
+    <tr>
+      <th>2013</th>
+      <td>Tommy Haas [19]</td>
+      <td>Denis Kudla</td>
+      <td>Lukas Lacko</td>
+      <td>Carlos Berlocq</td>
+    </tr>
+    <tr>
+      <th>2014</th>
+      <td>Federico Delbonis</td>
+      <td>Albert Montanes</td>
+      <td>Julien Benneteau [24]</td>
+      <td>Ivo Karlovic [29]</td>
+    </tr>
+    <tr>
+      <th>2015</th>
+      <td>Blaz Kavcic</td>
+      <td>Maxime Hamou</td>
+      <td>Paul Henri Mathieu</td>
+      <td>Thomaz Bellucci</td>
+    </tr>
+    <tr>
+      <th>2016</th>
+      <td>Rafael Nadal [5]</td>
+      <td>Julien Benneteau</td>
+      <td>Julien Benneteau</td>
+      <td>Santiago Giraldo</td>
+    </tr>
+    <tr>
+      <th>2017</th>
+      <td>Feliciano Lopez [28]</td>
+      <td>Damir Dzumhur</td>
+      <td>Andreas Haider Maurer</td>
+      <td>Malek Jaziri</td>
+    </tr>
+    <tr>
+      <th>2018</th>
+      <td>Stefanos Tsitsipas</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<p>
+    The highest-rank seed ever to hold the spoon is Goran Ivanisevic, who was the fourth seed in the 1995 Australian
+    Open. If you want to argue over the best-ever player to hold the anti-slam, John McEnroe (former number
+    one, 7-time slam winner) held the spoon at Wimbledon in 1978, and Rafael Nadal (current number
+    one, 17-time slam winner) held it at the 2016 Australian Open.
+</p>
+
+<img src="/static/post_assets/tennis-wooden-spoon/nadals-wooden-spoon.png" class="inline_image_full"/>
+
+<p>
+    In fact, at least four of the players on this list have won a Grand Slam, and at least three have spent time
+    ranked number 1 in the world. It's looking like Ostopenko is in good company!
+</p>
+
+<h3>Women's tour</h3>
+
+<p>
+    What about the women's side?
+</p>
+
+<center>
+<table class="dataframe" style="font-size:14px; text-align:right; border:2px solid steelblue; padding:8px;
+border-radius:8px;">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Australian Open</th>
+      <th>French Open</th>
+      <th>US Open</th>
+      <th>Wimbledon</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1968</th>
+      <td>Unknown</td>
+      <td>Sally Holdsworth</td>
+      <td>Mary Lowdon</td>
+      <td>Gail Benedetti</td>
+    </tr>
+    <tr>
+      <th>1969</th>
+      <td>Wendy Gilchrist</td>
+      <td>Erzsebet Polgar</td>
+      <td>Eva Lundquist</td>
+      <td>Kerstin Seelbach</td>
+    </tr>
+    <tr>
+      <th>1970</th>
+      <td>L Cameron</td>
+      <td>Unknown</td>
+      <td>Mary Struthers</td>
+      <td>Odile De Roubin</td>
+    </tr>
+    <tr>
+      <th>1971</th>
+      <td>Janet Fallis</td>
+      <td>Helga Masthoff [5]</td>
+      <td>Lany Kaligis</td>
+      <td>Helen Amos</td>
+    </tr>
+    <tr>
+      <th>1972</th>
+      <td>Dorte Ekner</td>
+      <td>Unknown</td>
+      <td>Maria Teresa Nasuelli</td>
+      <td>Glynis Coles</td>
+    </tr>
+    <tr>
+      <th>1973</th>
+      <td>Frances Candy</td>
+      <td>Patti Hogan</td>
+      <td>Sharon Walsh Pete</td>
+      <td>Gertruida Walhof</td>
+    </tr>
+    <tr>
+      <th>1974</th>
+      <td>Unknown</td>
+      <td>Linky Boshoff</td>
+      <td>Janet Haas</td>
+      <td>Christina Sandberg</td>
+    </tr>
+    <tr>
+      <th>1975</th>
+      <td>Helen Cawley [5]</td>
+      <td>Sue Mappin</td>
+      <td>Mima Jausovec</td>
+      <td>Terry Holladay</td>
+    </tr>
+    <tr>
+      <th>1976</th>
+      <td>Unknown</td>
+      <td>Iris Riedel Kuhn</td>
+      <td>Carrie Meyer [14]</td>
+      <td>Florenta Mihai</td>
+    </tr>
+    <tr>
+      <th>1977</th>
+      <td>Kathleen Harter</td>
+      <td>Carrie Meyer</td>
+      <td>Robin Harris</td>
+      <td>Kathleen Harter</td>
+    </tr>
+    <tr>
+      <th>1978</th>
+      <td>Birgitte Hermansen</td>
+      <td>Chris Oneil</td>
+      <td>Diane Desfor</td>
+      <td>Unknown</td>
+    </tr>
+    <tr>
+      <th>1979</th>
+      <td>Unknown</td>
+      <td>Daniela Marzano</td>
+      <td>Julie Anthony</td>
+      <td>Sue Barker [12]</td>
+    </tr>
+    <tr>
+      <th>1980</th>
+      <td>Diane Evers</td>
+      <td>Kim Jones Shaefer</td>
+      <td>Unknown</td>
+      <td>Dana Gilbert</td>
+    </tr>
+    <tr>
+      <th>1981</th>
+      <td>Rosie Casals</td>
+      <td>Dana Gilbert</td>
+      <td>Lea Antonoplis</td>
+      <td>Claudia Casabianca</td>
+    </tr>
+    <tr>
+      <th>1982</th>
+      <td>Barbara Hallquist</td>
+      <td>Renata Tomanova</td>
+      <td>Camille Benjamin</td>
+      <td>Sue Barker</td>
+    </tr>
+    <tr>
+      <th>1983</th>
+      <td>Beth Herr</td>
+      <td>Lele Forood</td>
+      <td>Barbara Hallquist</td>
+      <td>Debbie Freeman</td>
+    </tr>
+    <tr>
+      <th>1984</th>
+      <td>Wendy Prausa</td>
+      <td>Hana Fukarkova</td>
+      <td>Julie Harrington</td>
+      <td>Ginny Purdy</td>
+    </tr>
+    <tr>
+      <th>1985</th>
+      <td>Linda Gates</td>
+      <td>Iva Budarova</td>
+      <td>Katerina Maleeva</td>
+      <td>Masako Yanagi</td>
+    </tr>
+    <tr>
+      <th>1986</th>
+      <td>Unknown</td>
+      <td>Beverly Bowes Hackney</td>
+      <td>Nathalie Herreman</td>
+      <td>Beverly Bowes Hackney</td>
+    </tr>
+    <tr>
+      <th>1987</th>
+      <td>Regina Marsikova</td>
+      <td>Pascale Etchemendy</td>
+      <td>Kathy Horvath</td>
+      <td>Terry Phelps</td>
+    </tr>
+    <tr>
+      <th>1988</th>
+      <td>Dianne Balestrat [14]</td>
+      <td>Terry Phelps</td>
+      <td>Mareen Louie Harper</td>
+      <td>Shaun Stafford</td>
+    </tr>
+    <tr>
+      <th>1989</th>
+      <td>Halle Cioffi</td>
+      <td>Nathalie Tauziat</td>
+      <td>Mercedes Paz</td>
+      <td>Anne Meredith</td>
+    </tr>
+    <tr>
+      <th>1990</th>
+      <td>Janine Tremelling</td>
+      <td>Rosalyn Nideffer [13]</td>
+      <td>Elise Burgin</td>
+      <td>Manuela Maleeva Fragniere [8]</td>
+    </tr>
+    <tr>
+      <th>1991</th>
+      <td>Patty Fendick</td>
+      <td>Isabelle Demongeot</td>
+      <td>Amanda Coetzer</td>
+      <td>Susan Sloane Lundy</td>
+    </tr>
+    <tr>
+      <th>1992</th>
+      <td>Petra Thoren</td>
+      <td>Carrie Cunningham</td>
+      <td>Tammy Whittington</td>
+      <td>Sarah Loosemore</td>
+    </tr>
+    <tr>
+      <th>1993</th>
+      <td>Nana Smith</td>
+      <td>Mana Endo</td>
+      <td>Caroline Kuhlman</td>
+      <td>Alexandra Fusai</td>
+    </tr>
+    <tr>
+      <th>1994</th>
+      <td>Lisa Mcshea</td>
+      <td>Catherine Mothes Jobkel</td>
+      <td>Janette Husarova</td>
+      <td>Bettina Fulco Villella</td>
+    </tr>
+    <tr>
+      <th>1995</th>
+      <td>Nana Smith</td>
+      <td>Alexia Dechaume Balleret</td>
+      <td>Andrea Temesvari</td>
+      <td>Stephanie Rottier</td>
+    </tr>
+    <tr>
+      <th>1996</th>
+      <td>Sonya Jeyaseelan</td>
+      <td>Isabelle Demongeot</td>
+      <td>Corina Morariu</td>
+      <td>Annabel Ellwood</td>
+    </tr>
+    <tr>
+      <th>1997</th>
+      <td>Maria Sanchez Lorenzo</td>
+      <td>Rachel Mcquillan</td>
+      <td>Erika De Lone</td>
+      <td>Ann Wunderlich</td>
+    </tr>
+    <tr>
+      <th>1998</th>
+      <td>Sandra Dopfer</td>
+      <td>Amelie Cocheteux</td>
+      <td>Cristina Torrens Valero</td>
+      <td>Nicole Pratt</td>
+    </tr>
+    <tr>
+      <th>1999</th>
+      <td>Kimberly Po Messerli</td>
+      <td>Miriam Oremans</td>
+      <td>Tatiana Panova</td>
+      <td>Magdalena Grzybowska</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>Anna Smashnova</td>
+      <td>Barbara Schwartz</td>
+      <td>Kristen Schlukebir</td>
+      <td>Rita Kuti Kis</td>
+    </tr>
+    <tr>
+      <th>2001</th>
+      <td>Adriana Gersi</td>
+      <td>Lisa Raymond</td>
+      <td>Tamarine Tanasugarn [26]</td>
+      <td>Anne Keothavong</td>
+    </tr>
+    <tr>
+      <th>2002</th>
+      <td>Mary Pierce</td>
+      <td>Stephanie Foretz Gacon</td>
+      <td>Shinobu Asagoe</td>
+      <td>Anna Smashnova [15]</td>
+    </tr>
+    <tr>
+      <th>2003</th>
+      <td>Libuse Prusova</td>
+      <td>Bahia Mouhtassine</td>
+      <td>Eleni Daniilidou [25]</td>
+      <td>Virginia Ruano Pascual</td>
+    </tr>
+    <tr>
+      <th>2004</th>
+      <td>Arantxa Parra Santonja</td>
+      <td>Mara Santangelo</td>
+      <td>Stephanie Cohen Aloro</td>
+      <td>Gala Leon Garcia</td>
+    </tr>
+    <tr>
+      <th>2005</th>
+      <td>Tiffany Welford</td>
+      <td>Meghann Shaughnessy</td>
+      <td>Sandra Kloesel</td>
+      <td>Emilie Loit</td>
+    </tr>
+    <tr>
+      <th>2006</th>
+      <td>Jill Craybas</td>
+      <td>Maria Vento Kabchi</td>
+      <td>Stephanie Dubois</td>
+      <td>Camille Pin</td>
+    </tr>
+    <tr>
+      <th>2007</th>
+      <td>Catalina Castano</td>
+      <td>Caroline Wozniacki</td>
+      <td>Yaroslava Shvedova</td>
+      <td>Anna Lena Groenefeld</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>Laura Granville</td>
+      <td>Elena Vesnina</td>
+      <td>Lucie Safarova</td>
+      <td>Nuria Llagostera Vives</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>Viktoria Kutuzova</td>
+      <td>Irena Pavlovic</td>
+      <td>Roberta Vinci</td>
+      <td>Alberta Brianti</td>
+    </tr>
+    <tr>
+      <th>2010</th>
+      <td>Raluca Olaru</td>
+      <td>Alberta Brianti</td>
+      <td>Jill Craybas</td>
+      <td>Ana Ivanovic</td>
+    </tr>
+    <tr>
+      <th>2011</th>
+      <td>Jamie Hampton</td>
+      <td>Junri Namigata</td>
+      <td>Tamarine Tanasugarn</td>
+      <td>Yaroslava Shvedova</td>
+    </tr>
+    <tr>
+      <th>2012</th>
+      <td>Anna Chakvetadze</td>
+      <td>Alize Cornet</td>
+      <td>Julia Glushko</td>
+      <td>Monica Niculescu [29]</td>
+    </tr>
+    <tr>
+      <th>2013</th>
+      <td>Stefanie Voegele</td>
+      <td>Coco Vandeweghe</td>
+      <td>Chanel Simmonds</td>
+      <td>Irina Camelia Begu</td>
+    </tr>
+    <tr>
+      <th>2014</th>
+      <td>Mariana Duque Marino</td>
+      <td>Luksika Kumkhum</td>
+      <td>Annika Beck</td>
+      <td>Taylor Townsend</td>
+    </tr>
+    <tr>
+      <th>2015</th>
+      <td>Annika Beck</td>
+      <td>Evgeniya Rodina</td>
+      <td>Karolina Pliskova [8]</td>
+      <td>Sachia Vickery</td>
+    </tr>
+    <tr>
+      <th>2016</th>
+      <td>Klara Koukalova</td>
+      <td>Jelena Jankovic [23]</td>
+      <td>Nadia Podoroska</td>
+      <td>Camila Giorgi</td>
+    </tr>
+    <tr>
+      <th>2017</th>
+      <td>Aliaksandra Sasnovich</td>
+      <td>Naomi Osaka</td>
+      <td>Taylor Townsend</td>
+      <td>Yulia Putintseva</td>
+    </tr>
+    <tr>
+      <th>2018</th>
+      <td>Shelby Rogers</td>
+      <td>Jeļena Ostapenko [5]</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+
+<p>
+    This list is admittedly sparser. You have to go back to the 1975 Australian Open to find another seed as highly
+    ranked who performed as poorly as Ostapenko did. Still, there are a couple of other notable names on this list:
+    former world number 1 Karolina Pliskova was left with the spoon at US Open 2015, and former world number 1 and
+    1-time slam winner Jelena Jankovic got it at the 2016 French Open.
+</p>
+
+<h3>Conclusion</h3>
+
+<p>
+    If you include non-Slam tournaments spoons are even more common: among the <a href="https://en.wikipedia.org/wiki/Big_Four_(tennis)">Big 4</a> Nadal and Federer have four apiece, Murray two, and Djokovic none (there's a running count <a href="https://tt.tennis-warehouse.com/index.php?threads/wooden-spoons-anti-slams-for-the-big-four.532808/">elsewhere on the Internet</a>).
+</p>
+
+<p>
+    Ostapenko is clearly in good company!
+</p>
+
+{% endblock %}
