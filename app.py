@@ -214,6 +214,13 @@ post_list = [
         'date': datetime(2018, 6, 10),
         'template': '/tennis-wooden-spoons.html',
         'snap': 'tennis-wooden-spoons.png'
+    },
+    {
+        'title': 'Where next for open data?',
+        'route': '2018/06/17/where-next-for-open-data.html',
+        'date': datetime(2018, 6, 17),
+        'template': '/where-next-for-open-data.html',
+        'snap': 'open-data-diagram.png'
     }
     # {
     #     'title': 'Building an MTA historical train arrival application',

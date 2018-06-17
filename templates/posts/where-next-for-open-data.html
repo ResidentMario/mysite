@@ -1,0 +1,218 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+{#<h3>Introduction</h3>#}
+
+<p>
+    I’ve been doing some thinking lately about open data, and specifically about open data as a product.
+</p>
+
+<p>
+    <b>Open data</b>, if you’re not familiar with it, is a recent phenomenon in government and academia encouraging institutions and municipalities to publish the data that they use. After all, these institutions exist for the public benefit, so their releasing the data that they collect (subject to restrictions on things like privacy and security) makes tons of sense.
+</p>
+
+{#<p>#}
+{#    I’ve started out my career working for several different stakeholders in the open data conversation in the Mayor’s Office, at NYU CUSP, and at Kaggle.#}
+{#</p>#}
+
+<p>
+    The radical openness of open data, early proponents promised us, would feed the next generation of tech products solving real problems our communities. So-called "citizen data scientists" would come out of the woodwork, seize onto the data, and carry it off into their communities. It would be used to hold local and federal governments accountable, and to inform decision making by smaller local stakeholders (like nonprofits and community groups).
+</p>
+
+
+<p>
+    In this post I opine on the two generations of open data platforms on the market right now, and offer one vision of what open data platforms might look like in the future.
+</p>
+
+<h3>First-generation open data products</h3>
+
+<p>
+    The first generation of open data products were, as you might expect, a mess.
+</p>
+
+<p>
+    Some vocabulary. An <b>open data producer</b> is an entity that creates and publicly publishes novel datasets, e.g. datasets that never existed or had never been public before. Most open data publishers are cities, municipalities, or other government entities (for example, <a href="https://opendata.cityofnewyork.us/">New York City Open Data</a>), but some institutions and other organizations also publish (for example, <a href="http://hodp.org/">Harvard Open Data</a>).
+</p>
+
+<p>
+    To provide their data publicly, open data producers need a piece of software known as an <b>open data portal</b>. Open data portal technologies compete on their selection of user-facing features: things like search, filtering, and overall look and feel. Some data publishers set up their own open-source portals, using open source software like <a href="https://ckan.org/">CKAN</a>, but at least in the United States most license the software from <b>open data portal vendors</b>.
+</p>
+
+<p>
+    In the United States the market leader portal (and vendor) is <a href="https://socrata.com/">Socrata</a>. I will use Socrata to illustrate the problems with these first-generation products, as it is the product I am most familiar with.
+</p>
+
+<p>
+    Socrata suffers from two different classes of issues that badly hamper its usability. The first set of issues are technical.
+</p>
+
+<p>
+    Socrata serves portal data from a central location, with each Socrata portal merely providing a view on the data contained therein. Thus San Francisco, New York City, Chicago, and Houston are all serving data from the same <a href="https://en.wikipedia.org/wiki/Monolithic_application">monolith</a>. This architecture is very easy to set up and administrate, and hence attractive to a start-up, but it is extremely suboptimal performance-wise. True to form, downloads from Socrata are really slow.
+</p>
+
+<p>
+    More important are product issues in the web tier. Searching for something on Socrata is a crapshoot because not only is data badly indexed, it’s also of highly uneven quality; best you can do is enter the right keywords and hope that at least one of the results you get hits the mark. An early product focus around built-in browser-based data visualization was a dead end, as data quality is usually too poor to support meaningful browser-based interaction without prior cleaning. And other issues of a similar nature abound.
+</p>
+
+<p>
+    The second set of problems are policy-based.
+</p>
+
+<p>
+    Once you have a portal, you need to populate it with data, and that data has to come from somewhere. The configuration of open data publishing incentives and resources varies from publisher to publisher. To take an example, if you study taxi administrators in New York City and in Chicago you will find very similarly organized regulatory agencies. Taxi management are not a new problem, so cities have established a consensus on how best to service them.
+</p>
+
+<p>
+    Open data is about a decade old. No such consensus exists yet. As a result, every data publisher does things differently.
+</p>
+
+{#<p>#}
+{#    Again, let’s zoom in on New York City. Here we have an open data law mandating that all agencies must open up their data inventories (or explain why they can’t open up individual datasets from their inventories) by a sequence of deadlines. The open data law is a really big legislative stick, sure, but the city bureaucracy has sort-of vetoed it. The timelines in the legislature are unrealistic, and on the time scale the city works on, it’s going to be years before we even get close.#}
+{#</p>#}
+
+<p>
+    This makes life much harder for vendors. Socrata relies on its contract with New York City and other cities like it to keep the lights on. Every publisher comes to the table with its own goals and opinions, and hence its own list of demands; and because of how different these organizations are, the things they want tend to be very different as well.
+</p>
+
+<p>
+    To satisfy all of these demands, Socrata has to pull its resources and its product in a hundred different directions, resulting in a product that does everything crappily instead of a few things well. Vendors are disincentivized to focus on things invisible at the negotiating table, like performance and availability, in favor of shiny toy features.
+</p>
+
+<p>
+    To move faster, either Socrata or one of its competitors has to pull a Steve Jobs and force a well thought-out consensus on what actually matters in an open data portal onto its customers, or it needs its customers need to organically reach a consensus on this matter themselves. Neither of these things will happen anytime soon.
+</p>
+
+<h3>Second-generation open data products</h3>
+
+<p>
+    First-generation open data portals are crappy product-wise, and it doesn’t matter.
+</p>
+
+<p>
+    The past couple of years have seen the emergence of what, for the purposes of this blog post, I will call <b>open data aggregators</b>. The two archetypal examples are <a href="https://www.kaggle.com/datasets">Kaggle Datasets</a> and <a href="https://data.world/">data.world</a>. These portals do not, as a rule, post their own newly created data; instead they rely on users uploading datasets themselves.
+</p>
+
+<p>
+    This simple change removes dataset producers from the equation. The developers managing the aggregator platforms are not held down by contracts and support lines, making it vastly easier to do what’s right for the product. Kaggle Datasets and data.world can afford to break things that vendors are too embattled to even touch.
+</p>
+
+<p>
+    As a result, even though Socrata and its peers are now around ten years old, and Kaggle Datasets and data.world are both around two, the latter are very obviously the technically superior product. They have made strides on solving many of the issues that still plague first-generation portals. Features like topic tags, manual curation, and vibrant forums have made searching for high-quality datasets easier. Integrations with fully-featured data science tools have led to more effective and communicative exploratory data visualization. User dataset uploads are treated as first-class citizens (obviously) and not awkward tack-ons. And so on.
+</p>
+
+<p>
+    However, technically better though they may be, a replacement for first-generation open data portals they are not.
+</p>
+
+<p>
+    For one, these platforms still rely on open data publishers implicitly. If the publishers stop opening up new datasets, aggregators will have no raw input to work with.
+</p>
+
+<p>
+    Second of all, open data publishers are stakeholders in a particular arena&mdash;New York City, say, or Harvard University, or something else. They care about providing comprehensive resources in that arena. The users that aggregators rely on are more mercenary. They will upload only the datasets that they are interested in, and they will not invest time in keeping said datasets maintained once they lose interest in it. Thus aggregators tend to accumulate multiple copies of the same dataset published at different times by different users. Preventing this from happening requires meaningfully shifting user behavior, a hard problem indeed!
+</p>
+
+<p>
+    Finally, and most importantly, there is a difference in audience. Data publishers want to see their data end up in the hands of local communities and organizations. They want to see their data used by constituents to make informed decisions about their lives.
+</p>
+
+<p>
+    Kaggle Datasets and data.world, meanwhile, are used primarily by an international community of technology enthusiasts. Most users there are learning or practicing data science skills or creating portfolio pieces. The focus is very much on the code; the data is mostly an incidental input to portfolio projects. Very little of it ends up back in the community.
+</p>
+
+<p>
+    This critical difference is a source of quiet friction between these second-generation open data platforms and data producers. I’ve heard it said that these products “poach” open data for their own goals, without providing anything back for the dataset producers. I’ve also heard them described as a “gray market” for data.
+</p>
+
+<p>
+    This isn’t a bad thing. These platforms have successfully evangelized open data beyond hardcore enthusiasts and put it into the hands of more incidental practitioners (some of whom, like me, will acquire a longer-held interest in the subject).
+</p>
+
+<p>
+    These are fair criticisms.
+</p>
+
+<p>
+    But these platforms have created a huge amount of exposure for open data, and they’ve done so internationally. More people doing more things can only lead to strictly better outcomes downstream. <a href="http://www.datakind.org/">DataKind</a> gets a fatter input pipe. More people show up to Obama Foundation events. And so on. The returns are not immediate, but they’re there, and they’re very worth it.
+</p>
+
+<p>
+    And they have finally created a space where user-created and "small producer" datasets are a first-class citizen. First-generation portal platforms either don’t allow users to upload data or don’t treat them on equal footing as producer-published data. This has given small and individual data publishers a place to share their data that’s "better than GitHub": an invaluable resource.
+</p>
+
+<p>
+    That being said, personally I would love to see more collaboration between data producers and second-generation open data platforms. Both sides are interested, and it is starting to happen&mdash;witness Kaggle’s <a href="https://www.kaggle.com/donorschoose/io">Data Science for Good Challenges</a>, now in their second inning. But it’s challenging. The producers and platforms are very different, and no one’s found a working model of collaboration yet.
+</p>
+
+<p>
+	Ultimately I think that in today’s world we need both first-generation and second-generation open data portals. But the further we go into the future, I foresee more of the conversation happening on the latter platforms than the former.
+</p>
+
+
+<h3>The next generation</h3>
+
+<p>
+    Looking forward, what will the next generation of open data products look like?
+</p>
+
+<p>
+    I am excited by one vision of the future.
+</p>
+
+<p>
+    A fundamental weakness of portals as a product concept is that they by definition partition data access. Each provider obviously has to store the data they host, and then has to maintain code for accessing that data quickly when needed. If a dataset gets posted to the New York City open data portal, then reposted to Kaggle and data.world, you now have the same file living in three different locations.
+</p>
+
+<p>
+    Architecturally speaking, portal front-end and portal data services are strongly coupled. But the front-end is where all of the features lie. If the canonical copy of the dataset gets updated, these three file copies will eventually go out of sync.
+</p>
+
+<p>
+    But what if there is a common underlying architecture? What if datasets were some kind of network resource?
+</p>
+
+<p>
+    This is appealing because it solves a swatch of remaining problems in the open data ecosystem today.
+</p>
+
+<p>
+    For one, open data aggregators provide a limited subset of the total data space: just the datasets that users have deemed most useful. This works to the exclusion of a lot of data. In particular, "helper" datasets that are not interesting on their own but useful in combination with other datasets are severely under-provisioned.
+</p>
+
+<p>
+    It also creates a versioning problem. For all of their feature weight, when it comes to datasets that continue to receive updates, open data aggregators do not, as a rule, keep up with data producers. Users will upload a version of the dataset that was recent at the timestamp they were working on it, but will generally not invest in maintaining it past the end date of their project.
+</p>
+
+<p>
+    In the short term, portal providers are moving to make data pipelines more robust, and data maintenance more user-friendly and less chore-like, but user behavior is hard to change. In my opinion, an architectural change is needed.
+</p>
+
+<p>
+    <a href="https://datbase.org/">datBase</a> is an interesting attempt at a solution. datBase is, as far as I can tell, asynchronous dataset access tooling. In the datBase model, dataset producers can seed their data onto some set of no-frills servers. Data publishers can subscribe to particular datasets. When a download request comes in from a user, the publisher can reach into the network to find a server that’s seeding the file in question, and forward that download to the user.
+</p>
+
+<p>
+    datBase does basically what every open data portal already do. It just ditches "everyone keeps their own copy" for "everyone pulls from a common canonical copy".
+</p>
+
+<p>
+    Publishing a new dataset would now mean pushing a new file into the common network. Any portal interested in that dataset could immediately put it in its rotation. Similarly, updating a dataset would now mean updating a file in the common network. Updating the dataset would require no work whatsoever on the portal provider’s part!
+</p>
+
+<p>
+    In this world open data portals could now feasibly provide as much data as they want, not just a manually curated selection thereof, and the data that they provide could always be the latest version, not a backdated and under-maintained copy. The portals themselves become web interfaces on top of this common resource, which was always the part that mattered to users anyway.
+</p>
+
+<p>
+    Leaf-reading new technology is a notoriously hard thing to do, and it’s too early to tell whether or not datBase will have any real impact. The approach and technology is both radical and unproven, making it a long shot. It’s possible a more tame approach will ultimately solve this problem, and it’s also possible I’m totally misreading the future.
+</p>
+
+<p>
+    Regardless of what happens, there’s a lot of innovation going on in this space right now. I’m excited to see what comes next.
+</p>
+
+{% endblock %}
