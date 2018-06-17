@@ -220,7 +220,7 @@ post_list = [
         'route': '2018/06/17/what-next-for-open-data.html',
         'date': datetime(2018, 6, 17),
         'template': '/what-next-for-open-data.html',
-        'snap': 'open-data-diagram.png'
+        'snap': 'what-next-for-open-data.png'
     }
     # {
     #     'title': 'Building an MTA historical train arrival application',
