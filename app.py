@@ -216,10 +216,10 @@ post_list = [
         'snap': 'tennis-wooden-spoons.png'
     },
     {
-        'title': 'Where next for open data?',
-        'route': '2018/06/17/where-next-for-open-data.html',
+        'title': 'What next for open data?',
+        'route': '2018/06/17/what-next-for-open-data.html',
         'date': datetime(2018, 6, 17),
-        'template': '/where-next-for-open-data.html',
+        'template': '/what-next-for-open-data.html',
         'snap': 'open-data-diagram.png'
     }
     # {
