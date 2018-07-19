@@ -161,23 +161,15 @@
 </p>
 
 <p>
-    I am excited by one vision of the future.
-</p>
-
-<p>
     A fundamental weakness of portals as a product concept is that they by definition partition data access. Each provider obviously has to store the data they host, and then has to maintain code for accessing that data quickly when needed. If a dataset gets posted to the New York City open data portal, then reposted to Kaggle and data.world, you now have the same file living in three different locations.
 </p>
 
 <p>
-    Architecturally speaking, portal front-end and portal data services are strongly coupled. But the front-end is where all of the features lie. If the canonical copy of the dataset gets updated, these three file copies will eventually go out of sync.
+    Architecturally speaking, portal front-end and portal data services are strongly coupled. But the front-end is where all of the features lie. If the canonical copy of the dataset gets updated, these three file copies will eventually go out of sync. In my experience, more often than not this is exactly what happens!
 </p>
 
 <p>
-    But what if there is a common underlying architecture? What if datasets were some kind of network resource?
-</p>
-
-<p>
-    This is appealing because it solves a swatch of remaining problems in the open data ecosystem today.
+    But what if there is a common underlying architecture? What if datasets were some kind of network resource? This is appealing because it solves a swatch of problems in today's ecosystem.
 </p>
 
 <p>
@@ -189,19 +181,15 @@
 </p>
 
 <p>
-    In the short term, portal providers are moving to make data pipelines more robust, and data maintenance more user-friendly and less chore-like, but user behavior is hard to change. In my opinion, an architectural change is needed.
+    In the short term, portal providers are moving to make data pipelines more robust, and data maintenance more user-friendly and less chore-like. But user behavior is hard to change. In my opinion, an architectural change is needed.
 </p>
 
 <p>
-    <a href="https://datbase.org/">datBase</a> is an interesting attempt at a solution. datBase is, as far as I can tell, asynchronous dataset access tooling. In the datBase model, dataset producers can seed their data onto some set of no-frills servers. Data publishers can subscribe to particular datasets. When a download request comes in from a user, the publisher can reach into the network to find a server that’s seeding the file in question, and forward that download to the user.
+    Suppose that instead of posting datasets to their own servers, dataset producers seed their datasets onto a set of servers maintained by someone else. These servers act as a network resource. Data publishers can subscribe to particular datasets, and when a download request comes in from a user, the publisher can reach into the network and forward that resource to the user.
 </p>
 
 <p>
-    datBase does basically what every open data portal already do. It just ditches "everyone keeps their own copy" for "everyone pulls from a common canonical copy".
-</p>
-
-<p>
-    Publishing a new dataset would now mean pushing a new file into the common network. Any portal interested in that dataset could immediately put it in its rotation. Similarly, updating a dataset would now mean updating a file in the common network. Updating the dataset would require no work whatsoever on the portal provider’s part!
+    Decoupling the storage layer from the presentational layer in this way eliminates the versioning problem. There is now just one canonical copy, and every application or portal that wants to use that database can subscribe to that and use it as its source. Publishing a new dataset would now mean pushing a new file into the common network. Updating the dataset would require no work whatsoever on the portal provider’s part!
 </p>
 
 <p>
@@ -209,11 +197,15 @@
 </p>
 
 <p>
-    Leaf-reading new technology is a notoriously hard thing to do, and it’s too early to tell whether or not datBase will have any real impact. The approach and technology is both radical and unproven, making it a long shot. It’s possible a more tame approach will ultimately solve this problem, and it’s also possible I’m totally misreading the future.
+    There are several different technologies on the market right now that could be used in this way. <a href="https://quiltdata.com/">Quilt</a> is one that I like, and <a href="https://datahub.io/">DataHub.io</a> is another example. These services are optimized around fast download speeds and well-designed metadata schemas. They're architecturally a good fit for the job of being the open data world's backing store. Of course, the hard part is getting there!
 </p>
 
 <p>
-    Regardless of what happens, there’s a lot of innovation going on in this space right now. I’m excited to see what comes next.
+    Another, more ambitious attempt at a solution is <a href="https://datbase.org/">datBase</a>. datBase is a very ambitious asynchronous dataset distribution model, one based on an experimental new protocol called dat. datBase is part of the asynchronous web movement, which is still in its infancy, so datBase isn't even in alpha yet. But it's a terrifically interesting new technology that I think is worth watching.
+</p>
+
+<p>
+    Leaf-reading new technology is a notoriously hard thing to do. Regardless of what happens, there’s a lot of innovation going on in this space right now. I’m excited to see what comes next.
 </p>
 
 {% endblock %}
