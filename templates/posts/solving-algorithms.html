@@ -18,24 +18,19 @@
 <h3>Step 1: Understand the problem statement</h3>
 
 <p>
-    Before doing anything else you need to read and reread the problem. Make sure you fully understand what it is asking.
-</p>
-
-<p>
-    Are there any ambiguities in the phrasing? For example, in this question it's unclear whether we want all possible substrings (in which case the longest match between "foobar" and "foofoobar" would be "foobar"), or just substrings that are located at the same place in the string (in which case the longest match between these two words would be just "foo"). A less ambiguous phrasing would be:
+    Before doing anything else you need to read and reread the problem. Make sure you fully understand what it is asking. In particular, make sure that you know the answer to any ambiguities in the phrasing. You would think this wouldn't come up a lot, but it does, especially in online challenges where there's no way to ask for clarification. And needless to say it's really a disaster if you start implementing the wrong algorithm!
 </p>
 
 {#<p>#}
 {#    Q: <b>Given two strings \(a\) and \(b\), write a function which returns the longest substring anywhere in the strings that is common to both.</b>#}
 {#</p>#}
 
-<p>
-    You would think this wouldn't come up a lot, but it does, especially in online challenges where there's no way to ask for clarification. And needless to say it's really a disaster if you start implementing the wrong algorithm!
-</p>
+{#<p>#}
+{#    You would think this wouldn't come up a lot, but it does, especially in online challenges where there's no way to ask for clarification. And needless to say it's really a disaster if you start implementing the wrong algorithm!#}
+{#</p>#}
 
 <p>
-    I also start thinking about corner cases immediately.
-
+    I would also start thinking about corner cases immediately. Are the base cases obvious and well-defined?
 {#    What if the two strings are empty? Should we return an empty string? A null value? We might further improve the question asked that way:#}
 </p>
 
@@ -44,7 +39,7 @@
 {#</p>#}
 
 <p>
-    Once we understand the problem wording we may consider the problem itself.
+    Only once we understand the problem wording may we start to consider the problem itself.
 </p>
 
 {#<p>#}
