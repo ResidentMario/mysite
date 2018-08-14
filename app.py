@@ -152,13 +152,13 @@ post_list = [
         'template': 'citibike-map.html',
         'snap': 'citibike-map.png'
     },
-    {
-        'title': 'Testifying on open data for City Council',
-        'route': '2016/09/24/city-council-testimony.html',
-        'date': datetime(2016, 9, 24),
-        'template': 'city-council-testimony.html',
-        'snap': 'city-council-testimony.png'
-    },
+    # {
+    #     'title': 'Testifying on open data for City Council',
+    #     'route': '2016/09/24/city-council-testimony.html',
+    #     'date': datetime(2016, 9, 24),
+    #     'template': 'city-council-testimony.html',
+    #     'snap': 'city-council-testimony.png'
+    # },
     {
         'title': 'Saving progress in pandas',
         'route': '2016/10/29/saving-progress-pandas.html',
@@ -221,6 +221,13 @@ post_list = [
         'date': datetime(2018, 6, 17),
         'template': '/what-next-for-open-data.html',
         'snap': 'what-next-for-open-data.png'
+    },
+    {
+        'title': 'My approach to solving coding challenges',
+        'route': '2018/08/14/solving-algorithms.html',
+        'date': datetime(2018, 8, 14),
+        'template': '/solving-algorithms.html',
+        'snap': 'code-writer-snap.png'
     }
     # {
     #     'title': 'Building an MTA historical train arrival application',
@@ -303,5 +310,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)

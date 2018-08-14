@@ -1,0 +1,299 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+{% endblock %}
+{% block content %}
+
+<p>
+    Software engineering interviews usually pivot around the asking and answering of certain well-posed algorithmic design problems. These are known as "coding challenges", and they are the centerpiece of the last step in the software engineer job application process&mdash;the feared <a href="https://www.quora.com/How-do-I-prepare-for-a-software-engineering-job-interview">on-site technical interview</a>.
+</p>
+
+<p>
+    I've been doing a lot of coding challenges lately. When writing code, I find it very easy to barge headfirst into a problem I am working on and try to bring it to a working solution all at once. After some moments of frustration, and some pair programming experiences where I got to see others' approaches, I realized that I need a mental workflow for approaching these questions, the contents of which I'm sharing in this blog post.
+</p>
+
+<h3>Step 1: Understand the problem statement</h3>
+
+<p>
+    Before doing anything else you need to read and reread the problem. Make sure you fully understand what it is asking.
+</p>
+
+<p>
+    Are there any ambiguities in the phrasing? For example, in this question it's unclear whether we want all possible substrings (in which case the longest match between "foobar" and "foofoobar" would be "foobar"), or just substrings that are located at the same place in the string (in which case the longest match between these two words would be just "foo"). A less ambiguous phrasing would be:
+</p>
+
+{#<p>#}
+{#    Q: <b>Given two strings \(a\) and \(b\), write a function which returns the longest substring anywhere in the strings that is common to both.</b>#}
+{#</p>#}
+
+<p>
+    You would think this wouldn't come up a lot, but it does, especially in online challenges where there's no way to ask for clarification. And needless to say it's really a disaster if you start implementing the wrong algorithm!
+</p>
+
+<p>
+    I also start thinking about corner cases immediately.
+
+{#    What if the two strings are empty? Should we return an empty string? A null value? We might further improve the question asked that way:#}
+</p>
+
+{#<p>#}
+{#    Q: <b>Given two strings \(a\) and \(b\), write a function which returns the longest substring anywhere in the strings that is common to both. If the two strings have no substring in common, return an empty string.</b>#}
+{#</p>#}
+
+<p>
+    Once we understand the problem wording we may consider the problem itself.
+</p>
+
+{#<p>#}
+{#    In this case this is a substring search problem. It occurs in various real-world contexts, like shell completion and finding matching segments in long DNA sequences. If we limit ourselves to just characters with matching indices, this problem is trivial: just map over the two strings in-order, collect \(true\) values, and return the longest \(true\) sequence. This is a one-line \(O(n)\) solution. using a one line map-reduce operation. What makes this problem challenging is that we are not limiting ourselves to just matching indices, but matches anywhere in the string.#}
+{#</p>#}
+
+<h3>Step 2: Write output unit tests</h3>
+
+<p>
+    Once we understand the desired behavior, we need to formalize the expectation by writing <a href="https://stackoverflow.com/questions/1383/what-is-unit-testing">unit tests</a> for it. These tests will be black box because we are not testing any function intrinsics or helps, only the expected output. Writing  tests ahead of time forces you to think about potential program edge cases right away, which promotes program correctness once you sit down to the actual programming.
+</p>
+
+{#<p>#}
+{#    I solved this question in Python. Here's a set of unit tests in that language:#}
+{#</p>#}
+{##}
+{#<pre><code class="language-python">import unittest#}
+{##}
+{#class TestLongestCommonSubstring(unittest.TestCase):#}
+{##}
+{#    def testEmptyString(self):#}
+{#        self.assertEqual(lcs("", ""), "")#}
+{##}
+{#    def testUnitStringMatch(self):#}
+{#        self.assertEqual(lcs("A", "A"), "A")#}
+{##}
+{#    def testUnitStringNonMatch(self):#}
+{#        self.assertEqual(lcs("A", "B"), "")#}
+{##}
+{#    def testLongMatch(self):#}
+{#        self.assertEqual(lcs("AAAA", "AAAA"), "AAAA")#}
+{##}
+{#    def testStartMatch(self):#}
+{#        self.assertEqual(lcs("AABB", "AACC"), "AA")#}
+{##}
+{#    def testEndMatch(self):#}
+{#        self.assertEqual(lcs("ABCC", "DECC"), "CC")#}
+{##}
+{#    def testUnequalLengths(self):#}
+{#        self.assertEqual(lcs("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCD"), "ABCD")#}
+{#</code></pre>#}
+
+<h3>Step 3: Design a brute-force solution in psuedocode</h3>
+
+<p>
+    Understanding expected output is often enough to define a <a href="https://en.wikipedia.org/wiki/Brute-force_search">brute-force solution</a>. The brute-force solution doesn't need to be pretty or fast, it just needs to work and pass the tests.
+</p>
+
+<p>
+    Why write the algorithm out in psuedocode first? Why not commit to an implementation in your favorite programming language immediately?
+</p>
+
+<p>
+    Generally speaking you perform two errors when building a program: logic errors, and syntax errors. Logic errors are errors in the way the program operates (for example, forgetting a termination condition). Syntax errors are errors in the way that you using the language you are writing the program in (for example, incorrectly concatenating variables of different types). If you write the program in a true language immediately, you will need to keep both kinds of errors in mind simultaneously.
+</p>
+
+<p>
+    By writing the program in psuedocode first you can focus solely on logical correctness first, and on syntactic correctness later. There's no right or wrong syntax, and hence no implementation details, and hence no need to think about the second class of problems (yet).
+</p>
+
+<p>
+    That being said, if the problem is very easy, you can skip this step and go straight to Step 4. If the problem is hard from the get-go, or if a significant difficulty in the problem is in just coming up with the brute force solution, you may need to perform Step 5, property analysis, first, before you can even implement a brute-force solution.
+</p>
+
+{#<p>#}
+{#    In this case the simplest possible way to solve the problem is obvious: just iterate over every possible combination of staring indices in the two strings, and compare the characters starting at each of these pairs of indices, breaking if we reach non-matching characters (or the end of either string). Compare each substring we find to the longest one we've found yet, updating to the new string if we find it's longer than the old one. At the end of the loop, return the found string. Here's the pseudocode:#}
+{#</p>#}
+{##}
+{#<pre>lcs_brute(a, b):#}
+{#longest = ""#}
+{#for a_i of range(a):#}
+{#    for b_i of range(b):#}
+{#        curr_seq = ""#}
+{#        offset = 0#}
+{##}
+{#        while a[a_i + offset] = b[b_i + offset]:#}
+{#            next_char = a[a_i + offset]#}
+{#            curr_seq += next_char#}
+{#            offset++#}
+{##}
+{#            if a_i + offset >= len(a) or b_i + offset >= len(b):#}
+{#                break#}
+{##}
+{#        if len(curr_seq) > len(longest):#}
+{#            longest = curr_seq#}
+{##}
+{#        curr_seq = ""#}
+{##}
+{#return longest#}
+{#</pre>#}
+
+<h3>Step 4: Implement the brute-force algorithm</h3>
+
+<p>
+    With the logic written out, you can focus on mapping it to the implementation.
+</p>
+
+{#<pre><code class="language-python">def lcs(a, b):#}
+{#longest = ""#}
+{#for a_idx, a_char in enumerate(a):#}
+{#    for b_idx, b_char in enumerate(b):#}
+{#        curr_seq = ""#}
+{#        offset = 0#}
+{##}
+{#        while a[a_idx + offset] == b[b_idx + offset]:#}
+{#            next_char = a[a_idx + offset]#}
+{#            curr_seq += next_char#}
+{#            offset += 1#}
+{##}
+{#            if a_idx + offset >= len(a) or b_idx + offset >= len(b):#}
+{#                break#}
+{##}
+{#        if len(curr_seq) > len(longest):#}
+{#            longest = curr_seq#}
+{##}
+{#        curr_seq = ""#}
+{##}
+{#return longest#}
+{#</code></pre>#}
+
+<p>
+    The implementation doesn't need to be pretty. It just needs to work. Make sure it passes your tests!
+</p>
+
+<h3>Step 5: Study the problem properties</h3>
+
+<p>
+{#    This algorithm is \(O(n^3)\). Very inefficient! #}
+    With a brute force implementation done, it is now time to perform optimization.
+</p>
+
+<p>
+    There are two types of optimizations. Logical optimizations reduce program runtime and memory overhead by changing the underlying algorithm (for example, <a href="https://en.wikipedia.org/wiki/Memoization">memoization</a>). Syntactic optimizations reduce these things by changing the language features used (for example, <a href="https://stackoverflow.com/questions/1422149/what-is-vectorization">vectorization</a>). The former is usually considered important, and the latter optional.
+</p>
+
+<p>
+    Before we can perform these optimizations however we need to find properties of the problem and structures within the problem that we can take advantage of within our code. I like to first build a list of properties that I see that I think might be helpful.
+
+{#    For this particular problem the properties that I saw were:#}
+</p>
+
+{#<ol>#}
+{#    <li>#}
+{#        Let \(\text{LCS}(\cdot, \cdot)\) be the program. The core unit of work of the LCS program is the index-based comparison operation \(\text{cmplen(i, j)}\), which itself iteratively uses the atomic character comparison instruction \(\text{CMP}[\cdot,\cdot]\). Logically optimizing the algorithm is equivalent to reducing the number of comparisons needed.#}
+{#    </li>#}
+{#    <li>#}
+{#        There is a recurrence relationship over cmplen as we move leftward:#}
+{##}
+{#    \[\text{cmplen}(i, j) = \text{CMP}[i, j] \circ \text{cmplen}(i + 1, j + 1)\]#}
+{#    </li>#}
+{#    <li>#}
+{#        If the indices \(i\) or \(j\) are out of bounds, \(\text{cmplen(i, j) = 0}\).#}
+{#    </li>#}
+{#    <li>#}
+{#        If we know a certain substring match, we know every sub-substring match as well, and we know those matches will be shorter.#}
+{#    </li>#}
+{#    <li>#}
+{#        A longest known match of length \(n\) greatly reduces the remaining search space, because it eliminates all character sequences near the ends of the string shorter than \(n\), and all character sequences in between known matches of length less than \(n\).#}
+{#    </li>#}
+{#    <li>#}
+{#        Every matching substring within the two strings will necessarily be the prefix of some other substring, and the suffix of some other string.#}
+{#    </li>#}
+{#</ol>#}
+
+<p>
+    Any list will do, as long as it contains the most important properties of the problem. But finding the "right things" is really, really hard; knowing what to look for, and how, is mainly a matter of experience.
+</p>
+
+{#<p>#}
+{#    The major optimization opportunity are properties 6 and 2.#}
+{#</p>#}
+{##}
+{#<p>#}
+{#    First of all, notice that the algorithm performs a tight loop over the data, visiting every possible combination of prefixes and/or suffixes. We know from property 6 that every matching substring is a suffix of some other substring. Visiting every possible combination of suffixes means visiting every possible matching substring, either by itself or as the suffix of some other string. So we can compare the last characters of each combination of strings in the inner loop, and discard the rest of the substring after finding or not finding a match, instead of iterating through the entire substring, as in the brute force solution.#}
+{#</p>#}
+{##}
+{#<p>#}
+{#    Then, per property 2, if we know the substring match length of the immediately smaller suffix string, we may learn the substring match length of the current suffix string by performing a single additional comparison operation. Property 2 is the reason that we want to use suffixes, not prefixes, as this optimization can't be applied to suffixes, but property 6 applies to both equally.#}
+{#</p>#}
+{##}
+{#<p>#}
+{#    What data structure can be use to take advantage of property 2? An array whose columns and indices are the indices of the \(a\) and \(b\) substring, respectively, is a convenient representation.#}
+{#</p>#}
+
+<h3>Step 6: Implement the optimized solution in pseudocode</h3>
+
+<p>
+    Again, do pseudocode first, program language implementation later, again to separate logical thought from syntactic thought.
+
+{#    Here's a psuedocode implementation:#}
+</p>
+
+{#<pre><code>lcs(a, b):#}
+{#    progress = Array(len(a) by len(b))#}
+{#    for a_i of range(a):#}
+{#        for b_i of range(b):#}
+{#            a_suff = a[:a_i + 1]#}
+{#            b_suff = b[:b_i + 1]#}
+{#            if a_i = 0 or b_i = 0:#}
+{#                if a_suff == b_suff:#}
+{#                    progress[a_i][b_i] = 1#}
+{#                else:#}
+{#                    progress[a_i][b_i] = 0#}
+{#            else:#}
+{#                if a_suff[-1] == b_suff[-1]:#}
+{#                    progress[a_i][b_i] = progress[a_i - 1][b_i - 1] + 1#}
+{#                else:#}
+{#                    progress[a_i][b_i] = 0#}
+{##}
+{#    a_i, b_i = argmax(progress)#}
+{#    maxlen = progress[a_i][b_i]#}
+{#    return a[suffix end:]#}
+{#</code></pre>#}
+
+<h3>Step 7: Implement the optimized algorithm</h3>
+
+<p>
+    Now we implement the optimized algorithm, and make sure it still passes the tests.
+</p>
+<!-- Code here, maybe. -->
+<h3>Step 8: Loop through optimizations</h3>
+
+<p>
+    If we are applying multiple non-trivial optimizations, we may significantly reduce our defect rate by applying them one at a time, instead of all at once. In other words, if there are multiple things we can "do" to make our program better, it can be greatly helpful to perform steps 6 and 7 in a loop: implement one optimization in pseudocode and then in code, then the next one, and so on.
+</p>
+
+
+<h3>Step 9: Refactor for quality and implement constant-factor optimizations</h3>
+
+<p>
+    Your first attempt at an algorithm will invariably be a bit messy, and will tend to use features of the language that you are most comfortable with. Once you have successfully implemented something that works, you can improve code quality by refactoring it.
+</p>
+
+<p>
+    This can achieve two ends. One, tidy operations like removing unused variables, renaming unclear fields, and extracting functional components to helper functions improve code readability. Second, refactoring will allow you to deploy language features that you know reasonably well, but which you would hesitate to use in an interview or prototyping context (in case you make a mistake). These more advanced language features can further improve code clarity.
+</p>
+
+<p>
+    Finally, the last thing you can do is introduce constant-factor optimizations. Constant-factor optimizations do not improve the time complexity of the algorithm, but do improve its finer runtime characteristics. Examples include <a href="https://stackoverflow.com/questions/45803829/memory-overhead-of-typed-arrays-vs-strings">replacing typed arrays with lists</a> and <a href="https://stackoverflow.com/questions/1422149/what-is-vectorization">vectorizing math operations</a>. These types of optimizations are hard to get right, will not be easily applicable to every problem, and require a detailed understanding of the programming language you are working with. In most contexts, this is an optional bonus!
+</p>
+
+<h3>Closing comments</h3>
+
+<p>
+    This is an idealized workflow, as the flow of coding challenge changes dramatically based on where it is conducted, how much time you have, and how difficult the problem you are working on is for you. If you don't have access to a programming environment (as in a whiteboarding interview) you obviously won't be writing any tests. If you find the question easy you may not need to write out pseudocode first. If you find the question hard, you may need to think for a long time about the properties of the problem even before you write a brute-force solution.
+</p>
+
+<p>
+    Find this blog post heavy on words and light on code? <a href="https://nbviewer.jupyter.org/github/ResidentMario/data-structures-js/blob/master/notebooks/Longest%20Common%20Substring.ipynb">Check out the Jupyter notebook it's based on</a>, which includes a full worked solution that I've omitted here.
+</p>
+
+{% endblock %}

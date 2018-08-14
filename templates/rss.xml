@@ -127,12 +127,6 @@
             <pubDate>Wed, 14 Sep 2016 00:00:00 EST</pubDate>
     </item>
     <item>
-            <title>Testifying on open data for City Council</title>
-            <link>http://www.residentmar.io/2016/09/24/city-council-testimony.html</link>
-            <guid>http://www.residentmar.io/2016/09/24/city-council-testimony.html</guid>
-            <pubDate>Sat, 24 Sep 2016 00:00:00 EST</pubDate>
-    </item>
-    <item>
             <title>Saving progress in pandas</title>
             <link>http://www.residentmar.io/2016/10/29/saving-progress-pandas.html</link>
             <guid>http://www.residentmar.io/2016/10/29/saving-progress-pandas.html</guid>
@@ -185,6 +179,12 @@
             <link>http://www.residentmar.io/2018/06/17/what-next-for-open-data.html</link>
             <guid>http://www.residentmar.io/2018/06/17/what-next-for-open-data.html</guid>
             <pubDate>Sun, 17 Jun 2018 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>My approach to solving coding challenges</title>
+            <link>http://www.residentmar.io/2018/08/14/solving-algorithms.html</link>
+            <guid>http://www.residentmar.io/2018/08/14/solving-algorithms.html</guid>
+            <pubDate>Tue, 14 Aug 2018 00:00:00 EST</pubDate>
     </item>
 </channel>
 </rss>
