@@ -275,8 +275,8 @@ advocacy_posts = [post for post in post_list if post['type'] == 'advocacy']
 
 project_list = [
     {
-        'title': 'Bar',
-        'description': 'Yo',
+        'title': 'Geoplot',
+        'description': 'A geospatial data visualization library for Python',
         'snap': 'code-writer-snap.png',
         'links': [
             {'title': 'Foo Explainer', 'href': 'https://example.com'}
