@@ -1,0 +1,44 @@
+{% extends "frame.html" %}
+{% block pagetitle %} Projects {% endblock %}
+{% block content %}
+
+<div class="project-section-header">Tech</div>
+
+<!-- TODO: Add a little icon that tells you where the link is pointing to, e.g. Medium, blog post, so on. -->
+{% for project in project_list[::-1] %}
+    <div class="project-frame">
+    <div class="project-snap">
+        <a href={{ project.links[-1].href }}>
+            <img style="height:150px; width:300px;" src={{ '/static/post_snaps/' + project.snap }}/>
+        </a>
+    </div>
+
+        <div class="project-body">
+            <div class="project-title">
+                {{  project.title }}
+            </div>
+            <div class="project-description">
+                {{ project.description }}
+            </div>
+            <div class="project-link-container">
+                <ul class="nav-project-link-list">
+                    {% for link in project.links %}
+                            <li><a class="navigation-link" href={{ link.href }}>→ {{ link.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br clear="all"/>
+{% endfor %}
+
+
+<div class="project-section-header" style="margin-top:50px;">Advocacy</div>
+
+<ul class="nav-worklist">
+{% for thing in advocacy_list[::-1] %}
+    <li><a class="navigation-link" href={{ thing.route }}>{{ thing.title }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

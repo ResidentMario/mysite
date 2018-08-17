@@ -4,49 +4,31 @@
 
 
 <p>
+    I went to college thinking I would study economics, but ended up majoring in mathematics instead. My junior year I fell in love with <a class="navigation-link" href="http://opendatahandbook.org/guide/en/">open data</a>. I learned Python, got coding, and haven't looked back.
+</p>
+
+<p>
+    I started out building civic data analyses and visualizations. Then I went about exploring the broader data science and data visualization worlds. I've worked at the <a class="navigation-link" href="https://www1.nyc.gov/site/analytics/index.page">NYC Mayor's Office of Data Analytics</a>, <a class="navigation-link" href="http://cusp.nyu.edu/">NYU Center for Urban Science + Progress</a>, and <a class="navigation-link" href="https://www.kaggle.com/">Kaggle</a>. Most recently I spent twelve weeks at the <a class="navigation-link" href="https://www.recurse.com/">Recurse Center</a>, where I studied data engineering in a wonderfully collaborative environment.
+</p>
+
+<p>
+    Along the way I've written a few successful open source libraries, dozens of small civic data explorations, and a handful of larger data web apps. I've given talks and strategized on things like data design, understanding communities, and building effective products. I've written learning materials on data analysis, data visualization, and machine learning.
+</p>
+
+<p>
+    I write in Python, JavaScript, and plain English. I'd like to pick up Haskell and Rust someday.
+</p>
+
+<p>
+    To keep up with my work, follow me on <a class="navigation-link" href="https://twitter.com/residentmario">Twitter</a> or subscribe to my blog with <a class="navigation-link" href={{request.url_root}}feed>RSS</a>.
+</p>
+<!--
+
     I am a data analyst and software developer with strong interests in data science, visualization, and engineering;
     and in civic open data. An acute civic and open data junkie, I love working to make sense of and build useful
     results with public records data. This website is a collection space for ruminations on topics in programming, data
     science, data engineering, mathematics, and other such mischief. In my spare time I also enjoy playing tennis.
-</p>
 
-<g style="width:960px; display:block; transform:translate(-95px, 0); border:1px solid black;
-border-radius:5px; overflow:hidden; padding-top:8px; margin-bottom:20px; height:1600px;">
-</g>
-
-<script src="/static/js/d3.v3.js"></script>
-
-<script>
-    d3.json("/static/json/post_list.json", function(error, dataset) {
-        if (error) throw error;
-
-        var frame = d3.select("g")
-                .selectAll("a")
-                .data(dataset)
-                .enter();
-
-        frame
-                .append("a")
-                .attr({
-                    "href": function(d) { return d['route']; },
-                    "class": "blog-frame navigation-link"
-                })
-                .append("span")
-                .style({
-                    "width": "320px",
-                    "height": "160px",
-                    "background-image": function(d) { return "url(\"/static/post_snaps/" + d['snap'] + "\")"; },
-                    "background-size": "320px 160px",
-                    "display": "table-cell"
-                })
-                .append("span")
-                .style({
-                    "display": "block",
-                    "padding": "15px"
-                })
-                .text(function(d) { return d['title']; });
-    });
-
-</script>
+-->
 
 {% endblock %}

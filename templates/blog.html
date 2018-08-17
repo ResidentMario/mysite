@@ -1,0 +1,14 @@
+{% extends "frame.html" %}
+{% block pagetitle %} About {% endblock %}
+{% block content %}
+
+<!-- TODO: Allow filtering -->
+<ul class="nav-worklist">
+{% for post in post_list[::-1] %}
+    <li><span style="font-size:12px">{{ post.route[:10] }}</span>&nbsp;&nbsp;&nbsp;&mdash;&nbsp;&nbsp;&nbsp;
+        <a class="navigation-link" href={{ post.route }}>{{ post.title }}</a>
+        <i style="font-size:12px">({{  post.type }})</i></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

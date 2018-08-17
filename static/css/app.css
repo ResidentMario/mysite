@@ -24,6 +24,7 @@ body {
     width:800px;
     margin:auto;
     background:transparent;
+    margin-top:100px;
 }
 /* Holds site navigation */
 #navbar {
@@ -33,7 +34,7 @@ body {
 }
 /* Holds the actual site content. */
 #content {
-    font-size:17px;
+    font-size:16px;
     line-height:1.5em;
     color: #252525;
     margin-top:45px;
@@ -125,8 +126,6 @@ body {
 /* CSS used for the post navigation in the article footer. */
 .post_desc {
     font-family: Roboto, sans serif;
-    font-weight:bold;
-    color:#252525;
     text-align:center;
     width:260px;
 }
@@ -178,14 +177,11 @@ a:active {
 
 /* unvisited navigation link */
 .navigation-link:link {
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
+    color: #0000ee;
 }
 /* visited navigation link */
 .navigation-link:visited {
-    color: #333;
-    text-decoration: none;
+    color: #00008b;
 }
 /* mouse over navigation link */
 .navigation-link:hover {
@@ -196,4 +192,52 @@ a:active {
 .navigation-link:active {
     color: #BBB;
     text-decoration: none;
+}
+.nav-worklist {
+    list-style: none;
+    padding: 0;
+}
+.project-title {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+.nav-project-link-list {
+    list-style: none;
+    padding: 0;
+}
+.project-section-header {
+    font-size: 18px;
+    padding: 12px 24px 12px 24px;
+    display: inline-block;
+    background: black;
+    color:white;
+    border-radius:10px 10px 0 0;
+}
+.project-frame {
+    margin-bottom:180px;
+}
+.project-description {
+    font-size: 16px;
+    color: #555;
+}
+.project-body {
+    float: left;
+    margin-left: 40px;
+}
+.project-snap {
+    border-radius:25px;
+    float:left;
+    overflow: hidden;
+}
+.matrix-link:link {
+    color: black;
+}
+.matrix:visited {
+    color: black;
+}
+.matrix:hover {
+    color: #BBB;
+}
+.bottom-spacer {
+    margin-top:120px;
 }
