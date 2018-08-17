@@ -405,6 +405,11 @@ def projects():
                            advocacy_list=advocacy_list)
 
 
+@app.route('/matrix.html')
+def matrix():
+    return render_template('matrix.html', most_recent='/latest.html')
+
+
 @app.route('/latest.html')
 def latest_post():
     return redirect(request.url_root + post_list[len(post_list) - 1]['route'], code=302)
