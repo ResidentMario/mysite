@@ -2,14 +2,13 @@
 {% block pagetitle %} About {% endblock %}
 {% block content %}
 
-<!-- TODO: Populate using post_list param passed down from the webapp. -->
+<!-- Allow filtering -->
 <ul class="nav-worklist">
-    <li>A</li>
-    <li>B</li>
-    <li>C</li>
-    <li>D</li>
-    <li>E</li>
-    <li>F</li>
+{% for post in post_list[::-1] %}
+    <li><span style="font-size:12px">{{ post.route[:10] }}</span>&nbsp;&nbsp;&nbsp;&mdash;&nbsp;&nbsp;&nbsp;
+        <a class="navigation-link" href={{ post.route }}>{{ post.title }}</a>
+        <i style="font-size:12px">({{  post.type }})</i></li>
+{% endfor %}
 </ul>
 
 {% endblock %}

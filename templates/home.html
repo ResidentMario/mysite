@@ -2,21 +2,39 @@
 {% block pagetitle %} About {% endblock %}
 {% block content %}
 
-<b>Recent writing</b>
+<b>Recent technical writing</b>
 <ul class="nav-worklist" style="margin-bottom:50px;">
-    <li>List item 1</li>
-    <li>List item 2</li>
-    <li>List item 3</li>
-    <li><i><a class="navigation-link" href="./blog.html">more →</a></i></li>
+    {% for post in technical_posts[-3:][::-1] %}
+        <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
+    {% endfor %}
+        <li><i><a class="navigation-link" href="./blog.html">more →</a></i></li>
+</ul>
+
+
+<b>Recent data explorations</b>
+<ul class="nav-worklist" style="margin-bottom:50px;">
+    {% for post in exploratory_posts[-3:][::-1] %}
+        <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
+    {% endfor %}
+        <li><i><a class="navigation-link" href="./blog.html">more →</a></i></li>
+</ul>
+
+
+<b>Recent advocacy</b>
+<ul class="nav-worklist" style="margin-bottom:50px;">
+    {% for post in advocacy_posts[-3:][::-1] %}
+        <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
+    {% endfor %}
+        <li><i><a class="navigation-link" href="./blog.html">more →</a></i></li>
 </ul>
 
 
 <b>Recent projects</b>
-<ul class="nav-worklist">
-    <li>List item 1</li>
-    <li>List item 2</li>
-    <li>List item 3</li>
-    <li><i><a class="navigation-link" href="./projects.html">more →</a></i></li>
+<ul class="nav-worklist" style="margin-bottom:50px;">
+    {% for project in project_list[-3:][::-1] %}
+        <li><a class="navigation-link" href="./{{ project.route }}">{{project.title}}</a></li>
+    {% endfor %}
+        <li><i><a class="navigation-link" href="./projects.html">more →</a></i></li>
 </ul>
 
 {% endblock %}

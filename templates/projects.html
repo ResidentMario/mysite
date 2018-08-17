@@ -1,6 +1,35 @@
 {% extends "frame.html" %}
-{% block pagetitle %} Etcetera {% endblock %}
+{% block pagetitle %} Projects {% endblock %}
 {% block content %}
+
+<div class="project-section-header">Tech</div>
+
+<!-- TODO: Add a little icon that tells you where the link is pointing to, e.g. Medium, blog post, so on. -->
+{% for project in project_list %}
+    <div class="project-frame">
+        <img style="height:200px; width:400px; float:left" src={{ '/static/post_snaps/' + project.snap }}/>
+
+        <div class="project-body" style="float:left;">
+            <div class="project-title">
+                {{  project.title }}
+            </div>
+            <div class="project-description">
+                {{ project.description }}
+            </div>
+            <div class="project-link-container">
+                <ul class="nav-project-link-list">
+                    {% for link in project.links %}
+                            <li><a class="navigation-link" href={{ link.href }}>→ {{ link.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br clear="all"/>
+{% endfor %}
+
+
+<div class="project-section-header" style="margin-top:50px;">Advocacy</div>
 
 <p>This page is for assorted other things I've done.</p>
 
