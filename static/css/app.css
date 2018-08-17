@@ -201,15 +201,33 @@ a:active {
 }
 .project-title {
     font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 6px;
 }
 .nav-project-link-list {
     list-style: none;
     padding: 0;
 }
 .project-section-header {
-    font-size: 32px;
-    padding: 12px;
-    font-weight: bold;
+    font-size: 18px;
+    padding: 12px 24px 12px 24px;
     display: inline-block;
+    background: black;
+    color:white;
+    border-radius:10px 10px 0 0;
+}
+.project-frame {
+    margin-bottom:180px;
+}
+.project-description {
+    font-size: 16px;
+    color: #555;
+}
+.project-body {
+    float: left;
+    margin-left: 40px;
+}
+.project-snap {
+    border-radius:25px;
+    float:left;
+    overflow: hidden;
 }

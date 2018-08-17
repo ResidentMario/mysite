@@ -5,11 +5,15 @@
 <div class="project-section-header">Tech</div>
 
 <!-- TODO: Add a little icon that tells you where the link is pointing to, e.g. Medium, blog post, so on. -->
-{% for project in project_list %}
+{% for project in project_list[::-1] %}
     <div class="project-frame">
-        <img style="height:200px; width:400px; float:left" src={{ '/static/post_snaps/' + project.snap }}/>
+    <div class="project-snap">
+        <a href={{ project.links[-1].href }}>
+            <img style="height:150px; width:300px;" src={{ '/static/post_snaps/' + project.snap }}/>
+        </a>
+    </div>
 
-        <div class="project-body" style="float:left;">
+        <div class="project-body">
             <div class="project-title">
                 {{  project.title }}
             </div>
@@ -31,36 +35,10 @@
 
 <div class="project-section-header" style="margin-top:50px;">Advocacy</div>
 
-<p>This page is for assorted other things I've done.</p>
-
-<h3>External Posts</h3>
-<ul>
-    <li>Becoming a civic technologist out of college (<a href="https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c">Link</a>)</li>
-</ul>
-
-<h3>Talks</h3>
-
-<ul>
-    <li>Data Visualization Blogging (<a href=
-        "https://github.com/ResidentMario/data-visualization-blogging">Deck</a>)</li>
-
-    <li>Implementing Good Design (<a href=
-        "https://github.com/ResidentMario/implementing-good-design">Deck</a>)</li>
-    <li>
-        Introduction to Data Science (<a
-            href="https://docs.google.com/presentation/d/1GxnMOzDq_pUpjxe9rOaNbDevH44h_zlCzMLWS6JCN5M/edit?usp=sharing">Deck</a>)
-    </li>
-    <li>A History of Pi (<a
-            href="https://docs.google.com/presentation/d/1dBfEnn96jtEXtbfHXRHBkOHt9NsIK6RjyD8E9habiLQ/edit?usp=sharing">Deck</a>)</li>
-</ul>
-
-<h3>Press</h3>
-
-<ul>
-    <li>
-        Who runs the world? Data (<a
-            href="https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032">Link</a>)
-    </li>
+<ul class="nav-worklist">
+{% for thing in advocacy_list[::-1] %}
+    <li><a class="navigation-link" href={{ thing.route }}>{{ thing.title }}</a></li>
+{% endfor %}
 </ul>
 
 {% endblock %}

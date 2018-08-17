@@ -275,25 +275,106 @@ advocacy_posts = [post for post in post_list if post['type'] == 'advocacy']
 
 project_list = [
     {
-        'title': 'Geoplot',
-        'description': 'A geospatial data visualization library for Python',
-        'snap': 'code-writer-snap.png',
-        'links': [
-            {'title': 'Foo Explainer', 'href': 'https://example.com'}
-        ]
-    },
-    {
-        'title': 'Missingno',
-        'description': 'A missing data visualization library for Python',
+        'title': 'missingno',
+        'description': 'A missing data visualization library',
         'snap': 'missingno.png',
         'links': [
-            {'title': 'JOSS Paper',
+            {'title': 'Using missingno to visualize missing data',
+             'href': './2016/03/28/missingno.html',
+             'type': 'post'},
+            {'title': 'JOSS paper',
              'href': 'http://joss.theoj.org/papers/52b4115d6c03864b884fbf3334851322',
              'type': 'paper'},
             {'title': 'Try it',
              'href': 'https://github.com/ResidentMario/missingno',
-             'type': 'GitHub'}
+             'type': 'repo'}
         ]
+    },
+    {
+        'title': 'life of citi bike',
+        'description': 'Exploring a day in the life of Citi Bike',
+        'snap': 'life-of-citibike-alt.png',
+        'links': [
+            {'title': 'The making of Life of Citi Bike',
+             'href': './2016/08/27/day-in-the-life-of-citibike.html',
+             'type': 'post'
+             },
+            {'title': 'Try it',
+             'href': 'http://www.residentmar.io/visualizations/life-of-citibike.html',
+             'type': 'webapp'}
+        ]
+    },
+    {
+        'title': 'py_d3',
+        'description': 'Port of the D3.JS visualization grammar to Jupyter',
+        'snap': 'py-d3.png',
+        'links': [
+            {'title': 'Bringing D3.JS to Jupyter Notebook with Py-D3',
+             'href': './2016/09/12/py-d3.html',
+             'type': 'post'},
+            {'title': 'Try it',
+             'href': 'https://github.com/ResidentMario/py_d3',
+             'type': 'repo'}
+        ]
+    },
+    {
+        'title': 'checkpoints',
+        'description': 'A progress-saving pandas monkey-patch',
+        'snap': 'saving-progress-pandas.png',
+        'links': [
+            {'title': 'Saving progress in pandas',
+             'href': './2016/10/29/saving-progress-pandas.html',
+             'type': 'post'},
+            {'title': 'Try it',
+             'href': 'https://github.com/ResidentMario/checkpoints',
+             'type': 'repo'}
+        ]
+    },
+    {
+        'title': 'geoplot',
+        'description': 'A geospatial data visualization library',
+        'snap': 'geoplot.png',
+        'links': [
+            {'title': 'Geospatial visualization made easy with geoplot',
+             'href': './2017/02/07/geoplot.html',
+             'type': 'post'},
+            {'title': 'Documentation',
+             'href': 'https://residentmario.github.io/geoplot/index.html',
+             'type': 'docs'},
+            {'title': 'Try it',
+             'href': 'https://github.com/ResidentMario/geoplot',
+             'type': 'repo'}
+        ]
+    },
+    {
+        'title': 'the machine learning repository',
+        'description': 'Organized notes on machine learning',
+        'snap': 'the-machine-learning-repository.png',
+        'links': [
+            {'title': 'Try it',
+             'href': 'https://residentmario.github.io/machine-learning-notes/index.html',
+             'type': 'webapp'}
+        ]
+    }
+]
+
+
+advocacy_list = [
+    {
+        'title': 'Who runs the world? Data',
+        'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032'
+    },
+    {
+        'title': 'Implementing good design',
+        'route': 'https://github.com/ResidentMario/implementing-good-design'
+    },
+    {
+        'title': 'Becoming a civic technologist out of college',
+        'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
+    },
+    {
+        'title': 'Learning by doing with data viz blogging',
+        'route': 'https://github.com/ResidentMario/data-visualization-blogging'
     }
 ]
 
@@ -319,7 +400,9 @@ def blog():
 
 @app.route('/projects.html')
 def projects():
-    return render_template('projects.html', most_recent='/latest.html', project_list=project_list)
+    return render_template('projects.html', most_recent='/latest.html',
+                           project_list=project_list,
+                           advocacy_list=advocacy_list)
 
 
 @app.route('/latest.html')
