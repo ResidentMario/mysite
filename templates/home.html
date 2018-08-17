@@ -32,7 +32,7 @@
 <b>Recent projects</b>
 <ul class="nav-worklist" style="margin-bottom:50px;">
     {% for project in project_list[-3:][::-1] %}
-        <li><a class="navigation-link" href="./{{ project.route }}">{{project.title}}</a></li>
+        <li><a class="navigation-link" href="{{ project.links[-1].href }}">{{project.title}}</a></li>
     {% endfor %}
         <li><i><a class="navigation-link" href="./projects.html">more →</a></i></li>
 </ul>

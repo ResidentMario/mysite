@@ -126,8 +126,6 @@ body {
 /* CSS used for the post navigation in the article footer. */
 .post_desc {
     font-family: Roboto, sans serif;
-    font-weight:bold;
-    color:#252525;
     text-align:center;
     width:260px;
 }
@@ -230,4 +228,16 @@ a:active {
     border-radius:25px;
     float:left;
     overflow: hidden;
+}
+.see-also-link:visited {
+    color: black;
+}
+.see-also-link:hover {
+    color: #BBB;
+}
+.see-also {
+    margin-top:40px;
+}
+.bottom-spacer {
+    margin-top:120px;
 }

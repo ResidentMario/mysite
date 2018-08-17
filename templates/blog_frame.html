@@ -10,81 +10,8 @@
 {% endblock %}
 
 {% block extension_page_bottom %}
+&mdash; Aleksey
 
+<div class="bottom-spacer"></div>
 
-<script src="/static/js/d3.v3.js"></script>
-
-<script>
-    d3.json("/static/json/post_list.json", function(error, dataset) {
-        if (error) throw error;
-
-        var rand_post_nums = [];
-        while (rand_post_nums.length < 3) {
-            var num = Math.floor(Math.random() * dataset.length);
-            if (rand_post_nums.indexOf(num) == -1) {
-                rand_post_nums.push(num);
-            }
-        }
-
-        var frame = d3.select("g");
-
-        var images = frame
-                .append("table")
-                .attr({
-                    "class": "posts_table"
-                }).append("tr")
-                .append("g");
-
-        images.selectAll("g")
-                .data(rand_post_nums)
-                .enter()
-                .append("td")
-                .attr("class", "post_item")
-                .append("a")
-                .attr({
-                    "href": function(d) { return dataset[d]['route']; }
-                })
-                .append("img")
-                .attr({
-                    "src": function(d) { return '/static/post_snaps/' + dataset[d]['snap']; }
-                })
-                .attr("class", "post_image");
-
-        var desc = frame.append("table")
-                .attr("class", "post_descriptions")
-                .append("tr")
-                .append("g");
-
-        desc.selectAll("g").append("tr")
-                .data(rand_post_nums)
-                .enter()
-                .append("td")
-                .attr("class", "post_desc")
-                .append("a")
-                .attr("class", "navigation-link")
-                .attr("href", function(d) { return dataset[d]['route']; })
-                .text(function(d) { return dataset[d]['title']; })
-    });
-</script>
-
-<g>
-
-</g>
-
-<div id="disqus_thread"></div>
-<script>
-    var disqus_config = function () {
-        this.page.url =  request.url;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = {{ id }}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    (function() {  // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        
-        s.src = '//alekseybilogur.disqus.com/embed.js';
-        
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 {% endblock %}

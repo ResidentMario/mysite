@@ -28,7 +28,7 @@
         <a href="https://github.com/residentmario" class="navigation-link">github</a>&nbsp;&nbsp;
         <a href="https://kaggle.com/residentmario" class="navigation-link">kaggle</a>&nbsp;&nbsp;
         <a href="https://twitter.com/residentmario" class="navigation-link">twitter</a>&nbsp;&nbsp;
-        <a href="about.html" class="navigation-link">about</a>&nbsp;&nbsp;
+        <a href="/about.html" class="navigation-link">about</a>&nbsp;&nbsp;
     </div>
 	</div>
 	<div id="frame">
@@ -43,13 +43,6 @@
 		</div>
 		{% block extension_page_bottom %}
 		{% endblock %}
-		<div id="disqus">
-		<div id="footer">
-			<div style="float:right">{% block footer %} <a href={{request.url_root}}feed>
-                <img src="/static/design_elements/rss_logo.png" style="height:12px;"/> Subscribe
-            </a>&mdash;<a href="https://github.com/ResidentMario/mysite">View Source</a>&mdash;<a href="mailto:aleksey@residentmar.io">Contact</a>{% endblock %}</div>
-		</div>
-		</div>
 	</div>
 </body>
 </html>
