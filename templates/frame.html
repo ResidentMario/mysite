@@ -3,7 +3,6 @@
 <html lang="en">
 <head>
 	<link rel= "stylesheet" type= "text/css" href= "{{request.url_root}}static/css/app.css">
-	<!--<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>-->
 	<link rel= "stylesheet" type= "text/css" href= "/static/css/roboto.css">
 	<link rel="icon" type="image/x-icon" href="/static/design_elements/code-writer-black.png"/>
     <link rel="alternate" type="application/rss+xml" title="Data Hacks Feed" href="{{request.url_root}}feed" />
@@ -22,29 +21,15 @@
 		<img src="/static/design_elements/code-writer.svg" alt="Icon." style="height:65px; position:absolute; top:5px"/>
 	</div>
 	<div id="navbar">
-	<div style="float:left; font-size:20px;">
-        <a href="/" class="navigation-link">About</a>&nbsp;&nbsp;
-        <img src="/static/design_elements/vertbar.svg" style="height:30px" alt="Vertical bar"/>&nbsp;&nbsp;
-		<a href={{ most_recent }} class="navigation-link">Blog</a> &nbsp;
-        <img src="/static/design_elements/vertbar.svg" style="height:30px" alt="Vertical bar"/>&nbsp;&nbsp;
-        <a href="/et-cetera.html" class="navigation-link">Etc</a>
+	<div style="float:left; font-size:18px; margin-top:12px;">
+        <a href="/" class="navigation-link">home</a>&nbsp;&nbsp;
+		<a href="/blog.html" class="navigation-link">blog</a>&nbsp;&nbsp;
+        <a href="projects.html" class="navigation-link">projects</a>&nbsp;&nbsp;
+        <a href="https://github.com/ResidentMario" class="navigation-link">github</a>&nbsp;&nbsp;
+        <a href="https://kaggle.com/residentmario" class="navigation-link">kaggle</a>&nbsp;&nbsp;
+        <a href="https://twitter.com/residentmario" class="navigation-link">twitter</a>&nbsp;&nbsp;
+        <a href="about.html" class="navigation-link">about</a>&nbsp;&nbsp;
     </div>
-		<div style="float:right; padding-top:11px">
-            <a href="https://github.com/ResidentMario">
-                <img src="/static/design_elements/github_logo.svg" style="height:32px" alt="Github logo"/>
-            </a>
-            <a href="https://www.kaggle.com/residentmario">
-                <img src="/static/design_elements/kaggle_logo.png" style="height:32px" alt="Kaggle logo"/>
-            </a>
-            <a href="https://www.linkedin.com/pub/aleksey-bilogur/94/6a9/95">
-                <img src="/static/design_elements/linkedin_logo.svg" style="height:32px" alt="LinkedIn logo"/>
-            </a>
-            <a href="https://twitter.com/ResidentMario">
-                <img src="/static/design_elements/twitter_logo.png" style="height:32px" alt="Twitter logo"/></a>
-            </a>
-
-		</div>
-		<br/>
 	</div>
 	<div id="frame">
 		<div id="content">
@@ -60,10 +45,9 @@
 		{% endblock %}
 		<div id="disqus">
 		<div id="footer">
-			<div style="float:right">{% block footer %} © Aleksey Bilogur 2015-2018&mdash;<a href={{request.url_root}}feed>
+			<div style="float:right">{% block footer %} <a href={{request.url_root}}feed>
                 <img src="/static/design_elements/rss_logo.png" style="height:12px;"/> Subscribe
-            </a><!--<a
-					href="https://validator.w3.org/nu/?doc={{ request.url }}">Valid HTML</a>-->&mdash;<a href="https://github.com/ResidentMario/mysite">View Source</a>&mdash;<a href="mailto:aleksey@residentmar.io">Contact</a>{% endblock %}</div>
+            </a>&mdash;<a href="https://github.com/ResidentMario/mysite">View Source</a>&mdash;<a href="mailto:aleksey@residentmar.io">Contact</a>{% endblock %}</div>
 		</div>
 		</div>
 	</div>

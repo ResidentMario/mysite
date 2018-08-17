@@ -243,12 +243,22 @@ post_paths = [post['route'] for post in post_list]
 
 @app.route('/')
 def main_page():
+    return render_template('home.html', most_recent='/latest.html')
+
+
+@app.route('/about.html')
+def about():
     return render_template('about.html', most_recent='/latest.html')
 
 
-@app.route('/et-cetera.html')
-def et_cetera():
-    return render_template('et-cetera.html', most_recent='/latest.html')
+@app.route('/blog.html')
+def blog():
+    return render_template('blog.html', most_recent='/latest.html', post_list=post_list)
+
+
+@app.route('/projects.html')
+def projects():
+    return render_template('projects.html', most_recent='/latest.html')
 
 
 @app.route('/latest.html')

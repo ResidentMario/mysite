@@ -24,6 +24,7 @@ body {
     width:800px;
     margin:auto;
     background:transparent;
+    margin-top:100px;
 }
 /* Holds site navigation */
 #navbar {
@@ -178,14 +179,11 @@ a:active {
 
 /* unvisited navigation link */
 .navigation-link:link {
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
+    color: #0000ee;
 }
 /* visited navigation link */
 .navigation-link:visited {
-    color: #333;
-    text-decoration: none;
+    color: #00008b;
 }
 /* mouse over navigation link */
 .navigation-link:hover {
@@ -196,4 +194,8 @@ a:active {
 .navigation-link:active {
     color: #BBB;
     text-decoration: none;
+}
+.nav-worklist {
+    list-style: none;
+    padding: 0;
 }
