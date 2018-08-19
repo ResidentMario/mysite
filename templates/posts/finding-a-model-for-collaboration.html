@@ -1,0 +1,184 @@
+{% extends "blog_frame.html" %}
+{% block content %}
+
+<p>
+    In a previous blog post, <a href="/2018/06/17/what-next-for-open-data.html">"What next for open data?"</a>, I opined on the past, present, and future of the open data product ecosystem.
+</p>
+
+<p>
+    <b>Open data</b>, if you’re not familiar with it, is a recent phenomenon in government and academia encouraging institutions and municipalities to publish the data that they use. After all, these institutions exist for the public benefit, so their releasing the data that they collect (subject to restrictions on things like privacy and security) makes tons of sense.
+</p>
+
+<p>
+    Open data gave us, the general public, access to a kaleidoscope of data that previously lived only within the walls of regulatory agencies. This ranges from the whimsical, like the <a href="https://data.cityofnewyork.us/Health/NYC-Dog-Licensing-Dataset/nu7n-tubp">dog names dataset</a>, to the serious, like <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95">car accident report data</a>, to the strange, like <a href="https://data.cityofnewyork.us/Housing-Development/Times-Square-Screens/n246-cev5">a dataset of billboards in Times Square</a>. See for yourself: search for something interesting on <a href="https://opendata.cityofnewyork.us/">NYC Open Data</a>, or on <a href="https://www.data.gov/">Data.gov</a>, and see what you find.
+</p>
+
+<p>
+    In that previous post I talked about the "supply side" of the "open data market": the products that provide the hosting platforms and the government agencies (and other data-releasing entities) that upload to them. In this post I’m going to discuss the "demand side": the people, projects, and causes using the data. This post is somewhat more general than the previous one, as many of the problems I will discuss are not open data problems specifically, but govtech problems in general.
+</p>
+
+<h3>The promise...</h3>
+
+<p>
+    Open data isn’t free. It requires a lot of work to collect and publish. Once published, it requires still more work to maintain and curate. Why bother?
+</p>
+
+<p>
+    Open data was legislated into existence by bureaucrats, but those bureaucrats were spurred into action by open data activists. The activists, in turn, were spurred into action by a dream: the dream of the "citizen data scientist".
+</p>
+
+<p>
+    The radical openness of open data, early proponents promised us, would feed the next generation of tech products solving real problems our communities. Citizen data scientists would come out of the woodwork, seize onto the data, and carry it off into their communities. It would be used to hold governments accountable, to inform decision making by nonprofits, to help community groups prioritize their work, and so on.
+</p>
+
+
+<h3>...broken</h3>
+
+<p>
+    Some of that's happened, but not much.
+</p>
+
+<p>
+    For one, as anyone that spends a lot of time working with public data will tell you, open data is data, and <a href="http://fortune.com/2014/06/30/big-data-dirty-problem/">data is dirty</a>. Open datasets often take a lot of cleaning to render usable, and the process of cleaning your data requires significant technical knowledge. To be able to use open data effectively, you have to know how to program (or, failing that, know someone else that can).
+</p>
+
+<p>
+    But scrounging through sanitation records to find nuggets of insight you can carry to your local community board meeting is a very peculiar thing to do. While there are certainly programmers that are civically inclined in this way, the vast majority are not. If you look at the programs, web applications, and other technical projects powered by open data that are out there in the real world, you will see a landscape populated mainly by, frankly, portfolio projects.
+</p>
+
+<p>
+    Take my work, for instance. In past work I <a href="2016/02/09/average-chain-distance.html">analyzed the locations of Starbucks in Manhattan</a>, <a href="http://localhost:5000/2016/03/19/nyc-motor-vehicle-collisions.html">looked into the accident-proneness of New York City streets</a>, <a href="http://localhost:5000/2017/02/13/311.html">broke 311 requests down by call type</a>, and did numerous similar things.
+</p>
+
+<p>
+    These were fun projects, and they earned me a certain renown amongst a certain type of nerd. But how many of these projects led to actionable change?
+</p>
+
+<p>
+    None. Zero. Nil. Nada.
+</p>
+
+<p>
+    My knowledge of Starbucks distances did not translate into legislation limiting the spread of chain stores. My analysis of 311 call types didn’t change the 311 call process. And my accident location analysis got some news-of-the-day press attention, but not much more than that.
+</p>
+
+<p>
+    These projects were far from useless. I learned a lot. My readers learned a lot. But learning is a fuzzy and inconcrete thing. When I interned at the Mayor's Office, I was proud to say that I worked an organization that did things like measurably reduce the time-to-open for new small business restaurants. On a personal level, in terms of impact, "a lot of people learned something" isn't even in the same ballpark.
+</p>
+
+<p>
+    The fact of the matter is that not only is creating change hard, it’s also orthogonal to why we programmers make these analyses and applications in the first place. Most programmers are motivated by hard problems, interesting edge cases, clever abstractions, and exciting new technologies. We pick projects that pull from the bucket of things we want to get our computer to do. Our fear is spending a career writing boring CRUD web applications. Chasing down our local bureaucrats and force-feeding them nuggets of information isn't even on the map.
+</p>
+
+<p>
+    But there are organizations that spend all of their time thinking, talking, dreaming about this chase. Community groups. Non-profits. Advocates. Why not work with them?
+</p>
+
+
+<h3>There is no working model for tech-activism collaboration</h3>
+
+<img src="/static/post_assets/finding-a-model-for-collaboration/obama-foundation-meetup-card.png" class="inline_image_full"/>
+
+<p>
+    Late last year I left work an hour early to attend a meetup in Manhattan. The <a href="https://www.obama.org/">Obama Foundation</a> was in town, and the still-nascent organization was meeting with local nonprofits and community groups across the country to understand their community funding opportunities. They were turning their trip into a public roadshow, and this event was their New York leg.
+</p>
+
+
+<p>
+    The event followed a panel interview format, featuring a handful of technically-inclined civic and community non-profits. The audience was a veritable sea of folks from the tech industry, many of whom had turned out to see what 44 was up to these days.
+</p>
+
+<p>
+    The question hanging over everyone's heads was this: what could the tech industry do to help civic causes? The ensuing conversation was both terrifically enlightening, and, franky, depressing. The panelists basically took turns lambasting how difficult it was to work with "techies". They stated that they no problem recruiting folks from the tech industry to volunteer to help out with their causes, but that they couldn’t retain the talent.
+</p>
+
+<p>
+    The core issue, which came up time and time again, was product ownership. Particularly vivid in my mind is a story told by Noelle Francois of <a href="https://heatseek.org/">Heat Seek</a>, a NYC non-profit that provides (and advocates around) sensors meant for tenants at risk of having their heat shut down. Francois explained that early in the startup’s history they tried hosting a weekly gathering of technical volunteers hacking on Heat Seek. But nobody wanted to step up to owning any meaningful chunks of the tech in their spare time, and they had to put a stop to it when it became obvious that the difficulty of pooling the many small contributions outstripped the reward.
+</p>
+
+<p>
+    Another organization talked about how difficult it was to get techies to pony up for the thing they most badly needed...maintaining a boring CRUD web app.
+</p>
+
+<p>
+    Frankly, I got the impression that these organizations didn’t trust us. They had easy access to technical volunteers (after all, who doesn’t want to help hold penny-pinching, heat-meter-fiddling scumbag landlords accountable?), but a hard scoping problem matching those volunteers to maintenance commitments. The panelists were frustrated. The crowd was befuddled. The Obama Foundation personnel were floored.
+</p>
+
+
+<h3>The communication chasm</h3>
+
+<p>
+    Recall the advocate’s vision for open data: citizen data scientists using their spare time to parse open data for nuggets of insight, insights which will be used by community to improve lives. If there is no working model for tech-advocacy collaboration these nuggets will never make it before people with the power to affect change.
+</p>
+
+<p>
+    Here’s another story, to underscore the point. More than two years ago (how time flies!) I attended a talk by Ben Wellington, a quantitative programmer at a technical hedge fund (more on that later). Ben is the man behind <a href="http://iquantny.tumblr.com/">IQuantNY</a>, a website featuring fascinating tidbits of insights from open data sources.
+</p>
+
+<p>
+    Ben had the same problem I did. He was doing lots of work, and that work was getting recognized (IQuantNY made him a household name in a certain nerd crowd), but it wasn’t getting very far past the web page. But Ben succeeded where I had faltered: he found a nugget, then he found a load it into a BB gun and shoot it into a bureaucrat's face (...maybe I need a better analogy). In a 2016 IQuantNY post titled "<a href="http://iquantny.tumblr.com/post/144197004989/the-nypd-was-systematically-ticketing-legally">The NYPD Was Systematically Ticketing Legally Parked Cars for Millions of Dollars a Year - Open Data Just Put an End To It</a>", Ben described how he used open parking violations data, plus Google Maps, to document instances where the NYPD was giving out tickets for a type of supposed parking violation that had been taken out of the books eight years prior.
+</p>
+
+<p>
+    The feel-good part of the story: he reached out to the NYPD, who not only acknowledged the fact, but stated that they were going to retrain their officers to make them aware of this new rule. Ben’s words: "I was speechless" (really, you should go ahead and read the full article).
+</p>
+
+<p>
+    One issue Ben discussed in his talk that is absent from this post is the fact that he at first tried to reach out to the NYPD through public channels, and got no response. By this point Ben was well known enough in the community that he could ask the city’s open data champions (Amen Ra Masheriki, the city Chief Analytics Officer, and Gale Brewer, the Manhattan Borough President) to relay the message for him, making it impossible to ignore. This second attempt is what ultimately garnered a response.
+</p>
+
+<p>
+    The lesson here, at least for me, is that Ben Wellington is an extraordinary citizen. But the citizen data scientist vision posits an ordinary one. Without these connections you’re not getting very far at all taking the direct route. He was just as disappointed by this as I am.
+</p>
+
+<p>
+    Instead, you need to relay to a cause or organization that has the cause celebre to advocate with you. And if there are no working model for tech-activism collaboration...now what?
+</p>
+
+
+<h3>A working model</h3>
+
+<img src="/static/post_assets/finding-a-model-for-collaboration/two-sigma-data-clinic-splash-page.png" class="inline_image_full"/>
+
+<p>
+    Let’s not end with a problem, without also offering a solution.
+</p>
+
+<p>
+    A word of warning: I am not a public policy wonk, and I haven’t spent time studying this issue in any formal way. I’ve merely been around the block a few times, and have gotten a feeling for what might work. Maybe.
+</p>
+
+<p>
+    There are a few models for collaborating on open data out there right now. One in particular I think has great potential is what the <a href="https://www.twosigma.com/about/data-clinic/">Two Sigma Data Clinic</a> is doing. Two Sigma is the "technical hedge fund" in "Ben Wellington, a quantitative programmer at a technical hedge fund"; the Data Clinic is his latest project.
+</p>
+
+<p>
+    Two Sigma is a massive hedge fund which prides itself on hiring the best of the best (its interviews are reputedly much harder than Google’s). It has a lot of bright minds churning away at that age-old problem, beating the stock market. In the tech industry there is an established philosophy of "the 20 percent project": a side project or idea that you are allowed to (theoretically) dedicate up to 20% of your work time to. The value proposition of the Data Lab is simple: what if we gave Two Sigma employees the opportunity to work on structured public-benefit projects in their 20% time?
+</p>
+
+<p>
+    It’s a clever win-win-win. Two Sigma corporate wins because it increases employee retention ("hey, I wouldn’t get to work on these problems for fun at [other megacorp]"). Two Sigma employees win because they get to work on really impactful projects, not just on things they’re paid to do. The civic groups the Data Lab partners with win because they get to commit to a relationship with an organization with an agenda, not an individual with a fleeting interest; individual Two Sigma employees may step out, but others will step in.
+</p>
+
+<p>
+    This engagement model has the core feature that it abstracts “an interested programmer“ up into “a individual out of a group of interested programmers“, which, for a civic cause strung up by past commitment issues, seems a much less volatile proposition. It also creates space for a dedicated product manager, who maintains the “input pipe” of problems, handles much of the communication overhead of the engagement, and just generally deals with that thorny problem of matching talent to interest to project.
+</p>
+
+<p>
+    This is an interesting model for tech-advocacy collaboration. I don’t work there (which doesn’t stop me from having an opinion, apparently), so I don’t know how well it’s coming along in practice, but I’m hopeful that it can be made to work.
+</p>
+
+<p>
+    Moreover, I’m excited by the growth potential of this idea. If Two Sigma can do this, what’s to stop Google (which has on the order of 10x as many employees in New York alone) from doing it? Or any other tech giant?
+</p>
+
+<p>
+    The 20% civic data project could, in theory,  be one of the largest injection of talent into govtech in general, and open data specifically, in a long time.
+</p>
+
+<p>
+    And that’s something to look forward to.
+</p>
+
+
+{% endblock %}

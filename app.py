@@ -258,6 +258,14 @@ post_list = [
         'template': '/solving-algorithms.html',
         'snap': 'code-writer-snap.png',
         'type': 'technical'
+    },
+    {
+        'title': 'Finding a model for collaboration in govtech that works',
+        'route': '2018/08/19/finding-a-model-for-collaboration.html',
+        'date': datetime(2018, 8, 19),
+        'template': '/finding-a-model-for-collaboration.html',
+        'snap': 'code-writer-snap.png',
+        'type': 'advocacy'
     }
     # {
     #     'title': 'Building an MTA historical train arrival application',
