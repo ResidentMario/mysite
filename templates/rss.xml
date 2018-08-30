@@ -192,5 +192,11 @@
             <guid>http://www.residentmar.io/2018/08/19/finding-a-model-for-collaboration.html</guid>
             <pubDate>Sun, 19 Aug 2018 00:00:00 EST</pubDate>
     </item>
+    <item>
+            <title>Building an MTA historical train arrival application</title>
+            <link>http://www.residentmar.io/2018/05/16/subway-explorer.html</link>
+            <guid>http://www.residentmar.io/2018/05/16/subway-explorer.html</guid>
+            <pubDate>Wed, 29 Aug 2018 00:00:00 EST</pubDate>
+    </item>
 </channel>
 </rss>
