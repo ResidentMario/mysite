@@ -266,14 +266,15 @@ post_list = [
         'template': '/finding-a-model-for-collaboration.html',
         'snap': 'code-writer-snap.png',
         'type': 'advocacy'
+    },
+    {
+        'title': 'Building an MTA historical train arrival application',
+        'route': '2018/05/16/subway-explorer.html',
+        'date': datetime(2018, 8, 29),
+        'template': 'subway-explorer.html',
+        'snap': 'empty.png',
+        'type': 'technical'
     }
-    # {
-    #     'title': 'Building an MTA historical train arrival application',
-    #     'route': '2018/05/16/subway-explorer.html',
-    #     'date': datetime(2018, 5, 16),
-    #     'template': 'subway-explorer.html',
-    #     'snap': 'empty.png'
-    # }
 ]
 
 post_paths = [post['route'] for post in post_list]
@@ -355,6 +356,22 @@ project_list = [
         ]
     },
     {
+        'title': 'subway explorer',
+        'description': 'What real-time arrival data says about your commute',
+        'snap': 'subway-explorer.png',
+        'links': [
+            {'title': 'Building an MTA historical train arrival application',
+             'href': './2018/05/16/subway-explorer.html',
+             'type': 'post'},
+            {'title': 'Parsing subway rides with gtfs-tripify',
+             'href': './2018/01/29/gtfs-tripify.html',
+             'type': 'post'},
+            {'title': 'Repo',
+             'href': 'https://github.com/ResidentMario/subway-explorer-webapp',
+             'type': 'repo'}
+        ]
+    },
+    {
         'title': 'the machine learning repository',
         'description': 'Organized notes on machine learning',
         'snap': 'the-machine-learning-repository.png',
@@ -371,6 +388,10 @@ advocacy_list = [
     {
         'title': 'Who runs the world? Data',
         'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032'
+    },
+    {
+        'title': 'NYC City Council testimony on open data',
+        'route': 'https://www.youtube.com/watch?v=U7T2Hwj3vjc'
     },
     {
         'title': 'Implementing good design',

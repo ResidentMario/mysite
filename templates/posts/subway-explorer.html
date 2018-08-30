@@ -13,6 +13,10 @@
     As I alluded to in that post, the next step was to implement this technique into a consumer-facing webapp, the Subway Explorer. This is a project that hasn't launched yet (more on why later), so I'm hedging my bets a bit by writing about it here, but I think it'll make for interesting reading.
 </p>
 
+<p>
+    To see (part of) the code, and for instructions on getting this application running locally (it is not yet publicly available), check out <a href="https://github.com/ResidentMario/subway-explorer-webapp">GitHub repo</a>.
+</p>
+
 <h3>Design</h3>
 
 <p>
@@ -227,8 +231,22 @@
 The full deployment files and a walkthrough on using them is up at the <code class="inline_code"><a href="https://github.com/ResidentMario/subway-explorer-deploy">subway-explorer-deploy</a></code> repository.
 </p>
 
-<h3>Conclusion</h3>
+<h3>What's next</h3>
 
-<p>This section will be written in the future.</p>
+<p>
+    This post, and project, has been on the backburner for quite some time now.
+</p>
+
+<p>
+    The Subway Explorer is presently in the proof-of-concept stage. For a hard-coded range of dates, it works most of the time, but sometimes fails: there are still a few small edge cases, and one large one (accurately mapping east-west headings to north-south ones), which make it not quite fully operational.
+</p>
+
+<p>
+    These edges can, with some difficulty, be polished away. A bigger problem is the fact that this service needs to rely on some kind of GTFS-RT archival service, and that's just not infrastructure that I'm willing to commit to paying for, let alone maintaining, for what amounts to a pet project.
+</p>
+
+<p>
+    As I understand it, the <a href="https://transitcenter.org/">Transit Center</a> and the <a href="http://cusp.nyu.edu/">NYU CUSP</a> had both talked about maintaining such a public-facing resource in the past, but as of yet no institution has stepped up to the ball on this one. That may change in the future (in which case I will happily amend this coda!), but until it does, here we stand.
+</p>
 
 {% endblock %}
