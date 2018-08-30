@@ -269,7 +269,7 @@ post_list = [
     },
     {
         'title': 'Building an MTA historical train arrival application',
-        'route': '2018/05/16/subway-explorer.html',
+        'route': '2018/08/29/subway-explorer.html',
         'date': datetime(2018, 8, 29),
         'template': 'subway-explorer.html',
         'snap': 'empty.png',
