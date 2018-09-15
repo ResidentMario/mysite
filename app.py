@@ -372,6 +372,21 @@ project_list = [
         ]
     },
     {
+        'title': 'kaggle learn',
+        'description': 'Two tracks in an online data science learning platform',
+        'snap': 'kaggle-learn.png',
+        'links': [
+            {'title': 'Overview',
+             'href': 'https://www.kaggle.com/learn',
+             'type': 'link'},
+            {'title': 'Try the pandas track',
+             'href': 'https://www.kaggle.com/learn/pandas'},
+            {'title': 'Try the data visualization track',
+             'href': 'https://www.kaggle.com/learn/data-visualisation',
+             'type': 'link'}
+        ]
+    },
+    {
         'title': 'the machine learning repository',
         'description': 'Organized notes on machine learning',
         'snap': 'the-machine-learning-repository.png',
@@ -498,5 +513,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
