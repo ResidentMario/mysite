@@ -419,6 +419,14 @@ advocacy_list = [
     {
         'title': 'Learning by doing with data viz blogging',
         'route': 'https://github.com/ResidentMario/data-visualization-blogging'
+    },
+    {
+        'title': 'Kaggle site documentation',
+        'route': 'https://www.kaggle.com/docs'
+    },
+    {
+        'title': 'Profiling top Kagglers: Bestfitting, currently #1 in the world',
+        'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/'
     }
 ]
 
@@ -513,5 +521,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
