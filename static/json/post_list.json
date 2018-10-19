@@ -288,12 +288,12 @@
         "year": 2018
     },
     {
-        "title": "A survey of roles in industry data science",
-        "route": "http://www.residentmar.io/2018/10/14/roles-in-data-science.html",
+        "title": "The three kinds of data scientists",
+        "route": "http://www.residentmar.io/2018/10/18/roles-in-data-science.html",
         "snap": "code-writer-snap.png",
         "type": "advocacy",
         "month": 10,
-        "day": 14,
+        "day": 18,
         "year": 2018
     }
 ]
