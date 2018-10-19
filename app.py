@@ -277,7 +277,7 @@ post_list = [
     },
     {
         'title': 'The three kinds of data scientists',
-        'route': '2018/10/14/roles-in-data-science.html',
+        'route': '2018/10/18/roles-in-data-science.html',
         'date': datetime(2018, 10, 18),
         'template': 'roles-in-data-science.html',
         'snap': 'code-writer-snap.png',
