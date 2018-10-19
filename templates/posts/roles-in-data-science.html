@@ -1,0 +1,146 @@
+{% extends "blog_frame.html" %}
+{% block content %}
+
+<p>
+    Companies have been building data-using products since the dawn of the computer, but the market for data has never been as hot as it is today. The people building the data products and data insights these days usually have the job title <b>data scientists</b>, and hence the industry at large is often referred to as the <b>data science</b> industry.
+</p>
+
+<p>
+    So what is a data scientist?
+</p>
+
+<p>
+    This is a questions to answer than you would think. Data science is so new that robust paths into industry simply don't exist yet. When Kaggle made a career paths highlight earlier this year, it was aptly titled <a href="http://blog.kaggle.com/tag/data-science-careers/">Winding Paths to Data Science</a>, because those working in it now ended up there in a hodgepodge of ways. Even the job title is a relatively recent innovation; in <a href="http://radar.oreilly.com/2011/09/building-data-science-teams.html#what-makes-data-scientist">a seminal article</a> DJ Patel and Jeff Hammerbacher, two former tech executives, plausibly claim to have invented the term around 2008.
+</p>
+
+<p>
+    I've spent a lot of time lately studying data science practices in the industry. As a part of that work I've come to the conclusion that there a "data scientist" is actually a homogenization of three related roles, and that we can usefully discuss the DNA of a "data scientist" through them. This model isn't perfect (I'll discuss some limitations it has at the end) but as the saying goes: "all models are wrong, but some are useful".
+</p>
+
+<h3>Machine Learning Engineers</h3>
+
+<p>
+    The top data scientists are <b>machine learning engineers</b>. MLEs are highly skilled machine learning practitioners whose job is to build and iterate on production machine learning models.
+</p>
+
+<p>
+    Machine learning engineers are the folks that are in charge of the models behind services like Amazon Alexa, Facebook Suggested Tags, and Google Translate. If someone is implementing advanced data science tech like neural networks in production, chances are they are a machine learning engineer.
+</p>
+
+<p>
+    Becoming a machine learning engineer (or a data scientist with responsibilities in this task domain) is not easy. MLEs are expected to have a deep theoretical understanding of machine learning model math and computer engineering. This is something that is only attainable with intensive study; in today's practice most machine learning engineers hold PhDs in machine learning or a closely related field. The combination of this extremely high barrier to entry and the ongoing craze around AI is that MLEs are likely the highest-paid non-executives in the entire tech industry. When the <i>New York Times</i> writes that "<a href="https://www.nytimes.com/2018/04/19/technology/artificial-intelligence-salaries-openai.html">AI Researchers Are Making More Than $1 Million, Even at a Nonprofit</a>", they're talking about top-ranking MLEs.
+</p>
+
+<p>
+    <ul>
+        <li><b>Job Title</b>: Machine Learning Engineer or Data Scientist or AI Researcher or Research Scientist</li>
+        <li><b>Skills</b>: Machine Learning</li>
+        <li><b>Education</b>: Likely a PhD</li>
+        <li><b>Watering Holes</b>: <a href="https://www.reddit.com/r/MachineLearning/">r/MachineLearning</a>, <a href="https://www.kaggle.com/">Kaggle</a>
+        <li><b>Favorite Books:</b> The Elements of Statistical Learning, Artificial Intelligence: A Modern Approach</li>
+        <li><b>Inspirations:</b> François Chollet, Yann LeCun, Fei-Fei Li</li>
+    </ul>
+</p>
+
+<h3>Data Engineers</h3>
+
+<p>
+    The second group of data science practitioners are <b>data engineers</b>.
+</p>
+
+<p>
+    One of the things that you learn quickly when you start to do data science in industry is that the clean, well-organized datasets that you often learn to work with in school are actually a rarity in the "real world". Data of the type useful for performing analysis on or building a machine learning model on requires a lot of hard work to get there. A machine learning pipeline in production might have a hundred lines of code marshalling and processing the data for every one line of code actually modeling it. Hence a saying in the industry that "90% of data science is cleaning your data".
+</p>
+
+<p>
+    Put it another way, in a mature machine learning pipeline there could be five data engineers tweaking the data for every one machine learning engineer tweaking the model!
+</p>
+
+<p>
+    Notably, a data engineer does not necessarily need to know much about data science or machine learning techniques. This knowledge is extremely helpful as context for the work they do, but is secondary in importance to raw data processing and system design skills.
+</p>
+
+<p>
+    Interested in a role in data engineering? Data engineers are software engineers who happen to specialize in data pipelines. Software engineering as a field has existed for a while, so the path to becoming a data engineer is very established. You "just" need to study software engineering, focusing your time especially on topics like databases and scalable applications. Most data engineers don't hold an education higher than a bachelor's degree, and it's totally possible to end up working as a data engineer on a sophisticated machine learning product straight out of college.
+</p>
+
+<p>
+    <ul>
+        <li><b>Job Title</b>: Data Engineer or Software Engineer</li>
+        <li><b>Skills</b>: Software engineering, databases, distributed systems, data analysis</li>
+        <li><b>Education</b>: Likely a bacholer's degree in computer science</li>
+        <li><b>Watering Holes</b>: <a href="https://news.ycombinator.com/">Hacker News</a>
+        <li><b>Recommended Readings</b>: Designing Data Intensive Applications, The Architecture of Open Source Applications</li>
+        <li><b>Inspirations</b>: Linus Torvalds, Jeff Dean</li>
+    </ul>
+</p>
+
+<h3>Data Analysts</h3>
+
+<p>
+    The last of the three data science roles are <b>data analysts</b>. Data analysts are technical programmers who are skilled in using statistical and analytical techniques to probe data for insights. Data analysts are usually expected to be strong communicators: they are usually outputting products, oftentimes in the form of data visualizations or data dashboards, which feed into the business decisions made by the organizations they work for.
+</p>
+
+<p>
+    Notably, data analysts do not necessarily work on or with products that involve any machine learning whatsoever, though simple machine learning models may be included as part of their project deliverables. In truth, "data analyst" is mainly a re-branding of a role that existed decades before the nascent data revolution, what used to be called the "business analyst" or "statistician". The rise of AI and of machine learning has made "data" a hot word, and so a lot of companies re-branded these jobs with "data analyst" or "data scientist" titles to help better attract talent.
+</p>
+
+<p>
+    Data anlysis is the junior-most of the three roles in data science, and also the most widespread. There are many, many companies out there that have data problems and business problems that need solving, far in excess of the number trying to incorporate machine learning into their products or dealing with large enough data volumes to need dedicated staffing. Thus these roles extend far beyond the tech industry; these days the pervasiveness and utility of data is such that even relatively small non-profits often employ at least one "data person" to help with their decision-making.
+</p>
+
+<p>
+    <ul>
+        <li><b>Job Title</b>: Data Analyst or Data Scientist or Business Analyst or Statistician</li>
+        <li><b>Skills</b>: Data Analysis, Data Visualization, Communication</li>
+        <li><b>Education</b>: Often self-taught</li>
+        <li><b>Watering Holes</b>: <a href="https://www.reddit.com/r/dataisbeautiful/">r/DataIsBeautiful</a>, <a href="https://www.reddit.com/r/Python/">r/Python</a>
+        <li><b>Recommended Readings:</b> Python for Data Analysis, The Visual Display of Quantitative Information</li>
+        <li><b>Inspirations</b>: Wes McKinney, Randal Olson, Edward Tufte</li>
+    </ul>
+</p>
+
+
+<h3>Data Scientist</h3>
+
+<p>
+    So what is a data scientist?
+</p>
+
+<p>
+    My revised opinion is that <b>a data scientist is an individual whose job includes one or more of machine learning engineering, data engineering, and data analysis</b>.
+</p>
+
+<p>
+    At large companies, these three roles are entirely separate. For example, the products in the <a href="https://cloud.google.com/products/ai/">Google Cloud AI</a> suite are maintained by a distinct team of data engineers and machine learning engineers, where the data engineers maintain the data pipelines whilst the machine learning engineers maintain the core models. The same tends to be true of medium-sized companies, especially when machine learning is at the core of the product or products. <a href="https://www.stitchfix.com/">StitchFix</a> is a good example of this.
+</p>
+
+<p>
+    Separating these roles and responsibilities out like this is a best practice on large data science teams because it's the most efficient way to build machine learning products at scale.
+</p>
+
+<p>
+    Smaller teams, meanwhile, will have fewer staff members, more constrained products, and little to no need for advanced machine learning models. These teams will have multidisciplinary employees, usually with the job title "data scientist", who will have responsibilities many of these areas&mdash;usually with a heavy emphasis on analysis, as these organizations have less need for robust data engineering pipelines and/or model predictions.
+</p>
+
+<p>
+    This is a major difference between working as a data scientist at a large company and working as one at a small company, and it accounts for a lot of the diversity in the term "data scientist".
+</p>
+
+<p>
+    Indeed.com is one company that I find interesting because it purposefully bucks this trend. They make a point of employing what they call <a href="https://engineering.indeedblog.com/talks/data-to-deployment/">full-stack data scientists</a>, effectively merging all three roles into one job description. Full-stack data scientists may be responsible for building up dataset pipelines one day, communicating insights from those datasets to the rest of the team on the next day, and then tweaking a production model built using insights from that data the day after that.
+</p>
+
+<p>
+    This simplified view of roles in data science explains most, but not all, of the variance in the job. There is a diverse range of other skills that are invariably part of the profile that companies look for when hiring, but which varies greatly from company to company and role to role.
+</p>
+
+<p>
+    Domain expertise plays a huge role; many data scientists start out as line workers in their industry, then transition into doing data science tasks as their company discovers data needs. Think chemists turned data scientists in the pharmaceutical industry, or journalists turned data journalists in the press. Another differentiator: general skills allied with the data science process, such as content writing and product management, which are more critical to certain jobs than to others.
+</p>
+
+<p>
+    So at the end of the day, you could start your evaluation of a particular data science position in terms of these three base types, but be sure to look at other holistic attributes of the job as well.
+</p>
+
+{% endblock %}

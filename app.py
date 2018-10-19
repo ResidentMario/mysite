@@ -272,8 +272,16 @@ post_list = [
         'route': '2018/08/29/subway-explorer.html',
         'date': datetime(2018, 8, 29),
         'template': 'subway-explorer.html',
-        'snap': 'empty.png',
+        'snap': 'code-writer-snap.png',
         'type': 'technical'
+    },
+    {
+        'title': 'The three kinds of data scientists',
+        'route': '2018/10/14/roles-in-data-science.html',
+        'date': datetime(2018, 10, 18),
+        'template': 'roles-in-data-science.html',
+        'snap': 'code-writer-snap.png',
+        'type': 'advocacy'
     }
 ]
 
