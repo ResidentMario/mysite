@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!--{% set most_recent_blog_post_url = request.url_root + "2016/02/20/wikmedia-foundation-turnover.html" %}-->
 <html lang="en">
 <head>
 	<link rel= "stylesheet" type= "text/css" href= "{{request.url_root}}static/css/app.css">
@@ -22,13 +21,32 @@
 	</div>
 	<div id="navbar">
 	<div style="float:left; font-size:18px; margin-top:12px;">
-        <a href="/" class="navigation-link">home</a>&nbsp;&nbsp;
-		<a href="/blog.html" class="navigation-link">blog</a>&nbsp;&nbsp;
-        <a href="/projects.html" class="navigation-link">projects</a>&nbsp;&nbsp;
+        {% if request.path != '/' %}
+            <a href="/" class="navigation-link">home</a>
+        {% else %}
+            home
+        {% endif %}
+        &nbsp;&nbsp;
+        {% if request.path != '/blog.html' %}
+    		<a href="/blog.html" class="navigation-link">blog</a>
+        {% else %}
+            blog
+        {% endif %}
+        &nbsp;&nbsp;
+        {% if request.path != '/projects.html' %}
+            <a href="/projects.html" class="navigation-link">projects</a>
+        {% else %}
+            projects
+        {% endif %}
+        &nbsp;&nbsp;
         <a href="https://github.com/residentmario" class="navigation-link">github</a>&nbsp;&nbsp;
         <a href="https://twitter.com/residentmario" class="navigation-link">twitter</a>&nbsp;&nbsp;
-        <a href="/matrix.html" class="navigation-link">matrix</a>&nbsp;&nbsp;
-        <a href="/about.html" class="navigation-link">about</a>&nbsp;&nbsp;
+        {% if request.path != '/about.html' %}
+            <a href="/about.html" class="navigation-link">about</a>
+        {% else %}
+            about
+        {% endif %}
+        &nbsp;&nbsp;
     </div>
 	</div>
 	<div id="frame">
