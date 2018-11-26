@@ -2,10 +2,6 @@
 {% block pagetitle %} About {% endblock %}
 {% block content %}
 
-<p>
-    For a more colorful version of this page visit the <a class="navigation-link" href="./matrix.html">matrix</a>.
-</p>
-
 <b>Recent technical writing</b>
 <ul class="nav-worklist" style="margin-bottom:50px;">
     {% for post in technical_posts[-3:][::-1] %}

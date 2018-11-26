@@ -242,7 +242,12 @@ a:active {
 .bottom-spacer {
     margin-top:120px;
 }
-.active-filter {
-    font-weight: bold;
-    color: #0000ee;
+.filter {
+    cursor: pointer;
+}
+.inactive-filter:link, .inactive-filter:visited {
+    color: #bfbfbf;
+}
+.inactive-filter:hover {
+    color: #666;
 }

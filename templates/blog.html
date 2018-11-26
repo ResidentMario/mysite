@@ -21,15 +21,21 @@ function render_posts() {
             .classed("content", true)
     );
 
+    // (d3.select(".content").append("div").text("filter:\u00A0\u00A0"))
+
     (d3.select(".content")
             .selectAll("span")
             .data(["advocacy", "technical", "exploration"])
             .enter()
-            .append("span")
+            .append("a")
+            .attr("href", "#")
             .classed("filter", true)
+            .classed("navigation-link", d => current_filters.includes(d))
             .classed("active-filter", d => current_filters.includes(d))
             .classed("inactive-filter", d => !current_filters.includes(d))
-            .text(d => d)
+            .text((d, i) => {
+                return (i === 1) ? "\u00A0\u00A0" + d + "\u00A0\u00A0" : d;
+            })
             .on("click", d => {
                 if (current_filters.includes(d)) {
                     current_filters = current_filters.filter(cat => cat !== d)
@@ -72,7 +78,7 @@ function render_posts() {
 
 }
 
-render_posts(current_filters);
+render_posts();
 </script>
 
 {% endblock %}
