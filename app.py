@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import (Flask, render_template, abort, request, make_response, Response, send_from_directory, redirect)
+from flask import (Flask, render_template, abort, request, make_response, Response, send_from_directory, redirect, url_for)
 from static.post_assets.citibike.citibike_trips import DataStore
 import json
 import os
@@ -15,7 +15,6 @@ post_list = [
     {
         'title': 'An exercise in probability',
         'route': '2015/11/06/an-exercise-in-probability.html',
-        'date': datetime(2015, 11, 6),
         'template': 'an-exercise-in-probability.html',
         'snap': 'an-exercise-in-probability.png',
         'type': 'technical'
@@ -23,7 +22,6 @@ post_list = [
     {
         'title': 'Measuring Wikipedia Signpost popularity',
         'route': '2016/01/17/signpost-views.html',
-        'date': datetime(2016, 1, 17),
         'template': 'signpost-views.html',
         'snap': 'signpost-views.png',
         'type': 'exploration'
@@ -31,7 +29,6 @@ post_list = [
     {
         'title': 'The decision to launch the Space Shuttle Challenger',
         'route': '2016/02/07/space-shuttle-challenger.html',
-        'date': datetime(2016, 2, 7),
         'template': 'space-shuttle-challenger.html',
         'snap': 'space-shuttle-challenger.png',
         'type': 'exploration'
@@ -39,7 +36,6 @@ post_list = [
     {
         'title': 'Is Starbucks really always two blocks away?',
         'route': '2016/02/09/average-chain-distance.html',
-        'date': datetime(2016, 2, 9),
         'template': 'average-chain-distance.html',
         'snap': 'average-chain-distance.png',
         'type': 'exploration'
@@ -47,7 +43,6 @@ post_list = [
     {
         'title': 'Exploring the IBM Watson Concept Insights service using watsongraph',
         'route': '2016/02/11/watsongraph-visualization.html',
-        'date': datetime(2016, 2, 11),
         'template': 'watsongraph-visualization.html',
         'snap': 'watsongraph-visualization.png',
         'type': 'exploration'
@@ -55,7 +50,6 @@ post_list = [
     {
         'title': 'Analyzing WikiProjects on Wikipedia',
         'route': '2016/02/15/wikiprojects.html',
-        'date': datetime(2016, 2, 15),
         'template': 'wikiprojects.html',
         'snap': 'wikiprojects.png',
         'type': 'exploration'
@@ -63,7 +57,6 @@ post_list = [
     {
         'title': 'The executive crisis at the Wikimedia Foundation',
         'route': '2016/02/20/wikimedia-foundation-turnover.html',
-        'date': datetime(2016, 2, 20),
         'template': 'wikimedia-foundation-turnover.html',
         'snap': 'wikimedia-foundation-turnover.png',
         'type': 'exploration'
@@ -71,7 +64,6 @@ post_list = [
     {
         'title': 'Addressing traffic fatalities in New York City',
         'route': '2016/03/19/nyc-motor-vehicle-collisions.html',
-        'date': datetime(2016, 3, 19),
         'template': 'nyc-motor-vehicle-collisions.html',
         'snap': 'nyc-motor-vehicle-collisions.png',
         'type': 'exploration'
@@ -79,7 +71,6 @@ post_list = [
     {
         'title': 'The worst places to drive in New York City',
         'route': '2016/03/23/worst-places-to-drive.html',
-        'date': datetime(2016, 3, 23),
         'template': 'worst-places-to-drive.html',
         'snap': 'worst-places-to-drive.png',
         'type': 'exploration'
@@ -87,7 +78,6 @@ post_list = [
     {
         'title': 'Using the missingno package to visualize missing data',
         'route': '2016/03/28/missingno.html',
-        'date': datetime(2016, 3, 28),
         'template': 'missingno.html',
         'snap': 'missingno.png',
         'type': 'technical'
@@ -95,7 +85,6 @@ post_list = [
     {
         'title': 'Who are the biggest landowners in New York City?',
         'route': '2016/05/27/biggest-landowners-nyc.html',
-        'date': datetime(2016, 5, 27),
         'template': 'biggest-landowners-nyc.html',
         'snap': 'landowners.png',
         'type': 'exploration'
@@ -103,7 +92,6 @@ post_list = [
     {
         'title': 'Addressing in New York City',
         'route': '2016/06/01/nyc-addresses.html',
-        'date': datetime(2016, 6, 1),
         'template': 'nyc-addresses.html',
         'snap': 'nyc-addresses.png',
         'type': 'exploration'
@@ -111,7 +99,6 @@ post_list = [
     {
         'title': 'Residential property sales in New York City',
         'route': '2016/06/03/residential-property-sales.html',
-        'date': datetime(2016, 6, 3),
         'template': 'residential-property-sales.html',
         'snap': 'residential-property-sales.png',
         'type': 'exploration'
@@ -119,7 +106,6 @@ post_list = [
     {
         'title': 'Counting New York City street trees',
         'route': '2016/06/04/new-york-city-tree-density.html',
-        'date': datetime(2016, 6, 4),
         'template': 'new-york-city-tree-density.html',
         'snap': 'new-york-city-real-estate.png',
         'type': 'exploration'
@@ -127,7 +113,6 @@ post_list = [
     {
         'title': 'Null and missing data in Python',
         'route': '2016/06/12/null-and-missing-data-python.html',
-        'date': datetime(2016, 6, 12),
         'template': 'null-and-missing-data-python.html',
         'snap': 'null-and-missing-data-python.png',
         'type': 'advocacy'
@@ -135,7 +120,6 @@ post_list = [
     {
         'title': 'What are the most popular random seeds?',
         'route': '2016/07/08/randomly-popular.html',
-        'date': datetime(2016, 7, 8),
         'template': 'randomly-popular.html',
         'snap': 'randomly-popular.png',
         'type': 'technical'
@@ -143,7 +127,6 @@ post_list = [
     {
         'title': 'The anatomy of an open data portal',
         'route': '2016/08/11/nyc-open-data-portal.html',
-        'date': datetime(2016, 8, 11),
         'template': 'nyc-open-data-portal.html',
         'snap': 'nycopendata.png',
         'type': 'exploration'
@@ -151,7 +134,6 @@ post_list = [
     {
         'title': 'The making of Life of Citi Bike',
         'route': '2016/08/27/day-in-the-life-of-citibike.html',
-        'date': datetime(2016, 8, 25),
         'template': 'day-in-the-life-of-citibike.html',
         'snap': 'life-of-citibike-alt.png',
         'type': 'technical'
@@ -159,7 +141,6 @@ post_list = [
     {
         'title': 'Bringing D3.JS to Jupyter Notebook with Py-D3',
         'route': '2016/09/12/py-d3.html',
-        'date': datetime(2016, 9, 12),
         'template': 'py-d3.html',
         'snap': 'py-d3.png',
         'type': 'technical'
@@ -167,22 +148,13 @@ post_list = [
     {
         'title': 'Mapping Citi Bike routes',
         'route': '2016/09/14/citibike-map.html',
-        'date': datetime(2016, 9, 14),
         'template': 'citibike-map.html',
         'snap': 'citibike-map.png',
         'type': 'exploration'
     },
-    # {
-    #     'title': 'Testifying on open data for City Council',
-    #     'route': '2016/09/24/city-council-testimony.html',
-    #     'date': datetime(2016, 9, 24),
-    #     'template': 'city-council-testimony.html',
-    #     'snap': 'city-council-testimony.png'
-    # },
     {
         'title': 'Saving progress in pandas',
         'route': '2016/10/29/saving-progress-pandas.html',
-        'date': datetime(2016, 10, 29),
         'template': 'saving-progress-pandas.html',
         'snap': 'saving-progress-pandas.png',
         'type': 'technical'
@@ -190,7 +162,6 @@ post_list = [
     {
         'title': 'In context: phase 2 of the Second Avenue Subway',
         'route': '2017/01/12/second-avenue-subway.html',
-        'date': datetime(2017, 1, 12),
         'template': 'second-avenue-subway.html',
         'snap': 'second-avenue-subway.png',
         'type': 'exploration'
@@ -198,7 +169,6 @@ post_list = [
     {
         'title': 'Geospatial visualization made easy with geoplot',
         'route': '2017/02/07/geoplot.html',
-        'date': datetime(2017, 2, 7),
         'template': 'geoplot.html',
         'snap': 'geoplot.png',
         'type': 'technical'
@@ -206,7 +176,6 @@ post_list = [
     {
         'title': 'Two million calls to 311',
         'route': '2017/02/13/311.html',
-        'date': datetime(2017, 2, 13),
         'template': '311.html',
         'snap': '311.png',
         'type': 'exploration'
@@ -214,7 +183,6 @@ post_list = [
     {
         'title': 'Parsing subway rides with gtfs-tripify',
         'route': '2018/01/29/gtfs-tripify.html',
-        'date': datetime(2018, 1, 29),
         'template': 'gtfs-tripify.html',
         'snap': 'gtfs-tripify.png',
         'type': 'technical'
@@ -222,7 +190,6 @@ post_list = [
     {
         'title': 'Kaggle kernels are Turing complete',
         'route': '2018/02/25/kaggle-kernels-are-turing-complete.html',
-        'date': datetime(2018, 2, 25),
         'template': 'kaggle-kernels-are-turing-complete.html',
         'snap': 'kaggle-kernels-are-turing-complete.png',
         'type': 'technical'
@@ -230,7 +197,6 @@ post_list = [
     {
         'title': 'Designing data visualization APIs',
         'route': '2018/05/30/dataviz-apis.html',
-        'date': datetime(2018, 5, 30),
         'template': 'dataviz-apis.html',
         'snap': 'dataviz-apis.png',
         'type': 'technical'
@@ -238,7 +204,6 @@ post_list = [
     {
         'title': 'Tennis\'s wooden spoons',
         'route': '2018/06/10/tennis-wooden-spoons.html',
-        'date': datetime(2018, 6, 10),
         'template': '/tennis-wooden-spoons.html',
         'snap': 'tennis-wooden-spoons.png',
         'type': 'exploration'
@@ -246,7 +211,6 @@ post_list = [
     {
         'title': 'What next for open data?',
         'route': '2018/06/17/what-next-for-open-data.html',
-        'date': datetime(2018, 6, 17),
         'template': '/what-next-for-open-data.html',
         'snap': 'what-next-for-open-data.png',
         'type': 'advocacy'
@@ -254,7 +218,6 @@ post_list = [
     {
         'title': 'My approach to solving coding challenges',
         'route': '2018/08/14/solving-algorithms.html',
-        'date': datetime(2018, 8, 14),
         'template': '/solving-algorithms.html',
         'snap': 'code-writer-snap.png',
         'type': 'technical'
@@ -262,7 +225,6 @@ post_list = [
     {
         'title': 'Finding a model for collaboration in govtech that works',
         'route': '2018/08/19/finding-a-model-for-collaboration.html',
-        'date': datetime(2018, 8, 19),
         'template': '/finding-a-model-for-collaboration.html',
         'snap': 'code-writer-snap.png',
         'type': 'advocacy'
@@ -270,7 +232,6 @@ post_list = [
     {
         'title': 'Building an MTA historical train arrival application',
         'route': '2018/08/29/subway-explorer.html',
-        'date': datetime(2018, 8, 29),
         'template': 'subway-explorer.html',
         'snap': 'code-writer-snap.png',
         'type': 'technical'
@@ -278,7 +239,6 @@ post_list = [
     {
         'title': 'The three kinds of data scientists',
         'route': '2018/10/18/roles-in-data-science.html',
-        'date': datetime(2018, 10, 18),
         'template': 'roles-in-data-science.html',
         'snap': 'code-writer-snap.png',
         'type': 'advocacy'
@@ -441,7 +401,7 @@ advocacy_list = [
 
 @app.route('/')
 def main_page():
-    return render_template('home.html', most_recent='/latest.html',
+    return render_template('home.html',
                            technical_posts=technical_posts,
                            exploratory_posts=exploratory_posts,
                            advocacy_posts=advocacy_posts,
@@ -450,24 +410,32 @@ def main_page():
 
 @app.route('/about.html')
 def about():
-    return render_template('about.html', most_recent='/latest.html')
+    return render_template('about.html')
 
 
 @app.route('/blog.html')
 def blog():
-    return render_template('blog.html', most_recent='/latest.html', post_list=post_list)
+    f = request.args.get('filter')
+    current_filters = [f] if f else ['technical', 'exploration', 'advocacy']
+    print(current_filters)
+
+    return render_template(
+        'blog.html',
+        post_list=json.dumps(post_list[::-1]),
+        current_filters=current_filters
+    )
 
 
 @app.route('/projects.html')
 def projects():
-    return render_template('projects.html', most_recent='/latest.html',
+    return render_template('projects.html',
                            project_list=project_list,
                            advocacy_list=advocacy_list)
 
 
 @app.route('/matrix.html')
 def matrix():
-    return render_template('matrix.html', most_recent='/latest.html')
+    return render_template('matrix.html')
 
 
 @app.route('/latest.html')
@@ -517,13 +485,13 @@ def serve(path):
     if path in post_paths:
         index = post_paths.index(path)
         post = post_list[index]
+        date_str = post['route'][:10]
+        year, month, day = date_str[:4], date_str[5:7], date_str[8:10]
         return render_template('posts/' + post['template'],
                                id=index + 1,
-                               date="{0:02d}/{1:02d}/{2}".format(post['date'].month, post['date'].day,
-                                                                 post['date'].year),
-                               title=post['title'],
-                               most_recent=request.url_root + post_list[len(post_list) - 1]['route']
-                               )
+                               date="{0}/{1}/{2}".format(month, day, year),
+                               title=post['title']
+                              )
     else:
         abort(404)
 

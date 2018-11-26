@@ -11,7 +11,7 @@
     {% for post in technical_posts[-3:][::-1] %}
         <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
     {% endfor %}
-        <li><i><a class="navigation-link" href="./blog.html">more →</a></i></li>
+        <li><i><a class="navigation-link" href="./blog.html?filter=technical">more →</a></i></li>
 </ul>
 
 
@@ -20,7 +20,7 @@
     {% for post in exploratory_posts[-3:][::-1] %}
         <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
     {% endfor %}
-        <li><i><a class="navigation-link" href="./blog.html">more →</a></i></li>
+        <li><i><a class="navigation-link" href="./blog.html?filter=exploration">more →</a></i></li>
 </ul>
 
 
@@ -29,7 +29,7 @@
     {% for post in advocacy_posts[-3:][::-1] %}
         <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
     {% endfor %}
-        <li><i><a class="navigation-link" href="./blog.html">more →</a></i></li>
+        <li><i><a class="navigation-link" href="./blog.html?filter=advocacy">more →</a></i></li>
 </ul>
 
 
