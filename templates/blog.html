@@ -27,6 +27,8 @@ function render_posts() {
             .enter()
             .append("span")
             .classed("filter", true)
+            .classed("active-filter", d => current_filters.includes(d))
+            .classed("inactive-filter", d => !current_filters.includes(d))
             .text(d => d)
             .on("click", d => {
                 if (current_filters.includes(d)) {
@@ -34,8 +36,6 @@ function render_posts() {
                 } else {
                     current_filters.push(d);
                 }
-
-                console.log(current_filters);
 
                 render_posts();
             })
