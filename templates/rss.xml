@@ -112,7 +112,7 @@
             <title>The making of Life of Citi Bike</title>
             <link>http://www.residentmar.io/2016/08/27/day-in-the-life-of-citibike.html</link>
             <guid>http://www.residentmar.io/2016/08/27/day-in-the-life-of-citibike.html</guid>
-            <pubDate>Thu, 25 Aug 2016 00:00:00 EST</pubDate>
+            <pubDate>Sat, 27 Aug 2016 00:00:00 EST</pubDate>
     </item>
     <item>
             <title>Bringing D3.JS to Jupyter Notebook with Py-D3</title>
@@ -203,6 +203,12 @@
             <link>http://www.residentmar.io/2018/10/18/roles-in-data-science.html</link>
             <guid>http://www.residentmar.io/2018/10/18/roles-in-data-science.html</guid>
             <pubDate>Thu, 18 Oct 2018 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>One year of taking notes with Jupyter on the cloud</title>
+            <link>http://www.residentmar.io/2019/01/01/taking-notes-on-the-cloud.html</link>
+            <guid>http://www.residentmar.io/2019/01/01/taking-notes-on-the-cloud.html</guid>
+            <pubDate>Tue, 01 Jan 2019 00:00:00 EST</pubDate>
     </item>
 </channel>
 </rss>

@@ -4,11 +4,10 @@ from datetime import datetime
 
 dat = app.post_list
 for post in dat:
-    datetime_obj = post['date']
+    datetime_obj = datetime.strptime('/'.join(post['route'].split('/')[:3]), '%Y/%m/%d')
     post['month'] = datetime_obj.month
     post['day'] = datetime_obj.day
     post['year'] = datetime_obj.year
-    del post['date']
     del post['template']
     post['route'] = 'http://www.residentmar.io/' + post['route']
 
