@@ -242,6 +242,13 @@ post_list = [
         'template': 'roles-in-data-science.html',
         'snap': 'code-writer-snap.png',
         'type': 'advocacy'
+    },
+    {
+        'title': 'One year of taking notes with Jupyter on the cloud',
+        'route': '2019/01/01/taking-notes-on-the-cloud.html',
+        'template': 'taking-notes-on-the-cloud.html',
+        'snap': 'code-writer-snap.png',
+        'type': 'advocacy'
     }
 ]
 

@@ -1,0 +1,76 @@
+{% extends "blog_frame.html" %}
+{% block content %}
+
+<p>
+    The realization that <a href="https://jupyter.org/">Jupyter notebooks</a> have become the standard gateway to machine learning modeling and analytics amongst data scientists has fueled a surge in software products marketed as "Jupyter notebooks on the cloud (plus new stuff!)". Just from memory, here’s a few company offerings and startup products that fit this description in whole or in part: <a href="https://www.kaggle.com/kernels">Kaggle Kernels</a>, <a href="https://colab.research.google.com/">Google Colab</a>, <a href="https://aws.amazon.com/sagemaker/">AWS SageMaker</a>, <a href="https://cloud.google.com/datalab/">Google Cloud Datalab</a>, <a href="https://www.dominodatalab.com/platform/">Domino Data Lab</a>, <a href="https://docs.databricks.com/user-guide/notebooks/notebook-manage.html">DataBrick Notebooks</a>, <a href="https://notebooks.azure.com/">Azure Notebooks</a>...the list goes on and on.
+</p>
+
+<p>
+    The calculation is that the most effective way to sell paid products to a data scientist is to provide it alongside a familiar interface, the Jupyter notebook, that you give away for free. It does seem to be working. AWS SageMaker for instance, which provides a notebook-based interface to Amazon’s broader stack, is purportedly one of the fastest growing services in AWS's nebular network of offerings.
+</p>
+
+<p>
+    For me though, all this free notebook technology has the nice side effect that <b>it’s now easier than ever to use Jupyter notebooks to take and store reading notes in the cloud</b>.
+</p>
+
+
+<h3>Why write?</h3>
+
+<p>
+    I’m a big believer in taking notes on things that you read and that you learn as you learn them.
+</p>
+
+<p>
+    Writing things down in an understandable manner exercises the part of your brain that breaks a complex idea into individually explainable iotas, which helps to move the ideas you’re being exposed to from short-term to long-term memory. Plus if you take notes on something once, even if you end up forgetting many of the details later (as is inevitable) you will always have access to a reference that you can revisit and skim to jog your memory. Learning something a second time from your own notes is much faster than relearning the same thing formal explanations...as long as you make sure to take good notes.
+</p>
+
+
+<h3>Why notebooks?</h3>
+
+<p>
+    At first I had the problem of where to take notes. If you don't need to embed code or math into your writing there are software products like <a href="https://evernote.com/">Evernote</a> which work OK, but I did and I do, so that didn't cut it. After some experimentation, Jupyter notebooks proved to be the most comfortable format for me, because they combine all of the things I need (code cells for code, Markdown for words, and LaTeX for math) in an easily editable literate environment.
+</p>
+
+<p>
+    This isn’t the only form factor for quick note-taking. Julia Evans uses <a href="https://jvns.ca/about/">her blog</a> for this; Tom MacWright does this too in a <a href="https://macwright.org/2018/12/05/recently.html">digest format</a>. I personally find blogs to be a bit too heavyweight. I want my writing here to approximate a certain level of polish and usefulness to the reader, which most of the things I want to jot down aren’t (though if you want to go this route, Evans has some <a href="https://twitter.com/b0rk/status/823183090554126336">great advice</a>).
+</p>
+
+<p>
+    Hence Jupyter notebooks. But this created a different problem, which was that having random Jupyter notebooks on your local machine <a href="https://twitter.com/jakevdp/status/762755807389683712">gets out of hand pretty quickly</a>. I needed a better system for organizing my note-taking. About a year ago I discovered it: Jupyter notebooks on the cloud!
+</p>
+
+
+<h3>Why the cloud?</h3>
+
+<p>
+    Cloud notebooks are great because they let you concentrate on the writing, not the management. You don’t need to fire up a Jupyter instance or do kludgy environment management when launching a new notebook or trying a new software library. The notebook’s files get populated on some server somewhere you don’t care about instead of your local filesystem, so anything you write is instantly portable across machines. Finally, online notebook interfaces these days are pretty beefy in terms of their hardware, so when I’m doing something computationally intensive they can outpace my laptop pretty often.
+</p>
+
+<p>
+    <a href="https://www.kaggle.com/kernels">Kaggle Kernels</a> are my tool of choice for this job (disclosure: I used to work there) because they have a huge community of users, a reasonably well-curated runtime environment (almost all of the packages I would want to use in my code samples are there), a large library of datasets that you can use for cooking quick demos, robust search (at least for things I wrote myself), and the ability to make a kernel either public or private.
+</p>
+
+<p>
+    This last feature I’ve found to be particularly valuable. I don’t mind sharing most of the things that I write publicly. One of the best things I can get is feedback that my writing was valuable to someone else, or annotations from more experienced users that provide direction for further inquiry. I even built a <a href="https://residentmario.github.io/machine-learning-notes/index.html">tiny microsite</a> not too long ago organizing the better half of my doodles into a reading list. However, there’s also a decent amount of things that I write that are either unfinished drafts or intrinsically private: things like comments on the workplace and, topically, New Year’s resolutions.
+</p>
+
+<p>
+    For me the ability to make a notebook either public or private is what makes this a comprehensive solution. But, whilst I personally encourage you to share your code (no matter how embarrassing!), I also understand that this style of default open is not for everyone.
+</p>
+
+<p>
+    Another good options is <a href="https://colab.research.google.com/">Google Colab</a>. Colab has more cachet in industry and better hardware options, but lacks the network effect of the Kaggle Kernels user base.
+</p>
+
+
+<h3>Why you should try it!</h3>
+
+<p>
+    I don’t think that these platforms are used in this way all that often, which is a bit of a shame. A lot of the traffic I see on Kaggle Kernels and Google Colab tends towards the portfolio project or external sharing side of things: more formal and presentational than notebook-y.
+</p>
+
+<p>
+    I think that’s a shame, because in my experience these tools are a really great journaling tool. If you're a coder or a data scientist looking for good note-taking tool, I encourage you to try them out yourself!
+</p>
+
+{% endblock %}
