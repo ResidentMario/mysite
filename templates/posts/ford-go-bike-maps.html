@@ -1,0 +1,33 @@
+{% extends "blog_frame.html" %}
+{% block content %}
+
+<p>
+    <a href="http://www.residentmar.io/2016/09/14/citibike-map.html">Back in 2016 I mapped bike trips taken using New York City's bike-share system, Citi Bike</a>. I traded Brooklyn and Manhattan for Oakland and San Francisco in the meantime, so thought it'd be fitting to recreate that map in my updated setting.
+</p>
+
+<p>
+    Here's one for San Francisco:
+</p>
+
+<a href="/static/post_assets/ford-go-bike-maps/san-francisco-go-bike.png">
+<img src="/static/post_assets/ford-go-bike-maps/san-francisco-go-bike.png" class="inline_image_full"/>
+</a>
+
+<p>
+    And here's one for the East Bay:
+</p>
+
+<a href="/static/post_assets/ford-go-bike-maps/east-bay-go-bike.png">
+<img src="/static/post_assets/ford-go-bike-maps/east-bay-go-bike.png" class="inline_image_full"/>
+</a>
+
+<p>
+    One major difference: New York City has many bike-able bridges, but the Bay Area has none. There is <a href="https://en.wikipedia.org/wiki/Transbay_Tube">a tunnel</a> for trains and <a href="https://en.wikipedia.org/wiki/San_Francisco%E2%80%93Oakland_Bay_Bridge">a bridge</a> for cars but that's it. So whilst Brooklyn and Manhattan share their bikes, San Francisco and the East Bay operate entirely independently.
+</p>
+
+<p>
+    And a caveat: this map uses idealized routes generated using the <a href="https://openrouteservice.org/">Open Route Service</a> (which in turn uses OpenStreetMap data). These routes may differ from the actual, perhaps more circuitous routes bikers take.
+</p>
+
+
+{% endblock %}

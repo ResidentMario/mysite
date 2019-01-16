@@ -249,6 +249,13 @@ post_list = [
         'template': 'taking-notes-on-the-cloud.html',
         'snap': 'code-writer-snap.png',
         'type': 'advocacy'
+    },
+    {
+        'title': 'Mapping Ford Go Bike trips in the Bay Area',
+        'route': '2019/01/15/ford-go-bike-maps.html',
+        'template': 'ford-go-bike-maps.html',
+        'snap': 'code-writer-snap.png',
+        'type': 'exploration'
     }
 ]
 

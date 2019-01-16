@@ -304,5 +304,14 @@
         "month": 1,
         "day": 1,
         "year": 2019
+    },
+    {
+        "title": "Mapping Ford Go Bike trips in the Bay Area",
+        "route": "http://www.residentmar.io/2019/01/15/ford-go-bike-maps.html",
+        "snap": "code-writer-snap.png",
+        "type": "exploration",
+        "month": 1,
+        "day": 15,
+        "year": 2019
     }
 ]
