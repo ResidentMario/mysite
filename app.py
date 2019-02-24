@@ -256,6 +256,13 @@ post_list = [
         'template': 'ford-go-bike-maps.html',
         'snap': 'code-writer-snap.png',
         'type': 'exploration'
+    },
+    {
+        'title': 'To be a more effective data scientist, think in experiments',
+        'route': '2019/02/23/data-science-experiments.html',
+        'template': 'data-science-experiments.html',
+        'snap': 'code-writer-snap.png',
+        'type': 'advocacy'
     }
 ]
 

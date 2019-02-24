@@ -24,6 +24,7 @@ MANIFEST
 
 # PyCharm project
 .idea
+.vscode
 
 # Mac junk file
 .DS_Store
