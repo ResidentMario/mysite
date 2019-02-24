@@ -216,5 +216,11 @@
             <guid>http://www.residentmar.io/2019/01/15/ford-go-bike-maps.html</guid>
             <pubDate>Tue, 15 Jan 2019 00:00:00 EST</pubDate>
     </item>
+    <item>
+            <title>To be a more effective data scientist, think in experiments</title>
+            <link>http://www.residentmar.io/2019/02/23/data-science-experiments.html</link>
+            <guid>http://www.residentmar.io/2019/02/23/data-science-experiments.html</guid>
+            <pubDate>Sat, 23 Feb 2019 00:00:00 EST</pubDate>
+    </item>
 </channel>
 </rss>

@@ -313,5 +313,14 @@
         "month": 1,
         "day": 15,
         "year": 2019
+    },
+    {
+        "title": "To be a more effective data scientist, think in experiments",
+        "route": "http://www.residentmar.io/2019/02/23/data-science-experiments.html",
+        "snap": "code-writer-snap.png",
+        "type": "advocacy",
+        "month": 2,
+        "day": 23,
+        "year": 2019
     }
 ]
