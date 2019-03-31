@@ -10,7 +10,7 @@ for post in dat:
     post['day'] = datetime_obj.day
     post['year'] = datetime_obj.year
     # del post['template']
-    post['route'] = 'http://www.residentmar.io/' + post['route'] if 'https://' not in post['route']\
+    post['route'] = 'https://www.residentmar.io/' + post['route'] if 'https://' not in post['route']\
         else post['route']
 
 with open('./static/json/post_list.json', 'w') as outfile:
