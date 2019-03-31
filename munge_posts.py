@@ -4,12 +4,14 @@ from datetime import datetime
 
 dat = app.post_list
 for post in dat:
-    datetime_obj = datetime.strptime('/'.join(post['route'].split('/')[:3]), '%Y/%m/%d')
+    raw_datetime = post['date'] if 'date' in post else '/'.join(post['route'].split('/')[:3])
+    datetime_obj = datetime.strptime(raw_datetime, '%Y/%m/%d')
     post['month'] = datetime_obj.month
     post['day'] = datetime_obj.day
     post['year'] = datetime_obj.year
-    del post['template']
-    post['route'] = 'http://www.residentmar.io/' + post['route']
+    # del post['template']
+    post['route'] = 'http://www.residentmar.io/' + post['route'] if 'https://' not in post['route']\
+        else post['route']
 
 with open('./static/json/post_list.json', 'w') as outfile:
     json.dump(dat, outfile, indent=4)
@@ -30,8 +32,11 @@ for post in dat:
             <link>{1}</link>
             <guid>{1}</guid>
             <pubDate>{2}</pubDate>
-    """.format(post['title'], post['route'], datetime(post['year'], post['month'],
-                                                      post['day']).strftime('%a, %d %b %Y %H:00:00 EST'))
+    """.format(
+        post['title'], 
+        post['route'], 
+        datetime(post['year'], post['month'], post['day']).strftime('%a, %d %b %Y %H:00:00 EST')
+    )
     xml += """</item>"""
 
 xml += """

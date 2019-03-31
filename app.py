@@ -16,42 +16,36 @@ post_list = [
         'title': 'An exercise in probability',
         'route': '2015/11/06/an-exercise-in-probability.html',
         'template': 'an-exercise-in-probability.html',
-        'snap': 'an-exercise-in-probability.png',
         'type': 'technical'
     },
     {
         'title': 'Measuring Wikipedia Signpost popularity',
         'route': '2016/01/17/signpost-views.html',
         'template': 'signpost-views.html',
-        'snap': 'signpost-views.png',
         'type': 'exploration'
     },
     {
         'title': 'The decision to launch the Space Shuttle Challenger',
         'route': '2016/02/07/space-shuttle-challenger.html',
         'template': 'space-shuttle-challenger.html',
-        'snap': 'space-shuttle-challenger.png',
         'type': 'exploration'
     },
     {
         'title': 'Is Starbucks really always two blocks away?',
         'route': '2016/02/09/average-chain-distance.html',
         'template': 'average-chain-distance.html',
-        'snap': 'average-chain-distance.png',
         'type': 'exploration'
     },
     {
         'title': 'Exploring the IBM Watson Concept Insights service using watsongraph',
         'route': '2016/02/11/watsongraph-visualization.html',
         'template': 'watsongraph-visualization.html',
-        'snap': 'watsongraph-visualization.png',
         'type': 'exploration'
     },
     {
         'title': 'Analyzing WikiProjects on Wikipedia',
         'route': '2016/02/15/wikiprojects.html',
         'template': 'wikiprojects.html',
-        'snap': 'wikiprojects.png',
         'type': 'exploration'
     },
     {
@@ -72,197 +66,211 @@ post_list = [
         'title': 'The worst places to drive in New York City',
         'route': '2016/03/23/worst-places-to-drive.html',
         'template': 'worst-places-to-drive.html',
-        'snap': 'worst-places-to-drive.png',
         'type': 'exploration'
     },
     {
         'title': 'Using the missingno package to visualize missing data',
         'route': '2016/03/28/missingno.html',
         'template': 'missingno.html',
-        'snap': 'missingno.png',
         'type': 'technical'
     },
     {
         'title': 'Who are the biggest landowners in New York City?',
         'route': '2016/05/27/biggest-landowners-nyc.html',
         'template': 'biggest-landowners-nyc.html',
-        'snap': 'landowners.png',
         'type': 'exploration'
     },
     {
         'title': 'Addressing in New York City',
         'route': '2016/06/01/nyc-addresses.html',
         'template': 'nyc-addresses.html',
-        'snap': 'nyc-addresses.png',
         'type': 'exploration'
     },
     {
         'title': 'Residential property sales in New York City',
         'route': '2016/06/03/residential-property-sales.html',
         'template': 'residential-property-sales.html',
-        'snap': 'residential-property-sales.png',
         'type': 'exploration'
     },
     {
         'title': 'Counting New York City street trees',
         'route': '2016/06/04/new-york-city-tree-density.html',
         'template': 'new-york-city-tree-density.html',
-        'snap': 'new-york-city-real-estate.png',
         'type': 'exploration'
     },
     {
         'title': 'Null and missing data in Python',
         'route': '2016/06/12/null-and-missing-data-python.html',
         'template': 'null-and-missing-data-python.html',
-        'snap': 'null-and-missing-data-python.png',
         'type': 'advocacy'
     },
     {
         'title': 'What are the most popular random seeds?',
         'route': '2016/07/08/randomly-popular.html',
         'template': 'randomly-popular.html',
-        'snap': 'randomly-popular.png',
         'type': 'technical'
     },
     {
         'title': 'The anatomy of an open data portal',
         'route': '2016/08/11/nyc-open-data-portal.html',
         'template': 'nyc-open-data-portal.html',
-        'snap': 'nycopendata.png',
         'type': 'exploration'
     },
     {
         'title': 'The making of Life of Citi Bike',
         'route': '2016/08/27/day-in-the-life-of-citibike.html',
         'template': 'day-in-the-life-of-citibike.html',
-        'snap': 'life-of-citibike-alt.png',
         'type': 'technical'
     },
     {
         'title': 'Bringing D3.JS to Jupyter Notebook with Py-D3',
         'route': '2016/09/12/py-d3.html',
         'template': 'py-d3.html',
-        'snap': 'py-d3.png',
         'type': 'technical'
     },
     {
         'title': 'Mapping Citi Bike routes',
         'route': '2016/09/14/citibike-map.html',
         'template': 'citibike-map.html',
-        'snap': 'citibike-map.png',
         'type': 'exploration'
     },
     {
         'title': 'Saving progress in pandas',
         'route': '2016/10/29/saving-progress-pandas.html',
         'template': 'saving-progress-pandas.html',
-        'snap': 'saving-progress-pandas.png',
         'type': 'technical'
     },
     {
         'title': 'In context: phase 2 of the Second Avenue Subway',
         'route': '2017/01/12/second-avenue-subway.html',
         'template': 'second-avenue-subway.html',
-        'snap': 'second-avenue-subway.png',
         'type': 'exploration'
     },
     {
         'title': 'Geospatial visualization made easy with geoplot',
         'route': '2017/02/07/geoplot.html',
         'template': 'geoplot.html',
-        'snap': 'geoplot.png',
         'type': 'technical'
     },
     {
         'title': 'Two million calls to 311',
         'route': '2017/02/13/311.html',
         'template': '311.html',
-        'snap': '311.png',
         'type': 'exploration'
+    },
+    {
+        'title': 'Becoming a civic technologist out of college',
+        'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
+        'template': None,
+        'type': 'advocacy',
+        'date': '2017/09/01'
     },
     {
         'title': 'Parsing subway rides with gtfs-tripify',
         'route': '2018/01/29/gtfs-tripify.html',
         'template': 'gtfs-tripify.html',
-        'snap': 'gtfs-tripify.png',
         'type': 'technical'
     },
     {
         'title': 'Kaggle kernels are Turing complete',
         'route': '2018/02/25/kaggle-kernels-are-turing-complete.html',
         'template': 'kaggle-kernels-are-turing-complete.html',
-        'snap': 'kaggle-kernels-are-turing-complete.png',
         'type': 'technical'
     },
     {
         'title': 'Designing data visualization APIs',
         'route': '2018/05/30/dataviz-apis.html',
         'template': 'dataviz-apis.html',
-        'snap': 'dataviz-apis.png',
         'type': 'technical'
     },
     {
         'title': 'Tennis\'s wooden spoons',
         'route': '2018/06/10/tennis-wooden-spoons.html',
         'template': '/tennis-wooden-spoons.html',
-        'snap': 'tennis-wooden-spoons.png',
         'type': 'exploration'
     },
     {
         'title': 'What next for open data?',
         'route': '2018/06/17/what-next-for-open-data.html',
         'template': '/what-next-for-open-data.html',
-        'snap': 'what-next-for-open-data.png',
         'type': 'advocacy'
     },
     {
         'title': 'My approach to solving coding challenges',
         'route': '2018/08/14/solving-algorithms.html',
         'template': '/solving-algorithms.html',
-        'snap': 'code-writer-snap.png',
         'type': 'technical'
     },
     {
         'title': 'Finding a model for collaboration in govtech that works',
         'route': '2018/08/19/finding-a-model-for-collaboration.html',
         'template': '/finding-a-model-for-collaboration.html',
-        'snap': 'code-writer-snap.png',
         'type': 'advocacy'
     },
     {
         'title': 'Building an MTA historical train arrival application',
         'route': '2018/08/29/subway-explorer.html',
         'template': 'subway-explorer.html',
-        'snap': 'code-writer-snap.png',
         'type': 'technical'
     },
     {
         'title': 'The three kinds of data scientists',
         'route': '2018/10/18/roles-in-data-science.html',
         'template': 'roles-in-data-science.html',
-        'snap': 'code-writer-snap.png',
         'type': 'advocacy'
     },
     {
         'title': 'One year of taking notes with Jupyter on the cloud',
         'route': '2019/01/01/taking-notes-on-the-cloud.html',
         'template': 'taking-notes-on-the-cloud.html',
-        'snap': 'code-writer-snap.png',
         'type': 'advocacy'
     },
     {
         'title': 'Mapping Ford Go Bike trips in the Bay Area',
         'route': '2019/01/15/ford-go-bike-maps.html',
         'template': 'ford-go-bike-maps.html',
-        'snap': 'code-writer-snap.png',
         'type': 'exploration'
+    },
+    {
+        'title': 'Reproduce a machine learning model build in four lines of code',
+        'route': 'https://blog.quiltdata.com/reproduce-a-machine-learning-model-build-in-four-lines-of-code-b4f0a5c5f8c8',
+        'template': None,
+        'type': 'advocacy',
+        'date': '2019/01/17'
+    },
+    {
+        'title': 'Building fully custom machine learning models on AWS SageMaker: a practical guide',
+        'route': 'https://towardsdatascience.com/building-fully-custom-machine-learning-models-on-aws-sagemaker-a-practical-guide-c30df3895ef7',
+        'template': None,
+        'type': 'technical',
+        'date': '2019/02/12'
+    },
+    {
+        'title': 'How to classify photos in 600 classes using nine million Open Images',
+        'route': 'https://medium.freecodecamp.org/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319',
+        'template': None,
+        'type': 'technical',
+        'date': '2019/02/20'
     },
     {
         'title': 'To be a more effective data scientist, think in experiments',
         'route': '2019/02/23/data-science-experiments.html',
         'template': 'data-science-experiments.html',
-        'snap': 'code-writer-snap.png',
         'type': 'advocacy'
+    },
+    {
+        'title': 'Import almost anything in Python: an intro to module loaders and finders',
+        'route': 'https://blog.quiltdata.com/import-almost-anything-in-python-an-intro-to-module-loaders-and-finders-f5e7b15cda47',
+        'template': None,
+        'type': 'technical',
+        'date': '2019/03/04'
+    },
+    {
+        'title': 'Evaluating Keras neural network performance using Yellowbrick visualizations',
+        'route': 'https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174',
+        'template': None,
+        'type': 'technical',
+        'date': '2019/03/21'
     }
 ]
 
@@ -390,31 +398,27 @@ project_list = [
 
 advocacy_list = [
     {
-        'title': 'Who runs the world? Data',
+        'title': 'Interview — Who runs the world? Data',
         'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032'
     },
     {
-        'title': 'NYC City Council testimony on open data',
+        'title': 'Hearing — NYC City Council testimony on open data',
         'route': 'https://www.youtube.com/watch?v=U7T2Hwj3vjc'
     },
     {
-        'title': 'Implementing good design',
-        'route': 'https://github.com/ResidentMario/implementing-good-design'
+        'title': 'Talk — implementing good design',
+        'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/'
     },
     {
-        'title': 'Becoming a civic technologist out of college',
-        'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
+        'title': 'Lightning talk — Learning by doing with data viz blogging',
+        'route': 'https://www.meetup.com/DataVisualization/events/245257327/'
     },
     {
-        'title': 'Learning by doing with data viz blogging',
-        'route': 'https://github.com/ResidentMario/data-visualization-blogging'
-    },
-    {
-        'title': 'Kaggle site documentation',
+        'title': 'Docs — Kaggle',
         'route': 'https://www.kaggle.com/docs'
     },
     {
-        'title': 'Profiling top Kagglers: Bestfitting, currently #1 in the world',
+        'title': 'Interview — Profiling top Kagglers: Bestfitting, currently #1 in the world',
         'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/'
     }
 ]

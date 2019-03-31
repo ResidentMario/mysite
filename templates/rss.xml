@@ -151,6 +151,12 @@
             <pubDate>Mon, 13 Feb 2017 00:00:00 EST</pubDate>
     </item>
     <item>
+            <title>Becoming a civic technologist out of college</title>
+            <link>https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c</link>
+            <guid>https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c</guid>
+            <pubDate>Fri, 01 Sep 2017 00:00:00 EST</pubDate>
+    </item>
+    <item>
             <title>Parsing subway rides with gtfs-tripify</title>
             <link>http://www.residentmar.io/2018/01/29/gtfs-tripify.html</link>
             <guid>http://www.residentmar.io/2018/01/29/gtfs-tripify.html</guid>
@@ -217,10 +223,40 @@
             <pubDate>Tue, 15 Jan 2019 00:00:00 EST</pubDate>
     </item>
     <item>
+            <title>Reproduce a machine learning model build in four lines of code</title>
+            <link>https://blog.quiltdata.com/reproduce-a-machine-learning-model-build-in-four-lines-of-code-b4f0a5c5f8c8</link>
+            <guid>https://blog.quiltdata.com/reproduce-a-machine-learning-model-build-in-four-lines-of-code-b4f0a5c5f8c8</guid>
+            <pubDate>Thu, 17 Jan 2019 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>Building fully custom machine learning models on AWS SageMaker: a practical guide</title>
+            <link>https://towardsdatascience.com/building-fully-custom-machine-learning-models-on-aws-sagemaker-a-practical-guide-c30df3895ef7</link>
+            <guid>https://towardsdatascience.com/building-fully-custom-machine-learning-models-on-aws-sagemaker-a-practical-guide-c30df3895ef7</guid>
+            <pubDate>Tue, 12 Feb 2019 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>How to classify photos in 600 classes using nine million Open Images</title>
+            <link>https://medium.freecodecamp.org/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319</link>
+            <guid>https://medium.freecodecamp.org/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319</guid>
+            <pubDate>Wed, 20 Feb 2019 00:00:00 EST</pubDate>
+    </item>
+    <item>
             <title>To be a more effective data scientist, think in experiments</title>
             <link>http://www.residentmar.io/2019/02/23/data-science-experiments.html</link>
             <guid>http://www.residentmar.io/2019/02/23/data-science-experiments.html</guid>
             <pubDate>Sat, 23 Feb 2019 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>Import almost anything in Python: an intro to module loaders and finders</title>
+            <link>https://blog.quiltdata.com/import-almost-anything-in-python-an-intro-to-module-loaders-and-finders-f5e7b15cda47</link>
+            <guid>https://blog.quiltdata.com/import-almost-anything-in-python-an-intro-to-module-loaders-and-finders-f5e7b15cda47</guid>
+            <pubDate>Mon, 04 Mar 2019 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>Evaluating Keras neural network performance using Yellowbrick visualizations</title>
+            <link>https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174</link>
+            <guid>https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174</guid>
+            <pubDate>Thu, 21 Mar 2019 00:00:00 EST</pubDate>
     </item>
 </channel>
 </rss>

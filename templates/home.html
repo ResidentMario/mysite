@@ -5,16 +5,20 @@
 <b>Recent technical writing</b>
 <ul class="nav-worklist" style="margin-bottom:50px;">
     {% for post in technical_posts[-3:][::-1] %}
-        <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
+        {% set route = post.route if post.route.startswith('https://') else './' + post.route %}
+        <li><a class="navigation-link" href="{{ route }}">{{post.title}}</a></li>
+    {% else %}
     {% endfor %}
-        <li><i><a class="navigation-link" href="./blog.html?filter=technical">more →</a></i></li>
+    <li><i><a class="navigation-link" href="./blog.html?filter=exploration">more →</a></i></li>
 </ul>
 
 
 <b>Recent data explorations</b>
 <ul class="nav-worklist" style="margin-bottom:50px;">
     {% for post in exploratory_posts[-3:][::-1] %}
-        <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
+        {% set route = post.route if post.route.startswith('https://') else './' + post.route %}
+            <li><a class="navigation-link" href="{{ route }}">{{post.title}}</a></li>
+        {% else %}
     {% endfor %}
         <li><i><a class="navigation-link" href="./blog.html?filter=exploration">more →</a></i></li>
 </ul>
@@ -23,9 +27,11 @@
 <b>Recent advocacy</b>
 <ul class="nav-worklist" style="margin-bottom:50px;">
     {% for post in advocacy_posts[-3:][::-1] %}
-        <li><a class="navigation-link" href="./{{ post.route }}">{{post.title}}</a></li>
+        {% set route = post.route if post.route.startswith('https://') else './' + post.route %}
+        <li><a class="navigation-link" href="{{ route }}">{{post.title}}</a></li>
+    {% else %}
     {% endfor %}
-        <li><i><a class="navigation-link" href="./blog.html?filter=advocacy">more →</a></i></li>
+    <li><i><a class="navigation-link" href="./blog.html?filter=exploration">more →</a></i></li>
 </ul>
 
 

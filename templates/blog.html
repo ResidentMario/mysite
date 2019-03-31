@@ -17,63 +17,71 @@ function render_posts() {
     let displayed_posts = post_list.filter(p => current_filters.includes(p.type));
 
     (d3.select(".container")
-            .append("span")
-            .classed("content", true)
+        .append("span")
+        .classed("content", true)
     );
 
-    // (d3.select(".content").append("div").text("filter:\u00A0\u00A0"))
-
     (d3.select(".content")
-            .selectAll("span")
-            .data(["advocacy", "technical", "exploration"])
-            .enter()
-            .append("a")
-            .attr("href", "#")
-            .classed("filter", true)
-            .classed("navigation-link", d => current_filters.includes(d))
-            .classed("active-filter", d => current_filters.includes(d))
-            .classed("inactive-filter", d => !current_filters.includes(d))
-            .text((d, i) => {
-                return (i === 1) ? "\u00A0\u00A0" + d + "\u00A0\u00A0" : d;
-            })
-            .on("click", d => {
-                if (current_filters.includes(d)) {
-                    current_filters = current_filters.filter(cat => cat !== d)
-                } else {
-                    current_filters.push(d);
-                }
+        .selectAll("span")
+        .data(["advocacy", "technical", "exploration"])
+        .enter()
+        .append("a")
+        .attr("href", "#")
+        .classed("filter", true)
+        .classed("navigation-link", d => current_filters.includes(d))
+        .classed("active-filter", d => current_filters.includes(d))
+        .classed("inactive-filter", d => !current_filters.includes(d))
+        .text((d, i) => {
+        return (i === 1) ? "\u00A0\u00A0" + d + "\u00A0\u00A0" : d;
+        })
+        .on("click", d => {
+        if (current_filters.includes(d)) {
+                current_filters = current_filters.filter(cat => cat !== d)
+        } else {
+                current_filters.push(d);
+        }
 
-                render_posts();
-            })
+        render_posts();
+        })
     );
 
     let posts = (d3.select(".content")
-            .append("ul")
-            .classed("nav-worklist", true)
-            .selectAll("li")
-            .data(displayed_posts)
-            .enter()
-            .append("li")
+        .append("ul")
+        .classed("nav-worklist", true)
+        .selectAll("li")
+        .data(displayed_posts)
+        .enter()
+        .append("li")
     );
 
     (posts.append("span")
-            .style({"font-size": "12px"})
-            .text(p => p.route.slice(0, 10))
+        .style({"font-size": "12px"})
+        .text(p => (p.hasOwnProperty('date')) ? p.date : p.route.slice(0, 10))
     );
 
     (posts.append("span")
-            .html("&nbsp;&nbsp;&nbsp;&mdash;&nbsp;&nbsp;&nbsp;")
+        .html("&nbsp;&nbsp;&nbsp;&mdash;&nbsp;&nbsp;&nbsp;")
     );
 
     (posts.append("a")
-            .classed("navigation-link", true)
-            .attr("href", p => p.route)
-            .text(p => p.title)
+        .classed("navigation-link", true)
+        .attr("href", p => p.route)
+        .text(p => p.title)
     );
 
     (posts.append("i")
-            .style({"font-size": "12px"})
-            .text(p => " (" + p.type + ")")
+        .style({"font-size": "12px"})
+        .text(p => " (" + p.type + ")")
+    );
+
+    (posts.append("span")
+        .html("&nbsp;")
+    );
+
+    (posts.append("img")
+        .filter(p => p.route.startsWith("https://"))
+        .attr("src", "/static/design_elements/medium_logo.png")
+        .attr("height", "12px")
     );
 
 }
