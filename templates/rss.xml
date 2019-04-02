@@ -258,5 +258,11 @@
             <guid>https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174</guid>
             <pubDate>Thu, 21 Mar 2019 00:00:00 EST</pubDate>
     </item>
+    <item>
+            <title>Boost your CNN classifier performance with progressive resizing in Keras</title>
+            <link>https://towardsdatascience.com/boost-your-cnn-image-classifier-performance-with-progressive-resizing-in-keras-a7d96da06e20</link>
+            <guid>https://towardsdatascience.com/boost-your-cnn-image-classifier-performance-with-progressive-resizing-in-keras-a7d96da06e20</guid>
+            <pubDate>Mon, 01 Apr 2019 00:00:00 EST</pubDate>
+    </item>
 </channel>
 </rss>

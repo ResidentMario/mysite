@@ -384,5 +384,15 @@
         "month": 3,
         "day": 21,
         "year": 2019
+    },
+    {
+        "title": "Boost your CNN classifier performance with progressive resizing in Keras",
+        "route": "https://towardsdatascience.com/boost-your-cnn-image-classifier-performance-with-progressive-resizing-in-keras-a7d96da06e20",
+        "template": null,
+        "type": "technical",
+        "date": "2019/04/01",
+        "month": 4,
+        "day": 1,
+        "year": 2019
     }
 ]

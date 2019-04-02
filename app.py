@@ -271,6 +271,13 @@ post_list = [
         'template': None,
         'type': 'technical',
         'date': '2019/03/21'
+    },
+    {
+        'title': 'Boost your CNN classifier performance with progressive resizing in Keras',
+        'route': 'https://towardsdatascience.com/boost-your-cnn-image-classifier-performance-with-progressive-resizing-in-keras-a7d96da06e20',
+        'template': None,
+        'type': 'technical',
+        'date': '2019/04/01'
     }
 ]
 
@@ -420,6 +427,10 @@ advocacy_list = [
     {
         'title': 'Interview — Profiling top Kagglers: Bestfitting, currently #1 in the world',
         'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/'
+    },
+    {
+        'title': 'Pitch — Bring order to data chaos with Quilt T4',
+        'route': 'https://blog.quiltdata.com/bring-order-to-data-chaos-with-quilt-t4-e5d9058f4d36'
     }
 ]
 
