@@ -386,7 +386,7 @@ project_list = [
             {'title': 'Try the pandas track',
              'href': 'https://www.kaggle.com/learn/pandas'},
             {'title': 'Try the data visualization track',
-             'href': 'https://www.kaggle.com/learn/data-visualisation',
+             'href': 'https://www.kaggle.com/learn/data-visualization',
              'type': 'link'}
         ]
     },
