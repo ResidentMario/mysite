@@ -394,5 +394,15 @@
         "month": 4,
         "day": 1,
         "year": 2019
+    },
+    {
+        "title": "Fran\u00e7ois Chollet wants you to care about developer experience",
+        "route": "https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642",
+        "template": null,
+        "type": "technical",
+        "date": "2019/06/07",
+        "month": 6,
+        "day": 7,
+        "year": 2019
     }
 ]

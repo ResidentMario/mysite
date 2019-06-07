@@ -278,6 +278,13 @@ post_list = [
         'template': None,
         'type': 'technical',
         'date': '2019/04/01'
+    },
+    {
+        'title': 'François Chollet wants you to care about developer experience',
+        'route': 'https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642',
+        'template': None,
+        'type': 'technical',
+        'date': '2019/06/07'
     }
 ]
 
@@ -429,8 +436,16 @@ advocacy_list = [
         'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/'
     },
     {
+        'title': 'Docs — Quilt',
+        'route': 'https://docs.quiltdata.com/'
+    },
+    {
         'title': 'Pitch — Bring order to data chaos with Quilt T4',
         'route': 'https://blog.quiltdata.com/bring-order-to-data-chaos-with-quilt-t4-e5d9058f4d36'
+    },
+    {
+        'title': 'Pitch — Building a fully reproducible machine learning pipeline with CometML and Quilt',
+        'route': 'https://medium.com/comet-ml/building-a-fully-reproducible-machine-learning-pipeline-with-comet-ml-and-quilt-aa9c7bf85e72'
     }
 ]
 
