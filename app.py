@@ -8,7 +8,6 @@ app = Flask(__name__)
 basepath = os.path.abspath(".")
 
 # Initialize the MongoDB connection (for CitiBike).
-# db = DataStore(uri="mongodb://localhost:27017")  # Desktop.
 db = DataStore(json.load(open(basepath + "/static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # mLab
 
 post_list = [
@@ -247,7 +246,7 @@ post_list = [
     },
     {
         'title': 'How to classify photos in 600 classes using nine million Open Images',
-        'route': 'https://medium.freecodecamp.org/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319',
+        'route': 'https://www.freecodecamp.org/news/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319/',
         'template': None,
         'type': 'technical',
         'date': '2019/02/20'
@@ -283,7 +282,7 @@ post_list = [
         'title': 'François Chollet wants you to care about developer experience',
         'route': 'https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642',
         'template': None,
-        'type': 'technical',
+        'type': 'advocacy',
         'date': '2019/06/07'
     }
 ]

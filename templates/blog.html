@@ -73,17 +73,6 @@ function render_posts() {
         .style({"font-size": "12px"})
         .text(p => " (" + p.type + ")")
     );
-
-    (posts.append("span")
-        .html("&nbsp;")
-    );
-
-    (posts.append("img")
-        .filter(p => p.route.startsWith("https://"))
-        .attr("src", "/static/design_elements/medium_logo.png")
-        .attr("height", "12px")
-    );
-
 }
 
 render_posts();
