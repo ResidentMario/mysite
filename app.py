@@ -284,6 +284,12 @@ post_list = [
         'template': None,
         'type': 'advocacy',
         'date': '2019/06/07'
+    },
+    {
+        'title': 'Making Python classes more modular using mixins',
+        'route': '2019/07/07/python-mixins.html',
+        'template': 'python-mixins.html',
+        'type': 'technical'
     }
 ]
 
