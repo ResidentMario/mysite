@@ -236,8 +236,8 @@
     </item>
     <item>
             <title>How to classify photos in 600 classes using nine million Open Images</title>
-            <link>https://medium.freecodecamp.org/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319</link>
-            <guid>https://medium.freecodecamp.org/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319</guid>
+            <link>https://www.freecodecamp.org/news/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319/</link>
+            <guid>https://www.freecodecamp.org/news/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319/</guid>
             <pubDate>Wed, 20 Feb 2019 00:00:00 EST</pubDate>
     </item>
     <item>
@@ -269,6 +269,12 @@
             <link>https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642</link>
             <guid>https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642</guid>
             <pubDate>Fri, 07 Jun 2019 00:00:00 EST</pubDate>
+    </item>
+    <item>
+            <title>Making Python classes more modular using mixins</title>
+            <link>https://www.residentmar.io/2019/07/07/python-mixins.html</link>
+            <guid>https://www.residentmar.io/2019/07/07/python-mixins.html</guid>
+            <pubDate>Sun, 07 Jul 2019 00:00:00 EST</pubDate>
     </item>
 </channel>
 </rss>
