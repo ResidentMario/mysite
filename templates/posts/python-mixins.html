@@ -98,7 +98,7 @@
 </p>
 
 <p>
-    A mixin is a class that defines and implements a single, well-defined feature. Subclasses that inherit from the mixin inherit this feature - and nothing else.
+    A mixin is a class that defines and implements a single, well-defined feature. Subclasses that inherit from the mixin inherit this feature&mdash;and nothing else.
 </p>
 
 <p>
@@ -138,19 +138,14 @@
 
 <pre><code class="language-python">
     class HueMixin:
-    def set_hue_values():
-        # read hue-related parameters out of self.kwargs
-        # use those to build and apply a colormap to input data
-        return
-
+        def set_hue_values():
+            # read hue-related parameters out of self.kwargs
+            # use those to build and apply a colormap to input data
+            return
 </code></pre>
 
 <p>
    <b>Mixins are a safe form of multiple inheritance</b>. They enforce a new constraint on your classes: that all functionality relating to a specific feature must live in the appropriate mixin. Thus methods thus can't be defined in more than one place, and thus can't fall prey to diamond inheritance problems.
-</p>
-
-<p>
-    
 </p>
 
 <p>
