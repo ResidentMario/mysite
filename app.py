@@ -290,6 +290,13 @@ post_list = [
         'route': '2019/07/07/python-mixins.html',
         'template': 'python-mixins.html',
         'type': 'technical'
+    },
+    {
+        'title': 'Bringing together building, block, street, and point data',
+        'route': '2019/08/03/buildings-blocks-streets-points.html',
+        'template': 'buildings-blocks-streets-points.html',
+        'type': 'technical',
+        'date': '2019/08/03'
     }
 ]
 
