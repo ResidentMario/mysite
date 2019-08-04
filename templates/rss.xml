@@ -276,5 +276,11 @@
             <guid>https://www.residentmar.io/2019/07/07/python-mixins.html</guid>
             <pubDate>Sun, 07 Jul 2019 00:00:00 EST</pubDate>
     </item>
+    <item>
+            <title>Bringing together building, block, street, and point data</title>
+            <link>https://www.residentmar.io/2019/08/03/buildings-blocks-streets-points.html</link>
+            <guid>https://www.residentmar.io/2019/08/03/buildings-blocks-streets-points.html</guid>
+            <pubDate>Sat, 03 Aug 2019 00:00:00 EST</pubDate>
+    </item>
 </channel>
 </rss>

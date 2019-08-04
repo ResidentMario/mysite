@@ -413,5 +413,15 @@
         "month": 7,
         "day": 7,
         "year": 2019
+    },
+    {
+        "title": "Bringing together building, block, street, and point data",
+        "route": "https://www.residentmar.io/2019/08/03/buildings-blocks-streets-points.html",
+        "template": "buildings-blocks-streets-points.html",
+        "type": "technical",
+        "date": "2019/08/03",
+        "month": 8,
+        "day": 3,
+        "year": 2019
     }
 ]
