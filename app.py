@@ -297,6 +297,13 @@ post_list = [
         'template': 'buildings-blocks-streets-points.html',
         'type': 'technical',
         'date': '2019/08/03'
+    },
+    {
+        'title': '130,000 reasons why data science can help clean up San Francisco',
+        'route': 'https://medium.com/rubbish-love/130-000-reasons-why-data-science-can-help-clean-up-san-francisco-6412eba1e374',
+        'template': None,
+        'type': 'exploration',
+        'date': '2019/09/11'
     }
 ]
 
