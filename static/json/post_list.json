@@ -423,5 +423,15 @@
         "month": 8,
         "day": 3,
         "year": 2019
+    },
+    {
+        "title": "130,000 reasons why data science can help clean up San Francisco",
+        "route": "https://medium.com/rubbish-love/130-000-reasons-why-data-science-can-help-clean-up-san-francisco-6412eba1e374",
+        "template": null,
+        "type": "exploration",
+        "date": "2019/09/11",
+        "month": 9,
+        "day": 11,
+        "year": 2019
     }
 ]

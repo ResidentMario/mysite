@@ -540,11 +540,6 @@ def citibike_sample(path, stationid):
     return Response(json.dumps(tripset), mimetype='application/json')
 
 
-@app.route('/geoplot/<path:path>')
-def serve_geoplot_documentation(path):
-    return redirect("https://residentmario.github.io/geoplot/index.html")
-
-
 @app.route('/<path:path>')
 def serve(path):
     if path in post_paths:
