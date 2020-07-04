@@ -22,21 +22,21 @@
 	<div id="navbar">
 	<div style="float:left; font-size:18px; margin-top:12px;">
         {% if request.path != '/' %}
-            <a href="/" class="navigation-link">home</a>
-        {% else %}
-            home
-        {% endif %}
-        &nbsp;&nbsp;
-        {% if request.path != '/blog.html' %}
-    		<a href="/blog.html" class="navigation-link">blog</a>
+            <a href="/" class="navigation-link">blog</a>
         {% else %}
             blog
         {% endif %}
         &nbsp;&nbsp;
-        {% if request.path != '/projects.html' %}
-            <a href="/projects.html" class="navigation-link">projects</a>
+        {% if request.path != '/code.html' %}
+            <a href="/code.html" class="navigation-link">code</a>
         {% else %}
-            projects
+            code
+        {% endif %}
+        &nbsp;&nbsp;
+        {% if request.path != '/advocacy.html' %}
+            <a href="/advocacy.html" class="navigation-link">advocacy</a>
+        {% else %}
+            advocacy
         {% endif %}
         &nbsp;&nbsp;
         <a href="https://github.com/residentmario" class="navigation-link">github</a>&nbsp;&nbsp;

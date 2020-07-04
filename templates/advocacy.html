@@ -3,7 +3,7 @@
 {% block content %}
 
 <ul class="nav-worklist" style="margin-bottom:50px;">
-    {% for post in post_list[::-1] %}
+    {% for post in advocacy_list[::-1] %}
         {% set route = post.route if post.route.startswith('https://') else './' + post.route %}
         <li>
             <div class="flex-box" style="display:flex;">
@@ -11,7 +11,7 @@
                     <a class="navigation-link" href="{{ route }}">{{post.title}}</a>
                 </div>
                 <div class="flex-item" style="flex:1; color:#444; vertical-align:center; text-align:right; line-height:1.75em;">
-                    {{route[2:12].replace("/", "-")}}
+                    {{post.date}}
                 </div>
             </div>
         </li>

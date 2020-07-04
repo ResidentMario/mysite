@@ -7,8 +7,8 @@ import os
 app = Flask(__name__)
 basepath = os.path.abspath(".")
 
-# Initialize the MongoDB connection (for CitiBike).
-db = DataStore(json.load(open(basepath + "/static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # mLab
+# # Initialize the MongoDB connection (for CitiBike).
+# db = DataStore(json.load(open(basepath + "/static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # mLab
 
 post_list = [
     {
@@ -158,13 +158,6 @@ post_list = [
         'type': 'exploration'
     },
     {
-        'title': 'Becoming a civic technologist out of college',
-        'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
-        'template': None,
-        'type': 'advocacy',
-        'date': '2017/09/01'
-    },
-    {
         'title': 'Parsing subway rides with gtfs-tripify',
         'route': '2018/01/29/gtfs-tripify.html',
         'template': 'gtfs-tripify.html',
@@ -231,59 +224,8 @@ post_list = [
         'type': 'exploration'
     },
     {
-        'title': 'Reproduce a machine learning model build in four lines of code',
-        'route': 'https://blog.quiltdata.com/reproduce-a-machine-learning-model-build-in-four-lines-of-code-b4f0a5c5f8c8',
-        'template': None,
-        'type': 'advocacy',
-        'date': '2019/01/17'
-    },
-    {
-        'title': 'Building fully custom machine learning models on AWS SageMaker: a practical guide',
-        'route': 'https://towardsdatascience.com/building-fully-custom-machine-learning-models-on-aws-sagemaker-a-practical-guide-c30df3895ef7',
-        'template': None,
-        'type': 'technical',
-        'date': '2019/02/12'
-    },
-    {
-        'title': 'How to classify photos in 600 classes using nine million Open Images',
-        'route': 'https://www.freecodecamp.org/news/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319/',
-        'template': None,
-        'type': 'technical',
-        'date': '2019/02/20'
-    },
-    {
         'title': 'To be a more effective data scientist, think in experiments',
         'route': '2019/02/23/data-science-experiments.html',
-        'template': 'data-science-experiments.html',
-        'type': 'advocacy'
-    },
-    {
-        'title': 'Import almost anything in Python: an intro to module loaders and finders',
-        'route': 'https://blog.quiltdata.com/import-almost-anything-in-python-an-intro-to-module-loaders-and-finders-f5e7b15cda47',
-        'template': None,
-        'type': 'technical',
-        'date': '2019/03/04'
-    },
-    {
-        'title': 'Evaluating Keras neural network performance using Yellowbrick visualizations',
-        'route': 'https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174',
-        'template': None,
-        'type': 'technical',
-        'date': '2019/03/21'
-    },
-    {
-        'title': 'Boost your CNN classifier performance with progressive resizing in Keras',
-        'route': 'https://towardsdatascience.com/boost-your-cnn-image-classifier-performance-with-progressive-resizing-in-keras-a7d96da06e20',
-        'template': None,
-        'type': 'technical',
-        'date': '2019/04/01'
-    },
-    {
-        'title': 'François Chollet wants you to care about developer experience',
-        'route': 'https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642',
-        'template': None,
-        'type': 'advocacy',
-        'date': '2019/06/07'
     },
     {
         'title': 'Making Python classes more modular using mixins',
@@ -298,19 +240,9 @@ post_list = [
         'type': 'technical',
         'date': '2019/08/03'
     },
-    {
-        'title': '130,000 reasons why data science can help clean up San Francisco',
-        'route': 'https://medium.com/rubbish-love/130-000-reasons-why-data-science-can-help-clean-up-san-francisco-6412eba1e374',
-        'template': None,
-        'type': 'exploration',
-        'date': '2019/09/11'
-    }
 ]
 
 post_paths = [post['route'] for post in post_list]
-technical_posts = [post for post in post_list if post['type'] == 'technical']
-exploratory_posts = [post for post in post_list if post['type'] == 'exploration']
-advocacy_posts = [post for post in post_list if post['type'] == 'advocacy']
 
 project_list = [
     {
@@ -431,51 +363,131 @@ project_list = [
 
 advocacy_list = [
     {
-        'title': 'Interview — Who runs the world? Data',
-        'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032'
+        'title': 'Who runs the world? Data',
+        'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032',
+        'date': '2016-06-01'
     },
     {
-        'title': 'Hearing — NYC City Council testimony on open data',
-        'route': 'https://www.youtube.com/watch?v=U7T2Hwj3vjc'
+        'title': 'Implementing good design',
+        'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/',
+        'date': '2016-09-26'
     },
     {
-        'title': 'Talk — implementing good design',
-        'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/'
+        'title': 'Becoming a civic technologist out of college',
+        'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
+        'date': '2017-09-01'
     },
     {
-        'title': 'Lightning talk — Learning by doing with data viz blogging',
-        'route': 'https://www.meetup.com/DataVisualization/events/245257327/'
+        'title': 'Learning by doing with data viz blogging',
+        'route': 'https://www.meetup.com/DataVisualization/events/245257327/',
+        'date': '2017-12-12'
     },
     {
-        'title': 'Docs — Kaggle',
-        'route': 'https://www.kaggle.com/docs'
+        'title': 'Profiling top Kagglers: Bestfitting, currently #1 in the world',
+        'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/',
+        'date': '2018-05-07'
     },
     {
-        'title': 'Interview — Profiling top Kagglers: Bestfitting, currently #1 in the world',
-        'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/'
+        'title': 'Reproduce a machine learning model build in four lines of code',
+        'route': 'https://blog.quiltdata.com/reproduce-a-machine-learning-model-build-in-four-lines-of-code-b4f0a5c5f8c8',
+        'date': '2019-01-17'
     },
     {
-        'title': 'Docs — Quilt',
-        'route': 'https://docs.quiltdata.com/'
+        'title': 'Building fully custom machine learning models on AWS SageMaker: a practical guide',
+        'route': 'https://towardsdatascience.com/building-fully-custom-machine-learning-models-on-aws-sagemaker-a-practical-guide-c30df3895ef7',
+        'date': '2019-02-12'
     },
     {
-        'title': 'Pitch — Bring order to data chaos with Quilt T4',
-        'route': 'https://blog.quiltdata.com/bring-order-to-data-chaos-with-quilt-t4-e5d9058f4d36'
+        'title': 'How to classify photos in 600 classes using nine million Open Images',
+        'route': 'https://www.freecodecamp.org/news/how-to-classify-photos-in-600-classes-using-nine-million-open-images-65847da1a319/',
+        'date': '2019-02-20'
     },
     {
-        'title': 'Pitch — Building a fully reproducible machine learning pipeline with CometML and Quilt',
-        'route': 'https://medium.com/comet-ml/building-a-fully-reproducible-machine-learning-pipeline-with-comet-ml-and-quilt-aa9c7bf85e72'
+        'title': 'Import almost anything in Python: an intro to module loaders and finders',
+        'route': 'https://blog.quiltdata.com/import-almost-anything-in-python-an-intro-to-module-loaders-and-finders-f5e7b15cda47',
+        'date': '2019-03-04'
+    },
+    {
+        'title': 'Bring order to data chaos with Quilt T4',
+        'route': 'https://blog.quiltdata.com/bring-order-to-data-chaos-with-quilt-t4-e5d9058f4d36',
+        'date': '2019-03-18'
+    },
+    {
+        'title': 'Evaluating Keras neural network performance using Yellowbrick visualizations',
+        'route': 'https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174',
+        'date': '2019-03-21'
+    },
+    {
+        'title': 'Boost your CNN classifier performance with progressive resizing in Keras',
+        'route': 'https://towardsdatascience.com/boost-your-cnn-image-classifier-performance-with-progressive-resizing-in-keras-a7d96da06e20',
+        'date': '2019-04-01'
+    },
+    {
+        'title': 'Building a fully reproducible machine learning pipeline with CometML and Quilt',
+        'route': 'https://medium.com/comet-ml/building-a-fully-reproducible-machine-learning-pipeline-with-comet-ml-and-quilt-aa9c7bf85e72',
+        'date': '2019-05-13'
+    },
+    {
+        'title': 'François Chollet wants you to care about developer experience',
+        'route': 'https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642',
+        'date': '2019-06-07'
+    },
+    {
+        'title': '130,000 reasons why data science can help clean up San Francisco',
+        'route': 'https://medium.com/rubbish-love/130-000-reasons-why-data-science-can-help-clean-up-san-francisco-6412eba1e374',
+        'date': '2019-09-11'
+    },
+    {
+        'title': 'Using Spark for model featurization with Spell',
+        'route': 'https://spell.ml/blog/using-spark-for-model-featurization-with-spell-XnEedBUAACcAjfTV',
+        'date': '2020-03-29'
+    },
+    {
+        'title': 'An introduction to hyperparameter search with CIFAR10',
+        'route': 'https://spell.ml/blog/an-introduction-to-hyperparameter-search-with-cifar10-Xo8_6BMAACEAkwVs',
+        'date': '2020-04-13'
+    },
+    {
+        'title': 'Automating GPU machine failure recovery in Google Compute Engine',
+        'route': 'https://spell.ml/blog/automated-machine-failure-recovery-Xp3TEhEAACUAYwPM',
+        'date': '2020-04-27'
+    },
+    {
+        'title': 'Reduce cloud GPU model training costs by 66% using spot instances',
+        'route': 'https://spell.ml/blog/reduce-gpu-model-training-costs-using-spot-XqtgJBAAACMAR6h8',
+        'date': '2020-05-10'
+    },
+    {
+        'title': 'It\'s 2020, why isn\'t deep learning 100% on the cloud yet?',
+        'route': 'https://spell.ml/blog/deep-learning-infrastructure-in-2020-Xr2s7xEAACEAv28w',
+        'date': '2020-05-17'
+    },
+    {
+        'title': 'Battle-tested techniques for scoping machine learning projects',
+        'route': 'https://github.com/spellrun/ml-project-scoping-talk',
+        'date': '2020-06-11'
+    },
+    {
+        'title': 'A developer-friendly guide to mixed-precision training with PyTorch',
+        'route': 'https://spell.ml/blog/mixed-precision-training-with-pytorch-Xuk7YBEAACAASJam',
+        'date': '2020-06-15'
+    },
+    {
+        'title': 'Distributed model training in PyTorch using DistributedDataParallel',
+        'route': 'https://spell.ml/blog/pytorch-distributed-data-parallel-XvEaABIAAB8Ars0e',
+        'date': '2020-06-21'
+    },
+    {
+        'title': 'Distributed model training using Horovod',
+        'route': 'https://spell.ml/blog/distributed-model-training-using-horovod-XvqEGRUAACgAa5th',
+        'date': '2020-06-29'
     }
 ]
 
 
 @app.route('/')
 def main_page():
-    return render_template('home.html',
-                           technical_posts=technical_posts,
-                           exploratory_posts=exploratory_posts,
-                           advocacy_posts=advocacy_posts,
-                           project_list=project_list)
+    return render_template('home.html', post_list=post_list)
 
 
 @app.route('/about.html')
@@ -483,29 +495,14 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/blog.html')
-def blog():
-    f = request.args.get('filter')
-    current_filters = [f] if f else ['technical', 'exploration', 'advocacy']
-    print(current_filters)
-
-    return render_template(
-        'blog.html',
-        post_list=json.dumps(post_list[::-1]),
-        current_filters=current_filters
-    )
+@app.route('/advocacy.html')
+def advocacy():
+    return render_template('advocacy.html', advocacy_list=advocacy_list)
 
 
-@app.route('/projects.html')
-def projects():
-    return render_template('projects.html',
-                           project_list=project_list,
-                           advocacy_list=advocacy_list)
-
-
-@app.route('/latest.html')
-def latest_post():
-    return redirect(request.url_root + post_list[len(post_list) - 1]['route'], code=302)
+@app.route('/code.html')
+def code():
+    return render_template('code.html', project_list=project_list)
 
 
 @app.route('/feed')
@@ -521,23 +518,23 @@ def display_visualization(path):
     return render_template('visualizations/' + path)
 
 
-@app.route('/citibike-api/<path:path>/id/<int:stationid>')
-def citibike_sample(path, stationid):
-    if path == 'bike-outbounds':
-        collection_name = 'outbound bike trip indices'
-    elif path == 'bike-inbounds':
-        collection_name = 'inbound bike trip indices'
-    elif path == 'outgoing-trips':
-        collection_name = 'outgoing trip indices'
-    elif path == 'incoming-trips':
-        collection_name = 'incoming trip indices'
-    else:
-        abort(404)
-        return
-    tripset = db.get_station_bikeset(stationid, collection_name)
-    # Remove None trips---these correspond with trips that have not been populated in the database yet!
-    tripset = [trip for trip in tripset if trip is not None]
-    return Response(json.dumps(tripset), mimetype='application/json')
+# @app.route('/citibike-api/<path:path>/id/<int:stationid>')
+# def citibike_sample(path, stationid):
+#     if path == 'bike-outbounds':
+#         collection_name = 'outbound bike trip indices'
+#     elif path == 'bike-inbounds':
+#         collection_name = 'inbound bike trip indices'
+#     elif path == 'outgoing-trips':
+#         collection_name = 'outgoing trip indices'
+#     elif path == 'incoming-trips':
+#         collection_name = 'incoming trip indices'
+#     else:
+#         abort(404)
+#         return
+#     tripset = db.get_station_bikeset(stationid, collection_name)
+#     # Remove None trips---these correspond with trips that have not been populated in the database yet!
+#     tripset = [trip for trip in tripset if trip is not None]
+#     return Response(json.dumps(tripset), mimetype='application/json')
 
 
 @app.route('/<path:path>')
@@ -547,15 +544,16 @@ def serve(path):
         post = post_list[index]
         date_str = post['route'][:10]
         year, month, day = date_str[:4], date_str[5:7], date_str[8:10]
-        return render_template('posts/' + post['template'],
-                               id=index + 1,
-                               date="{0}/{1}/{2}".format(month, day, year),
-                               title=post['title']
-                              )
+        return render_template(
+            'posts/' + post['template'],
+            id=index + 1,
+            date="{0}/{1}/{2}".format(month, day, year),
+            title=post['title']
+        )
     else:
         abort(404)
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)
