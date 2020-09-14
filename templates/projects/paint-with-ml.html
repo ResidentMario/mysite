@@ -1,0 +1,26 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/paint-with-ml/screenshot.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    <a href="http://paintwith.spell.ml/">Paint with ML</a> is an experimental ML art web application that lets you design your own Bob Ross style landscape painting. You build a semantic segmentation mask using a set of nine different semantic brushes, each one a different landscape painting element. Clicking on the "Run" button feeds this semantic map through an image-to-image translation network, generating a painting as output.
+</p>
+
+<p>
+    This project was initially a freelance consulting project for <a href="https://spell.ml/">Spell</a>, an end-to-end machine learning infrastructure platform startup. Some of the finishing touches, the application design especially, were made after I was hired onto Spell full time.
+</p>
+
+<p>
+    The deep learning model powering the application is a PyTorch <a href="https://github.com/NVlabs/SPADE">GauGAN</a>. The model was trained on the <a href="https://groups.csail.mit.edu/vision/datasets/ADE20K/">ADE20K</a> scene parsing benchmark dataset, then fine-tuned on a custom dataset of <a href="https://www.kaggle.com/residentmario/segmented-bob-ross-images">250 Bob Ross paintings</a>. Model training and deployment (to a Kubernetes-based model server endpoint) was via the Spell SDK.
+</p>
+
+<p>
+    The application frontend uses <a href="https://reactjs.org/">React</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">HTML Canvas</a>, and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">AWS S3 Static Hosting</a>. The code is available publicly <a href="https://github.com/spellml/paint-with-ml">on GitHub</a>; you can try it out for yourself <a href="http://paintwith.spell.ml/">here</a>.
+</p>
+
+{% endblock %}

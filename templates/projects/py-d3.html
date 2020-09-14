@@ -1,0 +1,57 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/py-d3/tree-diagram-example.gif" class="inline_image_full" alt="Data."/>
+
+<p>
+    D3 is a well-known and -loved JavaScript data visualization and document object manipulation library which makes it possible to express even extremely complex visual ideas simply using an intuitive grammar. Jupyter is a browser-hosted Python executable environment which provides an intuitive data science interface.
+</p>
+
+<p>
+    These libraries are foundational cornerstones of web-based data visualization and web-based data science, respectively.
+</p>
+
+<p>
+    However, they don't work together very well.    
+</p>
+
+<p>
+    It's easy to run JavaScript code inside of Jupyter Notebook cells, but Jupyter places no restrictions on the elements of the page the executing code has access to. Since the Jupyter Notebook interface itself is a part of the page, this makes it extremely easy to accidentally do grievous harm to your environment. The following one-liner is sufficient to destroy your entire display:
+</p>
+
+<pre><code class="language-javascript">
+    %%javascript d3.selectAll("div").remove();
+
+</code></pre>
+
+<p>
+    Even subtle changes will have side-effects on your interface&mdash;not really tenable.
+</p>
+
+<p>
+
+</p>
+    <a href="https://github.com/ResidentMario/py_d3">py-d3</a> is an idempotent D3 shim for Jupyter. It monkey-patches the default <code class="inline_code">d3.select()</code> and <code  class="inline_code">d3.selectAll()</code> selector methods with cell-specific versions that, at runtime, only see objects created inside of the currently executed cell. <a href="https://github.com/d3/d3/issues/2947">This approach was suggested to me by D3.JS creator Mike Bostock himself</a>.
+</p>
+
+<p>
+    At runtime, all you have to do is declare <code class="inline_code">%%d3</code> at the top of your code cell and you're ready to go:
+</p>
+
+<pre><code class="language-javascript">
+    %%d3
+    &lt;g>&lt;/g>
+
+    &lt;script>d3.select("g").text("Hello World!")&lt;/script>
+
+</pre></code>
+
+<p>
+    While <code class="inline_code">py_d3</code> is still probably the best way to sandbox D3.JS code in a Jupyter environment, these days I recommend using <a href="https://observablehq.com/">Observable Notebooks</a> instead.
+</p>
+
+{% endblock %}

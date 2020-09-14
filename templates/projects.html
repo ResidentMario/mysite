@@ -1,0 +1,13 @@
+{% extends "frame.html" %}
+{% block pagetitle %} Projects {% endblock %}
+{% block content %}
+
+{% for project in project_list %}
+<a href={{project.route}}>{{  project.title }}</a><br/>
+{{  project.subtitle }}<br/>
+{{  project.snap }}<br/>
+{{  project.route }}<br/>
+{{  project.template }}<br/>
+{% endfor %}
+
+{% endblock %}

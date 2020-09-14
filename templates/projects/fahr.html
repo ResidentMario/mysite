@@ -1,0 +1,30 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/fahr/screengrab.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    <a href="https://github.com/ResidentMario/airscooter">fahr</a> is a proof-of-concept Python CLI for training machine learning models remotely. Basically <code class="inline_code">fahr</code> does all of the work of packaging your model training script, shipping it on the cloud (via <a href="https://aws.amazon.com/sagemaker/">AWS SageMaker</a> or <a href="https://www.kaggle.com/kernels">Kaggle Kernels</a>), and reading back to local disk for you.
+</p>
+
+<p>
+    <code class="inline_code">fahr</code> grew out of my experience trying to use AWS SageMaker (prior to its late 2019 <a href="https://aws.amazon.com/blogs/aws/amazon-sagemaker-studio-the-first-fully-integrated-development-environment-for-machine-learning/">SageMaker Studio</a> facelift) and finding it to be an incredibly frustrating developer experience. Curious if I could make something better, I built most of <code class="inline_code">fahr</code> over the course of three coffee-fueled days in January 2019.
+</p>
+
+<p>
+    You need two files, a <code class="inline_code">requirements.txt</code> files specifying code dependencies (<code class="inline_code">conda.yml</code> is also supported), and a <code class="inline_code">.py</code> file defining the model training code. You call <code class="inline_code">fahr fit</code> to launch the training job, then <code class="inline_code">fahr fetch</code> to get model outputs.
+</p>
+
+<p>
+    Under the hood, <code class="inline_code">fahr</code> builds the code and model files into a Docker image locally (using the Docker Python SDK), pushes them to an AWS ECR registry on the cloud (using the AWS Python SDK), and then orchestrates a custom SageMaker run using this container as its entrypoint. Training outputs are downloaded from an S3 bucket that acts as the data sink.
+</p>
+
+<p>
+    This was a satisfying project to work on because it was an opportunity to write idiomatic Python cloud orchestration code with no deadline pressure and no hacks. Take a look at <a href="https://github.com/ResidentMario/fahr/blob/master/fahr/fahr.py">the code</a> to see the result.
+</p>
+
+{% endblock %}

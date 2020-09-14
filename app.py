@@ -68,12 +68,6 @@ post_list = [
         'type': 'exploration'
     },
     {
-        'title': 'Using the missingno package to visualize missing data',
-        'route': '2016/03/28/missingno.html',
-        'template': 'missingno.html',
-        'type': 'technical'
-    },
-    {
         'title': 'Who are the biggest landowners in New York City?',
         'route': '2016/05/27/biggest-landowners-nyc.html',
         'template': 'biggest-landowners-nyc.html',
@@ -122,12 +116,6 @@ post_list = [
         'type': 'technical'
     },
     {
-        'title': 'Bringing D3.JS to Jupyter Notebook with Py-D3',
-        'route': '2016/09/12/py-d3.html',
-        'template': 'py-d3.html',
-        'type': 'technical'
-    },
-    {
         'title': 'Mapping Citi Bike routes',
         'route': '2016/09/14/citibike-map.html',
         'template': 'citibike-map.html',
@@ -144,12 +132,6 @@ post_list = [
         'route': '2017/01/12/second-avenue-subway.html',
         'template': 'second-avenue-subway.html',
         'type': 'exploration'
-    },
-    {
-        'title': 'Geospatial visualization made easy with geoplot',
-        'route': '2017/02/07/geoplot.html',
-        'template': 'geoplot.html',
-        'type': 'technical'
     },
     {
         'title': 'Two million calls to 311',
@@ -244,6 +226,85 @@ post_list = [
 
 post_paths = [post['route'] for post in post_list]
 
+new_project_list = [
+    {
+        'title': 'missingno',
+        'subtitle': 'A missing data visualization library',
+        'snap': 'missingno.png',
+        'route': '2016/03/28/missingno.html',
+        'template': 'missingno.html',
+    },
+    {
+        'title': 'py_d3',
+        'subtitle': 'D3.JS in Jupyter',
+        'snap': 'py-d3.png',
+        'route': '2016/09/12/py-d3.html',
+        'template': 'py-d3.html',
+    },
+    # citibike would go here
+    {
+        'title': 'geoplot',
+        'subtitle': 'High-level geospatial plotting',
+        'snap': 'TODO',
+        'route': '2017/02/07/geoplot.html',
+        'template': 'geoplot.html',
+    },    
+    # 311 would go here
+    # The important part is https://github.com/ResidentMario/threshold-tree
+    {
+        'title': 'airscooter',
+        'subtitle': 'A wide-data management tool',
+        'snap': 'TODO',
+        'route': '2017/08/22/airscooter',
+        'template': 'airscooter.html'
+    },
+    {
+        'title': 'gtfs-tripify',
+        'subtitle': 'GTFS-RT train arrival time parser',
+        'snap': 'TODO',
+        'route': '2018/01/29/gtfs-tripify-parser.html',
+        'template': 'gtfs-tripify-parser.html',
+    },
+    {
+        'title': 'kaggle learn',
+        'subtitle': 'Coursework on pandas and data viz',
+        'snap': 'TODO',
+        'route': '2018/10/19/kaggle-learn.html',
+        'template': 'kaggle-learn.html'
+    },
+    {
+        'title': 'machine learning notes',
+        'subtitle': 'Organized notes on machine learning',
+        'snap': 'TODO',
+        'route': '2018/09/04/machine-learning-notes.html',
+        'template': 'machine-learning-notes.html'
+    },
+    {
+        'title': 'fahr',
+        'subtitle': 'Remote machine learning training',
+        'snap': 'TODO',
+        'route': '2019/01/22/fahr.html',
+        'template': 'fahr.html'
+    },
+    {
+        'title': 'rubbish story',
+        'subtitle': 'Visualizing a year of San Francisco street trash',
+        'snap': 'TODO',
+        'route': '2019-09-11/rubbish-story.html',
+        'template': 'rubbish-story.html'
+    },
+    {
+        'title': 'paint with ml',
+        'subtitle': 'Become an artist, with an assist from deep learning',
+        'snap': 'TODO',
+        'route': '2020-09-16/paint-with-ml.html',
+        'template': 'paint-with-ml.html'
+    }
+]
+
+new_project_paths = [project['route'] for project in new_project_list]
+
+# TODO: remove this
 project_list = [
     {
         'title': 'missingno',
@@ -481,6 +542,16 @@ advocacy_list = [
         'title': 'Distributed model training using Horovod',
         'route': 'https://spell.ml/blog/distributed-model-training-using-horovod-XvqEGRUAACgAa5th',
         'date': '2020-06-29'
+    },
+    {
+        'title': 'Getting started with large scale ETL jobs using Dask and AWS EMR',
+        'route': 'https://spell.ml/blog/large-scale-etl-jobs-using-dask-Xyl8GhEAACQAjK6h',
+        'date': '2020-08-03'
+    },
+    {
+        'title': 'Getting oriented in the RAPIDS distributed ML ecosystem, part 1: ETL',
+        'route': 'https://spell.ml/blog/getting-oriented-in-the-rapids-distributed-ml-ecosystem-part-1-X1gixBIAAJ7nyzHa',
+        'date': '2020-09-12'
     }
 ]
 
@@ -500,9 +571,15 @@ def advocacy():
     return render_template('advocacy.html', advocacy_list=advocacy_list)
 
 
+# TODO: replace this
 @app.route('/code.html')
 def code():
     return render_template('code.html', project_list=project_list)
+
+
+@app.route('/new_projects.html')
+def projects():
+    return render_template('projects.html', project_list=new_project_list)
 
 
 @app.route('/feed')
@@ -550,10 +627,21 @@ def serve(path):
             date="{0}/{1}/{2}".format(month, day, year),
             title=post['title']
         )
+    elif path in new_project_paths:
+        index = new_project_paths.index(path)
+        project = new_project_list[index]
+        date_str = project['route'][:10]
+        year, month, day = date_str[:4], date_str[5:7], date_str[8:10]
+        return render_template(
+            'projects/' + project['template'],
+            id=index + 1,
+            date="{0}/{1}/{2}".format(month, day, year),
+            title=project['title']
+        )
     else:
         abort(404)
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(debug=True)
+    # app.run()
+    app.run(debug=True)

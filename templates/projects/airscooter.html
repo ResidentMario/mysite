@@ -1,0 +1,42 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    <a href="https://github.com/ResidentMario/airscooter">airscooter</a> is a simple "wide-data" management CLI, written in Python, that I built one summer during an internship at <a href="https://cusp.nyu.edu/">NYU CUSP</a>.
+</p>
+
+<p>
+    We were interested in consuming a large amount of <a href="https://en.wikipedia.org/wiki/Open_data">open data</a> and running a novel anomoly detection algorithm over it to find points of interest in the data stream. Doing this in a systematic way required some way of systematically downloading, parsing, and outputing a large stream of flat files. Since most open datasets are very small, the problem wasn't data volume, it was the sheer breadth and number of data files we'd need to clean before we can use them.
+</p>
+
+<p>
+    Airscooter is a simple CLI-based syntax for building directed acyclic graphs of executable files. It's basically a high-level interface to <a href="https://airflow.apache.org/">Apache Airflow</a> designed to make working with a large number of small data cleaning scripts less painful. Here's how you'd use it:
+</p>
+
+<pre><code class="language-bash">
+    # initialize an airscooter config file in the current folder
+    airscooter init
+    # build a dependency DAG (writes to a YAML file you check into the repo)
+    airscooter link depositor.py \
+        --outputs=["nyc-east-river-bicycle-counts.zip"]
+    airscooter link transform.py \
+        --inputs=["nyc-east-river-bicycle-counts.zip"] \
+        --outputs=["nyc-east-river-bicycle-counts.csv"]
+    # now you can execute the dag at any time with...
+    airscooter run
+
+</code></pre>
+
+<p>
+    The <a href="https://residentmario.github.io/airscooter/quickstart.html">airscooter quickstart</a> has an example showcasing this process in action on a bicycle counts dataset.
+</p>
+
+<p>
+    This idea of managing dataset ETL as a DAG is pretty standard in industry these days. <a href="https://dvc.org/">DVC</a> and <a href="https://www.kubeflow.org/">Kubeflow</a> are two examples of popular machine learning infrastructure management tools that make these kinds of DAGs pretty fundamental to their design.
+</p>
+
+{% endblock %}
