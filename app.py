@@ -248,9 +248,14 @@ new_project_list = [
         'snap': 'TODO',
         'route': '2017/02/07/geoplot.html',
         'template': 'geoplot.html',
-    },    
-    # 311 would go here
-    # The important part is https://github.com/ResidentMario/threshold-tree
+    },
+    {
+        'title': 'two million calls to 311',
+        'subtitle': 'A hierarchical treemap visualization',
+        'snap': 'TODO',
+        'route': '2017/02/13/311-threshold-tree.html',
+        'template': '311-threshold-tree.html'
+    },
     {
         'title': 'airscooter',
         'subtitle': 'A wide-data management tool',
@@ -267,14 +272,14 @@ new_project_list = [
     },
     {
         'title': 'kaggle learn',
-        'subtitle': 'Coursework on pandas and data viz',
+        'subtitle': 'Coursework on data analysis and data viz',
         'snap': 'TODO',
         'route': '2018/10/19/kaggle-learn.html',
         'template': 'kaggle-learn.html'
     },
     {
         'title': 'machine learning notes',
-        'subtitle': 'Organized notes on machine learning',
+        'subtitle': 'Notes on machine learning',
         'snap': 'TODO',
         'route': '2018/09/04/machine-learning-notes.html',
         'template': 'machine-learning-notes.html'
@@ -288,17 +293,24 @@ new_project_list = [
     },
     {
         'title': 'rubbish story',
-        'subtitle': 'Visualizing a year of San Francisco street trash',
+        'subtitle': 'Visualizing San Francisco street trash',
         'snap': 'TODO',
         'route': '2019-09-11/rubbish-story.html',
         'template': 'rubbish-story.html'
     },
     {
         'title': 'paint with ml',
-        'subtitle': 'Become an artist, with an assist from deep learning',
+        'subtitle': 'Become a deep learning artist',
         'snap': 'TODO',
         'route': '2020-09-16/paint-with-ml.html',
         'template': 'paint-with-ml.html'
+    },
+    {
+        'title': 'rubbish-geo',
+        'subtitle': 'A geospatial analytics backend',
+        'snap': 'TODO',
+        'route': '2020-09-16/rubbish-geo.html',
+        'template': 'rubbish-geo.html'
     }
 ]
 

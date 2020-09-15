@@ -1,0 +1,34 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/311-threshold-tree/treemap.png" class="inline_image_full" alt="Data.">
+
+<p>
+    <a href="/2017/02/13/311.html">Two million calls to 311</a> was the most technically interesting of my open data explorations.
+</p>
+
+<p>
+    311 uses a flat classification scheme for incoming calls, one mostly based on how and to whom response responsibility will be routed. As a result, there were hundreds of categories of wildly different levels of specifity. For example, the majority of noise complaints get lumped into the catch-all category of Residential Noise (200,000 calls)&mdash;but there are related categories like helicopter noise (1000) and sanitation truck noise (200 calls) with far fewer reports. I was interested in showing these different categories in relative terms without obfuscating the minority classes.
+</p>
+
+<p>
+    For the frontend I designed an interactive hierarchical treemap visualization, implemented in D3 (see above). The visualization lets you click through individual categorical buckets to view detailed breakdown of their subcategories. <a href="https://github.com/ResidentMario/mysite/blob/master/templates/visualizations/311.html">Code</a>.
+</p>
+
+<p>
+    However, to get this working I needed something that would take the flat list of categories and subcategories and turn it into a hierarchical tree of "large" categories (which stand on their own) and "small" categories (collected in an "Other" category). This turned out to be a nontrivial algorithmic challenge. To solve it, I wrote a small single-purpose <code class="inline_code">npm</code> package called <code class="inline_code">threshold-tree</code>.
+</p>
+
+<p>
+    <code class="inline_code">threshold-tree</code> uses a recursive pre-order tree-traversal algorithm to push small categories that fail a threshold test (they are much smaller than their siblings) to child <code class="inline_code">Other</code> nodes. <code class="inline_code">Other</code> children are then themselves subdivided. The final visualization featured three layers of subdivision, e.g.: <code class="inline_code">Root > Other (190,000) > Crime (33,000) > Other (1,600) > Illegal Fireworks (200)</code>.
+</p>
+
+<p>
+    <a href="https://github.com/ResidentMario/threshold-tree/blob/master/threshold-tree.js">You can see that code here</a>.
+</p>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/rubbish-geo/arch.png" class="inline_image_full" alt="Data.">
+
+<p>
+    <a href="https://github.com/ResidentMario/rubbish-geo">rubbish-geo</a> is the (work-in-progress) backend to a forthcoming community litter map application.
+</p>
+
+<p>
+    In the summer of 2019 I did <a href="/2019-09-11/rubbish-story.html">a freelance consulting project</a> for <a href="rubbish.love">Rubbish</a>, a smart trash picker-upper startup. At the time they were interested in understanding 
+    what value they could derive from a rich collection of trash pickup data they had assembled.
+</p>
+
+<p>
+    One year later Rubbish's needs had advanced somewhat, and I was brought back in to build a geospatial analytics service that would allow the Rubbish team to build reports and community maps for stakeholders and community partners interested in understanding rubbish patterns in their neighborhoods.
+</p>
+
+<p>
+    The visualization attached is a service diagram showing, at a high level, how it works. Basically, <code class="inline_code">rubbish-geo</code> is a serverless API over a PostGIS instance hosted on GCP. Litter pickups are written by the (preexisting) Firestore user database by the client, then pushed to the analytics database using a DB listener. Clients then make GET requests (authenticated using <a href="https://firebase.google.com/docs/auth/admin/create-custom-tokens">Firestore custom tokens</a>) to Cloud Function endpoints to retrieve litter reports.
+</p>
+
+<p>
+    The section <a href="https://github.com/ResidentMario/rubbish-geo#architecture">architecture</a> in the repo <code class="inline_code">README</code> has more information on how it works.
+</p>
+
+{% endblock %}
