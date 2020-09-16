@@ -226,7 +226,7 @@ post_list = [
 
 post_paths = [post['route'] for post in post_list]
 
-new_project_list = [
+project_list = [
     {
         'title': 'missingno',
         'subtitle': 'A missing data visualization library',
@@ -241,198 +241,86 @@ new_project_list = [
         'route': '2016/09/12/py-d3.html',
         'template': 'py-d3.html',
     },
-    # citibike would go here
+    {
+        'title': 'life of citibike',
+        'subtitle': 'Visualizing a day of trips on Citi Bike',
+        'snap': 'life-of-citibike.png',
+        'route': '2016/08/27citibike-project.html',
+        'template': 'citibike.html'
+    },
     {
         'title': 'geoplot',
         'subtitle': 'High-level geospatial plotting',
-        'snap': 'TODO',
+        'snap': 'geoplot.png',
         'route': '2017/02/07/geoplot.html',
         'template': 'geoplot.html',
     },
     {
         'title': 'two million calls to 311',
         'subtitle': 'A hierarchical treemap visualization',
-        'snap': 'TODO',
+        'snap': '311.png',
         'route': '2017/02/13/311-threshold-tree.html',
         'template': '311-threshold-tree.html'
     },
-    {
-        'title': 'airscooter',
-        'subtitle': 'A wide-data management tool',
-        'snap': 'TODO',
-        'route': '2017/08/22/airscooter',
-        'template': 'airscooter.html'
-    },
+    # {
+    #     'title': 'airscooter',
+    #     'subtitle': 'A wide-data management tool',
+    #     'snap': 'missingno.png',
+    #     'route': '2017/08/22/airscooter.html',
+    #     'template': 'airscooter.html'
+    # },
     {
         'title': 'gtfs-tripify',
         'subtitle': 'GTFS-RT train arrival time parser',
-        'snap': 'TODO',
+        'snap': 'gtfs-tripify.png',
         'route': '2018/01/29/gtfs-tripify-parser.html',
         'template': 'gtfs-tripify-parser.html',
     },
     {
         'title': 'kaggle learn',
         'subtitle': 'Coursework on data analysis and data viz',
-        'snap': 'TODO',
+        'snap': 'kaggle-learn.png',
         'route': '2018/10/19/kaggle-learn.html',
         'template': 'kaggle-learn.html'
     },
     {
         'title': 'machine learning notes',
         'subtitle': 'Notes on machine learning',
-        'snap': 'TODO',
+        'snap': 'missingno.png',
         'route': '2018/09/04/machine-learning-notes.html',
         'template': 'machine-learning-notes.html'
     },
     {
         'title': 'fahr',
         'subtitle': 'Remote machine learning training',
-        'snap': 'TODO',
+        'snap': 'missingno.png',
         'route': '2019/01/22/fahr.html',
         'template': 'fahr.html'
     },
     {
         'title': 'rubbish story',
         'subtitle': 'Visualizing San Francisco street trash',
-        'snap': 'TODO',
+        'snap': 'rubbish-story.png',
         'route': '2019-09-11/rubbish-story.html',
         'template': 'rubbish-story.html'
     },
     {
         'title': 'paint with ml',
         'subtitle': 'Become a deep learning artist',
-        'snap': 'TODO',
+        'snap': 'paint-with-ml.png',
         'route': '2020-09-16/paint-with-ml.html',
         'template': 'paint-with-ml.html'
     },
     {
-        'title': 'rubbish-geo',
+        'title': 'rubbish geo',
         'subtitle': 'A geospatial analytics backend',
-        'snap': 'TODO',
+        'snap': 'rubbish-geo.png',
         'route': '2020-09-16/rubbish-geo.html',
         'template': 'rubbish-geo.html'
     }
-]
+][::-1]
 
-new_project_paths = [project['route'] for project in new_project_list]
-
-# TODO: remove this
-project_list = [
-    {
-        'title': 'missingno',
-        'description': 'A missing data visualization library',
-        'snap': 'missingno.png',
-        'links': [
-            {'title': 'Using missingno to visualize missing data',
-             'href': './2016/03/28/missingno.html',
-             'type': 'post'},
-            {'title': 'JOSS paper',
-             'href': 'http://joss.theoj.org/papers/52b4115d6c03864b884fbf3334851322',
-             'type': 'paper'},
-            {'title': 'Try it',
-             'href': 'https://github.com/ResidentMario/missingno',
-             'type': 'repo'}
-        ]
-    },
-    {
-        'title': 'life of citi bike',
-        'description': 'Exploring a day in the life of Citi Bike',
-        'snap': 'life-of-citibike-alt.png',
-        'links': [
-            {'title': 'The making of Life of Citi Bike',
-             'href': './2016/08/27/day-in-the-life-of-citibike.html',
-             'type': 'post'
-             },
-            {'title': 'Try it',
-             'href': 'http://www.residentmar.io/visualizations/life-of-citibike.html',
-             'type': 'webapp'}
-        ]
-    },
-    {
-        'title': 'py_d3',
-        'description': 'Port of the D3.JS visualization grammar to Jupyter',
-        'snap': 'py-d3.png',
-        'links': [
-            {'title': 'Bringing D3.JS to Jupyter Notebook with Py-D3',
-             'href': './2016/09/12/py-d3.html',
-             'type': 'post'},
-            {'title': 'Try it',
-             'href': 'https://github.com/ResidentMario/py_d3',
-             'type': 'repo'}
-        ]
-    },
-    {
-        'title': 'checkpoints',
-        'description': 'A progress-saving pandas monkey-patch',
-        'snap': 'saving-progress-pandas.png',
-        'links': [
-            {'title': 'Saving progress in pandas',
-             'href': './2016/10/29/saving-progress-pandas.html',
-             'type': 'post'},
-            {'title': 'Try it',
-             'href': 'https://github.com/ResidentMario/checkpoints',
-             'type': 'repo'}
-        ]
-    },
-    {
-        'title': 'geoplot',
-        'description': 'A geospatial data visualization library',
-        'snap': 'geoplot.png',
-        'links': [
-            {'title': 'Geospatial visualization made easy with geoplot',
-             'href': './2017/02/07/geoplot.html',
-             'type': 'post'},
-            {'title': 'Documentation',
-             'href': 'https://residentmario.github.io/geoplot/index.html',
-             'type': 'docs'},
-            {'title': 'Try it',
-             'href': 'https://github.com/ResidentMario/geoplot',
-             'type': 'repo'}
-        ]
-    },
-    {
-        'title': 'subway explorer',
-        'description': 'What real-time arrival data says about your commute',
-        'snap': 'subway-explorer.png',
-        'links': [
-            {'title': 'Building an MTA historical train arrival application',
-             'href': './2018/05/16/subway-explorer.html',
-             'type': 'post'},
-            {'title': 'Parsing subway rides with gtfs-tripify',
-             'href': './2018/01/29/gtfs-tripify.html',
-             'type': 'post'},
-            {'title': 'Repo',
-             'href': 'https://github.com/ResidentMario/subway-explorer-webapp',
-             'type': 'repo'}
-        ]
-    },
-    {
-        'title': 'kaggle learn',
-        'description': 'Two tracks in an online data science learning platform',
-        'snap': 'kaggle-learn.png',
-        'links': [
-            {'title': 'Overview',
-             'href': 'https://www.kaggle.com/learn',
-             'type': 'link'},
-            {'title': 'Try the pandas track',
-             'href': 'https://www.kaggle.com/learn/pandas'},
-            {'title': 'Try the data visualization track',
-             'href': 'https://www.kaggle.com/learn/data-visualization',
-             'type': 'link'}
-        ]
-    },
-    {
-        'title': 'the machine learning repository',
-        'description': 'Organized notes on machine learning',
-        'snap': 'the-machine-learning-repository.png',
-        'links': [
-            {'title': 'Try it',
-             'href': 'https://residentmario.github.io/machine-learning-notes/index.html',
-             'type': 'webapp'}
-        ]
-    }
-]
-
+project_paths = [project['route'] for project in project_list]
 
 advocacy_list = [
     {
@@ -583,15 +471,9 @@ def advocacy():
     return render_template('advocacy.html', advocacy_list=advocacy_list)
 
 
-# TODO: replace this
-@app.route('/code.html')
-def code():
-    return render_template('code.html', project_list=project_list)
-
-
-@app.route('/new_projects.html')
-def projects():
-    return render_template('projects.html', project_list=new_project_list)
+@app.route('/portfolio.html')
+def portfolio():
+    return render_template('projects.html', project_list=project_list)
 
 
 @app.route('/feed')
@@ -639,9 +521,9 @@ def serve(path):
             date="{0}/{1}/{2}".format(month, day, year),
             title=post['title']
         )
-    elif path in new_project_paths:
-        index = new_project_paths.index(path)
-        project = new_project_list[index]
+    elif path in project_paths:
+        index = project_paths.index(path)
+        project = project_list[index]
         date_str = project['route'][:10]
         year, month, day = date_str[:4], date_str[5:7], date_str[8:10]
         return render_template(

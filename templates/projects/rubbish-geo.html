@@ -21,7 +21,7 @@
 </p>
 
 <p>
-    The visualization attached is a service diagram showing, at a high level, how it works. Basically, <code class="inline_code">rubbish-geo</code> is a serverless API over a PostGIS instance hosted on GCP. Litter pickups are written by the (preexisting) Firestore user database by the client, then pushed to the analytics database using a DB listener. Clients then make GET requests (authenticated using <a href="https://firebase.google.com/docs/auth/admin/create-custom-tokens">Firestore custom tokens</a>) to Cloud Function endpoints to retrieve litter reports.
+    The visualization attached is a service diagram showing, at a high level, how it works. Basically, <code class="inline_code">rubbish-geo</code> is a serverless API over a PostGIS instance hosted on GCP. Litter pickups are written to the (preexisting) Firestore user database by the client, then pushed to the analytics database using a DB listener. Clients then make GET requests (authenticated using <a href="https://firebase.google.com/docs/auth/admin/create-custom-tokens">Firestore custom tokens</a>) to Cloud Function endpoints to retrieve litter reports.
 </p>
 
 <p>

@@ -2,12 +2,18 @@
 {% block pagetitle %} Projects {% endblock %}
 {% block content %}
 
-{% for project in project_list %}
-<a href={{project.route}}>{{  project.title }}</a><br/>
-{{  project.subtitle }}<br/>
-{{  project.snap }}<br/>
-{{  project.route }}<br/>
-{{  project.template }}<br/>
-{% endfor %}
+<div class="projects-frame">
+    {% for project in project_list %}
+        <div class="projects-item">
+            <div class="projects-item-snap-container">
+                <a href={{project.route}}>
+                    <img src=/static/project_snaps/{{project.snap}} width=200 />
+                </a>
+            </div>
+            <a href={{project.route}}>{{  project.title }}</a>
+            {{  project.subtitle }}<br/>
+        </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
