@@ -1,0 +1,22 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<p>
+    <a href="https://github.com/ResidentMario/gtfs-tripify">gtfs-tripify</a> is a library for teasing train arrival times out of GTFS-RT reatime data streams. You can use it to build beautiful train arrival time visualizations like this one:
+</p>
+
+<img src="/static/post_assets/gtfs-tripify/service.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    Although it works great 95% of the time, due to quirks in how GTFS-RT data is provided, this library produces errant output that's difficult to iron out completely. The <a href="https://residentmario.github.io/gtfs-tripify/quickstart.html">quickstart</a> in the <code class="inline_code">gtfs-tripify</code> documentation explains how to use this library and how to interpret the outputs.
+</p>
+
+<p>
+    The blog post "<a href="/2018/01/29/gtfs-tripify.html">Parsing subway rides with gtfs-tripify</a>" is a detailed breakdown of how it works.
+</p>
+
+{% endblock %}

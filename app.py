@@ -68,12 +68,6 @@ post_list = [
         'type': 'exploration'
     },
     {
-        'title': 'Using the missingno package to visualize missing data',
-        'route': '2016/03/28/missingno.html',
-        'template': 'missingno.html',
-        'type': 'technical'
-    },
-    {
         'title': 'Who are the biggest landowners in New York City?',
         'route': '2016/05/27/biggest-landowners-nyc.html',
         'template': 'biggest-landowners-nyc.html',
@@ -122,12 +116,6 @@ post_list = [
         'type': 'technical'
     },
     {
-        'title': 'Bringing D3.JS to Jupyter Notebook with Py-D3',
-        'route': '2016/09/12/py-d3.html',
-        'template': 'py-d3.html',
-        'type': 'technical'
-    },
-    {
         'title': 'Mapping Citi Bike routes',
         'route': '2016/09/14/citibike-map.html',
         'template': 'citibike-map.html',
@@ -144,12 +132,6 @@ post_list = [
         'route': '2017/01/12/second-avenue-subway.html',
         'template': 'second-avenue-subway.html',
         'type': 'exploration'
-    },
-    {
-        'title': 'Geospatial visualization made easy with geoplot',
-        'route': '2017/02/07/geoplot.html',
-        'template': 'geoplot.html',
-        'type': 'technical'
     },
     {
         'title': 'Two million calls to 311',
@@ -247,119 +229,98 @@ post_paths = [post['route'] for post in post_list]
 project_list = [
     {
         'title': 'missingno',
-        'description': 'A missing data visualization library',
+        'subtitle': 'A missing data visualization library',
         'snap': 'missingno.png',
-        'links': [
-            {'title': 'Using missingno to visualize missing data',
-             'href': './2016/03/28/missingno.html',
-             'type': 'post'},
-            {'title': 'JOSS paper',
-             'href': 'http://joss.theoj.org/papers/52b4115d6c03864b884fbf3334851322',
-             'type': 'paper'},
-            {'title': 'Try it',
-             'href': 'https://github.com/ResidentMario/missingno',
-             'type': 'repo'}
-        ]
-    },
-    {
-        'title': 'life of citi bike',
-        'description': 'Exploring a day in the life of Citi Bike',
-        'snap': 'life-of-citibike-alt.png',
-        'links': [
-            {'title': 'The making of Life of Citi Bike',
-             'href': './2016/08/27/day-in-the-life-of-citibike.html',
-             'type': 'post'
-             },
-            {'title': 'Try it',
-             'href': 'http://www.residentmar.io/visualizations/life-of-citibike.html',
-             'type': 'webapp'}
-        ]
+        'route': '2016/03/28/missingno.html',
+        'template': 'missingno.html',
     },
     {
         'title': 'py_d3',
-        'description': 'Port of the D3.JS visualization grammar to Jupyter',
+        'subtitle': 'D3.JS in Jupyter',
         'snap': 'py-d3.png',
-        'links': [
-            {'title': 'Bringing D3.JS to Jupyter Notebook with Py-D3',
-             'href': './2016/09/12/py-d3.html',
-             'type': 'post'},
-            {'title': 'Try it',
-             'href': 'https://github.com/ResidentMario/py_d3',
-             'type': 'repo'}
-        ]
+        'route': '2016/09/12/py-d3.html',
+        'template': 'py-d3.html',
     },
     {
-        'title': 'checkpoints',
-        'description': 'A progress-saving pandas monkey-patch',
-        'snap': 'saving-progress-pandas.png',
-        'links': [
-            {'title': 'Saving progress in pandas',
-             'href': './2016/10/29/saving-progress-pandas.html',
-             'type': 'post'},
-            {'title': 'Try it',
-             'href': 'https://github.com/ResidentMario/checkpoints',
-             'type': 'repo'}
-        ]
+        'title': 'life of citibike',
+        'subtitle': 'Visualizing a day of trips on Citi Bike',
+        'snap': 'life-of-citibike.png',
+        'route': '2016/08/27citibike-project.html',
+        'template': 'citibike.html'
     },
     {
         'title': 'geoplot',
-        'description': 'A geospatial data visualization library',
+        'subtitle': 'High-level geospatial plotting',
         'snap': 'geoplot.png',
-        'links': [
-            {'title': 'Geospatial visualization made easy with geoplot',
-             'href': './2017/02/07/geoplot.html',
-             'type': 'post'},
-            {'title': 'Documentation',
-             'href': 'https://residentmario.github.io/geoplot/index.html',
-             'type': 'docs'},
-            {'title': 'Try it',
-             'href': 'https://github.com/ResidentMario/geoplot',
-             'type': 'repo'}
-        ]
+        'route': '2017/02/07/geoplot.html',
+        'template': 'geoplot.html',
     },
     {
-        'title': 'subway explorer',
-        'description': 'What real-time arrival data says about your commute',
-        'snap': 'subway-explorer.png',
-        'links': [
-            {'title': 'Building an MTA historical train arrival application',
-             'href': './2018/05/16/subway-explorer.html',
-             'type': 'post'},
-            {'title': 'Parsing subway rides with gtfs-tripify',
-             'href': './2018/01/29/gtfs-tripify.html',
-             'type': 'post'},
-            {'title': 'Repo',
-             'href': 'https://github.com/ResidentMario/subway-explorer-webapp',
-             'type': 'repo'}
-        ]
+        'title': 'two million calls to 311',
+        'subtitle': 'A hierarchical treemap',
+        'snap': '311.png',
+        'route': '2017/02/13/311-threshold-tree.html',
+        'template': '311-threshold-tree.html'
+    },
+    # {
+    #     'title': 'airscooter',
+    #     'subtitle': 'A wide-data management tool',
+    #     'snap': 'missingno.png',
+    #     'route': '2017/08/22/airscooter.html',
+    #     'template': 'airscooter.html'
+    # },
+    {
+        'title': 'gtfs-tripify',
+        'subtitle': 'GTFS-RT train arrival time parser',
+        'snap': 'gtfs-tripify.png',
+        'route': '2018/01/29/gtfs-tripify-parser.html',
+        'template': 'gtfs-tripify-parser.html',
     },
     {
         'title': 'kaggle learn',
-        'description': 'Two tracks in an online data science learning platform',
+        'subtitle': 'Coursework on data analysis and data viz',
         'snap': 'kaggle-learn.png',
-        'links': [
-            {'title': 'Overview',
-             'href': 'https://www.kaggle.com/learn',
-             'type': 'link'},
-            {'title': 'Try the pandas track',
-             'href': 'https://www.kaggle.com/learn/pandas'},
-            {'title': 'Try the data visualization track',
-             'href': 'https://www.kaggle.com/learn/data-visualization',
-             'type': 'link'}
-        ]
+        'route': '2018/10/19/kaggle-learn.html',
+        'template': 'kaggle-learn.html'
     },
     {
-        'title': 'the machine learning repository',
-        'description': 'Organized notes on machine learning',
-        'snap': 'the-machine-learning-repository.png',
-        'links': [
-            {'title': 'Try it',
-             'href': 'https://residentmario.github.io/machine-learning-notes/index.html',
-             'type': 'webapp'}
-        ]
+        'title': 'machine learning notes',
+        'subtitle': 'Notes on machine learning',
+        'snap': 'ml-notes.png',
+        'route': '2018/09/04/machine-learning-notes.html',
+        'template': 'machine-learning-notes.html'
+    },
+    {
+        'title': 'fahr',
+        'subtitle': 'Remote machine learning training',
+        'snap': 'fahr.png',
+        'route': '2019/01/22/fahr.html',
+        'template': 'fahr.html'
+    },
+    {
+        'title': 'rubbish story',
+        'subtitle': 'Visualizing San Francisco street trash',
+        'snap': 'rubbish-story.png',
+        'route': '2019-09-11/rubbish-story.html',
+        'template': 'rubbish-story.html'
+    },
+    {
+        'title': 'paint with ml',
+        'subtitle': 'Become a deep learning artist',
+        'snap': 'paint-with-ml.png',
+        'route': '2020-09-16/paint-with-ml.html',
+        'template': 'paint-with-ml.html'
+    },
+    {
+        'title': 'rubbish geo',
+        'subtitle': 'A geospatial analytics service',
+        'snap': 'rubbish-geo.png',
+        'route': '2020-09-16/rubbish-geo.html',
+        'template': 'rubbish-geo.html'
     }
-]
+][::-1]
 
+project_paths = [project['route'] for project in project_list]
 
 advocacy_list = [
     {
@@ -367,26 +328,26 @@ advocacy_list = [
         'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032',
         'date': '2016-06-01'
     },
-    {
-        'title': 'Implementing good design',
-        'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/',
-        'date': '2016-09-26'
-    },
-    {
-        'title': 'Becoming a civic technologist out of college',
-        'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
-        'date': '2017-09-01'
-    },
-    {
-        'title': 'Learning by doing with data viz blogging',
-        'route': 'https://www.meetup.com/DataVisualization/events/245257327/',
-        'date': '2017-12-12'
-    },
-    {
-        'title': 'Profiling top Kagglers: Bestfitting, currently #1 in the world',
-        'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/',
-        'date': '2018-05-07'
-    },
+    # {
+    #     'title': 'Implementing good design',
+    #     'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/',
+    #     'date': '2016-09-26'
+    # },
+    # {
+    #     'title': 'Becoming a civic technologist out of college',
+    #     'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
+    #     'date': '2017-09-01'
+    # },
+    # {
+    #     'title': 'Learning by doing with data viz blogging',
+    #     'route': 'https://www.meetup.com/DataVisualization/events/245257327/',
+    #     'date': '2017-12-12'
+    # },
+    # {
+    #     'title': 'Profiling top Kagglers: Bestfitting, currently #1 in the world',
+    #     'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/',
+    #     'date': '2018-05-07'
+    # },
     {
         'title': 'Reproduce a machine learning model build in four lines of code',
         'route': 'https://blog.quiltdata.com/reproduce-a-machine-learning-model-build-in-four-lines-of-code-b4f0a5c5f8c8',
@@ -433,11 +394,6 @@ advocacy_list = [
         'date': '2019-06-07'
     },
     {
-        'title': '130,000 reasons why data science can help clean up San Francisco',
-        'route': 'https://medium.com/rubbish-love/130-000-reasons-why-data-science-can-help-clean-up-san-francisco-6412eba1e374',
-        'date': '2019-09-11'
-    },
-    {
         'title': 'Using Spark for model featurization with Spell',
         'route': 'https://spell.ml/blog/using-spark-for-model-featurization-with-spell-XnEedBUAACcAjfTV',
         'date': '2020-03-29'
@@ -481,6 +437,21 @@ advocacy_list = [
         'title': 'Distributed model training using Horovod',
         'route': 'https://spell.ml/blog/distributed-model-training-using-horovod-XvqEGRUAACgAa5th',
         'date': '2020-06-29'
+    },
+    {
+        'title': 'Getting started with large scale ETL jobs using Dask and AWS EMR',
+        'route': 'https://spell.ml/blog/large-scale-etl-jobs-using-dask-Xyl8GhEAACQAjK6h',
+        'date': '2020-08-03'
+    },
+    {
+        'title': 'Getting oriented in the RAPIDS distributed ML ecosystem, part 1: ETL',
+        'route': 'https://spell.ml/blog/getting-oriented-in-the-rapids-distributed-ml-ecosystem-part-1-X1gixBIAAJ7nyzHa',
+        'date': '2020-09-12'
+    },
+    {
+        'title': 'What does the machine learning workspace of the future look like?',
+        'route': 'https://spell.ml/blog/the-learning-workspace-of-the-future-X1_MkRAAACMAXG0v',
+        'date': '2020-09-14'
     }
 ]
 
@@ -500,17 +471,9 @@ def advocacy():
     return render_template('advocacy.html', advocacy_list=advocacy_list)
 
 
-@app.route('/code.html')
-def code():
-    return render_template('code.html', project_list=project_list)
-
-
-@app.route('/feed')
-def rss_feed():
-    rss_xml = render_template('rss.xml')
-    response = make_response(rss_xml)
-    response.headers['Content-Type'] = 'application/rss+xml'
-    return response
+@app.route('/portfolio.html')
+def portfolio():
+    return render_template('projects.html', project_list=project_list)
 
 
 @app.route('/visualizations/<path:path>')
@@ -549,6 +512,17 @@ def serve(path):
             id=index + 1,
             date="{0}/{1}/{2}".format(month, day, year),
             title=post['title']
+        )
+    elif path in project_paths:
+        index = project_paths.index(path)
+        project = project_list[index]
+        date_str = project['route'][:10]
+        year, month, day = date_str[:4], date_str[5:7], date_str[8:10]
+        return render_template(
+            'projects/' + project['template'],
+            id=index + 1,
+            date="{0}/{1}/{2}".format(month, day, year),
+            title=project['title']
         )
     else:
         abort(404)

@@ -1,0 +1,34 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<br clear="all"/>
+
+<div style="display: inline-flex; flex-direction: row; justify-content: space-around;">
+    <img src="/static/post_assets/geoplot/nyc-collision-factors-thumb.png" width=256 height=256
+        alt="Data." />
+    <img src="/static/post_assets/geoplot/dc-street-network-thumb.png" width=256 height=256
+        alt="Data." />
+    <img src="/static/post_assets/geoplot/nyc-parking-tickets-thumb.png" width=256 height=256
+        alt="Data."/>
+   
+</div>
+
+<p>
+    <a href="https://github.com/ResidentMario/geoplot">geoplot</a> is a high-level geospatial plotting library for Python. It builds on top of <code class="inline_code">geopandas</code> and <code class="inline_code">cartopy</code>, and provides an extremely useful list of canned visualizations for your data analytics needs. It comes with extensive documentation, including a <a href="https://residentmario.github.io/geoplot/gallery/index.html">gallery page</a> showcasing a variety of interesting and useful plots.
+</p>
+
+<p>
+    <code class="inline_code">geoplot</code> is easily the largest OSS library I've written, and the one I'm most proud of.
+</p>
+
+<p>
+    <a href="https://www.residentmar.io/2019/07/07/python-mixins.html">"Making Python classes more modular using mixins"</a> describes one of the challenges of the implementation.
+</p>
+
+<br clear="all"/>
+
+{% endblock %}

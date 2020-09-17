@@ -1,0 +1,26 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script>
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/rubbish-story/screenshot.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    <a href="https://medium.com/rubbish-love/130-000-reasons-why-data-science-can-help-clean-up-san-francisco-6412eba1e374">130,000 reasons why data science can help clean up San Francisco</a> was a freelance consulting project I did for <a href="https://www.rubbish.love/">Rubbish</a>, a San Francisco startup. Rubbish is building a smart trash grabber and companion phone application. As you use the grabber to pick up litter off the curb, it uses your phone to automatically photograph what you've picked up. You then classify the pickup into one of several categories, and the data point gets filed away (with a timestamp and a GPS coordinate) in the Rubbish database. So you're not only cleaning up the street, but also generating actionable point cloud data in the process.
+</p>
+
+<p>
+    To validate the usefulness of this data I did an extensive analysis of Rubbish's Polk Street survey zone, a three block sector on a commercial strip in San Francisco that the group had been doing regular pickups on. I had a year's worth of data (130,000 points in all) to work with.
+</p>
+
+<p>
+    Executing on this project required some tricky geospatial join operations. I built a small special-purpose Python package called <code class="inline_code">streetmapper</code> to help me through this process. I wrote a blog post discussing these problems in detail: <a href="/2019/08/03/buildings-blocks-streets-points.html">Bringing together building, block, street, and point data</a>.
+</p>
+
+<p>
+    Overall I learned a ton of interesting stuff working on this engagement. The resulting blog post did well on Reddit and made the front page of Hacker News.
+</p>
+
+{% endblock %}

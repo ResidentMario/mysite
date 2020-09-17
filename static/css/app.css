@@ -66,7 +66,7 @@ body {
     color:#252525;
 }
 /* <code class="language-python"> is the Prism code highlighting trigger. This adds on to it. */
-.language-python, .language-javascript {
+.language-python, .language-javascript, .language-bash {
     font-size: 12px;
 }
 /* For little bits of code within the body of the page. Avoids the code element CSS selector because of the above. */
@@ -189,38 +189,14 @@ a:active {
     list-style: none;
     padding: 0;
 }
-.project-title {
-    font-size: 24px;
-    margin-bottom: 6px;
-}
-.nav-project-link-list {
-    list-style: none;
-    padding: 0;
-}
-.project-section-header {
-    font-size: 18px;
-    padding: 12px 24px 12px 24px;
-    display: inline-block;
-    background: black;
-    color:white;
-    border-radius:10px 10px 0 0;
-}
-.project-frame {
-    margin-bottom:180px;
-}
-.project-description {
-    font-size: 16px;
-    color: #555;
-}
-.project-body {
-    float: left;
-    margin-left: 40px;
-}
-.project-snap {
-    border-radius:25px;
-    float:left;
-    overflow: hidden;
-}
 .bottom-spacer {
     margin-top:120px;
+}
+.projects-frame {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 24px;
+}
+.projects-item {
+    width: 200px;
 }
