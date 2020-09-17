@@ -257,7 +257,7 @@ project_list = [
     },
     {
         'title': 'two million calls to 311',
-        'subtitle': 'A hierarchical treemap visualization',
+        'subtitle': 'A hierarchical treemap',
         'snap': '311.png',
         'route': '2017/02/13/311-threshold-tree.html',
         'template': '311-threshold-tree.html'
@@ -286,14 +286,14 @@ project_list = [
     {
         'title': 'machine learning notes',
         'subtitle': 'Notes on machine learning',
-        'snap': 'missingno.png',
+        'snap': 'ml-notes.png',
         'route': '2018/09/04/machine-learning-notes.html',
         'template': 'machine-learning-notes.html'
     },
     {
         'title': 'fahr',
         'subtitle': 'Remote machine learning training',
-        'snap': 'missingno.png',
+        'snap': 'fahr.png',
         'route': '2019/01/22/fahr.html',
         'template': 'fahr.html'
     },
@@ -313,7 +313,7 @@ project_list = [
     },
     {
         'title': 'rubbish geo',
-        'subtitle': 'A geospatial analytics backend',
+        'subtitle': 'A geospatial analytics service',
         'snap': 'rubbish-geo.png',
         'route': '2020-09-16/rubbish-geo.html',
         'template': 'rubbish-geo.html'
@@ -328,26 +328,26 @@ advocacy_list = [
         'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032',
         'date': '2016-06-01'
     },
-    {
-        'title': 'Implementing good design',
-        'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/',
-        'date': '2016-09-26'
-    },
-    {
-        'title': 'Becoming a civic technologist out of college',
-        'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
-        'date': '2017-09-01'
-    },
-    {
-        'title': 'Learning by doing with data viz blogging',
-        'route': 'https://www.meetup.com/DataVisualization/events/245257327/',
-        'date': '2017-12-12'
-    },
-    {
-        'title': 'Profiling top Kagglers: Bestfitting, currently #1 in the world',
-        'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/',
-        'date': '2018-05-07'
-    },
+    # {
+    #     'title': 'Implementing good design',
+    #     'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/',
+    #     'date': '2016-09-26'
+    # },
+    # {
+    #     'title': 'Becoming a civic technologist out of college',
+    #     'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
+    #     'date': '2017-09-01'
+    # },
+    # {
+    #     'title': 'Learning by doing with data viz blogging',
+    #     'route': 'https://www.meetup.com/DataVisualization/events/245257327/',
+    #     'date': '2017-12-12'
+    # },
+    # {
+    #     'title': 'Profiling top Kagglers: Bestfitting, currently #1 in the world',
+    #     'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/',
+    #     'date': '2018-05-07'
+    # },
     {
         'title': 'Reproduce a machine learning model build in four lines of code',
         'route': 'https://blog.quiltdata.com/reproduce-a-machine-learning-model-build-in-four-lines-of-code-b4f0a5c5f8c8',
@@ -392,11 +392,6 @@ advocacy_list = [
         'title': 'François Chollet wants you to care about developer experience',
         'route': 'https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642',
         'date': '2019-06-07'
-    },
-    {
-        'title': '130,000 reasons why data science can help clean up San Francisco',
-        'route': 'https://medium.com/rubbish-love/130-000-reasons-why-data-science-can-help-clean-up-san-francisco-6412eba1e374',
-        'date': '2019-09-11'
     },
     {
         'title': 'Using Spark for model featurization with Spell',
@@ -452,6 +447,11 @@ advocacy_list = [
         'title': 'Getting oriented in the RAPIDS distributed ML ecosystem, part 1: ETL',
         'route': 'https://spell.ml/blog/getting-oriented-in-the-rapids-distributed-ml-ecosystem-part-1-X1gixBIAAJ7nyzHa',
         'date': '2020-09-12'
+    },
+    {
+        'title': 'What does the machine learning workspace of the future look like?',
+        'route': 'https://spell.ml/blog/the-learning-workspace-of-the-future-X1_MkRAAACMAXG0v',
+        'date': '2020-09-14'
     }
 ]
 
@@ -474,14 +474,6 @@ def advocacy():
 @app.route('/portfolio.html')
 def portfolio():
     return render_template('projects.html', project_list=project_list)
-
-
-@app.route('/feed')
-def rss_feed():
-    rss_xml = render_template('rss.xml')
-    response = make_response(rss_xml)
-    response.headers['Content-Type'] = 'application/rss+xml'
-    return response
 
 
 @app.route('/visualizations/<path:path>')
@@ -537,5 +529,5 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True)
