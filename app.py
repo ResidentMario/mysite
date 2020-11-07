@@ -452,6 +452,16 @@ advocacy_list = [
         'title': 'What does the machine learning workspace of the future look like?',
         'route': 'https://spell.ml/blog/the-learning-workspace-of-the-future-X1_MkRAAACMAXG0v',
         'date': '2020-09-14'
+    },
+    {
+        'title': 'MLOps concepts for busy engineers: model serving',
+        'route': 'https://spell.ml/blog/mlops-concepts-model-serving-X385lREAACcAAGzS',
+        'date': '2020-10-07'
+    },
+    {
+        'title': 'The key components of a successful MLOps strategy',
+        'route': 'https://spell.ml/blog/components-of-an-mlops-strategy-X4d_KREAACUAvo6M',
+        'date': '2020-10-14'
     }
 ]
 

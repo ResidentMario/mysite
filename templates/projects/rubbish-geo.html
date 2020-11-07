@@ -21,7 +21,30 @@
 </p>
 
 <p>
-    The visualization attached is a service diagram showing, at a high level, how it works. Basically, <code class="inline_code">rubbish-geo</code> is a serverless API over a PostGIS instance hosted on GCP. Litter pickups are written to the (preexisting) Firestore user database by the client, then pushed to the analytics database using a DB listener. Clients then make GET requests (authenticated using <a href="https://firebase.google.com/docs/auth/admin/create-custom-tokens">Firestore custom tokens</a>) to Cloud Function endpoints to retrieve litter reports.
+    This service diagram shows, at a high level, how it works. Basically, <code class="inline_code">rubbish-geo</code> is a serverless API over a PostGIS instance hosted on GCP. Litter pickups are written to the (preexisting) Firestore user database by the client, then pushed to the analytics database using a database listener. The records are cleaned, counted, and aligned to the street grid, creating a blockface-by-blockface view of street litter:
+</p>
+
+<pre><code class="language-bash">
+rubbish=#
+SELECT (name, curb, rubbish_per_meter, num_runs)
+    FROM blockface_statistics
+    INNER JOIN centerlines
+        ON blockface_statistics.centerline_id=centerlines.id;
+row
+--------------------------------------------------------------------------------
+("Polk Street b/w Green Street and Union Street",left,0.22538216309912568,1)
+("Polk Street b/w Green Street and Union Street",right,0.2863445870030898,1)
+("Polk Street b/w Green Street and Bonita Street",right,0.44559654370508806,1)
+("Polk Street b/w Green Street and Bonita Street",left,0.9923351948727908,1)
+("Polk Street b/w Vallejo Street and Bonita Street",left,1.205936820807271,1)
+("Polk Street b/w Vallejo Street and Bonita Street",right,1.003636792752386,1)
+("Polk Street b/w Vallejo Street and Broadway",left,0.77333135587109,1)
+("Polk Street b/w Vallejo Street and Broadway",right,1.0993923061952355,1)
+</code></pre>
+<br/>
+
+<p>
+    Clients can then make <code class="inline_code">GET</code> requests (authenticated using <a href="https://firebase.google.com/docs/auth/admin/create-custom-tokens">Firestore custom tokens</a>) to Cloud Function endpoints to retrieve litter reports.
 </p>
 
 <p>
