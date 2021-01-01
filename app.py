@@ -369,11 +369,6 @@ advocacy_list = [
         'date': '2019-03-04'
     },
     {
-        'title': 'Bring order to data chaos with Quilt T4',
-        'route': 'https://blog.quiltdata.com/bring-order-to-data-chaos-with-quilt-t4-e5d9058f4d36',
-        'date': '2019-03-18'
-    },
-    {
         'title': 'Evaluating Keras neural network performance using Yellowbrick visualizations',
         'route': 'https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174',
         'date': '2019-03-21'
@@ -462,6 +457,21 @@ advocacy_list = [
         'title': 'The key components of a successful MLOps strategy',
         'route': 'https://spell.ml/blog/components-of-an-mlops-strategy-X4d_KREAACUAvo6M',
         'date': '2020-10-14'
+    },
+    {
+        'title': 'Getting oriented in the RAPIDS distributed ML ecosystem, part 2: training and scoring',
+        'route': 'https://spell.ml/blog/getting-oriented-in-the-rapids-distributed-ml-ecosystem-part-2-X68AOxIAACAAacZk',
+        'date': '2020-11-12'
+    },
+    {
+        'title': 'A developer-friendly guide to model quantization with PyTorch',
+        'route': 'https://spell.ml/blog/pytorch-quantization-X8e7wBAAACIAHPhT',
+        'date': '2020-12-01'
+    },
+    {
+        'title': 'A developer-friendly guide to model pruning with PyTorch',
+        'route': 'https://spell.ml/blog/model-pruning-in-pytorch-X9pXQRAAACIAcH9h',
+        'date': '2020-12-15'
     }
 ]
 
