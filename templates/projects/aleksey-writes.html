@@ -1,0 +1,24 @@
+{% extends "blog_frame.html" %}
+{% block content %}
+
+<img src="/static/post_assets/aleksey-writes/intro.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    <a href="https://github.com/ResidentMario/aleksey-writes">aleksey-writes</a> is a search index over all of my technical notes from the period 2016-2020.
+</p>
+
+<p>
+    I write a lot. I find that taking semi-detailed notes on things that are new to me as I learn them helps with my ability to comprehend those things. Plus it's a great refresher should I ever need to return to a particular subject at a future time.
+</p>
+
+<p>
+    If you absolutely need to know how much I know about I know about such ineffable concepts as, say, cross-entropy, look no further than <code class="inline_code">aleksey-writes</code>.
+</p>
+
+<img src="/static/post_assets/aleksey-writes/results.png" class="inline_image_full" alt="Data."/>
+
+<p>
+    The <a href="https://github.com/ResidentMario/aleksey-writes/tree/master/js">frontend</a> is in React. The <a href="https://github.com/ResidentMario/aleksey-writes/tree/master/docker">search service</a> is containerized ElasticSearch. The <a href="https://github.com/ResidentMario/aleksey-writes/tree/master/rust/html2documents/src">web scraper</a> (used to parse the plaintext) is in Rust, run from <a href="https://github.com/ResidentMario/aleksey-writes/tree/master/scripts">some shell scripts</a>. Plus a little bit of inlined Python, here or there.
+</p>
+
+{% endblock %}
