@@ -330,11 +330,11 @@ project_list = [
 project_paths = [project['route'] for project in project_list]
 
 advocacy_list = [
-    {
-        'title': 'Who runs the world? Data',
-        'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032',
-        'date': '2016-06-01'
-    },
+    # {
+    #     'title': 'Who runs the world? Data',
+    #     'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032',
+    #     'date': '2016-06-01'
+    # },
     # {
     #     'title': 'Implementing good design',
     #     'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/',
@@ -356,13 +356,8 @@ advocacy_list = [
     #     'date': '2018-05-07'
     # },
     {
-        'title': 'Reproduce a machine learning model build in four lines of code',
-        'route': 'https://blog.quiltdata.com/reproduce-a-machine-learning-model-build-in-four-lines-of-code-b4f0a5c5f8c8',
-        'date': '2019-01-17'
-    },
-    {
         'title': 'Building fully custom machine learning models on AWS SageMaker: a practical guide',
-        'route': 'https://towardsdatascience.com/building-fully-custom-machine-learning-models-on-aws-sagemaker-a-practical-guide-c30df3895ef7',
+        'route': 'https://web.archive.org/web/20201112011906if_/https://towardsdatascience.com/building-fully-custom-machine-learning-models-on-aws-sagemaker-a-practical-guide-c30df3895ef7?gi=c6b2aaf66f37',
         'date': '2019-02-12'
     },
     {
@@ -372,33 +367,23 @@ advocacy_list = [
     },
     {
         'title': 'Import almost anything in Python: an intro to module loaders and finders',
-        'route': 'https://blog.quiltdata.com/import-almost-anything-in-python-an-intro-to-module-loaders-and-finders-f5e7b15cda47',
+        'route': 'https://web.archive.org/web/20190403222340if_/https://blog.quiltdata.com/import-almost-anything-in-python-an-intro-to-module-loaders-and-finders-f5e7b15cda47',
         'date': '2019-03-04'
     },
     {
         'title': 'Evaluating Keras neural network performance using Yellowbrick visualizations',
-        'route': 'https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174',
+        'route': 'https://web.archive.org/web/20190402012853if_/https://towardsdatascience.com/evaluating-keras-neural-network-performance-using-yellowbrick-visualizations-ad65543f3174',
         'date': '2019-03-21'
     },
     {
         'title': 'Boost your CNN classifier performance with progressive resizing in Keras',
-        'route': 'https://towardsdatascience.com/boost-your-cnn-image-classifier-performance-with-progressive-resizing-in-keras-a7d96da06e20',
+        'route': 'https://web.archive.org/web/20190602160035/https://towardsdatascience.com/boost-your-cnn-image-classifier-performance-with-progressive-resizing-in-keras-a7d96da06e20?gi=b38debfad33e',
         'date': '2019-04-01'
     },
     {
-        'title': 'Building a fully reproducible machine learning pipeline with CometML and Quilt',
-        'route': 'https://medium.com/comet-ml/building-a-fully-reproducible-machine-learning-pipeline-with-comet-ml-and-quilt-aa9c7bf85e72',
-        'date': '2019-05-13'
-    },
-    {
         'title': 'François Chollet wants you to care about developer experience',
-        'route': 'https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642',
+        'route': 'https://web.archive.org/web/20190614050018if_/https://blog.quiltdata.com/fran%C3%A7ois-chollet-wants-you-to-care-about-developer-experience-5fd049e45642',
         'date': '2019-06-07'
-    },
-    {
-        'title': 'Using Spark for model featurization with Spell',
-        'route': 'https://spell.ml/blog/using-spark-for-model-featurization-with-spell-XnEedBUAACcAjfTV',
-        'date': '2020-03-29'
     },
     {
         'title': 'An introduction to hyperparameter search with CIFAR10',
@@ -419,11 +404,6 @@ advocacy_list = [
         'title': 'It\'s 2020, why isn\'t deep learning 100% on the cloud yet?',
         'route': 'https://spell.ml/blog/deep-learning-infrastructure-in-2020-Xr2s7xEAACEAv28w',
         'date': '2020-05-17'
-    },
-    {
-        'title': 'Battle-tested techniques for scoping machine learning projects',
-        'route': 'https://github.com/spellrun/ml-project-scoping-talk',
-        'date': '2020-06-11'
     },
     {
         'title': 'A developer-friendly guide to mixed-precision training with PyTorch',
@@ -479,6 +459,31 @@ advocacy_list = [
         'title': 'A developer-friendly guide to model pruning with PyTorch',
         'route': 'https://spell.ml/blog/model-pruning-in-pytorch-X9pXQRAAACIAcH9h',
         'date': '2020-12-15'
+    },
+    {
+        'title': 'An introduction to AutoML with Ludwig',
+        'route': 'https://spell.ml/blog/an-introduction-to-automl-with-ludwig-X_OSWhAAACMA6eYD',
+        'date': '2021-01-04'
+    },
+    {
+        'title': 'A deep dive into AWS spot instance interruptions',
+        'route': 'https://spell.ml/blog/aws-spot-interrupts-X_ZJ6xAAACEA9fGx',
+        'date': '2021-01-06'
+    },
+    {
+        'title': 'Speeding up model training with PyTorch JIT',
+        'route': 'https://spell.ml/blog/pytorch-jit-YBmYuBEAACgAiv71',
+        'date': '2021-02-02'
+    },
+    {
+        'title': 'Training larger-than-memory PyTorch models using gradient checkpointing',
+        'route': 'https://spell.ml/blog/gradient-checkpointing-pytorch-YGypLBAAACEAefHs',
+        'date': '2021-04-05'
+    },
+    {
+        'title': 'Optimizing PyTorch models for fast CPU inference using Apache TVM',
+        'route': 'https://spell.ml/blog/optimizing-pytorch-models-using-tvm-YI7pvREAACMAwYYz',
+        'date': '2021-05-05'
     }
 ]
 
