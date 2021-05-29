@@ -471,6 +471,11 @@ advocacy_list = [
         'date': '2021-01-06'
     },
     {
+        'title': 'Tips for training PyTorch models to convergence more quickly',
+        'route': 'https://spell.ml/blog/pytorch-training-tricks-YAnJqBEAACkARhgD',
+        'date': '2020-01-21'
+    },
+    {
         'title': 'Speeding up model training with PyTorch JIT',
         'route': 'https://spell.ml/blog/pytorch-jit-YBmYuBEAACgAiv71',
         'date': '2021-02-02'
