@@ -1,14 +1,8 @@
-from datetime import datetime
-from flask import (Flask, render_template, abort, request, make_response, Response, send_from_directory, redirect, url_for)
-from static.post_assets.citibike.citibike_trips import DataStore
-import json
+from flask import (Flask, render_template, abort)
 import os
 
 app = Flask(__name__)
 basepath = os.path.abspath(".")
-
-# # Initialize the MongoDB connection (for CitiBike).
-# db = DataStore(json.load(open(basepath + "/static/post_assets/citibike/mlab_instance_api_key.json"))['uri'])  # mLab
 
 post_list = [
     {
@@ -206,10 +200,6 @@ post_list = [
         'type': 'exploration'
     },
     {
-        'title': 'To be a more effective data scientist, think in experiments',
-        'route': '2019/02/23/data-science-experiments.html',
-    },
-    {
         'title': 'Making Python classes more modular using mixins',
         'route': '2019/07/07/python-mixins.html',
         'template': 'python-mixins.html',
@@ -262,13 +252,6 @@ project_list = [
         'route': '2017/02/13/311-threshold-tree.html',
         'template': '311-threshold-tree.html'
     },
-    # {
-    #     'title': 'airscooter',
-    #     'subtitle': 'A wide-data management tool',
-    #     'snap': 'missingno.png',
-    #     'route': '2017/08/22/airscooter.html',
-    #     'template': 'airscooter.html'
-    # },
     {
         'title': 'gtfs-tripify',
         'subtitle': 'GTFS-RT train arrival time parser',
@@ -330,31 +313,6 @@ project_list = [
 project_paths = [project['route'] for project in project_list]
 
 advocacy_list = [
-    # {
-    #     'title': 'Who runs the world? Data',
-    #     'route': 'https://www.amny.com/opinion/columnists/mark-chiusano/who-run-the-world-data-says-aleksey-bilogur-1.11863032',
-    #     'date': '2016-06-01'
-    # },
-    # {
-    #     'title': 'Implementing good design',
-    #     'route': 'https://www.meetup.com/NYC-D3-JS/events/234355571/',
-    #     'date': '2016-09-26'
-    # },
-    # {
-    #     'title': 'Becoming a civic technologist out of college',
-    #     'route': 'https://blog.codingitforward.com/becoming-a-civic-technologist-out-of-college-4bcb37f9777c',
-    #     'date': '2017-09-01'
-    # },
-    # {
-    #     'title': 'Learning by doing with data viz blogging',
-    #     'route': 'https://www.meetup.com/DataVisualization/events/245257327/',
-    #     'date': '2017-12-12'
-    # },
-    # {
-    #     'title': 'Profiling top Kagglers: Bestfitting, currently #1 in the world',
-    #     'route': 'http://blog.kaggle.com/2018/05/07/profiling-top-kagglers-bestfitting-currently-1-in-the-world/',
-    #     'date': '2018-05-07'
-    # },
     {
         'title': 'Building fully custom machine learning models on AWS SageMaker: a practical guide',
         'route': 'https://web.archive.org/web/20201112011906if_/https://towardsdatascience.com/building-fully-custom-machine-learning-models-on-aws-sagemaker-a-practical-guide-c30df3895ef7?gi=c6b2aaf66f37',
@@ -516,25 +474,6 @@ def portfolio():
 @app.route('/visualizations/<path:path>')
 def display_visualization(path):
     return render_template('visualizations/' + path)
-
-
-# @app.route('/citibike-api/<path:path>/id/<int:stationid>')
-# def citibike_sample(path, stationid):
-#     if path == 'bike-outbounds':
-#         collection_name = 'outbound bike trip indices'
-#     elif path == 'bike-inbounds':
-#         collection_name = 'inbound bike trip indices'
-#     elif path == 'outgoing-trips':
-#         collection_name = 'outgoing trip indices'
-#     elif path == 'incoming-trips':
-#         collection_name = 'incoming trip indices'
-#     else:
-#         abort(404)
-#         return
-#     tripset = db.get_station_bikeset(stationid, collection_name)
-#     # Remove None trips---these correspond with trips that have not been populated in the database yet!
-#     tripset = [trip for trip in tripset if trip is not None]
-#     return Response(json.dumps(tripset), mimetype='application/json')
 
 
 @app.route('/<path:path>')
