@@ -301,13 +301,13 @@ project_list = [
         'route': '2020-09-16/rubbish-geo.html',
         'template': 'rubbish-geo.html'
     },
-    {
-        'title': 'aleksey-writes',
-        'subtitle': 'Search my 2016-2020 writings',
-        'snap': 'aleksey-writes.png',
-        'route': '2021-02-21/aleksey-writes.html',
-        'template': 'aleksey-writes.html'
-    }
+    # {
+    #     'title': 'aleksey-writes',
+    #     'subtitle': 'Search my 2016-2020 writings',
+    #     'snap': 'aleksey-writes.png',
+    #     'route': '2021-02-21/aleksey-writes.html',
+    #     'template': 'aleksey-writes.html'
+    # }
 ][::-1]
 
 project_paths = [project['route'] for project in project_list]
