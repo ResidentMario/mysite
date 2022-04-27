@@ -301,13 +301,13 @@ project_list = [
         'route': '2020-09-16/rubbish-geo.html',
         'template': 'rubbish-geo.html'
     },
-    # {
-    #     'title': 'aleksey-writes',
-    #     'subtitle': 'Search my 2016-2020 writings',
-    #     'snap': 'aleksey-writes.png',
-    #     'route': '2021-02-21/aleksey-writes.html',
-    #     'template': 'aleksey-writes.html'
-    # }
+    {
+        'title': 'pytorch training guide',
+        'subtitle': 'Train time optimization',
+        'snap': 'pytorch-training-perf.avif',
+        'route': '2022-04-27/pytorch-training-perf.html',
+        'template': 'pytorch-training-perf.html'
+    }
 ][::-1]
 
 project_paths = [project['route'] for project in project_list]
@@ -452,13 +452,13 @@ advocacy_list = [
 
 
 @app.route('/')
-def main_page():
-    return render_template('home.html', post_list=post_list)
-
-
-@app.route('/about.html')
 def about():
     return render_template('about.html')
+
+
+@app.route('/blog.html')
+def main_page():
+    return render_template('blog.html', post_list=post_list)
 
 
 @app.route('/advocacy.html')

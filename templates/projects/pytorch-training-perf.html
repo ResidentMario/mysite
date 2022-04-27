@@ -1,0 +1,26 @@
+{% extends "blog_frame.html" %}
+{% block scripts %}
+<!-- <link href="/static/css/prism.css" rel="stylesheet" />
+<script src="/static/js/prism.js"></script> -->
+{% endblock %}
+{% block content %}
+
+<img src="/static/post_assets/pytorch-training-perf/screenshot.png" class="inline_image_full" alt="Homepage.">
+
+<p>
+    The <a href="https://github.com/ResidentMario/pytorch-training-performance-guide">PyTorch Training Performance Guide</a> is an introduction to and reference on PyTorch training peformance optimization.
+</p>
+
+<p>
+    Many of the large-scale deep learning models used in production today have training times measured in days. As a result, techniques for training these models quickly and effectively are an important area of optimization in applied settings.
+</p>
+
+<p>
+    Techniques discussed in this guide include: mixed-precision training, distributed training, model pruning, gradient checkpoints, and just-in-time compilation.
+</p>
+
+<p>
+    This is a practitioner-oriented guide which grew out of a sequence of blog posts I wrote at <a href="https://spell.ml/">Spell</a>. It includes many ample code samples and benchmarks demonstrating the concepts discussed.
+</p>
+
+{% endblock %}

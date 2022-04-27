@@ -22,15 +22,21 @@
 	<div id="navbar">
 	<div style="float:left; font-size:18px; margin-top:12px;">
         {% if request.path != '/' %}
-            <a href="/" class="navigation-link">blog</a>
+            <a href="/" class="navigation-link">about</a>
         {% else %}
-            blog
+            about
         {% endif %}
         &nbsp;&nbsp;
         {% if request.path != '/portfolio.html' %}
             <a href="/portfolio.html" class="navigation-link">portfolio</a>
         {% else %}
             portfolio
+        {% endif %}
+        &nbsp;&nbsp;
+        {% if request.path != '/blog.html' %}
+            <a href="/blog.html" class="navigation-link">blog</a>
+        {% else %}
+            blog
         {% endif %}
         &nbsp;&nbsp;
         {% if request.path != '/advocacy.html' %}
@@ -41,12 +47,6 @@
         &nbsp;&nbsp;
         <a href="https://github.com/residentmario" class="navigation-link">github</a>&nbsp;&nbsp;
         <a href="https://twitter.com/residentmario" class="navigation-link">twitter</a>&nbsp;&nbsp;
-        {% if request.path != '/about.html' %}
-            <a href="/about.html" class="navigation-link">about</a>
-        {% else %}
-            about
-        {% endif %}
-        &nbsp;&nbsp;
     </div>
 	</div>
 	<div id="frame">
