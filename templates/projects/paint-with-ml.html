@@ -8,7 +8,7 @@
 <img src="/static/post_assets/paint-with-ml/screenshot.png" class="inline_image_full" alt="Data."/>
 
 <p>
-    <a href="http://paintwith.spell.ml/">Paint with ML</a> is an ML art web application that lets you build your own Bob Ross style landscape painting. You build a semantic segmentation mask using a set of nine different semantic brushes, each one a different landscape painting element. Clicking on the "Run" button feeds this semantic map through an image-to-image translation network, generating a painting as output.
+    <a href="http://paintwith.spell.ml/">Paint with ML</a> was an ML art web application that lets you build your own Bob Ross style landscape painting. You build a semantic segmentation mask using a set of nine different semantic brushes, each one a different landscape painting element. Clicking on the "Run" button feeds this semantic map through an image-to-image translation network, generating a painting as output.
 </p>
 
 <p>
@@ -16,11 +16,13 @@
 </p>
 
 <p>
-    The deep learning model powering the application is a PyTorch <a href="https://github.com/NVlabs/SPADE">GauGAN</a>. The model was trained on the <a href="https://groups.csail.mit.edu/vision/datasets/ADE20K/">ADE20K</a> scene parsing benchmark dataset, then fine-tuned on a custom dataset of <a href="https://www.kaggle.com/residentmario/segmented-bob-ross-images">250 Bob Ross paintings</a>. Model training and deployment (to a Kubernetes-based model server endpoint) was via the Spell SDK.
+    The deep learning model powering the application is a PyTorch <a href="https://github.com/NVlabs/SPADE">GauGAN</a>. The model was trained on the <a href="https://groups.csail.mit.edu/vision/datasets/ADE20K/">ADE20K</a> scene parsing benchmark dataset, then fine-tuned on a custom dataset of <a href="https://www.kaggle.com/residentmario/segmented-bob-ross-images">250 Bob Ross paintings</a>. Model training and deployment (to a Kubernetes-based model server endpoint) was via the Spell SDK. Here are some examples of things people built with it:
 </p>
 
+<img src="/static/post_assets/paint-with-ml/banner-of-creations.png" class="inline_image_full" alt="Pretty pictures."/>
+
 <p>
-    The code is available publicly <a href="https://github.com/spellml/paint-with-ml">on GitHub</a>. You can try it out for yourself <a href="http://paintwith.spell.ml/">here</a>.
+    The code is available publicly <a href="https://github.com/spellml/paint-with-ml">on GitHub</a>.
 </p>
 
 {% endblock %}
